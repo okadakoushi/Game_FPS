@@ -1,8 +1,10 @@
 #pragma once
 
 #include "tkFile/TkmFile.h"
+#include "tkFile/TkaFile.h"
 #include "MeshParts.h"
 #include "Skeleton.h"
+#include "srcFile/Animation/AnimationClip.h"
 
 class IShaderResource;
 
@@ -18,6 +20,29 @@ struct ModelInitData {
 	int m_expandConstantBufferSize = 0;			//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//ユーザー拡張のシェーダーリソース。
 };
+
+/// <summary>
+/// アニメーション初期化データ。
+/// </summary>
+struct AnimInitData {
+	const char* m_tkaFilePath = nullptr;		//tkaファイルパス。
+};
+
+/// <summary>
+/// モデルの初期化ステップ。
+/// </summary>
+/// <remarks>
+/// こいつでcase管理しつつ、モデルの初期化を進める。
+/// </remarks>
+enum ModelInitStep {
+	enInitStep_LoadModel,
+	enInitStep_LoadSkelton,
+	enInitStep_Completed,
+	enInitStep_LoadAnimationClips,
+	initStep
+};
+
+
 /// <summary>
 /// モデルクラス。
 /// </summary>
@@ -26,10 +51,27 @@ class Model {
 public:
 
 	/// <summary>
-	/// tkmファイルから初期化。
+	/// モデル初期化ステップ。
+	/// </summary>
+	/// <param name="initData">初期化データ。</param>
+	/// <returns>ステップ</returns>
+	int Init( const ModelInitData& initData );
+	/// <summary>
+	/// スケルトンデータ読み込みステップ。
 	/// </summary>
 	/// <param name="initData">初期化データ</param>
-	void Init( const ModelInitData& initData );
+	/// <returns>ステップ</returns>
+	int LoadTks(const ModelInitData& initData);
+	/// <summary>
+	/// スケルトンの初期化処理。
+	/// </summary>
+	/// <returns></returns>
+	int initSkeleton();
+	/// <summary>
+	/// アニメーションの初期化。
+	/// </summary>
+	/// <param name="initData"></param>
+	void InitAnim(const AnimInitData& initData);
 	/// <summary>
 	/// ワールド行列の更新。
 	/// </summary>
@@ -60,9 +102,12 @@ public:
 		return m_world;
 	}
 private:
-
-	Matrix m_world;			//ワールド行列。
-	TkmFile m_tkmFile;		//tkmファイル。
-	Skeleton m_skeleton;	//スケルトン。
-	MeshParts m_meshParts;	//メッシュパーツ。
+	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
+	Matrix			m_world;		//ワールド行列。
+	TkmFile			m_tkmFile;		//tkmファイル。
+	TkaFile			m_tkaFile;		//tkaファイル。
+	Skeleton		m_skeleton;		//スケルトン。
+	MeshParts		m_meshParts;	//メッシュパーツ。
+	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
+	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
 };

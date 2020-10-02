@@ -14,6 +14,8 @@
 
 #include "Camera.h"
 
+class Light;
+
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
 /// </summary>
@@ -226,3 +228,4 @@ private:
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
+extern Light g_light;						//ライト。

@@ -1,9 +1,11 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
-
 #include "MiniEngine.h"
+
+using namespace std;
+
+const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
 
 /// <summary>
 /// ディレクションライト。
