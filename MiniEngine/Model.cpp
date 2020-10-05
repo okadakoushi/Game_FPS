@@ -13,6 +13,11 @@ int Model::Init(const ModelInitData& initData)
 		MessageBoxA(nullptr, "fxファイルパスが指定されていません。", "エラー", MB_OK);
 		std::abort();
 	}
+
+	//アニメーションをロードして積む。
+	m_tkaFile.Load(initData.m_tkaFilePath);
+	m_tkaFilePaths.push_back(initData.m_tkaFilePath);
+
 	mbstowcs(wfxFilePath, initData.m_fxFilePath, 256);
 
 	m_tkmFile.Load(initData.m_tkmFilePath);
@@ -65,6 +70,7 @@ int Model::initSkeleton()
 			auto animClip = make_unique<AnimationClip>();
 			//ファイルパスをロード。
 			animClip->Load(m_tkaFilePath.c_str());
+			//アニメーションクリップにメモリを移譲。
 			m_animationClips.push_back(move(animClip));
 		}
 		//アニメーションクリップのロード終了。
@@ -76,7 +82,7 @@ int Model::initSkeleton()
 	}
 }
 
-void Model::InitAnim(const AnimInitData& initData)
+int Model::InitAnim()
 {
 	bool isLoaded = true;
 	for (auto& animClip : m_animationClips) {
@@ -93,8 +99,21 @@ void Model::InitAnim(const AnimInitData& initData)
 			animClip->BuildKeyFrames();
 		}
 		//アニメーション初期化。
-	}
+		m_animation.Init(m_skeleton, m_animationClips);
 
+		//全init処理終了。
+		return enInitStep_Completed;
+	}
+}
+
+void Model::UpdateMatAndAnim()
+{
+	//アニメーション更新。
+	m_animation.Progress(DELTA_TIME);
+	//めんどいからまだSet作ってないよぉ！
+	UpdateWorldMatrix(m_pos, m_rot, m_scale);
+	//スケルトンも更新。
+	m_skeleton.Update(m_world);
 }
 
 void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
@@ -108,7 +127,7 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
 	mTrans.MakeTranslation(pos);
 	mRot.MakeRotationFromQuaternion(rot);
 	mScale.MakeScaling(scale);
-	m_world = mBias * mScale * mRot * mTrans;
+	m_world = /*mBias * */mScale * mRot * mTrans;
 }
 void Model::Draw(RenderContext& rc)
 {

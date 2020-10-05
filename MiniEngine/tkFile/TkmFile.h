@@ -33,10 +33,10 @@ public:
 	/// </summary>
 	struct SVertex {
 		Vector3 pos;			//座標。
-		Vector3 normal;		//法線。
+		Vector3 normal;			//法線。
 		Vector3 tangent;		//接ベクトル。
 		Vector3 binormal;		//従ベクトル。
-		Vector2 uv;			//UV座標。
+		Vector2 uv;				//UV座標。
 		int indices[4];			//スキンインデックス。
 		Vector4 skinWeights;	//スキンウェイト。
 	};

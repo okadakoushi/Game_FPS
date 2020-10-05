@@ -38,5 +38,5 @@ void TkaFile::LoadImplement(const char* filePath)
 	fread(&m_keyFrames.front(), sizeof(KeyFrame)* header.numKey, 1, fp);
 	
 	fclose(fp);
-
+	SetLoadedMark();
 }

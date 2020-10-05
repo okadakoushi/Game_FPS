@@ -5,6 +5,7 @@
 #include "MeshParts.h"
 #include "Skeleton.h"
 #include "srcFile/Animation/AnimationClip.h"
+#include "srcFile/Animation/Animation.h"
 
 class IShaderResource;
 
@@ -16,16 +17,10 @@ struct ModelInitData {
 	const char* m_vsEntryPointFunc = "VSMain";	//頂点シェーダーのエントリーポイント。
 	const char* m_psEntryPointFunc = "PSMain";	//ピクセルシェーダーのエントリーポイント。
 	const char* m_fxFilePath = nullptr;			//.fxファイルのファイルパス。
+	const char* m_tkaFilePath = nullptr;		//tkaファイルパス。
 	void* m_expandConstantBuffer = nullptr;		//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize = 0;			//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//ユーザー拡張のシェーダーリソース。
-};
-
-/// <summary>
-/// アニメーション初期化データ。
-/// </summary>
-struct AnimInitData {
-	const char* m_tkaFilePath = nullptr;		//tkaファイルパス。
 };
 
 /// <summary>
@@ -35,10 +30,11 @@ struct AnimInitData {
 /// こいつでcase管理しつつ、モデルの初期化を進める。
 /// </remarks>
 enum ModelInitStep {
+	enInitStep_None,
 	enInitStep_LoadModel,
 	enInitStep_LoadSkelton,
-	enInitStep_Completed,
 	enInitStep_LoadAnimationClips,
+	enInitStep_Completed,
 	initStep
 };
 
@@ -71,7 +67,11 @@ public:
 	/// アニメーションの初期化。
 	/// </summary>
 	/// <param name="initData"></param>
-	void InitAnim(const AnimInitData& initData);
+	int InitAnim();
+	/// <summary>
+	/// ワールド座標とアニメーションの更新。
+	/// </summary>
+	void UpdateMatAndAnim();
 	/// <summary>
 	/// ワールド行列の更新。
 	/// </summary>
@@ -87,6 +87,14 @@ public:
 	void BindSkeleton(Skeleton& skeleton)
 	{
 		m_meshParts.BindSkeleton(skeleton);
+	}
+	/// <summary>
+	/// アニメーションを再生。
+	/// </summary>
+	/// <param name="animNo">クリップ番号。</param>
+	/// <param name="interpolateTime">補間率。</param>
+	void PlayAnim(int animNo, float interpolateTime) {
+		m_animation.Play(animNo, interpolateTime);
 	}
 	/// <summary>
 	/// 描画
@@ -110,4 +118,8 @@ private:
 	MeshParts		m_meshParts;	//メッシュパーツ。
 	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
+	Animation		m_animation;	//アニメーション
+	Vector3	m_pos = Vector3::Zero;				//座標。
+	Vector3	m_scale = Vector3::One;				//拡大率。
+	Quaternion m_rot = Quaternion::Identity;	//回転。
 };

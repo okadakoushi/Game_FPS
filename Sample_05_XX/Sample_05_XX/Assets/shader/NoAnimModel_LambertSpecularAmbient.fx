@@ -2,6 +2,7 @@
 //拡散反射光のみを確認するためのサンプルです。
 
 
+
 static const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの本数。
 
 //モデル用の定数バッファ
@@ -26,9 +27,13 @@ cbuffer LightCb : register(b1){
 
 //頂点シェーダーへの入力。
 struct SVSIn{
-	float4 pos 		: POSITION;		//モデルの頂点座標。
-	float3 normal	: NORMAL;		//法線。
-	float2 uv 		: TEXCOORD0;	//UV座標。
+	float4	pos 		: POSITION;		//モデルの頂点座標。
+	float3	normal		: NORMAL;		//法線。
+	float3	Tangent		: TANGENT;		
+	float3	BiNormal	: BINORMAL;
+	float2	uv 			: TEXCOORD0;	//UV座標。
+	uint4	Indices		: BLENDINDICES0;//インデックスのサイズ。
+	float4	Weights		: BLENDWEIGHT0;	//重み。
 };
 //ピクセルシェーダーへの入力。
 struct SPSIn{
@@ -38,23 +43,33 @@ struct SPSIn{
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
 };
 
+//変更したらMeshPartsのディスクリプタヒープのレジスタも変更すること。
 //モデルテクスチャ。
 Texture2D<float4> g_texture : register(t0);	
 Texture2D<float4> g_normalMap : register(t1);
 Texture2D<float4> g_specularMap : register(t2);
+StructuredBuffer<float4x4> boneMatrix : register(t3); //ボーン行列 
 
 //サンプラステート。
 sampler g_sampler : register(s0);
 
 /// <summary>
 /// モデル用の頂点シェーダーのエントリーポイント。
+/// アニメーションサンプル用にスキニングしてる。
 /// </summary>
 SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
 {
 	SPSIn psIn;
+	//スキン行列の計算。
+	float4x4 skinning = 0;
+	float w = 0.0f;
+	for (int i = 0; i < 3; i++) {
+		skinning += boneMatrix[vsIn.Indices[i]] * vsIn.Weights[i];
+		w += vsIn.Weights[i];
+	}
+	skinning += boneMatrix[vsIn.Indices[3]] * (1.0f - w);
 
-	psIn.pos = mul(mWorld, vsIn.pos);						//モデルの頂点をワールド座標系に変換。
-	psIn.worldPos = psIn.pos.xyz;
+	psIn.pos = mul(skinning, vsIn.pos);						//モデルの頂点をワールド座標系に変換。
 	psIn.pos = mul(mView, psIn.pos);						//ワールド座標系からカメラ座標系に変換。
 	psIn.pos = mul(mProj, psIn.pos);						//カメラ座標系からスクリーン座標系に変換。
 	psIn.normal = normalize(mul(mWorld, vsIn.normal));		//法線をワールド座標系に変換。
@@ -75,27 +90,28 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	{
 		for( int i = 0; i < NUM_DIRECTIONAL_LIGHT; i++){
 			float NdotL = dot( psIn.normal, -directionalLight[i].direction);	//ライトの逆方向と法線で内積を計算する。
-			if( NdotL < 0.0f){	//内積の計算結果はマイナスになるので、if文で判定する。
+			if( NdotL < 0.0f){	
+				//内積の計算結果はマイナスになるので、if文で判定する。
 				NdotL = 0.0f;
 			}
 			float3 diffuse;
 			diffuse = directionalLight[i].color.xyz * (1.0f-metaric) * NdotL; //拡散反射光を足し算する。
-			return float4( diffuse, 1.0f);
-			//ライトをあてる物体から視点に向かって伸びるベクトルを計算する。
-			float3 eyeToPixel = eyePos - psIn.worldPos;
-			eyeToPixel = normalize(eyeToPixel);
-			
-			//光の物体に当たって、反射したベクトルを求める。
-			float3 reflectVector = reflect(directionalLight[i].direction, psIn.normal);
-			//反射した光が目に飛び込んて来ているかどうかを、内積を使って調べる。
-			float d = dot(eyeToPixel, reflectVector);
-			if( d < 0.0f){
-				d = 0.0f;
-			}
-			d = pow(d, specPow) * metaric;
-			float3 spec = directionalLight[i].color * d * 5.0f;
-			//スペキュラ反射の光を足し算する。
-			lig += diffuse + spec;
+	//		return float4( diffuse, 1.0f);
+	//		//ライトをあてる物体から視点に向かって伸びるベクトルを計算する。
+	//		float3 eyeToPixel = eyePos - psIn.worldPos;
+	//		eyeToPixel = normalize(eyeToPixel);
+	//		
+	//		//光の物体に当たって、反射したベクトルを求める。
+	//		float3 reflectVector = reflect(directionalLight[i].direction, psIn.normal);
+	//		//反射した光が目に飛び込んて来ているかどうかを、内積を使って調べる。
+	//		float d = dot(eyeToPixel, reflectVector);
+	//		if( d < 0.0f){
+	//			d = 0.0f;
+	//		}
+	//		d = pow(d, specPow) * metaric;
+	//		float3 spec = directionalLight[i].color * d * 5.0f;
+	//		//スペキュラ反射の光を足し算する。
+			lig += diffuse;// + spec;
 		}
 	}
 	

@@ -72,7 +72,7 @@ public:
 	/// ローカルボーン行列を取得。
 	/// </summary>
 	/// <returns></returns>
-	const vector<Matrix>& GetBoneLocalMatrix() const
+	const std::vector<Matrix>& GetBoneLocalMatrix() const
 	{
 		return m_boneMatrix;
 	}

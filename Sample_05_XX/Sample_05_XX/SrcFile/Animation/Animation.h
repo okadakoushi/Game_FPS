@@ -28,7 +28,7 @@ public:
 	/// </summary>
 	/// <param name="skelton">スケルトン。</param>
 	/// <param name="animClip">アニメーションクリップ。</param>
-	void Init(Skeleton& skelton, const vector<unique_ptr<AnimationClip>>& animClip);
+	void Init(Skeleton& skelton, const std::vector<std::unique_ptr<AnimationClip>>& animClip);
 	
 	void Play(int clipNo, float interpolateTime = 0.0f)
 	{
@@ -134,7 +134,7 @@ private:
 	}
 private:
 	static const int ANIMATION_PLAY_CONTROLLER_NUM = 32;	//アニメーションコントローラの数。
-	vector<AnimationClip*> m_animationClips;				//アニメーションクリップのリスト。
+	std::vector<AnimationClip*> m_animationClips;				//アニメーションクリップのリスト。
 	Skeleton* m_skelton = nullptr;							//アニメーションを適用するボーン。
 	AnimationController m_animationController[ANIMATION_PLAY_CONTROLLER_NUM];	//アニメーションコントローラー。
 	int m_numAnimationPlayController = 0;					//使用中のアニメーションコントローラー。

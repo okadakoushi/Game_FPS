@@ -177,9 +177,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	g_light.directionalLight[0].direction.y = 0.0f;
 	g_light.directionalLight[0].direction.z = -1.0f;
 
-	g_light.ambinetLight.x = 0.2f;
-	g_light.ambinetLight.y = 0.2f;
-	g_light.ambinetLight.z = 0.2f;
+	g_light.ambinetLight.x = 1.0f;
+	g_light.ambinetLight.y = 1.0f;
+	g_light.ambinetLight.z = 1.0f;
 	g_light.eyePos = g_camera3D->GetPosition();
 	g_light.specPow = 5.0f;
 

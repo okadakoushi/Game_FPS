@@ -1,7 +1,7 @@
 #pragma once
 
 struct KeyFrame {
-	uint32_t boneIndex;	//ボーンインデックス。
+	uint32_t boneIndex;	//何番目のボーンに割り当てられているか。
 	float time;			//時間。
 	Matrix transform;	//トランスフォーム。
 };
@@ -52,7 +52,7 @@ public:
 		m_isLoop = flag;
 	}
 	/// <summary>
-	/// キーフレームリストの取得。
+	/// 全骨のキーフレームリストの取得。
 	/// </summary>
 	/// <returns>キーフレームリスト。</returns>
 	const std::vector<KeyFramePtrList>& GetKeyFramePtrListArray()
@@ -81,9 +81,10 @@ private:
 	std::wstring				m_clipName;							//アニメーションクリップの名前。
 	bool						m_isLoop;							//ループ判定。
 	std::vector<KeyFramePtr>	m_keyFrames;						//キーフレームのリスト。
-	std::vector<KeyFramePtrList>		m_keyFramePtrListArray;				//キーフレームリストの配列。
-	KeyFramePtrList* m_topBoneKeyFrameList = nullptr;	//キーフレームの一番上の骨。
-	TkaFile					m_tkaFile;							//tkaファイル。
+	std::vector<KeyFramePtrList>		m_keyFramePtrListArray;		//キーフレームリストの配列。
+	KeyFramePtrList* m_topBoneKeyFrameList = nullptr;				//キーフレームの一番上の骨。
+	TkaFile					m_tkaFile;								//tkaファイル。
+	const int MAX_BONE = 512;												//骨の最大。
 };
 //アニメーションクリップのスマートポインタ。
 using AnimationClipPtr = std::unique_ptr<AnimationClip>;

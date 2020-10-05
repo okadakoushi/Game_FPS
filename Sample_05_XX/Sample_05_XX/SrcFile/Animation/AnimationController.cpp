@@ -22,9 +22,12 @@ void AnimationController::StartLoop()
 void AnimationController::ClacBoneMatrixInRootBoneSpace(Bone& bone, Matrix parentMatrix)
 {
 	//ワールド行列を計算。
+	//ルートボーン空間での行列(初期化)
 	auto& mBoneInRootSpace = m_boneMatrix[bone.GetNo()];
+	//ローカル行列。
 	Matrix localMatrix = m_boneMatrix[bone.GetNo()];
 	//親の行列とローカル行列を乗算して、ワールド行列を計算。
+	//**check WorldMat_boneA = WorldMat_model * LoacalMat_rootBone * LocalMat_boneA
 	mBoneInRootSpace = localMatrix * parentMatrix;
 	//子供のボーン行列も計算。
 	for (auto& childBone : bone.GetChildren()) {
@@ -41,14 +44,17 @@ void AnimationController::ClacBoneMatrixInRootBoneSpace()
 		auto bone = m_skelton->GetBone(boneNo);
 		if (bone->GetParentBoneNo() != -1) {
 			//見つかった
+			//ルートボーン自身は変換する必要性がないのでスキップ。
 			continue;
 		}
+		//アニメーション再生でモデルの位置は動かしたくないので、行列はIdentiye。
 		ClacBoneMatrixInRootBoneSpace(*bone, g_matIdentity);
 	}
 }
 
 void AnimationController::SamplingBoneMatrixFromAnimationClip()
 {
+	//骨の配列とキーフレームの二次元配列。
 	const auto& keyFramePtrListArray = m_animationClip->GetKeyFramePtrListArray();
 	for (const auto& keyFrameList : keyFramePtrListArray) {
 		if (keyFrameList.size() == 0) {
@@ -57,6 +63,7 @@ void AnimationController::SamplingBoneMatrixFromAnimationClip()
 		}
 		//現在再生中のキーフレームを取得。
 		KeyFrame* keyframe = keyFrameList.at(m_currentKeyFrameNo);
+		//今再生しているキーフレームの位置情報の取得。
 		m_boneMatrix[keyframe->boneIndex] = keyframe->transform;
 	}
 }
@@ -159,7 +166,7 @@ void AnimationController::Update(float deltaTime, Animation* animation)
 	//ボーン行列をアニメーションクリップからサンプリングしていく。
 	SamplingBoneMatrixFromAnimationClip();
 	//親の骨座標系になっているボーン行列をルートのボーン空間に変換していく。
-	ClacBoneMatrixInRootBoneSpace();
+	//ClacBoneMatrixInRootBoneSpace();
 	//footstepボーンの移動量を取得。
 	SamplingDeltaValueFootstepBone();
 	//footstepボーンの移動量を全体の骨から減算する。

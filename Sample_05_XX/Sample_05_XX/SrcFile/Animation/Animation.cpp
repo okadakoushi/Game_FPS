@@ -3,6 +3,14 @@
 
 void Animation::Init(Skeleton& skeleton, const vector<unique_ptr<AnimationClip>>& animClips)
 {
+	if (animClips.empty()) {
+		MessageBox(
+			nullptr,
+			L"Animation::Init() アニメーションクリップがありません。",
+			L"エラー",
+			MB_OK
+		);
+	}
 	m_skelton = &skeleton;
 	for (auto& animClip : animClips) {
 		//アニメメーションクリップ分回す。
@@ -68,7 +76,6 @@ void Animation::UpdateGlobalPose()
 	m_footstepDeltaValue = g_vec3Zero;
 	//ボーンを初期化。
 	for (int i = 0; i < numBone; i++) {
-
 		qGlobalPose[i] = Quaternion::Identity;
 		vGlobalPose[i] = Vector3::Zero;
 		vGlobalScale[i] = Vector3::Zero;
@@ -130,7 +137,32 @@ void Animation::UpdateGlobalPose()
 			qGlobalPose[boneNo].Slerp(intepolateRate, qGlobalPose[boneNo], qBone);
 		}
 	}
+
 	//グローバルポーズをスケルトンに反映させていく。
+	for (int boneNo = 0; boneNo < numBone; boneNo++) {
+		//ボーンの数だけ回す。
+		//拡大行列作成。
+		Matrix scaleMatirx;
+		scaleMatirx.MakeScaling(vGlobalScale[boneNo]);
+		//回転行列。
+		Matrix rotMatrix;
+		rotMatrix.MakeRotationFromQuaternion(qGlobalPose[boneNo]);
+		//平行移動行列。
+		Matrix transMat;
+		transMat.MakeTranslation(vGlobalPose[boneNo]);
+
+		//全部合成して、ボーン行列作成。
+		Matrix boneMatrix;
+		boneMatrix = scaleMatirx * rotMatrix;
+		boneMatrix = boneMatrix * transMat;
+
+		m_skelton->SetBoneLocalMatrix(
+			boneNo,
+			boneMatrix
+		);
+	}
+
+
 	int numAnimationController = m_numAnimationPlayController;
 	for (int i = 1; i < m_numAnimationPlayController; i++) {
 		int index = GetAnimationControllerIndex(startIndex, i);

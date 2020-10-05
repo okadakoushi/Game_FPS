@@ -46,7 +46,7 @@ void MeshParts::InitFromTkmFile(
 	}
 	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
-	CreateDescriptorHeaps();
+	//CreateDescriptorHeaps();
 }
 
 void MeshParts::CreateDescriptorHeaps()
@@ -68,7 +68,8 @@ void MeshParts::CreateDescriptorHeaps()
 			//ディスクリプタヒープにディスクリプタを登録していく。
 			descriptorHeap.RegistShaderResource(0, mesh->m_materials[matNo]->GetAlbedoMap());		//アルベドマップ。
 			descriptorHeap.RegistShaderResource(1, mesh->m_materials[matNo]->GetNormalMap());		//法線マップ。
-			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());	//スペキュラマップ。
+			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());		//スペキュラマップ。
+			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);					//ボーン
 			if (m_expandShaderResourceView){
 				descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO, *m_expandShaderResourceView);
 			}
@@ -81,6 +82,7 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeapNo++;
 		}
 	}
+	m_isCreateDescriptorHeap = true;
 }
 void MeshParts::CreateMeshFromTkmMesh(
 	const TkmFile::SMesh& tkmMesh, 
@@ -166,6 +168,9 @@ void MeshParts::Draw(
 )
 {
 #if 1
+	if (m_isCreateDescriptorHeap == false) {
+		CreateDescriptorHeaps();
+	}
 
 	//メッシュごとにドロー
 	//プリミティブのトポロジーはトライアングルリストのみ。

@@ -42,6 +42,7 @@ void AnimationClip::BuildKeyFrames()
 		m_keyFrames.push_back(move(keyFrame));
 		});
 	//ボーンインデックスごとのキーフレームの連結リストを作成。
+	m_keyFramePtrListArray.resize(MAX_BONE);
 	for (auto& keyFrame : m_keyFrames) {
 		m_keyFramePtrListArray[keyFrame->boneIndex].push_back(keyFrame.get());
 		if (m_topBoneKeyFrameList == nullptr) {

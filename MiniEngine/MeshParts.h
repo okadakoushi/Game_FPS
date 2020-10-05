@@ -104,4 +104,5 @@ private:
 	std::vector< DescriptorHeap > m_descriptorHeap;			//ディスクリプタヒープ。
 	Skeleton* m_skeleton = nullptr;							//スケルトン。
 	void* m_expandData = nullptr;							//ユーザー拡張データ。
+	bool m_isCreateDescriptorHeap = false;					//ディスクリプタヒープが作成済み？
 };
