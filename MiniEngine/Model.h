@@ -98,9 +98,12 @@ public:
 	}
 	/// <summary>
 	/// 描画
+	/// <para>2,3引数は指定ないならカメラのViewとProj。</para>
 	/// </summary>
-	/// <param name="renderContext">レンダリングコンテキスト</param>
-	void Draw(RenderContext& renderContext);
+	/// <param name="renderContext"></param>
+	/// <param name="viewMat"></param>
+	/// <param name="projMat"></param>
+	void Draw(RenderContext& renderContext, Matrix viewMat = g_camera3D->GetViewMatrix(), Matrix projMat = g_camera3D->GetProjectionMatrix());
 	/// <summary>
 	/// ワールド行列を取得。
 	/// </summary>

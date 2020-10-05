@@ -11,10 +11,10 @@
 #include "SrcFile/GameObject/GameObjectManager.h"
 
 using namespace std;
-//更新時間。後でGameTimeクラス作ること。
-const float DELTA_TIME = 1.0f / 60.0f;
-//ディレクションライトの数。
-const int NUM_DIRECTIONAL_LIGHT = 4;
+
+const float DELTA_TIME = 1.0f / 60.0f;	//更新時間。後でGameTimeクラス作ること。
+const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
+const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
 /// <summary>
 /// ディレクションライト。
