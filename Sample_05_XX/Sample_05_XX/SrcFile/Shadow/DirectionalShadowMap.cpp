@@ -41,7 +41,7 @@ void DirectionalShadowMap::RenderToShadowMap(RenderContext& rc)
 			//レンダーターゲットのセット。
 			rc.SetRenderTarget(m_shadowMaps[i].GetRTVCpuDescriptorHandle(), m_shadowMaps[i].GetDSVCpuDescriptorHandle());
 			for (auto& caster : m_shadowCasters) {
-				//caster->Draw(rc, m_LVPMatrix[i], g_matIdentity)
+				caster->Draw(rc, m_LVPMatrix, g_matIdentity);
 			}
 		}
 	}
