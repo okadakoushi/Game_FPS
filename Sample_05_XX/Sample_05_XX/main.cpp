@@ -13,14 +13,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
 
 	//ゲームのインスタンス作成。
-	Game* mGame = new Game;
+	NewGO<Game>(0);
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
 		//レンダリング開始。
 		g_engine->BeginFrame();
-		//ゲームの更新。
-		mGame->Update();
+		gameObjectManager().Start();
+		//ゲームオブジェクトマネージャーの更新。
+		gameObjectManager().UpdateManager();
 		//////////////////////////////////////
 		//ここから絵を描くコードを記述する。
 		//////////////////////////////////////

@@ -3,6 +3,13 @@
 
 #include "MiniEngine.h"
 
+//ノンコピー
+#include "SrcFile/util/Noncopyable.h"
+
+//ゲームオブジェクト。
+#include "SrcFile/GameObject/IGameObject.h"
+#include "SrcFile/GameObject/GameObjectManager.h"
+
 using namespace std;
 //更新時間。後でGameTimeクラス作ること。
 const float DELTA_TIME = 1.0f / 60.0f;
