@@ -129,12 +129,13 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
 	mScale.MakeScaling(scale);
 	m_world = /*mBias * */mScale * mRot * mTrans;
 }
-void Model::Draw(RenderContext& rc, Matrix viewMat, Matrix projMat)
+void Model::Draw(RenderContext& rc, Matrix viewMat, Matrix projMat, int RenderMode)
 {
 	m_meshParts.Draw(
 		rc, 
 		m_world, 
 		viewMat,
-		projMat
+		projMat,
+		RenderMode
 	);
 }

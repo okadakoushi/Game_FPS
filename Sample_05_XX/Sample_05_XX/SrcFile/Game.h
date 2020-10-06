@@ -7,8 +7,10 @@ public:
 	
 	bool Start() override;
 	void Update() override;
+	void PreRender() override;
+	void Draw() override;
 private:
-	Model m_animSampleModel;					//アニメーションさせるサンプルモデル。
+	Model m_unityChan;							//アニメーションさせるサンプルモデル。
 	Vector3 m_pos = Vector3::Zero;				//座標。
 	Vector3 m_scale = Vector3::One;				//拡大率
 	Quaternion m_rot = Quaternion::Identity;	//回転。

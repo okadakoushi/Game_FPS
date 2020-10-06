@@ -183,6 +183,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	g_light.eyePos = g_camera3D->GetPosition();
 	g_light.specPow = 5.0f;
 
+	//シャドウマップのインスタンス。
+	m_shadow = new DirectionalShadowMap;
+
 	g_graphicsEngine = this;
 	return true;
 }

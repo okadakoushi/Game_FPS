@@ -56,7 +56,7 @@ public:
 	/// <param name="mView">ビュー行列</param>
 	/// <param name="mProj">プロジェクション行列</param>
 	/// <param name="light">ライト</param>
-	void Draw(RenderContext& rc, const Matrix& mWorld, const Matrix& mView, const Matrix& mProj);
+	void Draw(RenderContext& rc, const Matrix& mWorld, const Matrix& mView, const Matrix& mProj, const int renderMode);
 	/// <summary>
 	/// スケルトンを関連付ける。
 	/// </summary>

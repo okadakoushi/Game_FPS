@@ -250,6 +250,17 @@ public:
 			DirectX::XMMatrixLookAtLH(position, target, up)
 		);
 	}
+	/*!
+	*@brief	ベクトルと行列の乗算
+	*@param[in,out]		v	乗算されるベクトル。
+	*/
+	void Mul(Vector3& vOut) const
+	{
+		DirectX::XMStoreFloat3(
+			&vOut.vec,
+			DirectX::XMVector3Transform(vOut, *this)
+		);
+	}
 	/// <summary>
 	/// 行列と行列の乗算
 	/// </summary>

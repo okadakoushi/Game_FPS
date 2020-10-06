@@ -14,7 +14,17 @@
 
 #include "Camera.h"
 
+#include "SrcFile/Shadow/DirectionalShadowMap.h";
+
 class Light;
+
+enum RenderMode {
+	enRenderMode_Skin,			//スキンあり。
+	enRenderMode_NonSkin,		//スキンなし。
+	enRenderMode_DrawShadow,	//シャドウマップ描画。
+	enRenderMode_Num			//いらんきもするが一応。
+};
+
 
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
@@ -120,6 +130,22 @@ public:
 	{
 		return m_currentFrameBufferRTVHandle;
 	}
+	/// <summary>
+	/// デプスステンシルビューをフレームバッファに変更する。
+	/// </summary>
+	/// <returns>現在描画中のフレームバッファ。</returns>
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentFrameBufferDSV() const
+	{
+		return m_currentFrameBufferDSVHandle;
+	}
+	/// <summary>
+	/// シャドウマップの取得。
+	/// </summary>
+	/// <returns>シャドウマップ。</returns>
+	DirectionalShadowMap* GetShadowMap() const
+	{
+		return m_shadow;
+	}
 private:
 	/// <summary>
 	/// D3Dデバイスの作成。
@@ -224,6 +250,7 @@ private:
 	UINT m_frameBufferHeight = 0;		//フレームバッファの高さ。
 	Camera m_camera2D;					//2Dカメラ。
 	Camera m_camera3D;					//3Dカメラ。
+	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。

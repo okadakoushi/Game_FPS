@@ -109,6 +109,10 @@ void Material::InitPipelineState()
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinModel.GetCompiledBlob());
 	m_transNonSkinModelPipelineState.Init(psoDesc);
 
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinShadowDraw.GetCompiledBlob());
+	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psSkinShadowDraw.GetCompiledBlob());
+	m_SkinShadowMapDraw.Init(psoDesc);
+
 }
 void Material::InitShaders(
 	const wchar_t* fxFilePath,
@@ -119,17 +123,27 @@ void Material::InitShaders(
 	m_vsNonSkinModel.LoadVS(fxFilePath, vsEntryPointFunc);
 	m_vsSkinModel.LoadVS(fxFilePath, vsEntryPointFunc);
 	m_psModel.LoadPS(fxFilePath, psEntryPointFunc);
+	//m_vsNonSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapNonSkin");
+	m_vsSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapSkin");
+	m_psSkinShadowDraw.LoadPS(fxFilePath, "PSMain_ShadowMap");
 }
-void Material::BeginRender(RenderContext& rc, int hasSkin)
+void Material::BeginRender(RenderContext& rc, int renderMode)
 {
 	rc.SetRootSignature(m_rootSignature);
 	
-	if (hasSkin) {
-	//	rc.SetPipelineState(m_skinModelPipelineState);
+	switch (renderMode)
+	{
+	case enRenderMode_Skin:
+		//スキンありパイプライン。
 		rc.SetPipelineState(m_transSkinModelPipelineState);
-	}
-	else {
-	//	rc.SetPipelineState(m_nonSkinModelPipelineState);
+		break;
+	case enRenderMode_NonSkin:
+		//スキンなしパイプライン。
 		rc.SetPipelineState(m_transNonSkinModelPipelineState);
+		break;
+	case enRenderMode_DrawShadow:
+		//シャドウマップ描画パイプライン。
+		rc.SetPipelineState(m_SkinShadowMapDraw);
+		break;
 	}
 }

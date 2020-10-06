@@ -38,7 +38,6 @@ enum ModelInitStep {
 	initStep
 };
 
-
 /// <summary>
 /// モデルクラス。
 /// </summary>
@@ -97,13 +96,13 @@ public:
 		m_animation.Play(animNo, interpolateTime);
 	}
 	/// <summary>
-	/// 描画
-	/// <para>2,3引数は指定ないならカメラのViewとProj。</para>
+	/// 
 	/// </summary>
 	/// <param name="renderContext"></param>
-	/// <param name="viewMat"></param>
-	/// <param name="projMat"></param>
-	void Draw(RenderContext& renderContext, Matrix viewMat = g_camera3D->GetViewMatrix(), Matrix projMat = g_camera3D->GetProjectionMatrix());
+	/// <param name="viewMat">ビュー。</param>
+	/// <param name="projMat">プロジェクション。</param>
+	/// <param name="RenderMode">レンダーモード。</param>
+	void Draw(RenderContext& renderContext, Matrix viewMat, Matrix projMat, int RenderMode = 0);
 	/// <summary>
 	/// ワールド行列を取得。
 	/// </summary>
@@ -112,6 +111,13 @@ public:
 	{
 		return m_world;
 	}
+	/// <summary>
+	/// シャドウキャスターとして登録。
+	/// </summary>
+	void SetShadwoCaster()
+	{
+		isShadowCaster = true;
+	}
 private:
 	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
 	Matrix			m_world;		//ワールド行列。
@@ -119,9 +125,11 @@ private:
 	TkaFile			m_tkaFile;		//tkaファイル。
 	Skeleton		m_skeleton;		//スケルトン。
 	MeshParts		m_meshParts;	//メッシュパーツ。
+	bool			isShadowCaster = false;		//シャドウキャスター？
+	bool			isShadowReciever = false;	//シャドウレシーバー？
 	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
-	Animation		m_animation;	//アニメーション
+	Animation						m_animation;		//アニメーション
 	Vector3	m_pos = Vector3::Zero;				//座標。
 	Vector3	m_scale = Vector3::One;				//拡大率。
 	Quaternion m_rot = Quaternion::Identity;	//回転。

@@ -42,6 +42,10 @@ struct SPSIn{
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
 };
+//シャドウ用ピクセルシェーダー入力。
+struct SPSInShadow {
+	float4 pos	: SV_POSITION;	//座標。
+};
 
 //変更したらMeshPartsのディスクリプタヒープのレジスタも変更すること。
 //モデルテクスチャ。
@@ -123,4 +127,38 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	float4 texColor = g_texture.Sample(g_sampler, psIn.uv);
 	texColor.xyz *= lig; //光をテクスチャカラーに乗算する。
 	return float4(texColor.xyz, 1.0f);	
+}
+
+/*
+	スキンありシャドウマップ生成用の頂点シェーダー。
+*/
+SPSInShadow VSMain_ShadowMapSkin(SVSIn vsIn)
+{
+	//どのピクセルシェーダに返すか。
+	SPSInShadow psInput = (SPSInShadow)0;
+
+	//スキン行列の計算。
+	float4x4 skinning = 0;
+	float w = 0.0f;
+	for (int i = 0; i < 3; i++) {
+		skinning += boneMatrix[vsIn.Indices[i]] * vsIn.Weights[i];
+		w += vsIn.Weights[i];
+	}
+	skinning += boneMatrix[vsIn.Indices[3]] * (1.0f - w);
+
+	psInput.pos = mul(skinning, vsIn.pos);						//モデルの頂点をワールド座標系に変換。
+	psInput.pos = mul(mView, psInput.pos);						//ワールド座標系からカメラ座標系に変換。
+	psInput.pos = mul(mProj, psInput.pos);						//カメラ座標系からスクリーン座標系に変換。77
+
+	return psInput;
+}
+
+/*
+	ピクセルシェーダーのエントリ関数。
+*/
+float4 PSMain_ShadowMap(SPSInShadow In) : SV_Target0
+{
+	//射影空間でのZ値を返す。
+	float z = In.pos.z / In.pos.w;
+	return z;
 }

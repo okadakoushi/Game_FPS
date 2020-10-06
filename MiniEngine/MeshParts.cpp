@@ -164,7 +164,8 @@ void MeshParts::Draw(
 	RenderContext& rc,
 	const Matrix& mWorld,
 	const Matrix& mView,
-	const Matrix& mProj
+	const Matrix& mProj,
+	const int renderMode
 )
 {
 #if 1
@@ -198,7 +199,7 @@ void MeshParts::Draw(
 		//マテリアルごとにドロー。
 		for (int matNo = 0; matNo < mesh->m_materials.size(); matNo++) {
 			//このマテリアルが貼られているメッシュの描画開始。
-			mesh->m_materials[matNo]->BeginRender(rc, mesh->skinFlags[matNo]);
+			mesh->m_materials[matNo]->BeginRender(rc, renderMode);
 			//ディスクリプタヒープを登録。
 			rc.SetDescriptorHeap(m_descriptorHeap.at(descriptorHeapNo));
 			//インデックスバッファを設定。

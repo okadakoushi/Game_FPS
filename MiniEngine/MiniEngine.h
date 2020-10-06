@@ -40,6 +40,7 @@
 
 #include "RenderContext_inline.h"
 #include "DescriptorHeap_inline.h"
+#include "RenderTarget.h"
 
 #include "Sprite.h"
 #include "Model.h"

@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="rc">レンダリングコンテキスト</param>
 	/// <param name="hasSkin">スキンがあるかどうかのフラグ</param>
-	void BeginRender(RenderContext& rc, int hasSkin);
+	void BeginRender(RenderContext& rc, int renderMode);
 
 	/// <summary>
 	/// アルベドマップを取得。
@@ -91,9 +91,14 @@ private:
 	PipelineState m_skinModelPipelineState;			//スキンありモデル用のパイプラインステート。
 	PipelineState m_transSkinModelPipelineState;	//スキンありモデル用のパイプラインステート(半透明マテリアル)。
 	PipelineState m_transNonSkinModelPipelineState;	//スキンなしモデル用のパイプラインステート(半透明マテリアル)。
+	PipelineState m_NonSkinShadowMapDraw;			//スキンなしモデル用のシャドウ描画パイプラインステート。
+	PipelineState m_SkinShadowMapDraw;				//スキンありモデル用のシャドウ描画パイプラインステート。
 	Shader m_vsNonSkinModel;						//スキンなしモデル用の頂点シェーダー。
 	Shader m_vsSkinModel;							//スキンありモデル用の頂点シェーダー。
 	Shader m_psModel;								//モデル用のピクセルシェーダー。
+	Shader m_vsNonSkinShadowDraw;					//スキンなしシャドウ描画用ピクセルシェーダー。
+	Shader m_vsSkinShadowDraw;						//スキンありシャドウ描画用ピクセルシェーダー。
+	Shader m_psSkinShadowDraw;							//シャドウ描画用ピクセルシェーダー。
 };
 
 
