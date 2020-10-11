@@ -463,7 +463,7 @@ void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 }
-void GraphicsEngine::EndRender()
+void GraphicsEngine::EndRender(bool ChangeTarget)
 {
 	// レンダリングターゲットへの描き込み完了待ち
 	m_renderContext.WaitUntilFinishDrawingToRenderTarget(m_renderTargets[m_frameIndex]);
@@ -479,7 +479,10 @@ void GraphicsEngine::EndRender()
 	m_swapChain->Present(0, 0);
 #else
 	// Present the frame.
-	m_swapChain->Present(1, 0);
+	if (ChangeTarget) {
+		m_swapChain->Present(1, 0);
+	}
+
 #endif
 	//描画完了待ち。
 	WaitDraw();

@@ -5,19 +5,19 @@ Game::Game()
 {
 	//アニメーションの初期化ステップの都合上ここで初期化。
 	//シャドウマップの初期化。
-	g_graphicsEngine->GetShadowMap()->Init(1024, 1024, 2000.0f);
+	g_graphicsEngine->GetShadowMap()->Init(1024, 1024, 500.0f);
 	//シャドウキャスターとして登録する。
 	g_graphicsEngine->GetShadowMap()->RegisterShadowCaster(&m_unityChan);
 }
 
 bool Game::Start()
 {
-	//tkaファイルパス。
-	const char* tkeFilePath[] = {
-		"animData/unityChan/idle.tka",
-		"animData/unityChan/run.tka",
-		"animData/unityChan/walk.tka"
-	};
+	////tkaファイルパス。
+	//const char* tkeFilePath[] = {
+	//	"animData/unityChan/idle.tka",
+	//	"animData/unityChan/run.tka",
+	//	"animData/unityChan/walk.tka"
+	//};
 
 	//初期化データ。
 	ModelInitData InitDataModel;
@@ -67,6 +67,10 @@ void Game::Update()
 	g_graphicsEngine->GetShadowMap()->Update();
 	//アニメーションのプレイ。
 	m_unityChan.PlayAnim(0, 0.0f);
+	if (GetAsyncKeyState('A')) {
+		m_pos.x++;
+		m_unityChan.SetPosition(m_pos);
+	}
 	//ワールド座標、アニメーションの更新。
 	m_unityChan.UpdateMatAndAnim();
 }

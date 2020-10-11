@@ -1,6 +1,5 @@
 #pragma once
 
-
 class ConstantBuffer{
 public:
 	/// <summary>
@@ -37,6 +36,11 @@ public:
 	/// <param name="descriptorHandle"></param>
 	void RegistConstantBufferView(D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandle);
 	void RegistConstantBufferView(D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandle, int bufferNo);
+	/// <summary>
+	/// 現在描画中の定数バッファを取得。
+	/// </summary>
+	/// <returns>バックバッファーの定数バッファ。</returns>
+	ID3D12Resource* GetconstantBuffer() const;
 private:
 	ID3D12Resource* m_constantBuffer[2] = {nullptr};//定数バッファ。
 	void* m_constBufferCPU[2] = { nullptr };		//CPU側からアクセスできるする定数バッファのアドレス。
@@ -44,3 +48,4 @@ private:
 	int m_allocSize = 0;
 	bool m_isValid = false;							//利用可能？
 };
+

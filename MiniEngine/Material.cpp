@@ -79,13 +79,13 @@ void Material::InitPipelineState()
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 3;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
-#ifdef SAMPE_16_02
+//#ifdef SAMPE_16_02
 	psoDesc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_FLOAT;	//法線出力用。	
-	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;						//Z値。
-#else
-	psoDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;			//法線出力用。	
-	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;	//Z値。
-#endif
+	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;			//Z値。
+//#else
+	//psoDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;			//法線出力用。	
+	//psoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//Z値。
+//#endif
 	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	psoDesc.SampleDesc.Count = 1;
 
@@ -109,6 +109,8 @@ void Material::InitPipelineState()
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinModel.GetCompiledBlob());
 	m_transNonSkinModelPipelineState.Init(psoDesc);
 
+	//シャドウ用。
+	psoDesc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;		//アルベドカラー出力用。
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinShadowDraw.GetCompiledBlob());
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psSkinShadowDraw.GetCompiledBlob());
 	m_SkinShadowMapDraw.Init(psoDesc);

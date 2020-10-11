@@ -183,6 +183,7 @@ void MeshParts::Draw(
 	cb.mView = mView;
 	cb.mProj = mProj;
 
+
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 
 	if (m_expandData) {

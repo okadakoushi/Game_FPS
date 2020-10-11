@@ -7,10 +7,13 @@
 /// カスケードシャドウマップ。
 /// </summary>
 /// <code>
-/// --func call step--
-/// 1.RegisterShadowCaster();
-/// 2.Update();	要改善。
-/// 3.RenderToShadowMap();
+/// --func call step-- *引数は省略*
+/// 1.Init();
+/// 2.(if Needed)SetShadowAreas();
+/// 3.RegisterShadowCaster();
+/// 4.SkinModel::RegisterShadowReciever();
+/// 5.Update();	todo : Engine::Update()
+/// 6.RenderToShadowMap() TODO : Engine::Update(); SkinModelに作らないこと。複数回Draw呼ばれる。
 /// </code>
 class DirectionalShadowMap : Noncopyable
 {
@@ -23,27 +26,35 @@ public:
 	/// <param name="lightHeight">太陽の高さ。</param>
 	void Init(int w, int h, float lightHeight);
 	/// <summary>
+	/// シャドウの範囲を決定。
+	/// <para>デフォルトはすべて500。</para>
+	/// </summary>
+	/// <param name="Area1">1枚目</param>
+	/// <param name="Area2">2枚目</param>
+	/// <param name="Area3">3枚目</param>
+	void SetShadowAreas(float Area1, float Area2, float Area3)
+	{
+		m_shadowAreas[0] = Area1;
+		m_shadowAreas[1] = Area2;
+		m_shadowAreas[2] = Area3;
+	}
+	/// <summary>
 	/// 更新。
 	/// </summary>
 	void Update();
-	/// <summary>
-	/// ライトの位置を計算。
-	/// </summary>
-	/// <param name="lightHeight">ライトカメラの高さ。</param>
-	/// <param name="viewFrustomCenterPosition">視錐台の中心。</param>
-	Vector3 CalcLightPosition(float lightHeight, Vector3 viewFrustomCenterPosition);
 	/// <summary>
 	/// シャドウマップを描画
 	/// </summary>
 	/// <remarks>
 	/// こいつ呼び出すと自動的にシャドウマップ用のRenderTargetに変更する。
 	/// 描画が終わり次第、元の描画していたフレームバッファに戻ります。
-	/// 後々、スキンモデルレンダーで勝手に呼ばれる処理にする。
+	/// todo:スキンモデルレンダーで勝手に呼ばれる処理にする。
 	/// </remarks>
 	/// <param name="rc"></param>
 	void RenderToShadowMap();
 	/// <summary>
 	/// シャドウキャスターとして登録。
+	/// <para>本関数を呼び出すと、シャドウ描画が自動的にONになります。</para>
 	/// </summary>
 	/// <param name="model">登録するモデル。</param>
 	void RegisterShadowCaster(Model* model)
@@ -54,7 +65,25 @@ public:
 		//シャドウだすで！
 		m_isEnable = true;
 	}
-
+	/// <summary>
+	/// シャドウ描画する？
+	/// </summary>
+	/// <param name="flag">フラグ。</param>
+	void SetShadowFlag(bool flag)
+	{
+		m_isEnable = flag;
+	}
+private://ユーザー側が使う必要のない関数。
+	/// <summary>
+	/// ライトの位置を計算。
+	/// </summary>
+	/// <remarks>
+	/// メンバではない値を返却する関数のため、参照に変えないこと。
+	/// </remarks>
+	/// <param name="lightHeight">ライトカメラの高さ。</param>
+	/// <param name="viewFrustomCenterPosition">視錐台の中心。</param>
+	/// <returns>視錐台真ん中のライトカメラの位置。</returns>
+	Vector3 CalcLightPosition(float lightHeight, Vector3 viewFrustomCenterPosition) const;
 private:
 	static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
@@ -70,8 +99,8 @@ private:
 	SShadowCb m_shadowCBEntity;					//シャドウの値。
 	ConstantBuffer m_shadowCB;					//シャドウの定数バッファ。
 	Vector3 m_lightDirection = Vector3::Down;	//ライトの方向。
-	float m_shadowAreas[NUM_SHADOW_MAP];		//影の落ちる範囲。
 	float m_lightHeight;						//ライトの高さ。
 	bool m_isEnable = false;					//シャドウマップが有効？
+	float m_shadowAreas[NUM_SHADOW_MAP] = { 500.0f,500.0f,500.0f };		//影の落ちる範囲。
 };
 

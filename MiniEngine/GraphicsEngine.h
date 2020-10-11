@@ -59,7 +59,7 @@ public:
 	/// <remarks>
 	/// 1フレームのレンダリングの終了時に呼び出してください。
 	/// </remarks>
-	void EndRender();
+	void EndRender(bool changeTarget = true);
 	/// <summary>
 	/// D3Dデバイスを取得。
 	/// </summary>
@@ -122,6 +122,15 @@ public:
 	/// </summary>
 	/// <param name="rc"></param>
 	void ChangeRenderTargetToFrameBuffer(RenderContext& rc);
+	void ExcuteCommand();
+	/// <summary>
+	/// 現在描画中のレンダーターゲットを取得。
+	/// </summary>
+	/// <returns></returns>
+	ID3D12Resource* GetRenderTarget() const
+	{
+		return m_renderTargets[m_frameIndex];
+	}
 	/// <summary>
 	/// 現在のフレームバッファのレンダリングターゲットビューを取得。
 	/// </summary>

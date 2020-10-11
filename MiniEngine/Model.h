@@ -112,8 +112,23 @@ public:
 		return m_world;
 	}
 	/// <summary>
+	/// シャドウレシーバーとして登録。
+	/// </summary>
+	void SetShadowReciever()
+	{
+		isShadowReciever = true;
+	}
+	void SetPosition(Vector3 pos) {
+		m_pos = pos;
+	}
+	friend class DirectionalShadowMap;
+protected:
+	/// <summary>
 	/// シャドウキャスターとして登録。
 	/// </summary>
+	/// <remarks>
+	/// ユーザー側には使用してほしくないが、シャドウマップで使うので。
+	/// </remarks>
 	void SetShadwoCaster()
 	{
 		isShadowCaster = true;

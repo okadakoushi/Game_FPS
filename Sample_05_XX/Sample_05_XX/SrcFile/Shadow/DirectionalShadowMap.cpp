@@ -13,14 +13,14 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 	int shadowMapNo = 0;
 	//クリアカラー。
 	float clearColor[] = {
-		1.0f,1.0f,1.0f,1.0f
+		1.0f, 1.0f, 1.0f, 1.0f
 	};
 	//シャドウマップを作成。
 	for (auto& sm : m_shadowMaps) {
 		sm.Create(
 			wh[shadowMapNo][0],
 			wh[shadowMapNo][1],
-			1,
+			0,
 			1,
 			DXGI_FORMAT_R32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT,
@@ -29,7 +29,9 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 		//次のシャドウマップへ。
 		shadowMapNo++;
 	}
-	//定数バッファ初期化。
+	//ライトの高さ。
+	m_lightHeight = lightHeight;
+	//定数バッファ初期化
 	m_shadowCB.Init(sizeof(m_shadowCBEntity), nullptr);
 }
 
@@ -86,9 +88,9 @@ void DirectionalShadowMap::Update()
 
 	//視錐台を分割する比率。
 	float shadowAreaTbl[] = {
-		2000 * 0.2f,
-		2000 * 0.4f,
-		2000 * 0.8f
+		m_shadowAreas[0],
+		m_shadowAreas[1],
+		m_shadowAreas[2]
 	};
 
 	//ライトビューの高さを計算
@@ -219,7 +221,7 @@ void DirectionalShadowMap::Update()
 	}
 }
 
-Vector3 DirectionalShadowMap::CalcLightPosition(float lightHeight, Vector3 viewFrustomCenterPosition)
+Vector3 DirectionalShadowMap::CalcLightPosition(float lightHeight, Vector3 viewFrustomCenterPosition) const 
 {
 	/*
 	ライトの高さ = 視錐台の中心座標.y + ライトの方向 * a
@@ -245,16 +247,24 @@ void DirectionalShadowMap::RenderToShadowMap()
 		//シャドウマップ有効だった。
 		for (int i = 0; i < NUM_SHADOW_MAP; i++) {
 			//レンダリングターゲットが設定できるようになるまで待機。
-			//rc.WaitUntilToPossibleSetRenderTarget(m_shadowMaps[i]);
+			rc.WaitUntilToPossibleSetRenderTarget(m_shadowMaps[i]);
 			//レンダーターゲットのセット。
 			rc.SetRenderTarget(m_shadowMaps[i].GetRTVCpuDescriptorHandle(), m_shadowMaps[i].GetDSVCpuDescriptorHandle());
 			//ケシケシ
 			rc.ClearRenderTargetView(m_shadowMaps[i].GetRTVCpuDescriptorHandle(), m_shadowMaps[i].GetRTVClearColor());
+			rc.ClearDepthStencilView(m_shadowMaps[i].GetDSVCpuDescriptorHandle(), 1.0f);
 			for (auto& caster : m_shadowCasters) {
 				//カキカキ
 				caster->Draw(rc, m_lightViewMatrix[i], m_lightProjMatirx[i], enRenderMode_DrawShadow);
+				//DX12の仕様上、定数バッファの値を変更する場合はコマンドリストにのっかっている描画処理を
+				//一旦描画して、コマンドリストを初期化。
+				g_graphicsEngine->EndRender(false);
+				g_graphicsEngine->BeginRender();
 			}
+			
 		}
+		//レンダーターゲット変えてるようになるまで待機。
+		rc.WaitUntilToPossibleSetRenderTarget(g_graphicsEngine->GetRenderTarget());
 		//カキカキ終わったらレンダーターゲット戻す。
 		rc.SetRenderTarget(g_graphicsEngine->GetCurrentFrameBuffuerRTV(), g_graphicsEngine->GetCurrentFrameBufferDSV());
 	}
