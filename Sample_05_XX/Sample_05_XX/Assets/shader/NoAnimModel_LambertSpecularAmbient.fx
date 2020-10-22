@@ -2,14 +2,17 @@
 //拡散反射光のみを確認するためのサンプルです。
 
 
-
+//変えたら変える。
 static const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの本数。
+static const int NUM_SHADOW_MAP = 3;		//シャドウマップの数。
 
 //モデル用の定数バッファ
+//変えたらMeshPartsの送ってる処理も変えてね！
 cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	int mShadowReciever;
 };
 
 //ディレクションライト。
@@ -23,6 +26,10 @@ cbuffer LightCb : register(b1){
 	float3 eyePos;					//カメラの視点。
 	float specPow;					//スペキュラの絞り。
 	float3 ambinentLight;			//環境光。
+};
+
+struct SVSInNonSkin {
+	float4 pos		: Position;				//頂点座標。
 };
 
 //頂点シェーダーへの入力。
@@ -41,7 +48,14 @@ struct SPSIn{
 	float3 normal		: NORMAL;		//法線。
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド空間でのピクセルの座標。
+	float4 posInWorld	: TEXCOORD2;	//ワールド座標。
+	float4 posInview	: TEXCOORD3;	//ビュー座標
 };
+
+cbuffer ShadowCB : register(b2) {
+	float4x4 mLVP[NUM_SHADOW_MAP];						//ライトビュープロジェクション。
+	float3 shadowAreaDepthInViewSpace;					//カメラ空間での影を落とすエリアの深度テーブル。
+}
 //シャドウ用ピクセルシェーダー入力。
 struct SPSInShadow {
 	float4 pos	: SV_POSITION;	//座標。
@@ -53,6 +67,9 @@ Texture2D<float4> g_texture : register(t0);
 Texture2D<float4> g_normalMap : register(t1);
 Texture2D<float4> g_specularMap : register(t2);
 StructuredBuffer<float4x4> boneMatrix : register(t3); //ボーン行列 
+Texture2D<float4> ShadowMap0 : register(t4);	//1枚目
+Texture2D<float4> ShadowMap1 : register(t5);	//2枚目
+Texture2D<float4> ShadowMap2 : register(t6);	//3枚目
 
 //サンプラステート。
 sampler g_sampler : register(s0);
@@ -74,12 +91,94 @@ SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
 	skinning += boneMatrix[vsIn.Indices[3]] * (1.0f - w);
 
 	psIn.pos = mul(skinning, vsIn.pos);						//モデルの頂点をワールド座標系に変換。
+	psIn.posInWorld = psIn.pos;								//ワールド座標を保存しておく。
 	psIn.pos = mul(mView, psIn.pos);						//ワールド座標系からカメラ座標系に変換。
+	psIn.posInview = psIn.pos;								//ビュー座標を保存しておく。
 	psIn.pos = mul(mProj, psIn.pos);						//カメラ座標系からスクリーン座標系に変換。
 	psIn.normal = normalize(mul(mWorld, vsIn.normal));		//法線をワールド座標系に変換。
 	psIn.uv = vsIn.uv;
 
 	return psIn;
+}
+
+/// <summary>
+/// モデル用スキンなしシェーダー。
+/// </summary>
+SPSIn VSMainNonSkin(SVSInNonSkin vsIn)
+{
+	SPSIn psIn;
+	psIn.pos = mul(mWorld, vsIn.pos);	//１：モデルの頂点をワールド座標系に変換。	
+	psIn.pos = mul(mView, psIn.pos);	//２：ワールド座標系からカメラ座標系に変換。
+	psIn.pos = mul(mProj, psIn.pos);	//３：カメラ座標系からスクリーン座標系に変換。
+	return psIn;
+}
+
+int GetCascadeIndex(float zInView)
+{
+	for (int i = 0; i < NUM_SHADOW_MAP; i++) {
+		if (zInView < shadowAreaDepthInViewSpace[i]) {
+			return i;
+		}
+	}
+	return 0;
+}
+
+float CalcShadowPercent(Texture2D<float4> tex, float2 uv, float depth)
+{
+	//シャドウマップの深度情報
+	float shadow_val = tex.Sample(g_sampler, uv).r;
+	//return shadow_val;
+	//深度テスト
+	if (depth > shadow_val.r + 0.01f) {
+		//手前にあるのでシャドウを落とす。
+		return 1.0f;
+	}
+	return 0.0f;	
+}
+
+float CalcShadow(float3 wp, float zInView)
+{
+	//1.0fだった場合シャドウが落ちる。
+	float Shadow = 0;
+	//シャドウを落とすかどうかの計算。
+	if (mShadowReciever == 1) {
+		//シャドウマップの番号。
+		int MapNum = 0;
+
+		//まず使用するシャドウマップの番号を取得する。
+		MapNum = GetCascadeIndex(zInView);
+
+		//モデルの座標をライトのLVPでライトカメラ軸に変換する。
+		float4 posInLVP = mul(mLVP[MapNum], float4(wp, 1.0f));
+		//ライト座標系での深度値を計算。
+		posInLVP.xyz /= posInLVP.w;
+		//深度値取得。
+		float depth = posInLVP.z;
+		//UV座標に変換。
+		float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
+		
+		/*if (!(shadowMapUV.x < 0 || shadowMapUV.y < 0 || shadowMapUV.x > 1 || shadowMapUV.y > 1))*/
+		{
+			//どのシャドウマップの深度情報をとるのか識別。
+			if (MapNum == 0) {
+				//0番目の深度情報で計算。
+				Shadow = CalcShadowPercent(ShadowMap0, shadowMapUV, depth);
+				return Shadow;
+			}
+			else if (MapNum == 1) {
+				//1番目の深度情報で計算。
+				Shadow = CalcShadowPercent(ShadowMap1, shadowMapUV, depth);
+				return Shadow;
+			}
+			else if (MapNum == 2) {
+				//2番目の深度情報で計算。
+				Shadow = CalcShadowPercent(ShadowMap2, shadowMapUV, depth);
+				return Shadow;
+			}
+		}
+	}
+	return Shadow;
+
 }
 /// <summary>
 /// モデル用のピクセルシェーダーのエントリーポイント
@@ -124,6 +223,14 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	//////////////////////////////////////////////////////
 	lig += ambinentLight; //足し算するだけ
 
+	float Shadow = CalcShadow(psIn.posInWorld, psIn.posInview.z);
+	//return Shadow;
+	lig *= lerp(1.f,0.5f,Shadow);
+	// if (Shadow == 1) {
+	// 	//影が落ちているのでライトを弱める。
+	// 	lig *= 0.5f;
+	// }
+	//lig *= Shadow;
 	float4 texColor = g_texture.Sample(g_sampler, psIn.uv);
 	texColor.xyz *= lig; //光をテクスチャカラーに乗算する。
 	return float4(texColor.xyz, 1.0f);	
@@ -140,16 +247,17 @@ SPSInShadow VSMain_ShadowMapSkin(SVSIn vsIn)
 	//スキン行列の計算。
 	float4x4 skinning = 0;
 	float w = 0.0f;
+	float4 pos = 0;
 	for (int i = 0; i < 3; i++) {
 		skinning += boneMatrix[vsIn.Indices[i]] * vsIn.Weights[i];
 		w += vsIn.Weights[i];
 	}
 	skinning += boneMatrix[vsIn.Indices[3]] * (1.0f - w);
 
-	psInput.pos = mul(skinning, vsIn.pos);						//モデルの頂点をワールド座標系に変換。
-	psInput.pos = mul(mView, psInput.pos);						//ワールド座標系からカメラ座標系に変換。
-	psInput.pos = mul(mProj, psInput.pos);						//カメラ座標系からスクリーン座標系に変換。77
-
+	pos = mul(skinning, vsIn.pos);						//モデルの頂点をワールド座標系に変換。
+	pos = mul(mView, pos);						//ワールド座標系からカメラ座標系に変換。
+	pos = mul(mProj, pos);						//カメラ座標系からスクリーン座標系に変換。77
+	psInput.pos = pos;
 	return psInput;
 }
 

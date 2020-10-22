@@ -6,30 +6,17 @@
 
 int Model::Init(const ModelInitData& initData)
 {
-	//内部のシェーダーをロードする処理が求めているのが
-	//wchar_t型の文字列なので、ここで変換しておく。
-	wchar_t wfxFilePath[256];
-	if (initData.m_fxFilePath == nullptr) {
-		MessageBoxA(nullptr, "fxファイルパスが指定されていません。", "エラー", MB_OK);
-		std::abort();
-	}
+
 
 	//アニメーションをロードして積む。
-	m_tkaFile.Load(initData.m_tkaFilePath);
-	m_tkaFilePaths.push_back(initData.m_tkaFilePath);
+	if (initData.m_tkaFilePath != nullptr) {
+		m_tkaFile.Load(initData.m_tkaFilePath);
+		m_tkaFilePaths.push_back(initData.m_tkaFilePath);
+	}
 
-	mbstowcs(wfxFilePath, initData.m_fxFilePath, 256);
 
 	m_tkmFile.Load(initData.m_tkmFilePath);
-	m_meshParts.InitFromTkmFile(
-		m_tkmFile, 
-		wfxFilePath, 
-		initData.m_vsEntryPointFunc,
-		initData.m_psEntryPointFunc,
-		initData.m_expandConstantBuffer,
-		initData.m_expandConstantBufferSize,
-		initData.m_expandShaderResoruceView
-	);
+
 
 	UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);
 	return enInitStep_LoadModel;
@@ -56,12 +43,32 @@ int Model::LoadTks(const ModelInitData& initData)
 	}
 }
 
-int Model::initSkeleton()
+int Model::initSkeleton(const ModelInitData& initData)
 {
 	//バインドポーズとかの計算。
 	m_skeleton.BuildBoneMatrices();
 	//スケルトンとモデルの関連付け。
-	BindSkeleton(m_skeleton);
+	if (initData.m_tkaFilePath != nullptr) {
+		BindSkeleton(m_skeleton);
+	}
+
+	//内部のシェーダーをロードする処理が求めているのが
+	//wchar_t型の文字列なので、ここで変換しておく。
+	wchar_t wfxFilePath[256];
+	if (initData.m_fxFilePath == nullptr) {
+		MessageBoxA(nullptr, "fxファイルパスが指定されていません。", "エラー", MB_OK);
+		std::abort();
+	}
+	mbstowcs(wfxFilePath, initData.m_fxFilePath, 256);
+	m_meshParts.InitFromTkmFile(
+		m_tkmFile,
+		wfxFilePath,
+		initData.m_vsEntryPointFunc,
+		initData.m_psEntryPointFunc,
+		initData.m_expandConstantBuffer,
+		initData.m_expandConstantBufferSize,
+		initData.m_expandShaderResoruceView
+	);
 	//アニメーションクリップ。
 	if (m_tkaFilePaths.empty() == false) {
 		//アニメーションクリップがあった。
@@ -127,7 +134,7 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
 	mTrans.MakeTranslation(pos);
 	mRot.MakeRotationFromQuaternion(rot);
 	mScale.MakeScaling(scale);
-	m_world = /*mBias * */mScale * mRot * mTrans;
+	m_world =/* mBias **/mScale * mRot * mTrans;
 }
 void Model::Draw(RenderContext& rc, Matrix viewMat, Matrix projMat, int RenderMode)
 {
@@ -136,6 +143,7 @@ void Model::Draw(RenderContext& rc, Matrix viewMat, Matrix projMat, int RenderMo
 		m_world, 
 		viewMat,
 		projMat,
+		isShadowReciever,
 		RenderMode
 	);
 }

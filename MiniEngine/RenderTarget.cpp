@@ -13,8 +13,6 @@ bool RenderTarget::Create(
 )
 {
 	auto d3dDevice = g_graphicsEngine->GetD3DDevice();
-	m_width = w;
-	m_height = h;
 	//レンダリングターゲットとなるテクスチャを作成する。
 	if (!CreateRenderTargetTexture(*g_graphicsEngine, d3dDevice, w, h, mipLevel, arraySize, colorFormat, clearColor)) {
 	//	TK_ASSERT(false, "レンダリングターゲットとなるテクスチャの作成に失敗しました。");
@@ -38,6 +36,8 @@ bool RenderTarget::Create(
 	if (clearColor) {
 		memcpy(m_rtvClearColor, clearColor, sizeof(clearColor));
 	}
+	//ビューポートの作成。
+	CreateViewPort(w, h);
 	return true;
 }
 bool RenderTarget::CreateDescriptorHeap(GraphicsEngine& ge, ID3D12Device*& d3dDevice)
@@ -165,6 +165,16 @@ bool RenderTarget::CreateDepthStencilTexture(
 	}
 	return true;
 }
+void RenderTarget::CreateViewPort(int w, int h )
+{
+	//ビューポートを初期化。
+	m_viewport.TopLeftX = 0;
+	m_viewport.TopLeftY = 0;
+	m_viewport.Width = w;
+	m_viewport.Height = h;
+	m_viewport.MinDepth = D3D12_MIN_DEPTH;
+	m_viewport.MaxDepth = D3D12_MAX_DEPTH;
+}
 void RenderTarget::CreateDescriptor(ID3D12Device*& d3dDevice)
 {
 	//カラーテクスチャのディスクリプタを作成。
@@ -176,3 +186,4 @@ void RenderTarget::CreateDescriptor(ID3D12Device*& d3dDevice)
 		d3dDevice->CreateDepthStencilView(m_depthStencilTexture, nullptr, dsvHandle);
 	}
 }
+

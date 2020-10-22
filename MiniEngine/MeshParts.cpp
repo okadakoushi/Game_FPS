@@ -46,7 +46,7 @@ void MeshParts::InitFromTkmFile(
 	}
 	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
-	//CreateDescriptorHeaps();
+	CreateDescriptorHeaps();
 }
 
 void MeshParts::CreateDescriptorHeaps()
@@ -70,13 +70,19 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeap.RegistShaderResource(1, mesh->m_materials[matNo]->GetNormalMap());		//法線マップ。
 			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());		//スペキュラマップ。
 			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);					//ボーン
+			//シャドウマップ登録。
+			auto* shadowMap = g_graphicsEngine->GetShadowMap();
+			descriptorHeap.RegistShaderResource(4, shadowMap->GetRenderTarget(0).GetRenderTargetTexture());
+			descriptorHeap.RegistShaderResource(5, shadowMap->GetRenderTarget(1).GetRenderTargetTexture());
+			descriptorHeap.RegistShaderResource(6, shadowMap->GetRenderTarget(2).GetRenderTargetTexture());
 			if (m_expandShaderResourceView){
 				descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO, *m_expandShaderResourceView);
 			}
-			descriptorHeap.RegistConstantBuffer(0, m_commonConstantBuffer);
+			descriptorHeap.RegistConstantBuffer(0, m_commonConstantBuffer);	//WVP
 			if (m_expandConstantBuffer.IsValid()) {
-				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer);
+				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer); //Light
 			}
+			descriptorHeap.RegistConstantBuffer(2, g_graphicsEngine->GetShadowMap()->GetShadowCB());	//Shadow
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
 			descriptorHeapNo++;
@@ -165,6 +171,7 @@ void MeshParts::Draw(
 	const Matrix& mWorld,
 	const Matrix& mView,
 	const Matrix& mProj,
+	const bool isShadowReciever,
 	const int renderMode
 )
 {
@@ -177,18 +184,19 @@ void MeshParts::Draw(
 	//プリミティブのトポロジーはトライアングルリストのみ。
 	rc.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//定数バッファを更新する。
+	//定数バッファを更新する。 todo : skinModelにcbを移譲。
 	SConstantBuffer cb;
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
-
+	cb.isShadowReciever = isShadowReciever;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 
 	if (m_expandData) {
 		m_expandConstantBuffer.CopyToVRAM(m_expandData);
 	}
+
 	if (m_boneMatricesStructureBuffer.IsInited()) {
 		//ボーン行列を更新する。
 		m_boneMatricesStructureBuffer.Update(m_skeleton->GetBoneMatricesTopAddress());

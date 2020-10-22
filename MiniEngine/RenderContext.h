@@ -3,7 +3,7 @@
 class ConstantBuffer;
 class Texture;
 class DescriptorHeap;
-class RenderTarget;
+#include "RenderTarget.h"
 /// <summary>
 /// レンダリングコンテキスト。
 /// </summary>
@@ -132,12 +132,23 @@ public:
 		}
 	}
 	/// <summary>
-	/// レンダリングターゲットとビューポートを同時に設定する。
+	/// レンダリングターゲットを設定する。
+	/// <para>こっち呼び出すときはViewPortの設定は、その処理時に手動で行うこと。</para>
 	/// </summary>
 	/// <param name="renderTarget"></param>
 	void SetRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle)
 	{
 		m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+	}
+	/// <summary>
+	/// レンダリングターゲットとビューポートを設定する。
+	/// </summary>
+	/// <param name="rt">RenderTarget</param>
+	/// <param name="dsvHandle">dsv	</param>
+	void SetRenderTarget(RenderTarget& rt, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle) 
+	{
+		m_commandList->OMSetRenderTargets(1, &rt.GetRTVCpuDescriptorHandle(), FALSE, &dsvHandle);
+		m_commandList->RSSetViewports(1, &rt.GetViewport());
 	}
 	/// <summary>
 	/// レンダリングターゲットとビューポートを同時に設定する。

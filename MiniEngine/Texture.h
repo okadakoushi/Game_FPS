@@ -46,7 +46,7 @@ public:
 	{
 		return m_texture != nullptr;
 	}
-	ID3D12Resource* Get()
+	ID3D12Resource* Get() const
 	{
 		return m_texture;
 	}

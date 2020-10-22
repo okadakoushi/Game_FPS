@@ -234,6 +234,10 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 	tkmMat.normalMapFileName = LoadTextureFileName(fp);
 	//スペキュラマップのファイル名をロード。
 	tkmMat.specularMapFileName = LoadTextureFileName(fp);
+	//リフレクションマップ
+	tkmMat.reflectionMapFileName = LoadTextureFileName(fp);
+	//屈折率マップ
+	tkmMat.refractionMapFileName = LoadTextureFileName(fp);
 
 	std::string texFilePath = filePath;
 	auto loadTexture = [&](
@@ -277,6 +281,8 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 	loadTexture( tkmMat.albedoMapFileName, tkmMat.albedoMap, tkmMat.albedoMapSize );
 	loadTexture( tkmMat.normalMapFileName, tkmMat.normalMap, tkmMat.normalMapSize );
 	loadTexture( tkmMat.specularMapFileName, tkmMat.specularMap, tkmMat.specularMapSize );
+	loadTexture( tkmMat.reflectionMapFileName, tkmMat.reflectionMap, tkmMat.reflectionMapSize );
+	loadTexture( tkmMat.refractionMapFileName, tkmMat.refractionMap, tkmMat.refractionMapSize );
 	
 }
 void TkmFile::BuildTangentAndBiNormal()

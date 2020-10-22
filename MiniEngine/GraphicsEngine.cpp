@@ -163,7 +163,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera2D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	m_camera3D.SetPosition({0.0f, 50.0f, 200.0f} );
-	m_camera3D.SetTarget({ 0.0f, 50.0f, 0.0f });
+	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	g_camera2D = &m_camera2D;
 	g_camera3D = &m_camera3D;
@@ -462,6 +462,7 @@ void GraphicsEngine::BeginRender()
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
+	rc.SetViewport(m_viewport);
 }
 void GraphicsEngine::EndRender(bool ChangeTarget)
 {

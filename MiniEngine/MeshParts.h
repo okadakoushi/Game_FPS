@@ -56,7 +56,7 @@ public:
 	/// <param name="mView">ビュー行列</param>
 	/// <param name="mProj">プロジェクション行列</param>
 	/// <param name="light">ライト</param>
-	void Draw(RenderContext& rc, const Matrix& mWorld, const Matrix& mView, const Matrix& mProj, const int renderMode);
+	void Draw(RenderContext& rc, const Matrix& mWorld, const Matrix& mView, const Matrix& mProj, const bool isShadowReciever = false, const int renderMode = 0);
 	/// <summary>
 	/// スケルトンを関連付ける。
 	/// </summary>
@@ -92,9 +92,10 @@ private:
 	/// この構造体を変更したら、SimpleModel.fxのCBも変更するように。
 	/// </remarks>
 	struct SConstantBuffer {
-		Matrix mWorld;		//ワールド行列。
-		Matrix mView;		//ビュー行列。
-		Matrix mProj;		//プロジェクション行列。
+		Matrix mWorld;			//ワールド行列。
+		Matrix mView;			//ビュー行列。
+		Matrix mProj;			//プロジェクション行列。
+		int isShadowReciever;	//シャドウレシーバー？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
 	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ

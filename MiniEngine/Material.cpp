@@ -59,7 +59,7 @@ void Material::InitPipelineState()
 		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 48, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_SINT, 0, 56, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
@@ -80,40 +80,42 @@ void Material::InitPipelineState()
 	psoDesc.NumRenderTargets = 3;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
 //#ifdef SAMPE_16_02
-	psoDesc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_FLOAT;	//法線出力用。	
-	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;			//Z値。
+	//psoDesc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_FLOAT;	//法線出力用。	
+	//psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;			//Z値。
 //#else
-	//psoDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;			//法線出力用。	
-	//psoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//Z値。
+	psoDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;			//法線出力用。	
+	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//Z値。
 //#endif
 	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	psoDesc.SampleDesc.Count = 1;
 
 	m_skinModelPipelineState.Init(psoDesc);
 
-	//続いてスキンなしモデル用を作成。
-	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinModel.GetCompiledBlob());
-	m_nonSkinModelPipelineState.Init(psoDesc);
+	//シャドウ用。
+	psoDesc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;		//アルベドカラー出力用。
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinShadowDraw.GetCompiledBlob());
+	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psSkinShadowDraw.GetCompiledBlob());
+	m_SkinShadowMapDraw.Init(psoDesc);
 
 	//続いて半透明マテリアル用。
+	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
+	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psModel.GetCompiledBlob());
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinModel.GetCompiledBlob());
 	psoDesc.BlendState.IndependentBlendEnable = TRUE;
 	psoDesc.BlendState.RenderTarget[0].BlendEnable = TRUE;
 	psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 	psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-
 	
+	//psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinModel.GetCompiledBlob());
 	m_transSkinModelPipelineState.Init(psoDesc);
 
-	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinModel.GetCompiledBlob());
+	//NonSkin用の設定を作成。desc変えないと上書きできない的なバグが。
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC NonSkinDesc = { 0 };
+	D3D12_INPUT_ELEMENT_DESC NonSkinElementDesc[] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	//そこまで変えるとこないので設定もってくる。
+	NonSkinDesc = psoDesc;
 	m_transNonSkinModelPipelineState.Init(psoDesc);
-
-	//シャドウ用。
-	psoDesc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;		//アルベドカラー出力用。
-	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinShadowDraw.GetCompiledBlob());
-	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psSkinShadowDraw.GetCompiledBlob());
-	m_SkinShadowMapDraw.Init(psoDesc);
 
 }
 void Material::InitShaders(
@@ -122,7 +124,7 @@ void Material::InitShaders(
 	const char* psEntryPointFunc
 )
 {
-	m_vsNonSkinModel.LoadVS(fxFilePath, vsEntryPointFunc);
+	m_vsNonSkinModel.LoadVS(fxFilePath, "VSMainNonSkin");
 	m_vsSkinModel.LoadVS(fxFilePath, vsEntryPointFunc);
 	m_psModel.LoadPS(fxFilePath, psEntryPointFunc);
 	//m_vsNonSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapNonSkin");

@@ -49,7 +49,7 @@ public:
 	/// レンダリングターゲットとなるテクスチャを取得。
 	/// </summary>
 	/// <returns></returns>
-	Texture& GetRenderTargetTexture()
+	Texture& GetRenderTargetTexture() 
 	{
 		return m_renderTargetTexture;
 	}
@@ -84,6 +84,18 @@ public:
 	float GetDSVClearValue() const
 	{
 		return m_dsvClearValue;
+	}
+	/// <summary>
+	/// ビューポートの取得。
+	/// </summary>
+	/// <returns></returns>
+	const D3D12_VIEWPORT& GetViewport() const
+	{
+		return m_viewport;
+	}
+	void SetName(const wchar_t* name)
+	{
+		m_renderTargetTextureDx12->SetName(name);
 	}
 private:
 	/// <summary>
@@ -129,18 +141,22 @@ private:
 		int w,
 		int h,
 		DXGI_FORMAT format);
+	void CreateViewPort(int w, int h);
 	/// <summary>
 	/// ディスクリプタの作成。
 	/// </summary>
 	/// <param name="d3dDevice">D3Dデバイス</param>
 	/// <returns>trueが返ってｋチアら成功。</returns>
 	void CreateDescriptor(ID3D12Device*& d3dDevice);
+
+	
 private:
 	Texture m_renderTargetTexture;
 	ID3D12Resource* m_renderTargetTextureDx12;	//レンダリングターゲットとなるテクスチャ。
 	ID3D12Resource* m_depthStencilTexture;		//深度ステンシルバッファとなるテクスチャ。
 	ID3D12DescriptorHeap*		m_rtvHeap;		//RTV用のディスクリプタヒープ。
 	ID3D12DescriptorHeap*		m_dsvHeap;		//深度ステンシルバッファビューのディスクリプタヒープ。
+	D3D12_VIEWPORT				m_viewport;		//ビューポート。
 	UINT m_rtvDescriptorSize = 0;				//フレームバッファのディスクリプタのサイズ。
 	UINT m_dsvDescriptorSize = 0;				//深度ステンシルバッファのディスクリプタのサイズ。
 	int m_width = 0;							//レンダリングターゲットの幅。

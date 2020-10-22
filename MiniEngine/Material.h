@@ -98,7 +98,7 @@ private:
 	Shader m_psModel;								//モデル用のピクセルシェーダー。
 	Shader m_vsNonSkinShadowDraw;					//スキンなしシャドウ描画用ピクセルシェーダー。
 	Shader m_vsSkinShadowDraw;						//スキンありシャドウ描画用ピクセルシェーダー。
-	Shader m_psSkinShadowDraw;							//シャドウ描画用ピクセルシェーダー。
+	Shader m_psSkinShadowDraw;						//シャドウ描画用ピクセルシェーダー。
 };
 
 

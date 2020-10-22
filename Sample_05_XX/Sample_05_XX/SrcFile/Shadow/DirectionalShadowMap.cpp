@@ -6,8 +6,8 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 	//シャドウマップの解像度。
 	int wh[NUM_SHADOW_MAP][2] = {
 		{w,h},				//近距離。
-		{w >> 2, h >> 2},	//中距離。
-		{w >> 2, h >> 2}	//遠距離。
+		{w , h },	//中距離。
+		{w , h}	//遠距離。
 	};
 	//シャドウ番号。
 	int shadowMapNo = 0;
@@ -26,49 +26,51 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 			DXGI_FORMAT_D32_FLOAT,
 			clearColor
 		);
+		m_shadowMaps[shadowMapNo].SetName(L"SHADOW MAP");
 		//次のシャドウマップへ。
 		shadowMapNo++;
 	}
+	
 	//ライトの高さ。
 	m_lightHeight = lightHeight;
-	//定数バッファ初期化
-	m_shadowCB.Init(sizeof(m_shadowCBEntity), nullptr);
+	//CB作成
+	m_shadowConstantBuffer.Init(sizeof(SShadowCb), nullptr);
 }
 
 void DirectionalShadowMap::Update()
 {
-	if (m_isEnable == false) {
-		//シャドウマップが有効じゃない。
-		return;
-	}
-	//カメラの方向。
-	Vector3 cameraDir = g_camera3D->GetForward();
-
+	//シーンをレンダリングしているカメラを使って、ライトカメラの回転を計算
+	//シーンカメラの前方向取得
+	auto cameraDir = g_camera3D->GetForward();
+	//fabs = 絶対値  FLT_EPSLIONでfloat特有の誤差を考慮しない。
+	//x,z軸が0に近いなら
 	if (fabs(cameraDir.x) < FLT_EPSILON && fabsf(cameraDir.z) < FLT_EPSILON) {
-		//ほぼ真上に向いてたら影は落ちない。
+		//ほぼ真上を向いてる
 		return;
 	}
-	//ライトビュー行列の回転成分を計算。
-	//ライトビューの前方向は下を向ける。
+
+	//ライトビュー行列の回転成分を計算
+
+	//ライトビューの前方向 下向き
 	Vector3 lightViewForward = m_lightDirection;
-	//ライトビューの上方向を計算。
+	//ライトビューの上方向
 	Vector3 lightViewUp;
 	if (fabsf(lightViewForward.y) > 0.999f) {
-		//ほぼ真上を向いてる
+		//ほぼ真上
 		lightViewUp.Cross(lightViewForward, Vector3::Right);
 	}
 	else {
 		lightViewUp.Cross(lightViewForward, Vector3::Up);
 	}
-	//正規化。
+	//正規化
 	lightViewUp.Normalize();
-	
-	//ライトビューの横方向。
+
+	//ライトビューの横方向
 	Vector3 lightViewRight;
 	lightViewRight.Cross(lightViewUp, lightViewForward);
 	lightViewRight.Normalize();
 
-	//ライトビューに回転を設定。
+	//ライトビューに回転を設定していく
 	Matrix lightViewRot;
 	//ライトビューの横を設定
 	lightViewRot.m[0][0] = lightViewRight.x;
@@ -86,11 +88,11 @@ void DirectionalShadowMap::Update()
 	lightViewRot.m[2][2] = lightViewForward.z;
 	lightViewRot.m[2][3] = 0.0f;
 
-	//視錐台を分割する比率。
+	//視錐台を分割する比率
 	float shadowAreaTbl[] = {
-		m_shadowAreas[0],
-		m_shadowAreas[1],
-		m_shadowAreas[2]
+		m_lightHeight * 0.8f,
+		m_lightHeight * 1.6f,
+		m_lightHeight * 3.6f
 	};
 
 	//ライトビューの高さを計算
@@ -166,7 +168,6 @@ void DirectionalShadowMap::Update()
 			auto viewFrustumCenterPosition = (nearPlaneCenterPos + farPlaneCenterPos) * 0.5f;
 			//ライトの位置を計算。
 			auto lightPos = CalcLightPosition(lightHeight, viewFrustumCenterPosition);
-			//CVector3 lightPos = { 0,2000,1000 };
 
 			//ライトの回転
 			mLightView = lightViewRot;
@@ -200,13 +201,12 @@ void DirectionalShadowMap::Update()
 		}
 		//プロジェクション行列
 		Matrix proj;
-		auto camerapos = g_camera3D->GetPosition();
 		//作成
 		proj.MakeOrthoProjectionMatrix(
 			w,
 			h,
 			far_z / 100.0f,
-			far_z
+			far_z 
 		);
 		m_lightViewMatrix[i] = mLightView;
 		m_lightProjMatirx[i] = proj;
@@ -218,6 +218,8 @@ void DirectionalShadowMap::Update()
 		m_shadowCBEntity.shadowAreaDepthInViewSpace[i] = farPlaneZ * 0.8f;
 		//次の近平面は今の遠平面。
 		nearPlaneZ = farPlaneZ;
+		//VRAMにコピー。
+		m_shadowConstantBuffer.CopyToVRAM(m_shadowCBEntity);
 	}
 }
 
@@ -246,10 +248,13 @@ void DirectionalShadowMap::RenderToShadowMap()
 	if (m_isEnable == true) {
 		//シャドウマップ有効だった。
 		for (int i = 0; i < NUM_SHADOW_MAP; i++) {
-			//レンダリングターゲットが設定できるようになるまで待機。
-			rc.WaitUntilToPossibleSetRenderTarget(m_shadowMaps[i]);
+			if (!m_Inited[i]) {
+				//レンダリングターゲットが設定できるようになるまで待機。
+				rc.WaitUntilToPossibleSetRenderTarget(m_shadowMaps[i]);
+				m_Inited[i] = true;
+			}
 			//レンダーターゲットのセット。
-			rc.SetRenderTarget(m_shadowMaps[i].GetRTVCpuDescriptorHandle(), m_shadowMaps[i].GetDSVCpuDescriptorHandle());
+			rc.SetRenderTarget(m_shadowMaps[i], m_shadowMaps[i].GetDSVCpuDescriptorHandle());
 			//ケシケシ
 			rc.ClearRenderTargetView(m_shadowMaps[i].GetRTVCpuDescriptorHandle(), m_shadowMaps[i].GetRTVClearColor());
 			rc.ClearDepthStencilView(m_shadowMaps[i].GetDSVCpuDescriptorHandle(), 1.0f);
@@ -259,14 +264,13 @@ void DirectionalShadowMap::RenderToShadowMap()
 				//DX12の仕様上、定数バッファの値を変更する場合はコマンドリストにのっかっている描画処理を
 				//一旦描画して、コマンドリストを初期化。
 				g_graphicsEngine->EndRender(false);
+				//RTVはここでmainRenderTargetに戻る。
 				g_graphicsEngine->BeginRender();
 			}
-			
 		}
-		//レンダーターゲット変えてるようになるまで待機。
-		rc.WaitUntilToPossibleSetRenderTarget(g_graphicsEngine->GetRenderTarget());
+
 		//カキカキ終わったらレンダーターゲット戻す。
-		rc.SetRenderTarget(g_graphicsEngine->GetCurrentFrameBuffuerRTV(), g_graphicsEngine->GetCurrentFrameBufferDSV());
+		//rc.SetRenderTarget(g_graphicsEngine->GetCurrentFrameBuffuerRTV(), g_graphicsEngine->GetCurrentFrameBufferDSV());
 	}
 
 }

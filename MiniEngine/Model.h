@@ -61,7 +61,7 @@ public:
 	/// スケルトンの初期化処理。
 	/// </summary>
 	/// <returns></returns>
-	int initSkeleton();
+	int initSkeleton(const ModelInitData& initData);
 	/// <summary>
 	/// アニメーションの初期化。
 	/// </summary>
@@ -120,6 +120,11 @@ public:
 	}
 	void SetPosition(Vector3 pos) {
 		m_pos = pos;
+	}
+
+	void SetRotation(Quaternion qRot)
+	{
+		m_rot = qRot;
 	}
 	friend class DirectionalShadowMap;
 protected:
