@@ -5,7 +5,7 @@ Game::Game()
 {
 	//アニメーションの初期化ステップの都合上ここで初期化。
 	//シャドウマップの初期化。
-	g_graphicsEngine->GetShadowMap()->Init(1280, 720, 500.0f);
+	g_graphicsEngine->GetShadowMap()->Init(1000, 1000, 500.0f);
 	//シャドウキャスターとして登録する。
 	g_graphicsEngine->GetShadowMap()->RegisterShadowCaster(&m_unityChan);
 	m_pos = { 0.0f,0.0f,0.0f };
@@ -14,7 +14,7 @@ Game::Game()
 bool Game::Start()
 {
 	////tkaファイルパス。
-	//const char* tkeFilePath[] = {
+	//const cha	* tkeFilePath[] = {
 	//	"animData/unityChan/idle.tka",
 	//	"animData/unityChan/run.tka",
 	//	"animData/unityChan/walk.tka"
@@ -87,7 +87,7 @@ void Game::Update()
 	else if (GetAsyncKeyState('S')) {
 		m_pos.z--;
 	}
-	m_unityChan.SetPosition({0,0,-188});
+	m_unityChan.SetPosition(m_pos);
 	//ワールド座標、アニメーションの更新。
 	m_unityChan.UpdateMatAndAnim();
 	Quaternion qRot = Quaternion::Identity;

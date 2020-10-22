@@ -6,8 +6,8 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 	//シャドウマップの解像度。
 	int wh[NUM_SHADOW_MAP][2] = {
 		{w,h},				//近距離。
-		{w , h },	//中距離。
-		{w , h}	//遠距離。
+		{w >> 1, h >> 1},	//中距離。
+		{w >> 1, h >> 1}	//遠距離。
 	};
 	//シャドウ番号。
 	int shadowMapNo = 0;
@@ -90,9 +90,9 @@ void DirectionalShadowMap::Update()
 
 	//視錐台を分割する比率
 	float shadowAreaTbl[] = {
+		m_lightHeight * 0.4f,
 		m_lightHeight * 0.8f,
-		m_lightHeight * 1.6f,
-		m_lightHeight * 3.6f
+		m_lightHeight * 1.2f
 	};
 
 	//ライトビューの高さを計算

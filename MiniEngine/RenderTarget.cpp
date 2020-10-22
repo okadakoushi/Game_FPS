@@ -170,8 +170,8 @@ void RenderTarget::CreateViewPort(int w, int h )
 	//ビューポートを初期化。
 	m_viewport.TopLeftX = 0;
 	m_viewport.TopLeftY = 0;
-	m_viewport.Width = w;
-	m_viewport.Height = h;
+	m_viewport.Width = static_cast<FLOAT>(w);
+	m_viewport.Height = static_cast<FLOAT>(h);
 	m_viewport.MinDepth = D3D12_MIN_DEPTH;
 	m_viewport.MaxDepth = D3D12_MAX_DEPTH;
 }

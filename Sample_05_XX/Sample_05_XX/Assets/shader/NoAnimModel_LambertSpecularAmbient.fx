@@ -163,17 +163,17 @@ float CalcShadow(float3 wp, float zInView)
 			if (MapNum == 0) {
 				//0番目の深度情報で計算。
 				Shadow = CalcShadowPercent(ShadowMap0, shadowMapUV, depth);
-				return Shadow;
+				//return 1.0f;
 			}
 			else if (MapNum == 1) {
 				//1番目の深度情報で計算。
 				Shadow = CalcShadowPercent(ShadowMap1, shadowMapUV, depth);
-				return Shadow;
+				//return 0.6f;
 			}
 			else if (MapNum == 2) {
 				//2番目の深度情報で計算。
 				Shadow = CalcShadowPercent(ShadowMap2, shadowMapUV, depth);
-				return Shadow;
+				//return 0.3f;
 			}
 		}
 	}
