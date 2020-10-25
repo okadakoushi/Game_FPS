@@ -9,7 +9,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	//ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
-
+	//エンジンの初期化。
+	EngineObj().Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
 
 	//ゲームのインスタンス作成。
@@ -18,7 +19,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	while (DispatchWindowMessage())
 	{
 		//レンダリング開始。
-		g_engine->BeginFrame();
+		EngineObj().BeginFrame();
 		gameObjectManager().Start();
 		//ゲームオブジェクトマネージャーの更新。
 		gameObjectManager().UpdateManager();
@@ -48,8 +49,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
 		//レンダリング終了。
-		g_engine->EndFrame();
+		EngineObj().EndFrame();
 	}
+	//エンジンの終了処理。
+	EngineObj().Final();
 	return 0;
 }
 

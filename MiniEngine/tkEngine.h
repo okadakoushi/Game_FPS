@@ -23,6 +23,10 @@ public:
 	/// </summary>
 	void Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight);
 	/// <summary>
+	/// エンジンの終了処理。
+	/// </summary>
+	void Final();
+	/// <summary>
 	/// エンジン取得。
 	/// </summary>
 	/// <returns></returns>
@@ -41,9 +45,7 @@ private:
 /// エンジンのオブジェクトを取得。
 /// </summary>
 /// <returns></returns>
-static inline TkEngine& GetEngineObj()
+static inline TkEngine& EngineObj()
 {
 	return TkEngine::GetEngine();
 }
-
-extern TkEngine* g_engine;	//TKエンジン。

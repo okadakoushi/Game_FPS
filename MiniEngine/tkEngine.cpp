@@ -2,13 +2,8 @@
 #include "tkEngine.h"
 #include "GraphicsEngine.h"
 
-TkEngine* g_engine = nullptr;
-
 TkEngine::~TkEngine()
 {
-	if (m_graphicsEngine) {
-		delete m_graphicsEngine;
-	}
 }
 void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 {
@@ -32,4 +27,11 @@ void TkEngine::BeginFrame()
 void TkEngine::EndFrame()
 {
 	m_graphicsEngine->EndRender();
+}
+
+void TkEngine::Final()
+{
+	if (m_graphicsEngine) {
+		delete m_graphicsEngine;
+	}
 }
