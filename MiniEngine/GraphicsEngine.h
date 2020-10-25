@@ -155,6 +155,22 @@ public:
 	{
 		return m_shadow;
 	}
+	/// <summary>
+	/// 2Dカメラ取得。
+	/// </summary>
+	/// <returns></returns>
+	Camera& GetCamera2D()
+	{
+		return m_camera2D;
+	}
+	/// <summary>
+	/// 3Dカメラ取得。
+	/// </summary>
+	/// <returns></returns>
+	Camera& GetCamera3D()
+	{
+		return m_camera3D;
+	}
 private:
 	/// <summary>
 	/// D3Dデバイスの作成。
@@ -261,6 +277,4 @@ private:
 	Camera m_camera3D;					//3Dカメラ。
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
 };
-extern Camera* g_camera2D;					//2Dカメラ。
-extern Camera* g_camera3D;					//3Dカメラ。
 extern Light g_light;						//ライト。

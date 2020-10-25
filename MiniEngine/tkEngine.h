@@ -3,6 +3,7 @@
 #include "HID/GamePad.h"
 
 class GraphicsEngine;
+class Camera;
 
 class TkEngine : Noncopyable{
 public:
@@ -39,15 +40,13 @@ public:
 	/// グラフィックエンジンの取得。
 	/// </summary>
 	/// <returns></returns>
-	GraphicsEngine* GetGraphicsEngine() const 
+	GraphicsEngine* GetGraphicsEngine() const
 	{
 		return m_graphicsEngine;
 	}
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
-
-	
 };
 
 /// <summary>
@@ -58,3 +57,9 @@ static inline TkEngine& EngineObj()
 {
 	return TkEngine::GetEngine();
 }
+
+static inline GraphicsEngine* GraphicsEngineObj()
+{
+	return EngineObj().GetGraphicsEngine();
+}
+

@@ -41,10 +41,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		//カメラも回す。
 		qRot.SetRotationDegY(g_pad[0]->GetLStickXF());
-		auto camPos = g_camera3D->GetPosition();
+		auto camPos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 		qRot.Apply(camPos);
-		g_camera3D->SetPosition(camPos);
-		g_light.eyePos = g_camera3D->GetPosition();
+		GraphicsEngineObj()->GetCamera3D().SetPosition(camPos);
+		g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////

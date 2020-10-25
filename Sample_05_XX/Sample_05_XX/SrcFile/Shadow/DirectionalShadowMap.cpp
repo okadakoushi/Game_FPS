@@ -41,7 +41,7 @@ void DirectionalShadowMap::Update()
 {
 	//シーンをレンダリングしているカメラを使って、ライトカメラの回転を計算
 	//シーンカメラの前方向取得
-	auto cameraDir = g_camera3D->GetForward();
+	auto cameraDir = GraphicsEngineObj()->GetCamera3D().GetForward();
 	//fabs = 絶対値  FLT_EPSLIONでfloat特有の誤差を考慮しない。
 	//x,z軸が0に近いなら
 	if (fabs(cameraDir.x) < FLT_EPSILON && fabsf(cameraDir.z) < FLT_EPSILON) {
@@ -92,7 +92,7 @@ void DirectionalShadowMap::Update()
 	lightViewRot.m[2][3] = 0.0f;
 
 	//ライトビューの高さを計算
-	float lightHeight = g_camera3D->GetTarget().y + m_lightHeight;
+	float lightHeight = GraphicsEngineObj()->GetCamera3D().GetTarget().y + m_lightHeight;
 
 	//シャドウの構造体
 	SShadowCb shadowCB;
@@ -103,7 +103,7 @@ void DirectionalShadowMap::Update()
 	//メインカメラの上方向
 	Vector3 cameraUp;
 	//外積で上方向を計算
-	cameraUp.Cross(g_camera3D->GetRight(), g_camera3D->GetForward());
+	cameraUp.Cross(GraphicsEngineObj()->GetCamera3D().GetRight(), GraphicsEngineObj()->GetCamera3D().GetForward());
 	//cameraUp = g_camera3D.GetUp();
 
 	//視錐台を分割するようにライトビュープロジェクション行列を計算
@@ -113,7 +113,7 @@ void DirectionalShadowMap::Update()
 		//ライトビュー
 		Matrix mLightView = Matrix::Identity;
 		//視錐台の片方ずつ(上、下)計算していくのでアングルは半分
-		float halfViewAngle = g_camera3D->GetViewAngle() * 0.5f;
+		float halfViewAngle = GraphicsEngineObj()->GetCamera3D().GetViewAngle() * 0.5f;
 		//視錐台の8頂点をライト空間に変換してAABB(視錐台の中にある直方体)を求めて、正射影の幅と高さを求める。
 		float w, h;
 		float far_z = -1.0f;
@@ -131,31 +131,31 @@ void DirectionalShadowMap::Update()
 			//アスペクト比を乗算
 			//いままではまっすぐ前の視錐台の線のみ計算だったのが
 			//ここからは縦横の情報がはいるため　詳細はaspect.pngを参照。
-			t *= g_camera3D->GetAspect();
+			t *= GraphicsEngineObj()->GetCamera3D().GetAspect();
 			//近平面の中央座標を計算
 			//資料8vertex.pngを参照。
-			auto nearPlaneCenterPos = g_camera3D->GetPosition() + cameraDir * nearPlaneZ;
+			auto nearPlaneCenterPos = GraphicsEngineObj()->GetCamera3D().GetPosition() + cameraDir * nearPlaneZ;
 
 			//v[0] = 視錐台の近平面で右上にある四角形の頂点。
-			v[0] = nearPlaneCenterPos + g_camera3D->GetRight() * t * nearPlaneZ + toUpperNear;
+			v[0] = nearPlaneCenterPos + GraphicsEngineObj()->GetCamera3D().GetRight() * t * nearPlaneZ + toUpperNear;
 			//v[1] = 視錐台の近平面で右下にある四角形の頂点
 			v[1] = v[0] - toUpperNear * 2.0f;
 
 			//v[2] = 視錐台の近平面で左上にある四角形の頂点
-			v[2] = nearPlaneCenterPos + g_camera3D->GetRight() * -t * nearPlaneZ + toUpperNear;
+			v[2] = nearPlaneCenterPos + GraphicsEngineObj()->GetCamera3D().GetRight() * -t * nearPlaneZ + toUpperNear;
 			//v[3] = 視錐台の近平面で左下にある四角形の頂点
 			v[3] = v[2] - toUpperNear * 2.0f;
 
 			//遠平面の中央座標を計算。
-			auto farPlaneCenterPos = g_camera3D->GetPosition() + cameraDir * farPlaneZ;
+			auto farPlaneCenterPos = GraphicsEngineObj()->GetCamera3D().GetPosition() + cameraDir * farPlaneZ;
 
 			//v[4] = 視錐台の遠平面で右上にある四角形の頂点
-			v[4] = farPlaneCenterPos + g_camera3D->GetRight() * t * farPlaneZ + toUpperFar;
+			v[4] = farPlaneCenterPos + GraphicsEngineObj()->GetCamera3D().GetRight() * t * farPlaneZ + toUpperFar;
 			//v[5] = 視錐台の遠平面で右下にある四角形の頂点
 			v[5] = v[4] - toUpperFar * 2.0f;
 
 			//v[6] = 視錐台の遠平面で左上にある四角形の頂点
-			v[6] = farPlaneCenterPos + g_camera3D->GetRight() * -t * farPlaneZ + toUpperFar;
+			v[6] = farPlaneCenterPos + GraphicsEngineObj()->GetCamera3D().GetRight() * -t * farPlaneZ + toUpperFar;
 			//v[7] = 視錐台の遠平面で左下にある四角形の頂点
 			v[7] = v[6] - toUpperFar * 2.0f;
 

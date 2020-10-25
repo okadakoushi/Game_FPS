@@ -107,7 +107,7 @@ void Game::PreRender()
 
 void Game::Draw()
 {
-	m_unityChan.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix());
+	m_unityChan.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix());
 	//ƒXƒLƒ“‚È‚µ•`‰æB
-	m_bg.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix(), enRenderMode_NonSkin);
+	m_bg.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix(), enRenderMode_NonSkin);
 }

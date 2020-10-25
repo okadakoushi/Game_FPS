@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "GraphicsEngine.h"
 
-Camera* g_camera2D = nullptr;				//2Dカメラ。
-Camera* g_camera3D = nullptr;				//3Dカメラ。
 Light g_light;								//ライト。
 
 GraphicsEngine::~GraphicsEngine()
@@ -164,9 +162,6 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetPosition({0.0f, 50.0f, 200.0f} );
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
-	g_camera2D = &m_camera2D;
-	g_camera3D = &m_camera3D;
-
 	//ライトの設定。
 	g_light.directionalLight[0].color.x = 1.0f;
 	g_light.directionalLight[0].color.y = 1.0f;
@@ -179,7 +174,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	g_light.ambinetLight.x = 1.0f;
 	g_light.ambinetLight.y = 1.0f;
 	g_light.ambinetLight.z = 1.0f;
-	g_light.eyePos = g_camera3D->GetPosition();
+	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	g_light.specPow = 5.0f;
 
 	//シャドウマップのインスタンス。

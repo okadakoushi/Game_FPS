@@ -98,7 +98,7 @@ private:
 		int isShadowReciever;	//シャドウレシーバー？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
-	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
+	ConstantBuffer	m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
 	IShaderResource* m_expandShaderResourceView = nullptr;	//ユーザー拡張シェーダーリソースビュー。
 	StructuredBuffer m_boneMatricesStructureBuffer;			//ボーン行列の構造化バッファ。
 	std::vector< SMesh* > m_meshs;							//メッシュ。
