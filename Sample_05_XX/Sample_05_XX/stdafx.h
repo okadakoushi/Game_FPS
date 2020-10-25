@@ -5,10 +5,10 @@ const float DELTA_TIME = 1.0f / 60.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
 static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
-#include "MiniEngine.h"
-
 //ノンコピー
 #include "SrcFile/util/Noncopyable.h"
+
+#include "MiniEngine.h"
 
 //ゲームオブジェクト。
 #include "SrcFile/GameObject/IGameObject.h"

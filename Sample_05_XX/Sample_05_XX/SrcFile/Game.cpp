@@ -5,7 +5,7 @@ Game::Game()
 {
 	//アニメーションの初期化ステップの都合上ここで初期化。
 	//シャドウマップの初期化。
-	g_graphicsEngine->GetShadowMap()->Init(1000, 1000, 500.0f);
+	g_graphicsEngine->GetShadowMap()->Init(2048, 2048, 1000.0f);
 	//シャドウキャスターとして登録する。
 	g_graphicsEngine->GetShadowMap()->RegisterShadowCaster(&m_unityChan);
 	m_pos = { 0.0f,0.0f,0.0f };

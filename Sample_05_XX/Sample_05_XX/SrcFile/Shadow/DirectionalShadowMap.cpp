@@ -20,7 +20,7 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 		sm.Create(
 			wh[shadowMapNo][0],
 			wh[shadowMapNo][1],
-			0,
+			1,
 			1,
 			DXGI_FORMAT_R32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT,
@@ -51,6 +51,9 @@ void DirectionalShadowMap::Update()
 
 	//ライトビュー行列の回転成分を計算
 
+	m_lightDirection.x = 0.0f;
+	m_lightDirection.y = -1.0f;
+	m_lightDirection.z = 0.0f;
 	//ライトビューの前方向 下向き
 	Vector3 lightViewForward = m_lightDirection;
 	//ライトビューの上方向
@@ -88,13 +91,6 @@ void DirectionalShadowMap::Update()
 	lightViewRot.m[2][2] = lightViewForward.z;
 	lightViewRot.m[2][3] = 0.0f;
 
-	//視錐台を分割する比率
-	float shadowAreaTbl[] = {
-		m_lightHeight * 0.4f,
-		m_lightHeight * 0.8f,
-		m_lightHeight * 1.2f
-	};
-
 	//ライトビューの高さを計算
 	float lightHeight = g_camera3D->GetTarget().y + m_lightHeight;
 
@@ -113,7 +109,7 @@ void DirectionalShadowMap::Update()
 	//視錐台を分割するようにライトビュープロジェクション行列を計算
 	for (int i = 0; i < NUM_SHADOW_MAP; i++) {
 		//遠平面を計算
-		farPlaneZ = nearPlaneZ + shadowAreaTbl[i];
+		farPlaneZ = nearPlaneZ + m_shadowAreas[i];
 		//ライトビュー
 		Matrix mLightView = Matrix::Identity;
 		//視錐台の片方ずつ(上、下)計算していくのでアングルは半分
@@ -206,7 +202,7 @@ void DirectionalShadowMap::Update()
 			w,
 			h,
 			far_z / 100.0f,
-			far_z 
+			far_z
 		);
 		m_lightViewMatrix[i] = mLightView;
 		m_lightProjMatirx[i] = proj;
@@ -215,12 +211,14 @@ void DirectionalShadowMap::Update()
 		//エンティティに積む
 		m_shadowCBEntity.mLVP[i] = m_LVPMatrix[i];
 		//どこまで影を落とすか(きわきわだと変な境界が発生するので少し狭める。)
-		m_shadowCBEntity.shadowAreaDepthInViewSpace[i] = farPlaneZ * 0.8f;
+		m_shadowCBEntity.shadowAreaDepthInViewSpace[i] = farPlaneZ * 0.9f;
 		//次の近平面は今の遠平面。
 		nearPlaneZ = farPlaneZ;
-		//VRAMにコピー。
-		m_shadowConstantBuffer.CopyToVRAM(m_shadowCBEntity);
+		
 	}
+
+	//VRAMにコピー。
+	m_shadowConstantBuffer.CopyToVRAM(m_shadowCBEntity);
 }
 
 Vector3 DirectionalShadowMap::CalcLightPosition(float lightHeight, Vector3 viewFrustomCenterPosition) const 

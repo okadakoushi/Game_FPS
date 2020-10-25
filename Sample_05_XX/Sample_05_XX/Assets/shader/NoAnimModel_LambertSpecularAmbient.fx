@@ -157,23 +157,23 @@ float CalcShadow(float3 wp, float zInView)
 		//UV座標に変換。
 		float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
 		
-		/*if (!(shadowMapUV.x < 0 || shadowMapUV.y < 0 || shadowMapUV.x > 1 || shadowMapUV.y > 1))*/
+
 		{
 			//どのシャドウマップの深度情報をとるのか識別。
 			if (MapNum == 0) {
 				//0番目の深度情報で計算。
 				Shadow = CalcShadowPercent(ShadowMap0, shadowMapUV, depth);
-				//return 1.0f;
+				return Shadow;
 			}
 			else if (MapNum == 1) {
 				//1番目の深度情報で計算。
 				Shadow = CalcShadowPercent(ShadowMap1, shadowMapUV, depth);
-				//return 0.6f;
+				return Shadow;
 			}
 			else if (MapNum == 2) {
 				//2番目の深度情報で計算。
 				Shadow = CalcShadowPercent(ShadowMap2, shadowMapUV, depth);
-				//return 0.3f;
+				return Shadow;
 			}
 		}
 	}
@@ -222,17 +222,24 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	// 環境光を計算
 	//////////////////////////////////////////////////////
 	lig += ambinentLight; //足し算するだけ
+	float4 posInLVP = mul(mLVP[0], psIn.posInWorld);
+	
+	float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
+	//UV出力。
+	//return float4(shadowMapUV, 0.0f, 1.0f);
+	
+	//Sampler結果出力。
+	//return ShadowMap0.Sample(g_sampler, shadowMapUV);
 
+	//影を落とすかどうかの計算をしていく。
 	float Shadow = CalcShadow(psIn.posInWorld, psIn.posInview.z);
-	//return Shadow;
-	lig *= lerp(1.f,0.5f,Shadow);
-	// if (Shadow == 1) {
-	// 	//影が落ちているのでライトを弱める。
-	// 	lig *= 0.5f;
-	// }
-	//lig *= Shadow;
+	//Shadowの値が0.0fなら0.5f, 1.0fなら1.0。
+	//GPU処理でのif文削減。
+	lig *= lerp(1.0f,0.5f,Shadow);
+	//テクスチャカラーをサンプリング。
 	float4 texColor = g_texture.Sample(g_sampler, psIn.uv);
-	texColor.xyz *= lig; //光をテクスチャカラーに乗算する。
+	//影を適用させる。
+	texColor.xyz *= lig; 
 	return float4(texColor.xyz, 1.0f);	
 }
 
