@@ -17,7 +17,7 @@ void StructuredBuffer::Init(int sizeOfElement, int numElement, void* initData)
 {
 	m_sizeOfElement = sizeOfElement;
 	m_numElement = numElement;
-	auto device = g_graphicsEngine->GetD3DDevice();
+	auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 
 	int bufferNo = 0;
 	for (auto& buffer : m_buffersOnGPU) {
@@ -47,12 +47,12 @@ void StructuredBuffer::Init(int sizeOfElement, int numElement, void* initData)
 }
 void StructuredBuffer::Update(void* data)
 {
-	auto backBufferIndex = g_graphicsEngine->GetBackBufferIndex();
+	auto backBufferIndex = EngineObj().GetGraphicsEngine()->GetBackBufferIndex();
 	memcpy(m_buffersOnCPU[backBufferIndex], data, m_numElement * m_sizeOfElement);
 }
 ID3D12Resource* StructuredBuffer::GetD3DResoruce() 
 {
-	auto backBufferIndex = g_graphicsEngine->GetBackBufferIndex();
+	auto backBufferIndex = EngineObj().GetGraphicsEngine()->GetBackBufferIndex();
 	return m_buffersOnGPU[backBufferIndex];
 }
 void StructuredBuffer::RegistShaderResourceView(D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandle, int bufferNo)
@@ -60,7 +60,7 @@ void StructuredBuffer::RegistShaderResourceView(D3D12_CPU_DESCRIPTOR_HANDLE desc
 	if (!m_isInited) {
 		return;
 	}
-	auto device = g_graphicsEngine->GetD3DDevice();
+	auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	ZeroMemory(&srvDesc, sizeof(srvDesc));

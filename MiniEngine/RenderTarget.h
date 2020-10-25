@@ -117,7 +117,7 @@ private:
 	/// <param name="format">テクスチャのフォーマット</param>
 	/// <returns>trueが返ってきたら成功。</returns>
 	bool CreateRenderTargetTexture(
-		GraphicsEngine& ge,
+		const GraphicsEngine* ge,
 		ID3D12Device*& d3dDevice,
 		int w, 
 		int h,

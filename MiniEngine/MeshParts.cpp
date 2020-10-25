@@ -71,7 +71,7 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());		//スペキュラマップ。
 			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);					//ボーン
 			//シャドウマップ登録。
-			auto* shadowMap = g_graphicsEngine->GetShadowMap();
+			auto* shadowMap = EngineObj().GetGraphicsEngine()->GetShadowMap();
 			descriptorHeap.RegistShaderResource(4, shadowMap->GetRenderTarget(0).GetRenderTargetTexture());
 			descriptorHeap.RegistShaderResource(5, shadowMap->GetRenderTarget(1).GetRenderTargetTexture());
 			descriptorHeap.RegistShaderResource(6, shadowMap->GetRenderTarget(2).GetRenderTargetTexture());
@@ -82,7 +82,7 @@ void MeshParts::CreateDescriptorHeaps()
 			if (m_expandConstantBuffer.IsValid()) {
 				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer); //Light
 			}
-			descriptorHeap.RegistConstantBuffer(2, g_graphicsEngine->GetShadowMap()->GetShadowCB());	//Shadow
+			descriptorHeap.RegistConstantBuffer(2, EngineObj().GetGraphicsEngine()->GetShadowMap()->GetShadowCB());	//Shadow
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
 			descriptorHeapNo++;

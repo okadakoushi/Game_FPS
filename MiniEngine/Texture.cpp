@@ -35,7 +35,7 @@ void Texture::InitFromMemory(const char* memory, unsigned int size)
 void Texture::LoadTextureFromMemory(const char* memory, unsigned int size
 )
 {
-	auto device = g_graphicsEngine->GetD3DDevice();
+	auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	DirectX::ResourceUploadBatch re(device);
 	re.Begin();
 	ID3D12Resource* texture;
@@ -49,7 +49,7 @@ void Texture::LoadTextureFromMemory(const char* memory, unsigned int size
 		0,
 		&texture
 	);
-	re.End(g_graphicsEngine->GetCommandQueue());
+	re.End(EngineObj().GetGraphicsEngine()->GetCommandQueue());
 
 	if (FAILED(hr)) {
 		//テクスチャの作成に失敗しました。
@@ -61,7 +61,7 @@ void Texture::LoadTextureFromMemory(const char* memory, unsigned int size
 }
 void Texture::LoadTextureFromDDSFile(const wchar_t* filePath)
 {
-	auto device = g_graphicsEngine->GetD3DDevice();
+	auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	DirectX::ResourceUploadBatch re(device);
 	re.Begin();
 	ID3D12Resource* texture;
@@ -74,7 +74,7 @@ void Texture::LoadTextureFromDDSFile(const wchar_t* filePath)
 		0,
 		&texture
 	);
-	re.End(g_graphicsEngine->GetCommandQueue());
+	re.End(EngineObj().GetGraphicsEngine()->GetCommandQueue());
 
 	if (FAILED(hr)) {
 		//テクスチャの作成に失敗しました。
@@ -88,7 +88,7 @@ void Texture::LoadTextureFromDDSFile(const wchar_t* filePath)
 void Texture::RegistShaderResourceView(D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandle, int bufferNo)
 {
 	if (m_texture) {
-		auto device = g_graphicsEngine->GetD3DDevice();
+		auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = m_textureDesc.Format;

@@ -9,7 +9,7 @@
 void Camera::Update()
 {
 	//アスペクト比を計算する。
-	m_aspect = (float)g_graphicsEngine->GetFrameBufferWidth() / (float)g_graphicsEngine->GetFrameBufferHeight();
+	m_aspect = (float)EngineObj().GetGraphicsEngine()->GetFrameBufferWidth() / (float)EngineObj().GetGraphicsEngine()->GetFrameBufferHeight();
 	if(m_isNeedUpdateProjectionMatrix){
 		if (m_updateProjMatrixFunc == enUpdateProjMatrixFunc_Perspective) {
 			//透視変換行列を計算。
@@ -49,8 +49,8 @@ void Camera::Update()
 }
 void Camera::CalcScreenPositionFromWorldPosition(Vector2& screenPos, const Vector3& worldPos) const
 {
-	float half_w = (float)g_graphicsEngine->GetFrameBufferWidth() * 0.5f;
-	float half_h = (float)g_graphicsEngine->GetFrameBufferHeight() * 0.5f;
+	float half_w = (float)EngineObj().GetGraphicsEngine()->GetFrameBufferWidth() * 0.5f;
+	float half_h = (float)EngineObj().GetGraphicsEngine()->GetFrameBufferHeight() * 0.5f;
 	Vector4 _screenPos;
 	_screenPos.Set(worldPos.x, worldPos.y, worldPos.z, 1.0f);
 	m_viewProjectionMatrix.Apply(_screenPos);

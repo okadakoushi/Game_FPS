@@ -10,7 +10,7 @@ VertexBuffer::~VertexBuffer()
 }
 void VertexBuffer::Init(int size, int stride)
 {
-	auto d3dDevice = g_graphicsEngine->GetD3DDevice();
+	auto d3dDevice = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
@@ -27,8 +27,8 @@ void VertexBuffer::Init(int size, int stride)
 }
 void VertexBuffer::Copy(void* srcVertices)
 {
-	auto& rc = g_graphicsEngine->GetRenderContext();
-	auto device = g_graphicsEngine->GetD3DDevice();
+	const auto& rc = EngineObj().GetGraphicsEngine()->GetRenderContext();
+	const auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	
 	DirectX::ResourceUploadBatch re(device);
 	re.Begin();
@@ -42,6 +42,6 @@ void VertexBuffer::Copy(void* srcVertices)
 		&subResourceData,
 		1);
 
-	re.End(g_graphicsEngine->GetCommandQueue());
+	re.End(EngineObj().GetGraphicsEngine()->GetCommandQueue());
 
 }

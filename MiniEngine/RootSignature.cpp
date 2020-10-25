@@ -18,7 +18,7 @@ bool RootSignature::Init(
 	UINT maxUavDescritor
 )
 {
-	auto d3dDevice = g_graphicsEngine->GetD3DDevice();
+	auto d3dDevice = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
 	sampler.Filter = samplerFilter;
@@ -76,7 +76,7 @@ bool RootSignature::Init(Shader& shader)
 	auto hr = D3DGetBlobPart(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(),
 		D3D_BLOB_ROOT_SIGNATURE, 0, &sig);
 	//ルートシグネチャの生成
-	auto d3dDevice = g_graphicsEngine->GetD3DDevice();
+	auto d3dDevice = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	hr = d3dDevice->CreateRootSignature(0, sig->GetBufferPointer(), sig->GetBufferSize(),
 		IID_PPV_ARGS(&m_rootSignature));
 	return hr == S_OK;

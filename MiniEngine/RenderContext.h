@@ -213,7 +213,7 @@ public:
 	/// </remarks>
 	void WaitUntilToPossibleSetRenderTargets(int numRt, RenderTarget* renderTargets[]);
 	void WaitUntilToPossibleSetRenderTarget(RenderTarget& renderTarget);
-	void WaitUntilToPossibleSetRenderTarget( ID3D12Resource* renderTarget)
+	void WaitUntilToPossibleSetRenderTarget(ID3D12Resource* renderTarget)
 	{
 		m_commandList->ResourceBarrier(
 			1,

@@ -242,7 +242,7 @@ Vector3 DirectionalShadowMap::CalcLightPosition(float lightHeight, Vector3 viewF
 void DirectionalShadowMap::RenderToShadowMap()
 {
 	//レンコン。
-	auto& rc = g_graphicsEngine->GetRenderContext();
+	auto& rc = EngineObj().GetGraphicsEngine()->GetRenderContext();
 	if (m_isEnable == true) {
 		//シャドウマップ有効だった。
 		for (int i = 0; i < NUM_SHADOW_MAP; i++) {
@@ -261,9 +261,9 @@ void DirectionalShadowMap::RenderToShadowMap()
 				caster->Draw(rc, m_lightViewMatrix[i], m_lightProjMatirx[i], enRenderMode_DrawShadow);
 				//DX12の仕様上、定数バッファの値を変更する場合はコマンドリストにのっかっている描画処理を
 				//一旦描画して、コマンドリストを初期化。
-				g_graphicsEngine->EndRender(false);
+				EngineObj().GetGraphicsEngine()->EndRender(false);
 				//RTVはここでmainRenderTargetに戻る。
-				g_graphicsEngine->BeginRender();
+				EngineObj().GetGraphicsEngine()->BeginRender();
 			}
 		}
 

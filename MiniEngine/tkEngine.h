@@ -35,9 +35,18 @@ public:
 		static TkEngine instance;
 		return instance;
 	}
+	/// <summary>
+	/// グラフィックエンジンの取得。
+	/// </summary>
+	/// <returns></returns>
+	GraphicsEngine* GetGraphicsEngine() const 
+	{
+		return m_graphicsEngine;
+	}
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
+
 	
 };
 

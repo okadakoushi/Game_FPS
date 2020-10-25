@@ -5,9 +5,9 @@ Game::Game()
 {
 	//アニメーションの初期化ステップの都合上ここで初期化。
 	//シャドウマップの初期化。
-	g_graphicsEngine->GetShadowMap()->Init(2048, 2048, 1000.0f);
+	EngineObj().GetGraphicsEngine()->GetShadowMap()->Init(2048, 2048, 1000.0f);
 	//シャドウキャスターとして登録する。
-	g_graphicsEngine->GetShadowMap()->RegisterShadowCaster(&m_unityChan);
+	EngineObj().GetGraphicsEngine()->GetShadowMap()->RegisterShadowCaster(&m_unityChan);
 	m_pos = { 0.0f,0.0f,0.0f };
 }
 
@@ -96,18 +96,18 @@ void Game::Update()
 	m_bg.UpdateMatAndAnim();
 	m_bg.SetShadowReciever();
 	//シャドウマップの更新。
-	g_graphicsEngine->GetShadowMap()->Update();
+	EngineObj().GetGraphicsEngine()->GetShadowMap()->Update();
 }
 
 void Game::PreRender()
 {
 	//描画。todo : engineUpdate
-	g_graphicsEngine->GetShadowMap()->RenderToShadowMap();
+	EngineObj().GetGraphicsEngine()->GetShadowMap()->RenderToShadowMap();
 }
 
 void Game::Draw()
 {
-	m_unityChan.Draw(g_graphicsEngine->GetRenderContext(), g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix());
+	m_unityChan.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix());
 	//スキンなし描画。
-	m_bg.Draw(g_graphicsEngine->GetRenderContext(), g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix(), enRenderMode_NonSkin);
+	m_bg.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix(), enRenderMode_NonSkin);
 }

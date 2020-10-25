@@ -10,7 +10,7 @@ IndexBuffer::~IndexBuffer()
 }
 void IndexBuffer::Init(int size, int stride)
 {
-	auto d3dDevice = g_graphicsEngine->GetD3DDevice();
+	auto d3dDevice = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
@@ -34,7 +34,7 @@ void IndexBuffer::Init(int size, int stride)
 }
 void IndexBuffer::Copy(void* srcIndecies)
 {
-	auto device = g_graphicsEngine->GetD3DDevice();
+	auto device = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	DirectX::ResourceUploadBatch re(device);
 	re.Begin();
 	D3D12_SUBRESOURCE_DATA subResourceData;
@@ -47,5 +47,5 @@ void IndexBuffer::Copy(void* srcIndecies)
 		&subResourceData,
 		1);
 
-	re.End(g_graphicsEngine->GetCommandQueue());
+	re.End(EngineObj().GetGraphicsEngine()->GetCommandQueue());
 }

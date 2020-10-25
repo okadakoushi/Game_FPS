@@ -11,7 +11,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 	//エンジンの初期化。
 	EngineObj().Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
-	auto& renderContext = g_graphicsEngine->GetRenderContext();
+	const auto& renderContext = EngineObj().GetGraphicsEngine();
 
 	//ゲームのインスタンス作成。
 	NewGO<Game>(0);

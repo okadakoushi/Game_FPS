@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "GraphicsEngine.h"
 
-GraphicsEngine* g_graphicsEngine = nullptr;	//グラフィックスエンジン
 Camera* g_camera2D = nullptr;				//2Dカメラ。
 Camera* g_camera3D = nullptr;				//3Dカメラ。
 Light g_light;								//ライト。
@@ -186,7 +185,6 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
 
-	g_graphicsEngine = this;
 	return true;
 }
 IDXGIFactory4* GraphicsEngine::CreateDXGIFactory()

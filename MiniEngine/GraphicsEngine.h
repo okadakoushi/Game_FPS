@@ -64,7 +64,7 @@ public:
 	/// D3Dデバイスを取得。
 	/// </summary>
 	/// <returns></returns>
-	ID3D12Device* GetD3DDevice()
+	ID3D12Device* GetD3DDevice() const 
 	{
 		return m_d3dDevice;
 	}
@@ -97,7 +97,7 @@ public:
 	/// レンダリングコンテキストを取得。
 	/// </summary>
 	/// <returns></returns>
-	RenderContext& GetRenderContext()
+	RenderContext& GetRenderContext() 
 	{
 		return m_renderContext;
 	}
@@ -261,7 +261,6 @@ private:
 	Camera m_camera3D;					//3Dカメラ。
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
 };
-extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
 extern Light g_light;						//ライト。
