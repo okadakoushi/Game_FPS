@@ -163,17 +163,17 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ƒ‰ƒCƒg‚ÌÝ’èB
-	g_light.directionalLight[0].color.x = 1.0f;
-	g_light.directionalLight[0].color.y = 1.0f;
-	g_light.directionalLight[0].color.z = 1.0f;
+	g_light.directionalLight[0].color.x = 0.5f;
+	g_light.directionalLight[0].color.y = 0.5f;
+	g_light.directionalLight[0].color.z = 0.5f;
 
 	g_light.directionalLight[0].direction.x = 0.0f;
 	g_light.directionalLight[0].direction.y = 0.0f;
 	g_light.directionalLight[0].direction.z = -1.0f;
 
-	g_light.ambinetLight.x = 1.0f;
-	g_light.ambinetLight.y = 1.0f;
-	g_light.ambinetLight.z = 1.0f;
+	g_light.ambinetLight.x = 0.5f;
+	g_light.ambinetLight.y = 0.5f;
+	g_light.ambinetLight.z = 0.5f;
 	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	g_light.specPow = 5.0f;
 

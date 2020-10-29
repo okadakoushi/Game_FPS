@@ -6,17 +6,11 @@
 
 int Model::Init(const ModelInitData& initData)
 {
-
-
 	//アニメーションをロードして積む。
 	if (initData.m_tkaFilePath != nullptr) {
 		m_tkaFile.Load(initData.m_tkaFilePath);
 		m_tkaFilePaths.push_back(initData.m_tkaFilePath);
 	}
-
-
-	m_tkmFile.Load(initData.m_tkmFilePath);
-
 
 	UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);
 	return enInitStep_LoadModel;
@@ -63,9 +57,6 @@ int Model::initSkeleton(const ModelInitData& initData)
 	m_meshParts.InitFromTkmFile(
 		m_tkmFile,
 		wfxFilePath,
-		initData.m_vsEntryPointFunc,
-		initData.m_psEntryPointFunc,
-		initData.m_expandConstantBuffer,
 		initData.m_expandConstantBufferSize,
 		initData.m_expandShaderResoruceView
 	);
@@ -111,6 +102,33 @@ int Model::InitAnim()
 		//全init処理終了。
 		return enInitStep_Completed;
 	}
+}
+
+void Model::InitModel(const char* filepath)
+{
+	//内部のシェーダーをロードする処理が求めているのが
+	//wchar_t型の文字列なので、ここで変換しておく。
+	wchar_t wfxFilePath[256];
+	if (filepath == nullptr) {
+		MessageBoxA(nullptr, "fxファイルパスが指定されていません。", "エラー", MB_OK);
+		std::abort();
+	}
+	//変換。
+	mbstowcs(wfxFilePath, filepath, 256);
+	//ロード。
+	m_tkmFile.Load(filepath);
+
+	//とりま強制ライト todo:Set系。
+	m_expandConstantBuffer = &g_light;
+	m_expandConstantBufferSize = sizeof(g_light);
+
+	//メッシュパーツを初期化していく。
+	m_meshParts.InitFromTkmFile(
+		m_tkmFile,
+		m_expandConstantBuffer,
+		m_expandConstantBufferSize,
+		m_expandShaderResoruceView
+	);
 }
 
 void Model::UpdateMatAndAnim()

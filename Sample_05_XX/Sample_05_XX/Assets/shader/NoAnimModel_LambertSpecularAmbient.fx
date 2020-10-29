@@ -27,11 +27,6 @@ cbuffer LightCb : register(b1){
 	float specPow;					//スペキュラの絞り。
 	float3 ambinentLight;			//環境光。
 };
-
-struct SVSInNonSkin {
-	float4 pos		: Position;				//頂点座標。
-};
-
 //頂点シェーダーへの入力。
 struct SVSIn{
 	float4	pos 		: POSITION;		//モデルの頂点座標。
@@ -41,6 +36,12 @@ struct SVSIn{
 	float2	uv 			: TEXCOORD0;	//UV座標。
 	uint4	Indices		: BLENDINDICES0;//インデックスのサイズ。
 	float4	Weights		: BLENDWEIGHT0;	//重み。
+};
+//スキンなし頂点シェーダー。
+struct SVSInNonSkin {
+	float4 pos		: POSITION;				//頂点座標。
+	float3 normal	: NORMAL;		//法線。
+	float2 uv 		: TEXCOORD0;	//uv座標。
 };
 //ピクセルシェーダーへの入力。
 struct SPSIn{
@@ -107,9 +108,14 @@ SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
 SPSIn VSMainNonSkin(SVSInNonSkin vsIn)
 {
 	SPSIn psIn;
+	psIn.worldPos = 0;					//なんやこれは！todo: delete
 	psIn.pos = mul(mWorld, vsIn.pos);	//１：モデルの頂点をワールド座標系に変換。	
+	psIn.posInWorld = psIn.pos;			//ワールド座標。
 	psIn.pos = mul(mView, psIn.pos);	//２：ワールド座標系からカメラ座標系に変換。
+	psIn.posInview = psIn.pos;			//ビュー座標
 	psIn.pos = mul(mProj, psIn.pos);	//３：カメラ座標系からスクリーン座標系に変換。
+	psIn.normal = vsIn.normal;
+	psIn.uv = vsIn.uv;
 	return psIn;
 }
 

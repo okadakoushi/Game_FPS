@@ -68,6 +68,10 @@ public:
 	/// <param name="initData"></param>
 	int InitAnim();
 	/// <summary>
+	/// モデルのみの初期化。
+	/// </summary>
+	void InitModel(const char* filepath);
+	/// <summary>
 	/// ワールド座標とアニメーションの更新。
 	/// </summary>
 	void UpdateMatAndAnim();
@@ -147,6 +151,9 @@ private:
 	MeshParts		m_meshParts;	//メッシュパーツ。
 	bool			isShadowCaster = false;		//シャドウキャスター？
 	bool			isShadowReciever = false;	//シャドウレシーバー？
+	void*  m_expandConstantBuffer = nullptr;				//拡張定数バッファ。
+	int m_expandConstantBufferSize = 0;						//拡張定数バッファのサイズ。
+	IShaderResource* m_expandShaderResoruceView = nullptr;	//拡張SRV
 	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
 	Animation						m_animation;		//アニメーション

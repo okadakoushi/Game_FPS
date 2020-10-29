@@ -41,9 +41,6 @@ public:
 	/// <param name="psEntryPointFunc">ピクセルシェーダーのエントリーポイントの関数名</param>
 	void InitFromTkmFile(
 		const TkmFile& tkmFile,
-		const wchar_t* fxFilePath,
-		const char* vsEntryPointFunc,
-		const char* psEntryPointFunc,
 		void* expandData,
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView
@@ -73,11 +70,8 @@ private:
 	/// <param name="psEntryPointFunc">ピクセルシェーダーのエントリーポイントの関数名</param>
 	void CreateMeshFromTkmMesh(
 		const TkmFile::SMesh& mesh, 
-		int meshNo,
-		const wchar_t* fxFilePath,
-		const char* vsEntryPointFunc,
-		const char* psEntryPointFunc );
-
+		int meshNo
+	);
 	/// <summary>
 	/// ディスクリプタヒープを作成。
 	/// </summary>

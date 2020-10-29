@@ -20,9 +20,6 @@ MeshParts::~MeshParts()
 }
 void MeshParts::InitFromTkmFile(
 	const TkmFile& tkmFile, 
-	const wchar_t* fxFilePath,
-	const char* vsEntryPointFunc,
-	const char* psEntryPointFunc,
 	void* expandData,
 	int expandDataSize,
 	IShaderResource* expandShaderResourceView
@@ -32,7 +29,7 @@ void MeshParts::InitFromTkmFile(
 	int meshNo = 0;
 	tkmFile.QueryMeshParts([&](const TkmFile::SMesh& mesh) {
 		//tkmファイルのメッシュ情報からメッシュを作成する。
-		CreateMeshFromTkmMesh(mesh, meshNo, fxFilePath, vsEntryPointFunc, psEntryPointFunc);
+		CreateMeshFromTkmMesh(mesh, meshNo);
 
 
 		meshNo++;
@@ -92,10 +89,8 @@ void MeshParts::CreateDescriptorHeaps()
 }
 void MeshParts::CreateMeshFromTkmMesh(
 	const TkmFile::SMesh& tkmMesh, 
-	int meshNo,
-	const wchar_t* fxFilePath,
-	const char* vsEntryPointFunc,
-	const char* psEntryPointFunc)
+	int meshNo
+)
 {
 	//頂点バッファを作成。
 	int numVertex = (int)tkmMesh.vertexBuffer.size();
@@ -148,7 +143,7 @@ void MeshParts::CreateMeshFromTkmMesh(
 	mesh->m_materials.reserve(tkmMesh.materials.size());
 	for (auto& tkmMat : tkmMesh.materials) {
 		auto mat = new Material;
-		mat->InitFromTkmMaterila(tkmMat, fxFilePath, vsEntryPointFunc, psEntryPointFunc);
+		mat->InitFromTkmMaterila(tkmMat);
 		mesh->m_materials.push_back(mat);
 	}
 

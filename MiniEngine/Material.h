@@ -11,10 +11,8 @@ public:
 	/// </summary>
 	/// <param name="tkmMat">tkmマテリアル</param>
 	void InitFromTkmMaterila(
-		const TkmFile::SMaterial& tkmMat,
-		const wchar_t* fxFilePath,
-		const char* vsEntryPointFunc,
-		const char* psEntryPointFunc);
+		const TkmFile::SMaterial& tkmMat
+		);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
 	/// </summary>
@@ -65,10 +63,7 @@ private:
 	/// <param name="fxFilePath">fxファイルのファイルパス</param>
 	/// <param name="vsEntryPointFunc">頂点シェーダーのエントリーポイントの関数名</param>
 	/// <param name="psEntryPointFunc">ピクセルシェーダーのエントリーポイントの関数名</param>
-	void InitShaders(
-		const wchar_t* fxFilePath,
-		const char* vsEntryPointFunc,
-		const char* psEntryPointFunc);
+	void InitShaders();
 	/// <summary>
 	/// テクスチャを初期化。
 	/// </summary>
@@ -87,7 +82,6 @@ private:
 	Texture	m_specularMap;							//スペキュラマップ。
 	ConstantBuffer m_constantBuffer;				//定数バッファ。
 	RootSignature m_rootSignature;					//ルートシグネチャ。
-	PipelineState m_nonSkinModelPipelineState;		//スキンなしモデル用のパイプラインステート。
 	PipelineState m_skinModelPipelineState;			//スキンありモデル用のパイプラインステート。
 	PipelineState m_transSkinModelPipelineState;	//スキンありモデル用のパイプラインステート(半透明マテリアル)。
 	PipelineState m_transNonSkinModelPipelineState;	//スキンなしモデル用のパイプラインステート(半透明マテリアル)。

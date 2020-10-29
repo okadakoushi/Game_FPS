@@ -29,29 +29,29 @@ bool Game::Start()
 	InitDataModel.m_expandConstantBuffer = &g_light;
 	InitDataModel.m_expandConstantBufferSize = sizeof(g_light);
 
-	ModelInitData InitStage;
-	InitStage.m_tkmFilePath = "Assets/modelData/bgReo/bg.tkm";
-	InitStage.m_fxFilePath = "Assets/shader/NoAnimModel_LambertSpecularAmbient.fx";
-	InitStage.m_expandConstantBuffer = &g_light;
-	InitStage.m_expandConstantBufferSize = sizeof(g_light);
+	//ステージのインスタンス作成。
+	m_bg = NewGO<SkinModelRender>(0, "bg");
+	//初期化。
+	m_bg->Init("Assets/modelData/bgReo/bg.tkm");
 
 	//アニメーション系の初期化開始！
 	switch (initState)
 	{
 	case enInitStep_None:
 		//ファイルパスの読み込み。
-		initState = m_unityChan.Init(InitDataModel);
-		m_bg.Init(InitStage);
+		m_unityChan.InitModel("Assets/modelData/unityChan.tkm");
+
+		return true;
 		break;
 	case enInitStep_LoadModel:
 		//tksファイルの読み込み。
 		initState = m_unityChan.LoadTks(InitDataModel);
-		m_bg.LoadTks(InitDataModel);
+		//m_bg.LoadTks(InitStage);
 		break;
 	case enInitStep_LoadSkelton:
 		//ボーンの行列計算、アニメーションクリップの有無の検索。
 		initState = m_unityChan.initSkeleton(InitDataModel);
-		m_bg.initSkeleton(InitDataModel);
+		//m_bg.initSkeleton(InitStage);
 		break;
 	case enInitStep_LoadAnimationClips:
 		//アニメーションの初期化。
@@ -90,11 +90,12 @@ void Game::Update()
 	m_unityChan.SetPosition(m_pos);
 	//ワールド座標、アニメーションの更新。
 	m_unityChan.UpdateMatAndAnim();
+	//回転を作成。
 	Quaternion qRot = Quaternion::Identity;
 	qRot.SetRotationDeg(Vector3::AxisX, -90.0f);
-	m_bg.SetRotation(qRot);
-	m_bg.UpdateMatAndAnim();
-	m_bg.SetShadowReciever();
+	m_bg->SetRotation(qRot);
+	m_bg->Update();
+	m_bg->SetShadowReciever();
 	//シャドウマップの更新。
 	EngineObj().GetGraphicsEngine()->GetShadowMap()->Update();
 }
@@ -107,7 +108,8 @@ void Game::PreRender()
 
 void Game::Draw()
 {
-	m_unityChan.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix());
+	m_unityChan.Draw(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix(), enRenderMode_NonSkin);
 	//スキンなし描画。
-	m_bg.Draw(EngineObj().GetGraphicsEngine()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix(), enRenderMode_NonSkin);
+	m_bg->SetRenderMode(enRenderMode_NonSkin);
+	m_bg->Draw();
 }

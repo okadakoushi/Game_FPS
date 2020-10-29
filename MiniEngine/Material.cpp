@@ -21,10 +21,8 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 }
 void Material::InitFromTkmMaterila(
-	const TkmFile::SMaterial& tkmMat,
-	const wchar_t* fxFilePath,
-	const char* vsEntryPointFunc,
-	const char* psEntryPointFunc)
+	const TkmFile::SMaterial& tkmMat
+)
 {
 	//テクスチャをロード。
 	InitTexture(tkmMat);
@@ -43,7 +41,7 @@ void Material::InitFromTkmMaterila(
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP);
 
 	//シェーダーを初期化。
-	InitShaders(fxFilePath, vsEntryPointFunc, psEntryPointFunc);
+	InitShaders();
 
 	//パイプラインステートを初期化。
 	InitPipelineState();
@@ -106,30 +104,32 @@ void Material::InitPipelineState()
 	psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 	psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-	
-	//psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinModel.GetCompiledBlob());
+
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinModel.GetCompiledBlob());
 	m_transSkinModelPipelineState.Init(psoDesc);
 
-	//NonSkin用の設定を作成。desc変えないと上書きできない的なバグが。
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC NonSkinDesc = { 0 };
-	D3D12_INPUT_ELEMENT_DESC NonSkinElementDesc[] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	//そこまで変えるとこないので設定もってくる。
-	NonSkinDesc = psoDesc;
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinModel.GetCompiledBlob());
+
 	m_transNonSkinModelPipelineState.Init(psoDesc);
 
+
+	//D3D12_GRAPHICS_PIPELINE_STATE_DESC NonSkinDesc = { 0 };
+	//D3D12_INPUT_ELEMENT_DESC NonSkinElementDesc[] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	////そこまで変えるとこないので設定もってくる。
+	//NonSkinDesc = psoDesc;
+	//NonSkinDesc.InputLayout = {NonSkinElementDesc , _countof(NonSkinElementDesc)};
+	//NonSkinDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinModel.GetCompiledBlob());
+	//m_transNonSkinModelPipelineState.Init(NonSkinDesc);
+
 }
-void Material::InitShaders(
-	const wchar_t* fxFilePath,
-	const char* vsEntryPointFunc,
-	const char* psEntryPointFunc
-)
+void Material::InitShaders()
 {
-	m_vsNonSkinModel.LoadVS(fxFilePath, "VSMainNonSkin");
-	m_vsSkinModel.LoadVS(fxFilePath, vsEntryPointFunc);
-	m_psModel.LoadPS(fxFilePath, psEntryPointFunc);
+	m_vsSkinModel.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain");
+	m_vsNonSkinModel.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMainNonSkin");
+	m_psModel.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain");
 	//m_vsNonSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapNonSkin");
-	m_vsSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapSkin");
-	m_psSkinShadowDraw.LoadPS(fxFilePath, "PSMain_ShadowMap");
+	m_vsSkinShadowDraw.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain_ShadowMapSkin");
+	m_psSkinShadowDraw.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_ShadowMap");
 }
 void Material::BeginRender(RenderContext& rc, int renderMode)
 {
