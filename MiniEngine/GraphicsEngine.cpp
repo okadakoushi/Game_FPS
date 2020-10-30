@@ -179,6 +179,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
+	m_shadow->Init(2048, 2048, 1000.0f);
 
 	return true;
 }

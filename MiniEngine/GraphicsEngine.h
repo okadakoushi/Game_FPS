@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <d3d12.h>
 #include <dxgi.h>
 #include <dxgi1_2.h>
@@ -17,14 +16,6 @@
 #include "SrcFile/Shadow/DirectionalShadowMap.h";
 
 class Light;
-
-enum RenderMode {
-	enRenderMode_Skin,			//スキンあり。
-	enRenderMode_NonSkin,		//スキンなし。
-	enRenderMode_DrawShadow,	//シャドウマップ描画。
-	enRenderMode_Num			//いらんきもするが一応。
-};
-
 
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン

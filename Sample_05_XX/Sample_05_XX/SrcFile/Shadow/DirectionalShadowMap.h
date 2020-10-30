@@ -2,18 +2,17 @@
 #include "SrcFile/util/Noncopyable.h"
 #include "Model.h"
 #include "RenderTarget.h"
+#include "SkinModelRender.h"
 
 /// <summary>
 /// カスケードシャドウマップ。
 /// </summary>
 /// <code>
 /// --func call step-- *引数は省略*
-/// 1.Init();
-/// 2.(if Needed)SetShadowAreas();
-/// 3.RegisterShadowCaster();
-/// 4.SkinModel::RegisterShadowReciever();
-/// 5.Update();	todo : Engine::Update()
-/// 6.RenderToShadowMap() TODO : Engine::Update(); SkinModelに作らないこと。複数回Draw呼ばれる。
+/// シャドウマップのサイズについてはgrahicsEngineのInitを参照。
+/// 1.(if Needed)SetShadowAreas();
+/// 2.SetShadowCaster();
+/// 3.RegisterShadowReciever();
 /// </code>
 class DirectionalShadowMap : Noncopyable
 {
@@ -91,6 +90,7 @@ public:
 	}
 	/// <summary>
 	/// シャドウ描画する？
+	/// <para>シャドウ描画を止めたいときにfalseを指定して呼び出してください。</para>
 	/// </summary>
 	/// <param name="flag">フラグ。</param>
 	void SetShadowFlag(bool flag)

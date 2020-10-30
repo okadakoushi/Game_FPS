@@ -69,7 +69,7 @@ void GameObjectManager::UpdateManager()
 	}
 	/// 描画系処理
 	{
-		//プレレンダー(シャドウマップのセットアップ)
+		//プレレンダー
 		PreRender();
 		//通常描画
 		Draw();

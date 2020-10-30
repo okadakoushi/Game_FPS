@@ -1,0 +1,1 @@
+mknvm.exe ../Sample_05_XX/Sample_05_XX/Assets/modelData/bgReo/bg.tkm ../Sample_05_XX/Sample_05_XX/Assets/nvm/level0.nvm

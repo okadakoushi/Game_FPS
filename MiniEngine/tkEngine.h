@@ -16,6 +16,10 @@ public:
 	/// </summary>
 	void BeginFrame();
 	/// <summary>
+	/// 更新処理。
+	/// </summary>
+	void Update();
+	/// <summary>
 	/// フレームの終了時に呼ばれる処理。
 	/// </summary>
 	void EndFrame();

@@ -20,9 +20,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	{
 		//レンダリング開始。
 		EngineObj().BeginFrame();
-		gameObjectManager().Start();
-		//ゲームオブジェクトマネージャーの更新。
-		gameObjectManager().UpdateManager();
+		EngineObj().Update();
 		//////////////////////////////////////
 		//ここから絵を描くコードを記述する。
 		//////////////////////////////////////

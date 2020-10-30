@@ -266,6 +266,8 @@ void DirectionalShadowMap::RenderToShadowMap()
 				EngineObj().GetGraphicsEngine()->BeginRender();
 			}
 		}
+		//リスト削除。
+		m_shadowCasters.clear();
 
 		//カキカキ終わったらレンダーターゲット戻す。
 		//rc.SetRenderTarget(g_graphicsEngine->GetCurrentFrameBuffuerRTV(), g_graphicsEngine->GetCurrentFrameBufferDSV());

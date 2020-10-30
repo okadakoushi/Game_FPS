@@ -43,7 +43,7 @@ void MeshParts::InitFromTkmFile(
 	}
 	m_expandShaderResourceView = expandShaderResourceView;
 	//ディスクリプタヒープを作成。
-	CreateDescriptorHeaps();
+	//CreateDescriptorHeaps();
 }
 
 void MeshParts::CreateDescriptorHeaps()

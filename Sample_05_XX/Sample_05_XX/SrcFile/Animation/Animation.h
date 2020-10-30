@@ -22,6 +22,7 @@ public:
 	/// <returns>¬Œ÷A¸”sB</returns>
 	bool IsInited() const
 	{
+		return m_isInited;
 	}
 	/// <summary>
 	/// ‰Šú‰»B

@@ -146,45 +146,41 @@ float CalcShadow(float3 wp, float zInView)
 {
 	//1.0fだった場合シャドウが落ちる。
 	float Shadow = 0;
-	//シャドウを落とすかどうかの計算。
-	if (mShadowReciever == 1) {
-		//シャドウマップの番号。
-		int MapNum = 0;
+	//シャドウマップの番号。
+	int MapNum = 0;
 
-		//まず使用するシャドウマップの番号を取得する。
-		MapNum = GetCascadeIndex(zInView);
+	//まず使用するシャドウマップの番号を取得する。
+	MapNum = GetCascadeIndex(zInView);
 
-		//モデルの座標をライトのLVPでライトカメラ軸に変換する。
-		float4 posInLVP = mul(mLVP[MapNum], float4(wp, 1.0f));
-		//ライト座標系での深度値を計算。
-		posInLVP.xyz /= posInLVP.w;
-		//深度値取得。
-		float depth = posInLVP.z;
-		//UV座標に変換。
-		float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
-		
+	//モデルの座標をライトのLVPでライトカメラ軸に変換する。
+	float4 posInLVP = mul(mLVP[MapNum], float4(wp, 1.0f));
+	//ライト座標系での深度値を計算。
+	posInLVP.xyz /= posInLVP.w;
+	//深度値取得。
+	float depth = posInLVP.z;
+	//UV座標に変換。
+	float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
 
-		{
-			//どのシャドウマップの深度情報をとるのか識別。
-			if (MapNum == 0) {
-				//0番目の深度情報で計算。
-				Shadow = CalcShadowPercent(ShadowMap0, shadowMapUV, depth);
-				return Shadow;
-			}
-			else if (MapNum == 1) {
-				//1番目の深度情報で計算。
-				Shadow = CalcShadowPercent(ShadowMap1, shadowMapUV, depth);
-				return Shadow;
-			}
-			else if (MapNum == 2) {
-				//2番目の深度情報で計算。
-				Shadow = CalcShadowPercent(ShadowMap2, shadowMapUV, depth);
-				return Shadow;
-			}
+
+	{
+		//どのシャドウマップの深度情報をとるのか識別。
+		if (MapNum == 0) {
+			//0番目の深度情報で計算。
+			Shadow = CalcShadowPercent(ShadowMap0, shadowMapUV, depth);
+			return Shadow;
+		}
+		else if (MapNum == 1) {
+			//1番目の深度情報で計算。
+			Shadow = CalcShadowPercent(ShadowMap1, shadowMapUV, depth);
+			return Shadow;
+		}
+		else if (MapNum == 2) {
+			//2番目の深度情報で計算。
+			Shadow = CalcShadowPercent(ShadowMap2, shadowMapUV, depth);
+			return Shadow;
 		}
 	}
 	return Shadow;
-
 }
 /// <summary>
 /// モデル用のピクセルシェーダーのエントリーポイント
@@ -228,20 +224,24 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	// 環境光を計算
 	//////////////////////////////////////////////////////
 	lig += ambinentLight; //足し算するだけ
-	float4 posInLVP = mul(mLVP[0], psIn.posInWorld);
-	
-	float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
-	//UV出力。
-	//return float4(shadowMapUV, 0.0f, 1.0f);
-	
-	//Sampler結果出力。
-	//return ShadowMap0.Sample(g_sampler, shadowMapUV);
 
-	//影を落とすかどうかの計算をしていく。
-	float Shadow = CalcShadow(psIn.posInWorld, psIn.posInview.z);
-	//Shadowの値が0.0fなら0.5f, 1.0fなら1.0。
-	//GPU処理でのif文削減。
-	lig *= lerp(1.0f,0.5f,Shadow);
+	if (mShadowReciever == 1) {
+		//シャドウレシーバーなのでシャドウが落ちるかの計算。
+		//LVPを計算。
+		float4 posInLVP = mul(mLVP[0], psIn.posInWorld);
+		//UV座標に変換。
+		float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
+		//UV出力。
+		//return float4(shadowMapUV, 0.0f, 1.0f);
+		//Sampler結果出力。
+		//return ShadowMap0.Sample(g_sampler, shadowMapUV);
+
+		//影を落とすかどうかの計算をしていく。
+		float Shadow = CalcShadow(psIn.posInWorld, psIn.posInview.z);
+		//Shadowの値が0.0fなら0.5f, 1.0fなら1.0。
+		//GPU処理でのif文削減。
+		lig *= lerp(1.0f, 0.5f, Shadow);
+	}
 	//テクスチャカラーをサンプリング。
 	float4 texColor = g_texture.Sample(g_sampler, psIn.uv);
 	//影を適用させる。

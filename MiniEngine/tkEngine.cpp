@@ -24,6 +24,18 @@ void TkEngine::BeginFrame()
 	}
 	
 }
+void TkEngine::Update()
+{
+	//Shadowの更新。
+	GraphicsEngineObj()->GetShadowMap()->Update();
+	//Shadowの描画。 todo:Render分ける。
+	GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
+	//GOMの初期化。
+	gameObjectManager().Start();
+	//GOMの更新。
+	gameObjectManager().UpdateManager();
+}
+
 void TkEngine::EndFrame()
 {
 	m_graphicsEngine->EndRender();

@@ -7,11 +7,11 @@ static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
 //ノンコピー
 #include "SrcFile/util/Noncopyable.h"
+//ゲームオブジェクト。
+#include "SrcFile/GameObject/IGameObject.h"
 
 #include "MiniEngine.h"
 
-//ゲームオブジェクト。
-#include "SrcFile/GameObject/IGameObject.h"
 #include "SrcFile/GameObject/GameObjectManager.h"
 
 //スキンモデル。
