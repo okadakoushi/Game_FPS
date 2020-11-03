@@ -163,13 +163,32 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ÉâÉCÉgÇÃê›íËÅB
-	g_light.directionalLight[0].color.x = 0.5f;
-	g_light.directionalLight[0].color.y = 0.5f;
-	g_light.directionalLight[0].color.z = 0.5f;
+	g_light.directionalLight[0].color.x = 1.5f;
+	g_light.directionalLight[0].color.y = 1.5f;
+	g_light.directionalLight[0].color.z = 1.5f;
+	g_light.directionalLight[0].color.a = 1.0f;
 
 	g_light.directionalLight[0].direction.x = 0.0f;
 	g_light.directionalLight[0].direction.y = 0.0f;
 	g_light.directionalLight[0].direction.z = -1.0f;
+
+	g_light.directionalLight[1].color.x = 1.5f;
+	g_light.directionalLight[1].color.y = 1.5f;
+	g_light.directionalLight[1].color.z = 1.5f;
+	g_light.directionalLight[1].color.a = 1.0f;
+
+	g_light.directionalLight[1].direction.x = 0.0f;
+	g_light.directionalLight[1].direction.y = 0.0f;
+	g_light.directionalLight[1].direction.z = 1.0f;
+
+	g_light.directionalLight[2].color.x = 1.5f;
+	g_light.directionalLight[2].color.y = 1.5f;
+	g_light.directionalLight[2].color.z = 1.5f;
+	g_light.directionalLight[2].color.a = 1.0f;
+
+	g_light.directionalLight[2].direction.x = 0.0f;
+	g_light.directionalLight[2].direction.y = -1.0f;
+	g_light.directionalLight[2].direction.z = 0.0f;
 
 	g_light.ambinetLight.x = 0.5f;
 	g_light.ambinetLight.y = 0.5f;
