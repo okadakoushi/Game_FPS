@@ -7,11 +7,10 @@ public:
 	
 	bool Start() override;
 	void Update() override;
-	void PreRender() override;
-	void Draw() override;
+	void ForwardRender() override;
 private:
-	SkinModelRender* m_unityChan = nullptr;							//アニメーションさせるサンプルモデル。
-	SkinModelRender* m_bg = nullptr;									//ステージ。
+	SkinModelRender* m_unityChan = nullptr;		//ユニティーちゃん。
+	SkinModelRender* m_bg = nullptr;			//ステージ。
 	Vector3 m_pos = Vector3::Zero;				//座標。
 	Vector3 m_scale = Vector3::One;				//拡大率
 	Quaternion m_rot = Quaternion::Identity;	//回転。

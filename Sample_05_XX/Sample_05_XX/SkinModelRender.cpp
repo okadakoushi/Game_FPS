@@ -128,7 +128,7 @@ void SkinModelRender::Update()
 	}
 }
 
-void SkinModelRender::Draw()
+void SkinModelRender::ForwardRender()
 {
 	auto& rc = GraphicsEngineObj()->GetRenderContext();
 	auto& camera3D = GraphicsEngineObj()->GetCamera3D();

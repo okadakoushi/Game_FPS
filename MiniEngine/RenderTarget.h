@@ -93,6 +93,22 @@ public:
 	{
 		return m_viewport;
 	}
+	/// <summary>
+	/// 使用可能かどうかを取得。
+	/// </summary>
+	/// <returns></returns>
+	bool GetAvailable() const
+	{
+		return m_available;
+	}
+	/// <summary>
+	/// 使用可能かどうかを設定。
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetAvailable(bool flag) 
+	{
+		m_available = flag;
+	}
 	void SetName(const wchar_t* name)
 	{
 		m_renderTargetTextureDx12->SetName(name);
@@ -163,6 +179,7 @@ private:
 	int m_height = 0;							//レンダリングターゲットの高さ。
 	float m_rtvClearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };	//レンダリングターゲットビューのクリアカラー。
 	float m_dsvClearValue = 1.0f;							//DSVのクリアカラー。
+	bool m_available = false;					//使用可能？
 };
 
 

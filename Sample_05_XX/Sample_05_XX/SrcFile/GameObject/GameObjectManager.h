@@ -161,17 +161,13 @@ public:
 	//更新
 	void Update();
 	/// <summary>
-	/// プレレンダー
-	/// </summary>
-	void PreRender();
-	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void ForwardRender();
 	/// <summary>
 	/// 最後の描画処理
 	/// </summary>
-	void PostRender();
+	void DrawHUD();
 	/// <summary>
 	/// ゲームオブジェクトの初期化開始。
 	/// </summary>

@@ -163,38 +163,47 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ライトの設定。
-	g_light.directionalLight[0].color.x = 1.5f;
-	g_light.directionalLight[0].color.y = 1.5f;
-	g_light.directionalLight[0].color.z = 1.5f;
-	g_light.directionalLight[0].color.a = 1.0f;
+	g_light.directionalLight[0].color = { 1.5f, 1.5f, 1.5f, 1.0f };
+	g_light.directionalLight[0].direction = { 0.0f, 0.0f, -1.0f };
 
-	g_light.directionalLight[0].direction.x = 0.0f;
-	g_light.directionalLight[0].direction.y = 0.0f;
-	g_light.directionalLight[0].direction.z = -1.0f;
+	g_light.directionalLight[1].color = { 1.5f, 1.5f, 1.5f, 1.0f };
+	g_light.directionalLight[1].direction = { 0.0f, 0.0f, 1.0f };
 
-	g_light.directionalLight[1].color.x = 1.5f;
-	g_light.directionalLight[1].color.y = 1.5f;
-	g_light.directionalLight[1].color.z = 1.5f;
-	g_light.directionalLight[1].color.a = 1.0f;
+	g_light.directionalLight[2].color = { 1.5f, 1.5f, 1.5f, 1.0f };
+	g_light.directionalLight[2].direction = { 0.0f, -1.0f, 0.0f };
 
-	g_light.directionalLight[1].direction.x = 0.0f;
-	g_light.directionalLight[1].direction.y = 0.0f;
-	g_light.directionalLight[1].direction.z = 1.0f;
+	//環境光。
+	g_light.ambinetLight = { 0.5f, 0.5f, 0.5f };
 
-	g_light.directionalLight[2].color.x = 1.5f;
-	g_light.directionalLight[2].color.y = 1.5f;
-	g_light.directionalLight[2].color.z = 1.5f;
-	g_light.directionalLight[2].color.a = 1.0f;
-
-	g_light.directionalLight[2].direction.x = 0.0f;
-	g_light.directionalLight[2].direction.y = -1.0f;
-	g_light.directionalLight[2].direction.z = 0.0f;
-
-	g_light.ambinetLight.x = 0.5f;
-	g_light.ambinetLight.y = 0.5f;
-	g_light.ambinetLight.z = 0.5f;
 	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	g_light.specPow = 5.0f;
+
+	float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//GBufferの初期化。
+	//アルベド用RTを作成。
+	m_GBufferRTs[GBuffer_albed].Create(
+		FRAME_BUFFER_W, FRAME_BUFFER_H,
+		1, 1,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_D32_FLOAT,
+		clearColor
+	);
+	//法線用RTを作成。
+	m_GBufferRTs[GBuffer_normal].Create(
+		FRAME_BUFFER_W, FRAME_BUFFER_H,
+		1, 1,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_UNKNOWN,
+		clearColor
+	);
+	//ワールド座標用RT作成。
+	m_GBufferRTs[GBuffer_worldPos].Create(
+		FRAME_BUFFER_W, FRAME_BUFFER_H,
+		1, 1,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,	//細かい値を保存。
+		DXGI_FORMAT_UNKNOWN,
+		clearColor
+	);
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;

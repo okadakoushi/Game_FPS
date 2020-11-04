@@ -39,7 +39,7 @@ public:
 	/// <summary>
 	/// 描画。
 	/// </summary>
-	void Draw() override;
+	void ForwardRender() override;
 	/// <summary>
 	/// アニメーションを再生。
 	/// </summary>

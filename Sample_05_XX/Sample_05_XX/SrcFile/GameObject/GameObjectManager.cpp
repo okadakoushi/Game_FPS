@@ -25,29 +25,20 @@ void GameObjectManager::Update()
 	}
 }
 
-void GameObjectManager::PreRender()
+void GameObjectManager::ForwardRender()
 {
 	for (GameObjectList objList : m_gameObjectListArray) {
 		for (IGameObject* obj : objList) {
-			obj->PreRenderWrapper();
-		}
-	}
-}
-
-void GameObjectManager::Draw()
-{
-	for (GameObjectList objList : m_gameObjectListArray) {
-		for (IGameObject* obj : objList) {
-			obj->DrawWrapper();
+			obj->ForwardRenderWrapper();
 		}
 	}
 }
 	
-void GameObjectManager::PostRender()
+void GameObjectManager::DrawHUD()
 {
 	for (GameObjectList objList : m_gameObjectListArray) {
 		for (IGameObject* obj : objList) {
-			obj->PostRenderWrapper();
+			obj->RenderHUD();
 		}
 	}
 }
@@ -69,12 +60,23 @@ void GameObjectManager::UpdateManager()
 	}
 	/// 描画系処理
 	{
-		//プレレンダー
-		PreRender();
-		//通常描画
-		Draw();
+		auto* ge = GraphicsEngineObj();
+		//GBuffer取得。
+		RenderTarget* rtv[]{
+			&ge->GetGBuffer(GBuffer_albed),
+			&ge->GetGBuffer(GBuffer_normal),
+			&ge->GetGBuffer(GBuffer_worldPos)
+		};
+		//使用可能までまつ。
+		ge->GetRenderContext().WaitUntilToPossibleSetRenderTargets(3, rtv);
+		//変更する。
+		ge->GetRenderContext().SetRenderTargets(3, rtv);
+		//クリア。
+		ge->GetRenderContext().ClearRenderTargetViews(3, rtv);
+		//フォワードレンダリング。
+		ForwardRender();
 		//ポストレンダー
-		PostRender();
+		DrawHUD();
 	}
 	//削除
 	ExcuteDeleteGameObject();

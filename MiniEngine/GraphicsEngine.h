@@ -17,6 +17,15 @@
 
 class Light;
 
+//GBuffer定義。
+enum EnGBuffer {
+	GBuffer_albed,		//アルベド。
+	GBuffer_normal,		//法線。
+	GBuffer_worldPos,	//ワールド座標。
+	//todo:shadow
+	Gbuffer_Num			//GBufferの数。	
+};
+
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
 /// </summary>
@@ -139,6 +148,15 @@ public:
 		return m_currentFrameBufferDSVHandle;
 	}
 	/// <summary>
+	/// GBufferを取得。
+	/// </summary>
+	/// <param name="gBufferNum">GBufferの種類。</param>
+	/// <returns>gBuffer</returns>
+	RenderTarget& GetGBuffer(EnGBuffer gBufferNum)
+	{
+		return m_GBufferRTs[gBufferNum];
+	}
+	/// <summary>
 	/// シャドウマップの取得。
 	/// </summary>
 	/// <returns>シャドウマップ。</returns>
@@ -256,7 +274,7 @@ private:
 	D3D12_RECT m_scissorRect;			//シザリング矩形。
 	RenderContext m_renderContext;		//レンダリングコンテキスト。
 	D3D12_CPU_DESCRIPTOR_HANDLE m_currentFrameBufferRTVHandle;		//現在書き込み中のフレームバッファのレンダリングターゲットビューのハンドル。
-	D3D12_CPU_DESCRIPTOR_HANDLE m_currentFrameBufferDSVHandle;		//現在書き込み中のフレームバッファの深度ステンシルビューの
+	D3D12_CPU_DESCRIPTOR_HANDLE m_currentFrameBufferDSVHandle;		//現在書き込み中のフレームバッファの深度ステンシルビューのハンドル。
 	// GPUとの同期で使用する変数。
 	UINT m_frameIndex = 0;
 	HANDLE m_fenceEvent = nullptr;
@@ -267,5 +285,6 @@ private:
 	Camera m_camera2D;					//2Dカメラ。
 	Camera m_camera3D;					//3Dカメラ。
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
+	RenderTarget m_GBufferRTs[Gbuffer_Num];	//GBufferのレンダーターゲット。
 };
 extern Light g_light;						//ライト。

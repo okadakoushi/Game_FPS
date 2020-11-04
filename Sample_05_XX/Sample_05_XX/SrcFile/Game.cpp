@@ -15,13 +15,8 @@ bool Game::Start()
 	//unitychan初期化。
 	m_unityChan = NewGO<SkinModelRender>(0, "Unity");
 	m_unityChan->Init("Assets/modelData/unityChan.tkm", "Assets/animData/unityChan/Idle.tka");
-	//m_unityChan->Init("Assets/modelData/tkSample_thief/Thethief_H.tkm","Assets/modelData/tkSample_thief/anim/idle.tka");
-	//Quaternion qRot;
-	//qRot.SetRotationDegX(90.0f);
-	//m_unityChan->SetRotation(qRot);
-	//Vector3 scale = g_vec3One * 1.5;
-	//m_unityChan->SetScale(scale);
-	//m_unityChan->SetShadwoCaster(true);
+	//シャドウを出す。
+	m_unityChan->SetShadwoCaster(true);
 
 	return true;
 
@@ -56,10 +51,6 @@ void Game::Update()
 	m_unityChan->SetRenderMode(enRenderMode_Skin);
 }
 
-void Game::PreRender()
-{
-}
-
-void Game::Draw()
+void Game::ForwardRender()
 {
 }

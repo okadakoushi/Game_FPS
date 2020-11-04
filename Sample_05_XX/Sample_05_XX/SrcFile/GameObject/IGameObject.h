@@ -40,27 +40,6 @@ public:
 	{
 	};
 	/// <summary>
-	/// プレレンダー
-	/// </summary>
-	/// <remarks>
-	/// PreRenderで描画が望まれるもの。
-	/// 1.シャドウマップ描画　※RenderToShadowMap
-	/// 2.シルエット描画 ※
-	/// </remarks>
-	virtual void PreRender()
-	{
-	}
-	/// <summary>
-	/// ポストレンダー
-	/// </summary>
-	/// <remarks>
-	/// PostRenderで描画が望まれるもの。
-	/// 1.エフェクト 
-	/// </remarks>
-	virtual void PostRender()
-	{
-	}
-	/// <summary>
 	/// <para>Updateの直前に呼ばれる開始処理</para>
 	/// <para>trueが返されると更新処理(Update)が開始されるよ</para>
 	/// </summary>
@@ -73,9 +52,15 @@ public:
 	/// </summary>
 	virtual void Update() {};
 	/// <summary>
-	/// 描画処理
+	/// フォワードレンダリング。
 	/// </summary>
-	virtual void Draw() {};
+	virtual void ForwardRender() {};
+	/// <summary>
+	/// HUD(最終的に表示される画面)を描画。
+	/// </summary>
+	virtual void RenderHUD()
+	{
+	}
 	/// <summary>
 	/// 優先度取得
 	/// </summary>
@@ -112,13 +97,6 @@ public:
 	/// 関数をラップしてるだけだよ
 	/// 各オブジェクトの関数の処理を開始させるよ
 	/// </summary>
-	void PreRenderWrapper()
-	{
-		if (m_isActive && m_isStart && !m_isDead)
-		{
-			PreRender();
-		}
-	}
 	void StartWrapper()
 	{
 		if (m_isActive && !m_isStart)
@@ -136,18 +114,18 @@ public:
 			Update();
 		}
 	}
-	void DrawWrapper()
+	void ForwardRenderWrapper()
 	{
 		if (m_isActive && m_isStart)
 		{
-			Draw();
+			ForwardRender();
 		}
 	}
-	void PostRenderWrapper()
+	void RenderHUDWrapper()
 	{
 		if (m_isActive && m_isStart && !m_isDead)
 		{
-			PostRender();
+			RenderHUD();
 		}
 	}
 	friend class GameObjectManager;

@@ -38,7 +38,14 @@ inline void RenderContext::WaitUntilFinishDrawingToRenderTarget(RenderTarget& re
 }
 inline void RenderContext::WaitUntilToPossibleSetRenderTarget(RenderTarget& renderTarget)
 {
-	WaitUntilToPossibleSetRenderTarget(renderTarget.GetRenderTargetTexture().Get());
+	if (renderTarget.GetAvailable() == false) {
+		//使用可能じゃない。
+		//エラーを回避する処理。
+		WaitUntilToPossibleSetRenderTarget(renderTarget.GetRenderTargetTexture().Get());
+		//使用可能にする。
+		renderTarget.SetAvailable(true);
+	}
+
 }
 inline void RenderContext::WaitUntilToPossibleSetRenderTargets(int numRt, RenderTarget* renderTargets[])
 {
