@@ -60,22 +60,11 @@ void GameObjectManager::UpdateManager()
 	}
 	/// 描画系処理
 	{
-		auto* ge = GraphicsEngineObj();
-		//GBuffer取得。
-		RenderTarget* rtv[]{
-			&ge->GetGBuffer(GBuffer_albed),
-			&ge->GetGBuffer(GBuffer_normal),
-			&ge->GetGBuffer(GBuffer_worldPos)
-		};
-		//使用可能までまつ。
-		ge->GetRenderContext().WaitUntilToPossibleSetRenderTargets(3, rtv);
-		//変更する。
-		ge->GetRenderContext().SetRenderTargets(3, rtv);
-		//クリア。
-		ge->GetRenderContext().ClearRenderTargetViews(3, rtv);
+		//ディファードレンダリング。
+		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
 		//フォワードレンダリング。
 		ForwardRender();
-		//ポストレンダー
+		//HUDに描画。
 		DrawHUD();
 	}
 	//削除

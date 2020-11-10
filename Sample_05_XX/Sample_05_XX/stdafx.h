@@ -19,6 +19,8 @@ static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
 //シャドウマップ。
 #include "SrcFile/Shadow/DirectionalShadowMap.h";
+//GBuffer
+#include "GBufferRender.h";
 
 using namespace std;
 

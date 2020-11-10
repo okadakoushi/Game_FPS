@@ -39,35 +39,9 @@ class Model {
 public:
 
 	/// <summary>
-	/// モデル初期化ステップ。
-	/// </summary>
-	/// <param name="initData">初期化データ。</param>
-	/// <returns>ステップ</returns>
-	int Init( const ModelInitData& initData );
-	/// <summary>
-	/// スケルトンデータ読み込みステップ。
-	/// </summary>
-	/// <param name="initData">初期化データ</param>
-	/// <returns>ステップ</returns>
-	int LoadTks(const ModelInitData& initData);
-	/// <summary>
-	/// スケルトンの初期化処理。
-	/// </summary>
-	/// <returns></returns>
-	int initSkeleton(const ModelInitData& initData);
-	/// <summary>
-	/// アニメーションの初期化。
-	/// </summary>
-	/// <param name="initData"></param>
-	int InitAnim();
-	/// <summary>
 	/// モデルのみの初期化。
 	/// </summary>
 	void InitModel(const char* filepath);
-	/// <summary>
-	/// ワールド座標とアニメーションの更新。
-	/// </summary>
-	void UpdateMatAndAnim();
 	/// <summary>
 	/// ワールド行列の更新。
 	/// </summary>
@@ -75,6 +49,14 @@ public:
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
 	void UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale);
+	/// <summary>
+	/// 更新。
+	/// </summary>
+	/// <param name="pos">位置。</param>
+	/// <param name="rot">回転。</param>
+	/// <param name="scale">拡大。</param>
+	/// <param name="isForwardRender">フォワードレンダーする？。</param>
+	void Update(Vector3 pos, Quaternion rot, Vector3 scale);
 
 	/// <summary>
 	/// スケルトンを関連付ける。

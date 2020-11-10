@@ -120,7 +120,12 @@ void SkinModelRender::Update()
 		m_animation.Progress(DELTA_TIME);
 	}
 	//ワールド座標更新。
-	m_model.UpdateWorldMatrix(m_pos, m_rot, m_scale);
+	m_model.Update(m_pos, m_rot, m_scale);
+
+	if (!m_isForwardRender) {
+		//フォワードレンダーしないのでGBuffer描画。
+		GraphicsEngineObj()->GetGBuffer().AddModel(this);
+	}
 
 	if (m_skeleton.IsInited()) {
 		//スケルトン初期化されてた。
@@ -133,6 +138,8 @@ void SkinModelRender::ForwardRender()
 	auto& rc = GraphicsEngineObj()->GetRenderContext();
 	auto& camera3D = GraphicsEngineObj()->GetCamera3D();
 	//モデルのDraw
-	m_model.Draw(rc, camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix(), m_renderMode);
+	if (m_isForwardRender) {
+		m_model.Draw(rc, camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix(), m_renderMode);
+	}
 }
 

@@ -46,6 +46,7 @@ void Game::Update()
 	//bgの表示。
 	m_bg->SetRotation(qRot);
 	m_bg->SetRenderMode(enRenderMode_NonSkin);
+	m_bg->SetForwardRender(false);
 	//Unitychanの表示。
 	m_unityChan->SetPosition(m_pos);
 	m_unityChan->SetRenderMode(enRenderMode_Skin);

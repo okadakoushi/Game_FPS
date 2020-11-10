@@ -81,6 +81,14 @@ public:
 		m_renderMode = rm;
 	}
 	/// <summary>
+	/// レンダーモードを取得。
+	/// </summary>
+	/// <returns></returns>
+	EnRenderMode& GetRenderMode() 
+	{
+		return m_renderMode;
+	}
+	/// <summary>
 	/// シャドウレシーバーとして登録。
 	/// </summary>
 	/// <param name="flag">フラグ。</param>
@@ -95,6 +103,11 @@ public:
 	void SetShadwoCaster(bool flag)
 	{
 		ShadowCaster = flag;
+	}
+
+	void SetForwardRender(bool flag)
+	{
+		m_isForwardRender = flag;
 	}
 	/// <summary>
 	/// モデルを取得。
@@ -129,5 +142,6 @@ private:
 	Vector3 m_scale = g_vec3One;		//拡大。
 	EnRenderMode m_renderMode = enRenderMode_NonSkin;	//描画モード。
 	EnModelInitStep m_initStep = enInitStep_None;		//初期化ステップ。
+	bool m_isForwardRender = false;		//フォワードレンダリングする？
 };
 

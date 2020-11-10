@@ -14,17 +14,9 @@
 #include "Camera.h"
 
 #include "SrcFile/Shadow/DirectionalShadowMap.h";
+#include "GBufferRender.h"
 
 class Light;
-
-//GBuffer定義。
-enum EnGBuffer {
-	GBuffer_albed,		//アルベド。
-	GBuffer_normal,		//法線。
-	GBuffer_worldPos,	//ワールド座標。
-	//todo:shadow
-	Gbuffer_Num			//GBufferの数。	
-};
 
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
@@ -150,11 +142,10 @@ public:
 	/// <summary>
 	/// GBufferを取得。
 	/// </summary>
-	/// <param name="gBufferNum">GBufferの種類。</param>
-	/// <returns>gBuffer</returns>
-	RenderTarget& GetGBuffer(EnGBuffer gBufferNum)
+	/// <returns>GBuffer</returns>
+	GBufferRender& GetGBuffer()
 	{
-		return m_GBufferRTs[gBufferNum];
+		return m_GBuffer;
 	}
 	/// <summary>
 	/// シャドウマップの取得。
@@ -285,6 +276,6 @@ private:
 	Camera m_camera2D;					//2Dカメラ。
 	Camera m_camera3D;					//3Dカメラ。
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
-	RenderTarget m_GBufferRTs[Gbuffer_Num];	//GBufferのレンダーターゲット。
+	GBufferRender m_GBuffer;			//GBuffer。
 };
 extern Light g_light;						//ライト。

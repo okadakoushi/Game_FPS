@@ -178,32 +178,16 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	g_light.specPow = 5.0f;
 
-	float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//GBufferの初期化。
-	//アルベド用RTを作成。
-	m_GBufferRTs[GBuffer_albed].Create(
-		FRAME_BUFFER_W, FRAME_BUFFER_H,
-		1, 1,
-		DXGI_FORMAT_R8G8B8A8_UNORM,
-		DXGI_FORMAT_D32_FLOAT,
-		clearColor
-	);
-	//法線用RTを作成。
-	m_GBufferRTs[GBuffer_normal].Create(
-		FRAME_BUFFER_W, FRAME_BUFFER_H,
-		1, 1,
-		DXGI_FORMAT_R8G8B8A8_UNORM,
-		DXGI_FORMAT_UNKNOWN,
-		clearColor
-	);
-	//ワールド座標用RT作成。
-	m_GBufferRTs[GBuffer_worldPos].Create(
-		FRAME_BUFFER_W, FRAME_BUFFER_H,
-		1, 1,
-		DXGI_FORMAT_R32G32B32A32_FLOAT,	//細かい値を保存。
-		DXGI_FORMAT_UNKNOWN,
-		clearColor
-	);
+	//GBufferを初期化。
+	m_GBuffer.Init();
+
+	//ディファード用スプライトの初期化データー。
+	SpriteInitData defardData;
+	//画面と一緒。
+	defardData.m_width = FRAME_BUFFER_W;
+	defardData.m_height = FRAME_BUFFER_H;
+	//スプライト用のシェーダー。
+	defardData.m_fxFilePath = "Assets/shader/sprite.fx";
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;

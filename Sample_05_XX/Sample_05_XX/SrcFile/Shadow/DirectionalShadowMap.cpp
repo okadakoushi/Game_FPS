@@ -246,11 +246,8 @@ void DirectionalShadowMap::RenderToShadowMap()
 	if (m_isEnable == true) {
 		//シャドウマップ有効だった。
 		for (int i = 0; i < NUM_SHADOW_MAP; i++) {
-			if (!m_Inited[i]) {
-				//レンダリングターゲットが設定できるようになるまで待機。
-				rc.WaitUntilToPossibleSetRenderTarget(m_shadowMaps[i]);
-				m_Inited[i] = true;
-			}
+			//使用可能までまつ。
+			rc.WaitUntilToPossibleSetRenderTarget(m_shadowMaps[i]);
 			//レンダーターゲットのセット。
 			rc.SetRenderTarget(m_shadowMaps[i], m_shadowMaps[i].GetDSVCpuDescriptorHandle());
 			//ケシケシ

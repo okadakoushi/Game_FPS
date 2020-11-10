@@ -31,14 +31,10 @@ void Model::InitModel(const char* filepath)
 	);
 }
 
-void Model::UpdateMatAndAnim()
+void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale)
 {
-	//アニメーション更新。
-	m_animation.Progress(DELTA_TIME);
-	//めんどいからまだSet作ってないよぉ！
-	UpdateWorldMatrix(m_pos, m_rot, m_scale);
-	//スケルトンも更新。
-	m_skeleton.Update(m_world);
+	//ワールド座標更新。
+	UpdateWorldMatrix(pos, rot, scale);
 }
 
 void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
