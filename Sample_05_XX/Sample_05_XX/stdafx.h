@@ -15,12 +15,12 @@ static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 #include "SrcFile/GameObject/GameObjectManager.h"
 
 //スキンモデル。
-#include "SkinModelRender.h"
+#include "SrcFile/SkinModelRender.h"
 
 //シャドウマップ。
 #include "SrcFile/Shadow/DirectionalShadowMap.h";
 //GBuffer
-#include "GBufferRender.h";
+#include "SrcFile/GBufferRender.h";
 
 using namespace std;
 

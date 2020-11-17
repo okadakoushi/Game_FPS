@@ -183,8 +183,8 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
-    <ClCompile Include="GBufferRender.cpp" />
-    <ClCompile Include="SkinModelRender.cpp" />
+    <ClCompile Include="SrcFile\GBufferRender.cpp" />
+    <ClCompile Include="SrcFile\SkinModelRender.cpp" />
     <ClCompile Include="SrcFile\Shadow\DirectionalShadowMap.cpp" />
     <ClCompile Include="SrcFile\Animation\AnimationController.cpp" />
     <ClCompile Include="SrcFile\Animation\Animation.cpp" />
@@ -232,8 +232,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
-    <ClInclude Include="GBufferRender.h" />
-    <ClInclude Include="SkinModelRender.h" />
+    <ClInclude Include="SrcFile\GBufferRender.h" />
+    <ClInclude Include="SrcFile\SkinModelRender.h" />
     <ClInclude Include="SrcFile\Shadow\DirectionalShadowMap.h" />
     <ClInclude Include="SrcFile\Animation\AnimationController.h" />
     <ClInclude Include="SrcFile\Animation\Animation.h" />

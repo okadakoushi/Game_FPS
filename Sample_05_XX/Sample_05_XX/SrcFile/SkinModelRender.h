@@ -14,7 +14,7 @@ enum EnRenderMode {
 /// </summary>
 /// <code>
 /// 1.NewGO();
-/// 2.(if ForwardRender)SetShader() & SetForwardRender todo:wrap;
+/// 2.(if ForwardRender)SetForwardRender;
 /// 3.Init();
 /// 4.(if Needed)Set~~();
 /// 5.(if Shadow)SetShadow~~();
@@ -107,22 +107,25 @@ public:
 		ShadowCaster = flag;
 	}
 	/// <summary>
-	/// フォワードレンダー描画にする？
+	/// フォワードレンダー描画にする。
 	/// <para>特殊なレンダリングを行う場合はTrueにする。</para>
-	/// <para>todo:Shaderも一緒にdeferred用に変更。</para>
+	/// <para>todo:ZBuffer周りにバグあり。</para>
 	/// </summary>
-	/// <param name="flag">フラグ。</param>
-	void SetForwardRender(bool flag)
+	void SetForwardRender()
 	{
-		m_isForwardRender = flag;
+		m_isForwardRender = true;
+		//フォワードレンダー設定するのでシェーダーも一緒に変更する。
+		m_model.SetShader(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx");
 	}
 	/// <summary>
-	/// シェーダーを設定。
+	/// ディファードレンダー描画にする。
+	/// <para>通常の描画に戻す際に使用。</para>
 	/// </summary>
-	/// <param name="fxPath">シェーダーのパス。</param>
-	void SetShader(const wchar_t* fxPath)
+	void SetDefferedRender()
 	{
-		m_model.SetShader(fxPath);
+		m_isForwardRender = false;
+		//ディファードレンダー設定するのでシェーダーも一緒に変更する。
+		m_model.SetShader(L"Assets/shader/DefeardModel.fx");
 	}
 	/// <summary>
 	/// モデルを取得。

@@ -98,6 +98,11 @@ bool SkinModelRender::Start()
 
 void SkinModelRender::Init(const char* tkmFile, const char* tkaFile)
 {
+	if (!m_isForwardRender) {
+		//–ˆ‰ñ‰Šú‰»‚·‚é‚Ì‚Å–Ê“|‚È‚Ì‚ÅDefferd‚Ìê‡‚Í‚±‚±‚Å‰Šú‰»‚µ‚¿‚á‚¤B
+		SetDefferedRender();
+	}
+	//ƒ‚ƒfƒ‹‰Šú‰»B
 	m_model.InitModel(tkmFile);
 	//todo : •¡”pushBuck
 	if (tkaFile != nullptr) {

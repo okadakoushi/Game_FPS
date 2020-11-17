@@ -14,7 +14,7 @@
 #include "Camera.h"
 
 #include "SrcFile/Shadow/DirectionalShadowMap.h"
-#include "GBufferRender.h"
+#include "SrcFile/GBufferRender.h"
 #include "Sprite.h"
 
 class Light;

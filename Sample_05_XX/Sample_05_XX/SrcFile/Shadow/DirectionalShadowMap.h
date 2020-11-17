@@ -2,7 +2,7 @@
 #include "SrcFile/util/Noncopyable.h"
 #include "Model.h"
 #include "RenderTarget.h"
-#include "SkinModelRender.h"
+#include "SrcFile/SkinModelRender.h"
 
 /// <summary>
 /// カスケードシャドウマップ。
