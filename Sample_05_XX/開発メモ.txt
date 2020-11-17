@@ -1,18 +1,11 @@
-アニメーションクリップ
-アニメーションコントローラー
-アニメーション
-シャドウマップ
-ライトのPBR計算（物理ベースライティング。）NoAnimModel_PBR.fx参照。
-ディファードレンダリング
-IGameObjectスマートポインタ
-
-
-SkinModelのSet作ってないからもでるうごかせんでぇｗｗｗ
-SkinModelのinitどうにかして
-SkinModelにcbの更新処理移して。
-SkinModelのDrawにviewとprojいらんくない？
-
-ShadowMapのDraw、Engine処理で呼ぶようにして。
+todo
+ SkinModelのDrawにviewとprojいらんくない？
+ DeferredのSprite切り替えなんとかする。
+ SpriteとDeferredSpriteのパイプライン分けるべき？
+ 
+warning
+ fxファイルを別に作る場合、VS,PSのエントリーポイントの名前一緒にしてね。
+ 　→エンジンの仕様上おなしくなるぞい。Material.cppを参照。
 
 ライトカメラ
 カメラのY軸　＝　ワールド座標のZ軸。

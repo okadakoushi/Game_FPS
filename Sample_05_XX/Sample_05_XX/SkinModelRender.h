@@ -1,10 +1,11 @@
 #pragma once
 
 enum EnRenderMode {
-	enRenderMode_Skin,			//スキンあり。
-	enRenderMode_NonSkin,		//スキンなし。
-	enRenderMode_DrawShadow,	//シャドウマップ描画。
-	enRenderMode_Num			//いらんきもするが一応。
+	enRenderMode_Skin,				//スキンあり。
+	enRenderMode_NonSkin,			//スキンなし。
+	enRenderMode_DrawShadow,		//シャドウマップ描画。
+	enRenderMode_NonSkinDrawShadow,	//スキンなしシャドウマップ描画。
+	enRenderMode_Num				//いらんきもするが一応。
 };
 
 
@@ -13,11 +14,12 @@ enum EnRenderMode {
 /// </summary>
 /// <code>
 /// 1.NewGO();
-/// 2.Init();
-/// 3.(if Needed)Set~~();
-/// 4.(if Shadow)SetShadow~~();
-/// 5.(if Anim)PlayAnimation();
-/// 6.(if ChangeRM)SetRenderMode();
+/// 2.(if ForwardRender)SetShader() & SetForwardRender todo:wrap;
+/// 3.Init();
+/// 4.(if Needed)Set~~();
+/// 5.(if Shadow)SetShadow~~();
+/// 6.(if Anim)PlayAnimation();
+/// 7.(if ChangeRM)SetRenderMode();
 /// </code>
 class SkinModelRender : public IGameObject
 {
@@ -104,10 +106,23 @@ public:
 	{
 		ShadowCaster = flag;
 	}
-
+	/// <summary>
+	/// フォワードレンダー描画にする？
+	/// <para>特殊なレンダリングを行う場合はTrueにする。</para>
+	/// <para>todo:Shaderも一緒にdeferred用に変更。</para>
+	/// </summary>
+	/// <param name="flag">フラグ。</param>
 	void SetForwardRender(bool flag)
 	{
 		m_isForwardRender = flag;
+	}
+	/// <summary>
+	/// シェーダーを設定。
+	/// </summary>
+	/// <param name="fxPath">シェーダーのパス。</param>
+	void SetShader(const wchar_t* fxPath)
+	{
+		m_model.SetShader(fxPath);
 	}
 	/// <summary>
 	/// モデルを取得。

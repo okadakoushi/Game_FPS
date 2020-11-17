@@ -43,7 +43,8 @@ public:
 		const TkmFile& tkmFile,
 		void* expandData,
 		int expandDataSize,
-		IShaderResource* expandShaderResourceView
+		IShaderResource* expandShaderResourceView,
+		const wchar_t* fxPath
 	) ;
 	/// <summary>
 	/// 描画。
@@ -70,7 +71,8 @@ private:
 	/// <param name="psEntryPointFunc">ピクセルシェーダーのエントリーポイントの関数名</param>
 	void CreateMeshFromTkmMesh(
 		const TkmFile::SMesh& mesh, 
-		int meshNo
+		int meshNo,
+		const wchar_t* fxPath
 	);
 	/// <summary>
 	/// ディスクリプタヒープを作成。

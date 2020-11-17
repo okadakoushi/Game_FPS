@@ -22,14 +22,15 @@ void MeshParts::InitFromTkmFile(
 	const TkmFile& tkmFile, 
 	void* expandData,
 	int expandDataSize,
-	IShaderResource* expandShaderResourceView
+	IShaderResource* expandShaderResourceView,
+	const wchar_t* fxPath
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
 	int meshNo = 0;
 	tkmFile.QueryMeshParts([&](const TkmFile::SMesh& mesh) {
 		//tkmファイルのメッシュ情報からメッシュを作成する。
-		CreateMeshFromTkmMesh(mesh, meshNo);
+		CreateMeshFromTkmMesh(mesh, meshNo, fxPath);
 
 
 		meshNo++;
@@ -66,12 +67,12 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeap.RegistShaderResource(0, mesh->m_materials[matNo]->GetAlbedoMap());		//アルベドマップ。
 			descriptorHeap.RegistShaderResource(1, mesh->m_materials[matNo]->GetNormalMap());		//法線マップ。
 			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());		//スペキュラマップ。
-			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);					//ボーン
 			//シャドウマップ登録。
 			auto* shadowMap = EngineObj().GetGraphicsEngine()->GetShadowMap();
-			descriptorHeap.RegistShaderResource(4, shadowMap->GetRenderTarget(0).GetRenderTargetTexture());
-			descriptorHeap.RegistShaderResource(5, shadowMap->GetRenderTarget(1).GetRenderTargetTexture());
-			descriptorHeap.RegistShaderResource(6, shadowMap->GetRenderTarget(2).GetRenderTargetTexture());
+			descriptorHeap.RegistShaderResource(15, shadowMap->GetRenderTarget(0).GetRenderTargetTexture());
+			descriptorHeap.RegistShaderResource(16, shadowMap->GetRenderTarget(1).GetRenderTargetTexture());
+			descriptorHeap.RegistShaderResource(17, shadowMap->GetRenderTarget(2).GetRenderTargetTexture());
+			descriptorHeap.RegistShaderResource(20, m_boneMatricesStructureBuffer);					//ボーン
 			if (m_expandShaderResourceView){
 				descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO, *m_expandShaderResourceView);
 			}
@@ -91,7 +92,8 @@ void MeshParts::CreateDescriptorHeaps()
 }
 void MeshParts::CreateMeshFromTkmMesh(
 	const TkmFile::SMesh& tkmMesh, 
-	int meshNo
+	int meshNo,
+	const wchar_t* fxPath
 )
 {
 	//頂点バッファを作成。
@@ -145,7 +147,7 @@ void MeshParts::CreateMeshFromTkmMesh(
 	mesh->m_materials.reserve(tkmMesh.materials.size());
 	for (auto& tkmMat : tkmMesh.materials) {
 		auto mat = new Material;
-		mat->InitFromTkmMaterila(tkmMat);
+		mat->InitFromTkmMaterila(tkmMat, fxPath);
 		mesh->m_materials.push_back(mat);
 	}
 

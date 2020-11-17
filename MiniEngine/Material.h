@@ -11,7 +11,8 @@ public:
 	/// </summary>
 	/// <param name="tkmMat">tkmマテリアル</param>
 	void InitFromTkmMaterila(
-		const TkmFile::SMaterial& tkmMat
+		const TkmFile::SMaterial& tkmMat,
+		const wchar_t* fxPath
 		);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
@@ -63,7 +64,7 @@ private:
 	/// <param name="fxFilePath">fxファイルのファイルパス</param>
 	/// <param name="vsEntryPointFunc">頂点シェーダーのエントリーポイントの関数名</param>
 	/// <param name="psEntryPointFunc">ピクセルシェーダーのエントリーポイントの関数名</param>
-	void InitShaders();
+	void InitShaders(const wchar_t* fx);
 	/// <summary>
 	/// テクスチャを初期化。
 	/// </summary>
@@ -77,7 +78,7 @@ private:
 		int hasNormalMap;	//法線マップを保持しているかどうかのフラグ。
 		int hasSpecMap;		//スペキュラマップを保持しているかどうかのフラグ。
 	};
-	Texture	m_albedoMap;	//アルベドマップ。
+	Texture	m_albedoMap;							//アルベドマップ。
 	Texture	m_normalMap;							//法線マップ。
 	Texture	m_specularMap;							//スペキュラマップ。
 	ConstantBuffer m_constantBuffer;				//定数バッファ。
@@ -93,6 +94,7 @@ private:
 	Shader m_vsNonSkinShadowDraw;					//スキンなしシャドウ描画用ピクセルシェーダー。
 	Shader m_vsSkinShadowDraw;						//スキンありシャドウ描画用ピクセルシェーダー。
 	Shader m_psSkinShadowDraw;						//シャドウ描画用ピクセルシェーダー。
+
 };
 
 

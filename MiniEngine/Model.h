@@ -97,20 +97,21 @@ public:
 	{
 		isShadowReciever = true;
 	}
-	void SetPosition(Vector3 pos) {
-		m_pos = pos;
-	}
-
-	void SetRotation(Quaternion qRot)
-	{
-		m_rot = qRot;
-	}
 	/// <summary>
 	/// シャドウキャスターとして登録。
 	/// </summary>
 	void SetShadwoCaster()
 	{
 		isShadowCaster = true;
+	}
+	/// <summary>
+	/// シェーダーを設定。
+	///<para>ちょっと実用性がない実装かも。todo:修正。</para>
+	/// </summary>
+	/// <param name="fxPath">シェーダーのファイルパス。</param>
+	void SetShader(const wchar_t* fxPath)
+	{
+		m_shaderFilePath = fxPath;
 	}
 private:
 	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
@@ -127,7 +128,5 @@ private:
 	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
 	Animation						m_animation;		//アニメーション
-	Vector3	m_pos = Vector3::Zero;				//座標。
-	Vector3	m_scale = Vector3::One;				//拡大率。
-	Quaternion m_rot = Quaternion::Identity;	//回転。
+	const wchar_t* m_shaderFilePath = L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx";			//シェーダーのファイルパス。
 };

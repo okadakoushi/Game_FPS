@@ -60,8 +60,11 @@ void GameObjectManager::UpdateManager()
 	}
 	/// 描画系処理
 	{
-		//ディファードレンダリング。
+
+		//GBufferレンダリング。
 		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
+		//GBufferを基にディファードレンダリング。
+		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
 		//フォワードレンダリング。
 		ForwardRender();
 		//HUDに描画。

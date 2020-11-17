@@ -3,6 +3,7 @@
 #include "Indexbuffer.h"
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
+#include "DescriptorHeap.h"
 
 class Texture;
 

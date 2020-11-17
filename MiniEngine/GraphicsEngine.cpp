@@ -179,15 +179,25 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	g_light.specPow = 5.0f;
 
 	//GBufferを初期化。
+	//todo:preRenderClass
 	m_GBuffer.Init();
 
-	//ディファード用スプライトの初期化データー。
-	SpriteInitData defardData;
-	//画面と一緒。
-	defardData.m_width = FRAME_BUFFER_W;
-	defardData.m_height = FRAME_BUFFER_H;
-	//スプライト用のシェーダー。
-	defardData.m_fxFilePath = "Assets/shader/sprite.fx";
+	//全体レンダリング。
+	m_spriteData.m_width = FRAME_BUFFER_W;
+	m_spriteData.m_height = FRAME_BUFFER_H;
+	//使用するテクスチャ。 とりまアルベドのみ。
+	//m_spriteData.m_textures[0] = &GraphicsEngineObj()->GetGBuffer().GetTexture(GBuffer_albed);
+	for (int i = 0; i < Gbuffer_Num; i++) {
+		//Gbufferの数だけ初期化。todo:static_cast
+		m_spriteData.m_textures[i] = &GraphicsEngineObj()->GetGBuffer().GetTexture((EnGBuffer)i);
+	}
+	//ディファード用のスプライトを設定。
+	m_spriteData.m_fxFilePath = "Assets/shader/Defeardsprite.fx";
+	//ライトの定数バッファ。
+	m_spriteData.m_expandConstantBuffer = &g_light;
+	m_spriteData.m_expandConstantBufferSize = sizeof(g_light);
+	//ディファード用のスプライトを初期化。
+	m_defferdSpr.Init(m_spriteData);
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
@@ -493,4 +503,10 @@ void GraphicsEngine::EndRender(bool ChangeTarget)
 #endif
 	//描画完了待ち。
 	WaitDraw();
+}
+
+void GraphicsEngine::DeffardRender(RenderContext& rc)
+{
+	//描画。
+	m_defferdSpr.Draw(rc);
 }

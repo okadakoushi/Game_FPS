@@ -9,11 +9,21 @@ bool Game::Start()
 {
 	//ステージの初期化。
 	m_bg = NewGO<SkinModelRender>(0, "bg");
+	//ディファード用のシェーダーを適用させる。todo:wrap
+	m_bg->SetShader(L"Assets/shader/DefeardModel.fx");
 	m_bg->Init("Assets/modelData/bgReo/bg.tkm");
 	m_bg->SetShadowReciever(true);
 
 	//unitychan初期化。
 	m_unityChan = NewGO<SkinModelRender>(0, "Unity");
+	/*
+	//通常描画用コード。
+	//エンジンの仕様上Initより早く書くこと。
+	m_unityChan->SetShader(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx");
+	m_unityChan->SetForwardRender(true);
+	*/
+	//ディファード用のシェーダーを適用させる。todo:wrap
+	m_unityChan->SetShader(L"Assets/shader/DefeardModel.fx");
 	m_unityChan->Init("Assets/modelData/unityChan.tkm", "Assets/animData/unityChan/Idle.tka");
 	//シャドウを出す。
 	m_unityChan->SetShadwoCaster(true);

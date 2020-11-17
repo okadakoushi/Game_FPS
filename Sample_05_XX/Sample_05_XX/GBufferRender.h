@@ -4,13 +4,15 @@
 enum EnGBuffer {
 	GBuffer_albed,		//アルベド。
 	GBuffer_normal,		//法線。
+	GBuffer_spec,		//スペキュラ。
 	GBuffer_worldPos,	//ワールド座標。
-	//todo:shadow
+	GBuffer_Shadow,		//シャドウ。
 	Gbuffer_Num			//GBufferの数。	
 };
 
 /// <summary>
-/// GBufferRender
+/// GBufferRender。
+/// GBuffer書き込み用クラス。
 /// </summary>
 /// <code>
 /// ModelRender Reff.
@@ -51,9 +53,18 @@ public:
 			m_models.erase(it);
 		}
 	}
+	/// <summary>
+	///	GBufferのテクスチャを取得する。
+	/// </summary>
+	/// <param name="gbufferNum">Gbufferの番号。</param>
+	/// <returns>指定したGbuffer。</returns>
+	Texture& GetTexture(const EnGBuffer& gbufferNum)
+	{
+		return m_GBuffers[gbufferNum].GetRenderTargetTexture();
+	}
 
 private:
 	std::vector<SkinModelRender*> m_models;			//モデルのリスト。
-	RenderTarget m_GBuffers[Gbuffer_Num];	//GBuffer。
+	RenderTarget m_GBuffers[Gbuffer_Num];			//GBuffer。
 };
 

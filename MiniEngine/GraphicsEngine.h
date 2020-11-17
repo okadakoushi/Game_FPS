@@ -13,8 +13,9 @@
 
 #include "Camera.h"
 
-#include "SrcFile/Shadow/DirectionalShadowMap.h";
+#include "SrcFile/Shadow/DirectionalShadowMap.h"
 #include "GBufferRender.h"
+#include "Sprite.h"
 
 class Light;
 
@@ -114,7 +115,11 @@ public:
 	/// </summary>
 	/// <param name="rc"></param>
 	void ChangeRenderTargetToFrameBuffer(RenderContext& rc);
-	void ExcuteCommand();
+	/// <summary>
+	/// ディファードレンダリング。
+	/// </summary>
+	/// <param name="rc">rc</param>
+	void DeffardRender(RenderContext& rc);
 	/// <summary>
 	/// 現在描画中のレンダーターゲットを取得。
 	/// </summary>
@@ -277,5 +282,7 @@ private:
 	Camera m_camera3D;					//3Dカメラ。
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
 	GBufferRender m_GBuffer;			//GBuffer。
+	Sprite m_defferdSpr;				//ディファード描画用スプライト。
+	SpriteInitData m_spriteData;
 };
 extern Light g_light;						//ライト。

@@ -21,7 +21,8 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 }
 void Material::InitFromTkmMaterila(
-	const TkmFile::SMaterial& tkmMat
+	const TkmFile::SMaterial& tkmMat,
+	const wchar_t* fxPath
 )
 {
 	//テクスチャをロード。
@@ -41,7 +42,7 @@ void Material::InitFromTkmMaterila(
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP);
 
 	//シェーダーを初期化。
-	InitShaders();
+	InitShaders(fxPath);
 
 	//パイプラインステートを初期化。
 	InitPipelineState();
@@ -75,14 +76,15 @@ void Material::InitPipelineState()
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	psoDesc.NumRenderTargets = 3;
+	psoDesc.NumRenderTargets = 4;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
 //#ifdef SAMPE_16_02
 	//psoDesc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_FLOAT;	//法線出力用。	
 	//psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;			//Z値。
 //#else
-	psoDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;			//法線出力用。	
-	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//Z値。
+	psoDesc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_UNORM;			//法線出力用。	
+	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32_FLOAT;				//スペキュラ出力用。
+	psoDesc.RTVFormats[3] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//ワールド座標出力
 //#endif
 	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	psoDesc.SampleDesc.Count = 1;
@@ -122,12 +124,14 @@ void Material::InitPipelineState()
 	//m_transNonSkinModelPipelineState.Init(NonSkinDesc);
 
 }
-void Material::InitShaders()
+void Material::InitShaders(const wchar_t* fx)
 {
-	m_vsSkinModel.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain");
-	m_vsNonSkinModel.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMainNonSkin");
-	m_psModel.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain");
+	//エントリーポイントを固定にしてるので、fxファイル間で統一すること。
+	m_vsSkinModel.LoadVS(fx, "VSMain");
+	m_vsNonSkinModel.LoadVS(fx, "VSMainNonSkin");
+	m_psModel.LoadPS(fx, "PSMain");
 	//m_vsNonSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapNonSkin");
+	//とりあえずシャドウ描画はこのfxでしかしないので。
 	m_vsSkinShadowDraw.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain_ShadowMapSkin");
 	m_psSkinShadowDraw.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_ShadowMap");
 }

@@ -27,7 +27,8 @@ void Model::InitModel(const char* filepath)
 		m_tkmFile,
 		m_expandConstantBuffer,
 		m_expandConstantBufferSize,
-		m_expandShaderResoruceView
+		m_expandShaderResoruceView,
+		m_shaderFilePath
 	);
 }
 
