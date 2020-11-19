@@ -87,6 +87,7 @@ public:
 		{
 			//ƒŠƒXƒg‚É’Ç‰Á
 			m_deleteObjectArray[m_currentDeleteObjectBufferNo].at(gameObject->GetPriority()).push_back(gameObject);
+			gameObject->OnDestroy();
 			gameObject->m_isDead = true;
 			gameObject = nullptr;
 		}

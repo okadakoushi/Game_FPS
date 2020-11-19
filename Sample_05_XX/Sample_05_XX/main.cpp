@@ -14,7 +14,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	const auto& renderContext = EngineObj().GetGraphicsEngine();
 
 	//ゲームのインスタンス作成。
-	NewGO<Game>(0);
+	NewGO<Game>(EnPriority_Game);
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
@@ -43,6 +43,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		qRot.Apply(camPos);
 		GraphicsEngineObj()->GetCamera3D().SetPosition(camPos);
 		g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
+
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////

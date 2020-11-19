@@ -5,6 +5,15 @@ const float DELTA_TIME = 1.0f / 60.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
 static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
+//昇順。小さいほうが早い。
+static enum Priority {
+	EnPriority_Game,
+	EnPriority_3DModel,		//モデル。
+	EnPriority_Render,		//レンダー系。
+	EnPriority_UI,			//UI(HDD描画等)。
+	EnPriority_Num = 9		//todo:マジックナンバー。
+};
+
 //ノンコピー
 #include "SrcFile/util/Noncopyable.h"
 //ゲームオブジェクト。

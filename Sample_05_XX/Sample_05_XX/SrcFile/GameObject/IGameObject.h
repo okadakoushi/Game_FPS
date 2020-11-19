@@ -52,6 +52,11 @@ public:
 	/// </summary>
 	virtual void Update() {};
 	/// <summary>
+	/// オンデストロイ。
+	/// <para>DeleteGOすると呼び出し。</para>
+	/// </summary>
+	virtual void OnDestroy() {};
+	/// <summary>
 	/// フォワードレンダリング。
 	/// </summary>
 	virtual void ForwardRender() {};
@@ -109,14 +114,14 @@ public:
 	}
 	void UpdateWrapper()
 	{
-		if (m_isActive && m_isStart && m_isUpdate)
+		if (m_isActive && m_isStart && m_isUpdate && !m_isDead)
 		{
 			Update();
 		}
 	}
 	void ForwardRenderWrapper()
 	{
-		if (m_isActive && m_isStart)
+		if (m_isActive && m_isStart && !m_isDead)
 		{
 			ForwardRender();
 		}

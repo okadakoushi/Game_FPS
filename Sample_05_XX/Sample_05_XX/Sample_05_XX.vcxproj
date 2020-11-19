@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\GamePlayer.cpp" />
     <ClCompile Include="SrcFile\GBufferRender.cpp" />
     <ClCompile Include="SrcFile\SkinModelRender.cpp" />
     <ClCompile Include="SrcFile\Shadow\DirectionalShadowMap.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="SrcFile\Game.cpp" />
     <ClCompile Include="SrcFile\Animation\AnimationClip.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SrcFile\Stage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -232,6 +234,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\GamePlayer.h" />
     <ClInclude Include="SrcFile\GBufferRender.h" />
     <ClInclude Include="SrcFile\SkinModelRender.h" />
     <ClInclude Include="SrcFile\Shadow\DirectionalShadowMap.h" />
@@ -243,6 +246,7 @@
     <ClInclude Include="SrcFile\Game.h" />
     <ClInclude Include="SrcFile\Animation\AnimationClip.h" />
     <ClInclude Include="SrcFile\util\Util.h" />
+    <ClInclude Include="SrcFile\Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
   </ItemGroup>

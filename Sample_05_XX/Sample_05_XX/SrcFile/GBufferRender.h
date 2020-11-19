@@ -39,6 +39,7 @@ public:
 	void AddModel(SkinModelRender* model)
 	{
 		m_models.push_back(model);
+		m_modelCount++;
 	}
 	/// <summary>
 	/// モデルをリストから削除。
@@ -51,6 +52,7 @@ public:
 		if (it != m_models.end()) {
 			//見つかった。
 			m_models.erase(it);
+			m_modelCount--;
 		}
 	}
 	/// <summary>
@@ -61,6 +63,16 @@ public:
 	Texture& GetTexture(const EnGBuffer& gbufferNum)
 	{
 		return m_GBuffers[gbufferNum].GetRenderTargetTexture();
+	}
+
+	int& GetModelCount()
+	{
+		return m_modelCount;
+	}
+
+	void ResetModelCount()
+	{
+		m_modelCount = 0;
 	}
 
 private:

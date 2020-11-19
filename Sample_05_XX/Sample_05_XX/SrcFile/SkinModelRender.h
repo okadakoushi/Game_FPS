@@ -25,7 +25,6 @@ class SkinModelRender : public IGameObject
 {
 public:
 	SkinModelRender();
-	~SkinModelRender();
 	/// <summary>
 	/// スタート。
 	/// </summary>
@@ -34,6 +33,10 @@ public:
 	/// 初期化。
 	/// </summary>
 	void Init(const char* tkmFile, const char* tkaFile = nullptr);
+	/// <summary>
+	/// デストロイ。
+	/// </summary>
+	void OnDestroy();
 	/// <summary>
 	/// 更新。
 	/// </summary>
@@ -108,7 +111,6 @@ public:
 	}
 	/// <summary>
 	/// フォワードレンダー描画にする。
-	/// <para>特殊なレンダリングを行う場合はTrueにする。</para>
 	/// <para>todo:ZBuffer周りにバグあり。</para>
 	/// </summary>
 	void SetForwardRender()

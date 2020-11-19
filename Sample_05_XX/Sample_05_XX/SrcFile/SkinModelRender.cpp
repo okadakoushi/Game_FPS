@@ -6,8 +6,12 @@ SkinModelRender::SkinModelRender()
 {
 }
 
-SkinModelRender::~SkinModelRender()
+void SkinModelRender::OnDestroy()
 {
+	//モデルレンダー消えたからGbufferのリストから削除する。
+	GraphicsEngineObj()->GetGBuffer().RemoveModel(this);
+	//モデルレンダー消えたからShadowCasterフラグもOFF。
+	ShadowCaster = false;
 }
 
 bool SkinModelRender::Start()

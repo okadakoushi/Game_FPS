@@ -1,4 +1,7 @@
 #pragma once
+class Stage;
+class GamePlayer;
+
 class Game : public IGameObject
 {
 public:
@@ -7,15 +10,8 @@ public:
 	
 	bool Start() override;
 	void Update() override;
-	void ForwardRender() override;
 private:
-	SkinModelRender* m_unityChan = nullptr;		//ユニティーちゃん。
-	SkinModelRender* m_bg = nullptr;			//ステージ。
-	Vector3 m_pos = Vector3::Zero;				//座標。
-	Vector3 m_scale = Vector3::One;				//拡大率
-	Quaternion m_rot = Quaternion::Identity;	//回転。
-	Animation m_animation;						//アニメーション。
-	int initState = 0;							//初期化ステップ。
-	bool m_inited = false;						//初期化終わった？。
+	Stage* m_stage = nullptr;		//ステージ。
+	GamePlayer* m_player = nullptr;	//プレイヤー。
 };
 
