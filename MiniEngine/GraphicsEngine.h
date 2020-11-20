@@ -14,7 +14,7 @@
 #include "Camera.h"
 
 #include "SrcFile/Shadow/DirectionalShadowMap.h"
-#include "SrcFile/GBufferRender.h"
+#include "SrcFile/GBuffer/GBufferRender.h"
 #include "Sprite.h"
 
 class Light;
@@ -172,7 +172,7 @@ public:
 	/// 3DƒJƒƒ‰æ“¾B
 	/// </summary>
 	/// <returns></returns>
-	Camera& GetCamera3D()
+	Camera& GetCamera3D() 
 	{
 		return m_camera3D;
 	}

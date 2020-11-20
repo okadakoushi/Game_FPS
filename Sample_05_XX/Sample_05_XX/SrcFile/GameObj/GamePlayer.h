@@ -1,4 +1,10 @@
 #pragma once
+
+class GameCamera;
+
+/// <summary>
+/// プレイヤークラス。
+/// </summary>
 class GamePlayer : public IGameObject
 {
 public:
@@ -15,5 +21,6 @@ public:
 private:
 	SkinModelRender* m_unityChan = nullptr;		//ユニティーちゃん。
 	Vector3 m_pos = g_vec3Zero;					//位置。
+	GameCamera* m_camera = nullptr;				//ゲームカメラ。
 };
 

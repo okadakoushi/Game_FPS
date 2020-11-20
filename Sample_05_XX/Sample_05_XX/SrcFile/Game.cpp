@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
-#include "Stage.h"
-#include "GamePlayer.h"
+#include "GameObj/Stage.h"
+#include "GameObj/GamePlayer.h"
 
 Game::Game()
 {

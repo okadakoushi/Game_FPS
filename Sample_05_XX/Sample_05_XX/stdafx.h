@@ -8,6 +8,7 @@ static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 //昇順。小さいほうが早い。
 static enum Priority {
 	EnPriority_Game,
+	EnPriority_Camera,		//カメラ。
 	EnPriority_3DModel,		//モデル。
 	EnPriority_Render,		//レンダー系。
 	EnPriority_UI,			//UI(HDD描画等)。
@@ -29,7 +30,7 @@ static enum Priority {
 //シャドウマップ。
 #include "SrcFile/Shadow/DirectionalShadowMap.h";
 //GBuffer
-#include "SrcFile/GBufferRender.h";
+#include "SrcFile/GBuffer/GBufferRender.h";
 
 using namespace std;
 

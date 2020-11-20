@@ -61,6 +61,14 @@ public:
 		m_pos = pos;
 	}
 	/// <summary>
+	/// 座標取得。
+	/// </summary>
+	/// <returns></returns>
+	Vector3& GetPosition()
+	{
+		return m_pos;
+	}
+	/// <summary>
 	/// 回転を設定。
 	/// </summary>
 	/// <param name="qRot"></param>
@@ -69,12 +77,28 @@ public:
 		m_rot = qRot;
 	}
 	/// <summary>
+	/// 回転を取得。
+	/// </summary>
+	/// <returns></returns>
+	Quaternion& GetRotation() 
+	{
+		return m_rot;
+	}
+	/// <summary>
 	/// 拡大率を設定。
 	/// </summary>
 	/// <param name="scale"></param>
 	void SetScale(Vector3& scale)
 	{	
 		m_scale = scale;
+	}
+	/// <summary>
+	/// 拡大を取得。
+	/// </summary>
+	/// <returns></returns>
+	Vector3& GetScale()
+	{
+		return m_scale;
 	}
 	/// <summary>
 	/// レンダーモードの設定。

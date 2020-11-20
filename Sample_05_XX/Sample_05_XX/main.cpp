@@ -25,23 +25,23 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//ここから絵を描くコードを記述する。
 		//////////////////////////////////////
 
-		Quaternion qRot;
-		if (g_pad[0]->IsPress(enButtonRight)) {
-			qRot.SetRotationDegY(1.0f);
-		}
-		else if (g_pad[0]->IsPress(enButtonLeft)) {
-			qRot.SetRotationDegY(-1.0f);
-		}
+		//Quaternion qRot;
+		//if (g_pad[0]->IsPress(enButtonRight)) {
+		//	qRot.SetRotationDegY(1.0f);
+		//}
+		//else if (g_pad[0]->IsPress(enButtonLeft)) {
+		//	qRot.SetRotationDegY(-1.0f);
+		//}
 
-		for (auto& lig : g_light.directionalLight) {
-			qRot.Apply(lig.direction);
-		}
+		//for (auto& lig : g_light.directionalLight) {
+		//	qRot.Apply(lig.direction);
+		//}
 
-		//カメラも回す。
-		qRot.SetRotationDegY(g_pad[0]->GetLStickXF());
-		auto camPos = GraphicsEngineObj()->GetCamera3D().GetPosition();
-		qRot.Apply(camPos);
-		GraphicsEngineObj()->GetCamera3D().SetPosition(camPos);
+		////カメラも回す。
+		//qRot.SetRotationDegY(g_pad[0]->GetLStickXF());
+		//auto camPos = GraphicsEngineObj()->GetCamera3D().GetPosition();
+		//qRot.Apply(camPos);
+		//GraphicsEngineObj()->GetCamera3D().SetPosition(camPos);
 		g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 
 		//////////////////////////////////////
