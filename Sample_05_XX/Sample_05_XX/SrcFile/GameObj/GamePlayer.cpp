@@ -41,14 +41,8 @@ void GamePlayer::Update()
 	else if (GetAsyncKeyState('S')) {
 		m_pos.z--;
 	}
+	//UnityChanの位置更新。
 	m_unityChan->SetPosition(m_pos);
-	
-	//カメラの設定。
-	Vector3 m_cameraPos = g_vec3Zero;			
-	m_cameraPos = { m_pos.x, m_pos.y + 50.0f, m_pos.z + 10.0f };
-	m_camera->SetPosOnFPS(m_cameraPos);
-	//ターゲット設定。
-	Vector3 m_target = g_vec3Zero;
-	m_target = { m_cameraPos.x,m_cameraPos.y, m_cameraPos.z + 50.0f };
-	m_camera->SetTarget(m_target);
+	//カメラの位置も更新。
+	m_camera->SetEyePos(m_pos);
 }
