@@ -22,6 +22,7 @@ bool GamePlayer::Start()
 
 	//GameCameraインスタンス化。
 	m_camera = NewGO<GameCamera>(EnPriority_Camera, "GameCamera");
+	m_camera->SetCameraType(true);
 
 	return true;
 }

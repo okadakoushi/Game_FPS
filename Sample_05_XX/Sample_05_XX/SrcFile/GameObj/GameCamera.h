@@ -31,6 +31,7 @@ public:
 	}
 	/// <summary>
 	/// カメラの種類を設定。
+	/// <para>falseでTPSカメラ。</para>
 	/// </summary>
 	/// <param name="flag">カメラの種類。</param>
 	void SetCameraType(bool cameraType)
