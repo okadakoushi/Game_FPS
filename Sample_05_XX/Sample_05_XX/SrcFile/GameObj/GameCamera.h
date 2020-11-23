@@ -25,7 +25,7 @@ public:
 	/// 視点の位置を設定。
 	/// </summary>
 	/// <param name="eyePos">視点。</param>
-	void SetCameraParam(Vector3& eyePos)
+	void SetEyePos(Vector3& eyePos)
 	{
 		m_playerPos = eyePos;
 	}
@@ -36,6 +36,14 @@ public:
 	void SetCameraType(bool cameraType)
 	{
 		m_isFPS = cameraType;
+	}
+	/// <summary>
+	/// カメラの向き取得。
+	/// </summary>
+	/// <returns>カメラの向き。</returns>
+	Vector3& GetToPos()
+	{
+		return m_toPos;
 	}
 private:
 	/// <summary>
@@ -49,7 +57,8 @@ private:
 	void MoveCameraOnTPS();
 private:
 	Vector3 m_playerPos = g_vec3Zero;				//プレイヤーの位置。
-	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//ターゲットに向かうベクトル。
+	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//視点または、注視点に向かうベクトル。
+	Vector3 m_cameraRot = g_vec3Zero;					//カメラの回転。
 	bool m_isFPS = true;					//FPSモード。
 	const float HORIZON = 1.0f;			//横のカメラ速度。
 	const float VERTICAL = 1.0f;		//縦のカメラ速度。

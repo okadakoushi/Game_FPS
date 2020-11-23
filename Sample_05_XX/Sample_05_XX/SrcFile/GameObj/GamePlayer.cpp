@@ -29,20 +29,41 @@ bool GamePlayer::Start()
 void GamePlayer::Update()
 {
 	//移動。
-	if (GetAsyncKeyState('A')) {
-		//m_pos.x++;
-	}
-	else if (GetAsyncKeyState('D')) {
-		//m_pos.x--;
-	}
-	else if (GetAsyncKeyState('W')) {
-		m_pos.z++;
-	}
-	else if (GetAsyncKeyState('S')) {
-		m_pos.z--;
-	}
-	//UnityChanの位置更新。
-	m_unityChan->SetPosition(m_pos);
+	Move();
 	//カメラの位置も更新。
 	m_camera->SetEyePos(m_pos);
+}
+
+void GamePlayer::Move()
+{
+	//カメラの向き情報。
+	Vector3 camForward = GraphicsEngineObj()->GetCamera3D().GetForward();
+	Vector3 camRight = GraphicsEngineObj()->GetCamera3D().GetRight();
+	camForward.y = 0.0f;
+	camForward.Normalize();
+	camRight.y = 0.0f;
+	camRight.Normalize();
+	
+	//移動処理。
+	//todo:Pad対応？キャラコン対応？慣性？
+	if (GetAsyncKeyState('W')) {
+		m_pos += camForward * m_speed;
+	}
+	if (GetAsyncKeyState('S')) {
+		m_pos -= camForward * m_speed;
+	}
+	if (GetAsyncKeyState('D')) {
+		m_pos += camRight * m_speed;
+	}
+	if (GetAsyncKeyState('A')) {
+		m_pos -= camRight * m_speed;
+	}
+
+	//カメラに合わせて向きも変える。
+	float angle = atan2(m_camera->GetToPos().x, m_camera->GetToPos().z);
+	m_rot.SetRotation(g_vec3AxisY, angle);
+	m_unityChan->SetRotation(m_rot);
+
+	//UnityChanの位置更新。
+	m_unityChan->SetPosition(m_pos);
 }

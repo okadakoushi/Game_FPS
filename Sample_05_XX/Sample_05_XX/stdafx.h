@@ -8,8 +8,8 @@ static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 //昇順。小さいほうが早い。
 static enum Priority {
 	EnPriority_Game,
-	EnPriority_Camera,		//カメラ。
 	EnPriority_3DModel,		//モデル。
+	EnPriority_Camera,		//カメラ。
 	EnPriority_Render,		//レンダー系。
 	EnPriority_UI,			//UI(HDD描画等)。
 	EnPriority_Num = 9		//todo:マジックナンバー。

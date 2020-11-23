@@ -9,7 +9,7 @@ void GBufferRender::Init()
 {
 	//GBufferの初期化。
 	//クリアカラー。
-	float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 0.5f };
 	//アルベド用RTを作成。
 	m_GBuffers[GBuffer_albed].Create(
 		FRAME_BUFFER_W, FRAME_BUFFER_H,
