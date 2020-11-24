@@ -1,7 +1,7 @@
 todo
  SkinModelのDrawにviewとprojいらんくない？
- DeferredのSprite切り替えなんとかする。
  SpriteとDeferredSpriteのパイプライン分けるべき？
+ 移動処理：慣性とか対応させる？
  
 warning
  fxファイルを別に作る場合、VS,PSのエントリーポイントの名前一緒にしてね。

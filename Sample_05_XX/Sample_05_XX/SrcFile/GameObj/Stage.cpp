@@ -11,7 +11,7 @@ bool Stage::Start()
 	//ステージのインスタンス。
 	m_bg = NewGO<SkinModelRender>(EnPriority_Render);
 	//初期化。
-	m_bg->Init("Assets/modelData/NavSample/NavStage.tkm");
+	m_bg->Init("Assets/modelData/NavSample/NavStageBase.tkm");
 	//シャドウレシーバー。
 	m_bg->SetShadowReciever(true);	
 
