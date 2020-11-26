@@ -19,7 +19,8 @@ bool Game::Start()
 	m_stage = NewGO<Stage>(EnPriority_3DModel, "bg");
 	//GamePlayerB
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
-
+	//ƒŒƒxƒ‹‚Ì“Ç‚İ‚İ(‰¼)
+	m_tklFile.Load("Assets/level/tkl3.0.tkl");
 	return true;
 
 }

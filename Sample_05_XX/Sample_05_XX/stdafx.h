@@ -22,6 +22,9 @@ static enum Priority {
 
 #include "MiniEngine.h"
 
+//tklファイル。
+#include "SrcFile/Level/TklFile.h"
+
 #include "SrcFile/GameObject/GameObjectManager.h"
 
 //スキンモデル。

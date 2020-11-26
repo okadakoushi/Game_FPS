@@ -1,0 +1,47 @@
+#include "stdafx.h"
+#include "TklFile.h"
+
+void TklFile::LoadImplement(const char* filePath)
+{
+	auto fp = fopen(filePath, "rb");
+	if (fp == nullptr) {
+		return;
+	}
+	//バージョン読み込み。
+	fread(&m_tklVersion, sizeof(m_tklVersion), 1, fp);
+	//オブジェクトの数を取得。
+	fread(&m_numObject, sizeof(m_numObject), 1, fp);
+	m_objects.resize(m_numObject);
+	for (int i = 0; i < m_numObject; i++) {
+		auto& obj = m_objects.at(i);
+		size_t nameCount = 0;
+		//オブジェクト名取得。
+		fread(&nameCount, 1, 1, fp);
+		obj.name = std::make_unique<char[]>(nameCount + 1);
+		fread(obj.name.get(), nameCount + 1, 1, fp);
+		//親のIDを取得。
+		fread(&obj.parentNo, sizeof(obj.parentNo), 1, fp);
+		//バインドポーズ取得。
+		fread(obj.bindPose, sizeof(obj.bindPose), 1, fp);
+		//逆バインドポーズ取得。
+		fread(obj.invBindPose, sizeof(obj.invBindPose), 1, fp);
+		//オブジェクト番号。
+		obj.no = i;
+		
+		//vec3のパラメーター。
+		int numVec3Data;
+		fread(&numVec3Data, sizeof(numVec3Data), 1, fp);
+		//vec3パラメーター。
+		for (int i = 0; i < numVec3Data; i++) {
+			float x, y, z;
+			fread(&x, sizeof(x), 1, fp);
+			fread(&y, sizeof(y), 1, fp);
+			fread(&z, sizeof(z), 1, fp);
+			obj.vec3Datas.push_back(Vector3(x, y, z));
+		}
+	}
+
+	fclose(fp);
+	//読み込み終了。
+	SetLoadedMark();
+}

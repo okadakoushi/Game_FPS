@@ -13,5 +13,6 @@ public:
 private:
 	Stage* m_stage = nullptr;		//ステージ。
 	GamePlayer* m_player = nullptr;	//プレイヤー。
+	TklFile m_tklFile;				//tklファイル。
 };
 

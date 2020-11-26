@@ -183,6 +183,9 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\Level\MapChipRender.cpp" />
+    <ClCompile Include="SrcFile\Level\MapChip.cpp" />
+    <ClCompile Include="SrcFile\Level\Level.cpp" />
     <ClCompile Include="SrcFile\GameObj\GameCamera.cpp" />
     <ClCompile Include="SrcFile\GameObj\GamePlayer.cpp" />
     <ClCompile Include="SrcFile\GBuffer\GBufferRender.cpp" />
@@ -204,6 +207,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="SrcFile\Level\TklFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -235,6 +239,9 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\Level\MapChipRender.h" />
+    <ClInclude Include="SrcFile\Level\MapChip.h" />
+    <ClInclude Include="SrcFile\Level\Level.h" />
     <ClInclude Include="SrcFile\GameObj\GameCamera.h" />
     <ClInclude Include="SrcFile\GameObj\GamePlayer.h" />
     <ClInclude Include="SrcFile\GBuffer\GBufferRender.h" />
@@ -251,6 +258,7 @@
     <ClInclude Include="SrcFile\GameObj\Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="SrcFile\Level\TklFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

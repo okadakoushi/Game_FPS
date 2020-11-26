@@ -45,6 +45,6 @@ protected:
 	}
 private:
 	std::string	m_filePath;		//ファイルパス。
-	bool		m_isLoaded;		//ロードフラグ。
+	bool		m_isLoaded = false;		//ロードフラグ。
 };
 
