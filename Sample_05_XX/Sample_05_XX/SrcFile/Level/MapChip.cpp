@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "MapChip.h"
-#include "MapChipRender.h"
 #include "Level.h"
 
 MapChip::MapChip(const LevelObjectData& objData, MapChipRender* mapChipRender)

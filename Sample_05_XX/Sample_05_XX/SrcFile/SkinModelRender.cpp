@@ -129,7 +129,7 @@ void SkinModelRender::Update()
 		m_animation.Progress(DELTA_TIME);
 	}
 	//ワールド座標更新。
-	m_model.Update(m_pos, m_rot, m_scale);
+	m_model.Update(m_pos, m_rot, m_scale, m_renderMode);
 
 	if (!m_isForwardRender) {
 		//フォワードレンダーしないのでGBuffer描画。

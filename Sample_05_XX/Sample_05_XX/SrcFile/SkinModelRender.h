@@ -1,13 +1,5 @@
 #pragma once
 
-enum EnRenderMode {
-	enRenderMode_Skin,				//スキンあり。
-	enRenderMode_NonSkin,			//スキンなし。
-	enRenderMode_DrawShadow,		//シャドウマップ描画。
-	enRenderMode_NonSkinDrawShadow,	//スキンなしシャドウマップ描画。
-	enRenderMode_Num				//いらんきもするが一応。
-};
-
 
 /// <summary>
 /// スキンモデルレンダー。

@@ -15,15 +15,15 @@ static enum Priority {
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };
 
-//ノンコピー
+//utill
 #include "SrcFile/util/Noncopyable.h"
 //ゲームオブジェクト。
 #include "SrcFile/GameObject/IGameObject.h"
 
 #include "MiniEngine.h"
 
-//tklファイル。
-#include "SrcFile/Level/TklFile.h"
+//#include "SrcFile/util/Util.h"
+#include "SrcFile/util/TNameKey.h"
 
 #include "SrcFile/GameObject/GameObjectManager.h"
 
@@ -31,9 +31,12 @@ static enum Priority {
 #include "SrcFile/SkinModelRender.h"
 
 //シャドウマップ。
-#include "SrcFile/Shadow/DirectionalShadowMap.h";
+#include "SrcFile/Shadow/DirectionalShadowMap.h"
 //GBuffer
-#include "SrcFile/GBuffer/GBufferRender.h";
+#include "SrcFile/GBuffer/GBufferRender.h"
+//レベル関連。
+#include "SrcFile/Level/MapChip.h"
+#include "SrcFile/Level/Level.h"
 
 using namespace std;
 

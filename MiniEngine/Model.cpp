@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Model.h"
 #include "srcFile/Animation/AnimationClip.h"
+#include "srcFile/SkinModelRender.h"
 #include <fstream>
 
 
@@ -32,13 +33,13 @@ void Model::InitModel(const char* filepath)
 	);
 }
 
-void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale)
+void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm)
 {
 	//ワールド座標更新。
-	UpdateWorldMatrix(pos, rot, scale);
+	UpdateWorldMatrix(pos, rot, scale, rm);
 }
 
-void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
+void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm)
 {
 	Matrix mBias;
 //todo	if (enUpdateAxis == enFbxUpAxisZ) {
@@ -49,7 +50,13 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
 	mTrans.MakeTranslation(pos);
 	mRot.MakeRotationFromQuaternion(rot);
 	mScale.MakeScaling(scale);
-	m_world =/* mBias **/mScale * mRot * mTrans;
+	if (rm != enRenderMode_Skin) {
+		m_world = mBias * mScale * mRot * mTrans;
+	}
+	else {
+		m_world = mScale * mRot * mTrans;
+	}
+
 }
 void Model::Draw(RenderContext& rc, Matrix viewMat, Matrix projMat, int RenderMode)
 {

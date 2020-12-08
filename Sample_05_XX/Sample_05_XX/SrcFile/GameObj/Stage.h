@@ -18,5 +18,6 @@ public:
 	void Update() override;
 private:
 	SkinModelRender* m_bg = nullptr;			//ステージ。
+	Level m_level;								//レベル。
 };
 

@@ -3,6 +3,9 @@
 #include "GameObj/Stage.h"
 #include "GameObj/GamePlayer.h"
 
+//#define Mode_Game;
+//#define Mode_Test;
+
 Game::Game()
 {
 }
@@ -20,7 +23,8 @@ bool Game::Start()
 	//GamePlayerB
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
 	//ƒŒƒxƒ‹‚Ì“Ç‚İ‚İ(‰¼)
-	m_tklFile.Load("Assets/level/tkl3.0.tkl");
+	//m_level.Init("Assets/level/tkl3.0.tkl");
+	
 	return true;
 
 }

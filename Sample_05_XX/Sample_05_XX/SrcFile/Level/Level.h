@@ -3,6 +3,8 @@
 class MapChip;
 class MapChipRender;
 
+#include "TklFile.h"
+
 /// <summary>
 /// オブジェクトデーター。
 /// フックできる範囲。
@@ -12,6 +14,15 @@ struct LevelObjectData {
 	Quaternion rotatatin;	//回転。
 	Vector3 scale;			//拡大。
 	const wchar_t* name;	//名前。
+	/// <summary>
+	/// 引数で渡したオブジェクト名のオブジェクトか判定する。
+	/// </summary>
+	/// <param name="objName">調べるオブジェクト名。</param>
+	/// <returns>名前が一致したらtrue。</returns>
+	bool EqualObjectName(const wchar_t* objName)
+	{
+		return wcscmp(objName, name) == 0;
+	}
 };
 
 /// <summary>
@@ -40,6 +51,16 @@ public:
 	/// <param name="hookFunc">オブジェクト作成時にフックする関数オブジェクト。</param>
 	void Init(const char* filePath, std::function<bool(LevelObjectData& obj)> hookFunc = nullptr);
 private:
+	/// <summary>
+	/// マップチップレンダーを作成できたら作成 or 描画すべきオブジェクトのインクリメント。
+	/// </summary>
+	/// <remarks>
+	/// 未登録オブジェクト→レンダーラーを作成。
+	/// 登録済みの場合→レンダーラーが描画するオブジェクトをインクリメント。
+	/// </remarks>
+	/// <param name="objData">オブジェクトデーター。</param>
+	/// <returns></returns>
+	MapChipRender* CteateMapChipRenderOrAddRenderObject(const LevelObjectData& objData);
 	/// <summary>
 	/// ボーン行列の構築。
 	/// </summary>

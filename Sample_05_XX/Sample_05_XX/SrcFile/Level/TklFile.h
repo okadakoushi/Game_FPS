@@ -8,6 +8,11 @@ public:
 		float bindPose[4][3];			//バインドポーズ。
 		float invBindPose[4][3];		//バインドポーズの逆行列。
 		int no;							//オブジェクト番号。
+		bool isShadowCaster;			//シャドウキャスターフラグ。
+		bool isShadowReceiver;			//シャドウレシーバーフラグ。
+		std::vector<int> intDatas;		//intパラメータ。
+		std::vector<float> floatDatas;	//floatパラメータ。
+		std::vector<std::unique_ptr<char[]>> charsDatas;	//文字列。
 		std::vector<Vector3> vec3Datas;	//vec3パラメーター。
 	};
 	/// <summary>

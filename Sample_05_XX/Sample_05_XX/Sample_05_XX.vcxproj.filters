@@ -310,5 +310,8 @@
     <ClInclude Include="SrcFile\Level\MapChipRender.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="SrcFile\util\TNameKey.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

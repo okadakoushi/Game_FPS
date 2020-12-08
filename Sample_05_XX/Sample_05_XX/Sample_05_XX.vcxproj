@@ -254,6 +254,7 @@
     <ClInclude Include="SrcFile\Resource\IResource.h" />
     <ClInclude Include="SrcFile\Game.h" />
     <ClInclude Include="SrcFile\Animation\AnimationClip.h" />
+    <ClInclude Include="SrcFile\util\TNameKey.h" />
     <ClInclude Include="SrcFile\util\Util.h" />
     <ClInclude Include="SrcFile\GameObj\Stage.h" />
     <ClInclude Include="stdafx.h" />

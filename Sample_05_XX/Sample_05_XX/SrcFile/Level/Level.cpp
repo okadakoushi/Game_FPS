@@ -27,6 +27,7 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 			objData.position.y = objData.position.z;
 			objData.position.z = -fix;
 
+			//objData.rotatatin.z += 90.0f;
 			fix = objData.rotatatin.y;
 			objData.rotatatin.y = objData.rotatatin.z;
 			objData.rotatatin.z = -fix;
@@ -42,6 +43,7 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 			}
 			if (isHook == false) {
 				//マップチップレンダーを作成する。
+				CteateMapChipRenderOrAddRenderObject(objData);
 			}
 		}
 	}
@@ -52,8 +54,33 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 		mapChipRender.second->QueryRenderObjDatas([&](const LevelObjectData& objData) {
 			//フックされなかったので、マップチップを作成する。
 			MapChipPtr mapChip = std::make_unique<MapChip>(objData, mapChipRender.second);
+			//ポインタを移譲。
+			m_mapChipPtrs.push_back(std::move(mapChip));
 		});
 	}
+}
+
+MapChipRender* Level::CteateMapChipRenderOrAddRenderObject(const LevelObjectData& objData)
+{
+	WNameKey nameKey(objData.name);
+	//すでに登録されているオブジェクトかを検索。
+	auto itFind = m_mapChipRenderPtrs.find(nameKey.GetHashCode());
+	MapChipRender* pMapChipRender = nullptr;
+	if (itFind == m_mapChipRenderPtrs.end()) {
+		//登録されてない。
+		auto mapChipRender = NewGO<MapChipRender>(EnPriority_Render);
+		pMapChipRender = mapChipRender;
+		//登録登録。
+		m_mapChipRenderPtrs.insert({ nameKey.GetHashCode(), mapChipRender });
+	}
+	else {
+		//登録されてた。
+		//描画するオブジェクトを増やす。
+		pMapChipRender = itFind->second;
+	}
+	pMapChipRender->AddRenderObject(objData);
+
+	return pMapChipRender;
 }
 
 void Level::BuildBoneMatrices()
@@ -68,7 +95,7 @@ void Level::BuildBoneMatrices()
 		bindPoseMatrix.m[0][3] = 0.0f;
 		bindPoseMatrix.m[1][3] = 0.0f;
 		bindPoseMatrix.m[2][3] = 0.0f;
-		bindPoseMatrix.m[3][3] = 0.0f;
+		bindPoseMatrix.m[3][3] = 1.0f;
 
 		//バインドポーズの逆行列。
 		Matrix invBindPoseMatirx;
@@ -79,7 +106,7 @@ void Level::BuildBoneMatrices()
 		invBindPoseMatirx.m[0][3] = 0.0f;
 		invBindPoseMatirx.m[1][3] = 0.0f;
 		invBindPoseMatirx.m[2][3] = 0.0f;
-		invBindPoseMatirx.m[3][3] = 0.0f;
+		invBindPoseMatirx.m[3][3] = 1.0f;
 
 		//ボーン名。
 		wchar_t boneName[256];
@@ -87,7 +114,7 @@ void Level::BuildBoneMatrices()
 		mbstowcs(boneName, tklObj.name.get(), 256);
 		BonePtr bone = std::make_unique<Bone>(
 			boneName,
-			invBindPoseMatirx,
+			bindPoseMatrix,
 			invBindPoseMatirx,
 			tklObj.parentNo,
 			tklObj.no
@@ -105,9 +132,9 @@ void Level::BuildBoneMatrices()
 				L"エラー。",
 				MB_OK
 			);
-
-			m_bones.push_back(std::move(bone));
 		}
+		//ボーンを積む。
+		m_bones.push_back(std::move(bone));
 		});
 	
 	for (auto& bone : m_bones) {

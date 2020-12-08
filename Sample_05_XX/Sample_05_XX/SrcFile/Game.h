@@ -1,4 +1,5 @@
 #pragma once
+
 class Stage;
 class GamePlayer;
 
@@ -13,6 +14,6 @@ public:
 private:
 	Stage* m_stage = nullptr;		//ステージ。
 	GamePlayer* m_player = nullptr;	//プレイヤー。
-	TklFile m_tklFile;				//tklファイル。
+	Level m_level;					//レベル。
 };
 

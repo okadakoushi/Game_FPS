@@ -28,6 +28,38 @@ void TklFile::LoadImplement(const char* filePath)
 		//オブジェクト番号。
 		obj.no = i;
 		
+		//シャドウキャスターのフラグ。
+		fread(&obj.isShadowCaster, sizeof(obj.isShadowCaster), 1, fp);
+		//シャドウレシーバーのフラグ。
+		fread(&obj.isShadowReceiver, sizeof(obj.isShadowReceiver), 1, fp);
+		//intパメーターの数。
+		int numIntData;
+		fread(&numIntData, sizeof(numIntData), 1, fp);
+		for (int i = 0; i < numIntData; i++) {
+			int val = 0;
+			fread(&val, sizeof(val), 1, fp);
+			obj.intDatas.push_back(val);
+		}
+		//floatパメーターの数。
+		int numFloatData;
+		fread(&numFloatData, sizeof(numFloatData), 1, fp);
+		for (int i = 0; i < numFloatData; i++) {
+			float val = 0;
+			fread(&val, sizeof(val), 1, fp);
+			obj.floatDatas.push_back(val);
+		}
+		//stringパラメータの数。
+		int numStringData;
+		fread(&numStringData, sizeof(numStringData), 1, fp);
+		obj.charsDatas.resize(numStringData);
+		for (int i = 0; i < numStringData; i++) {
+			//stringパラメータの長さ。
+			int numChara;
+			fread(&numChara, sizeof(numChara), 1, fp);
+			//stringパラメータ。
+			obj.charsDatas[i] = std::make_unique<char[]>(numChara + 1);
+			fread(obj.charsDatas[i].get(), numChara + 1, 1, fp);
+		}
 		//vec3のパラメーター。
 		int numVec3Data;
 		fread(&numVec3Data, sizeof(numVec3Data), 1, fp);

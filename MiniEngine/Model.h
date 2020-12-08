@@ -9,6 +9,14 @@
 
 class IShaderResource;
 
+enum EnRenderMode {
+	enRenderMode_Skin,				//スキンあり。
+	enRenderMode_NonSkin,			//スキンなし。
+	enRenderMode_DrawShadow,		//シャドウマップ描画。
+	enRenderMode_NonSkinDrawShadow,	//スキンなしシャドウマップ描画。
+	enRenderMode_Num				//いらんきもするが一応。
+};
+
 /// <summary>
 /// モデルの初期化データ
 /// </summary>
@@ -45,10 +53,15 @@ public:
 	/// <summary>
 	/// ワールド行列の更新。
 	/// </summary>
+	/// <remarks>
+	/// レンダーモードで軸変換するか決めてる。
+	/// todo:enZUP? enYUP?
+	/// </remarks>
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
-	void UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale);
+	/// <param name="rm">レンダーモード。</param>
+	void UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm);
 	/// <summary>
 	/// 更新。
 	/// </summary>
@@ -56,7 +69,7 @@ public:
 	/// <param name="rot">回転。</param>
 	/// <param name="scale">拡大。</param>
 	/// <param name="isForwardRender">フォワードレンダーする？。</param>
-	void Update(Vector3 pos, Quaternion rot, Vector3 scale);
+	void Update(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm);
 
 	/// <summary>
 	/// スケルトンを関連付ける。
