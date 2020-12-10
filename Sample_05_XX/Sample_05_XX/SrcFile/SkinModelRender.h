@@ -115,7 +115,7 @@ public:
 	/// <param name="flag">フラグ。</param>
 	void SetShadowReciever(bool flag)
 	{
-		m_model.SetShadowReciever();
+		m_model.SetShadowReciever(flag);
 	}
 	/// <summary>
 	/// シャドウキャスターフラグを設定。
@@ -123,7 +123,7 @@ public:
 	/// <param name="flag">フラグ。</param>
 	void SetShadwoCaster(bool flag)
 	{
-		ShadowCaster = flag;
+		m_model.SetShadwoCaster(flag);
 	}
 	/// <summary>
 	/// フォワードレンダー描画にする。
@@ -172,7 +172,6 @@ private:
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
 	Animation						m_animation;		//アニメーション
 	std::string						m_filePath;			//tkmファイルパス。
-	bool ShadowCaster = false;							//シャドウキャスター。
 	Vector3 m_pos = g_vec3Zero;			//座標。
 	Quaternion m_rot = g_quatIdentity;	//回転。
 	Vector3 m_scale = g_vec3One;		//拡大。

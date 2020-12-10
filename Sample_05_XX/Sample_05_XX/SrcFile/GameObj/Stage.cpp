@@ -11,16 +11,19 @@ bool Stage::Start()
 	////ステージのインスタンス。
 	//m_bg = NewGO<SkinModelRender>(EnPriority_Render);
 	////初期化。
-	//m_bg->Init("Assets/modelData/NavSample/L_SampleStage.tkm");
+	//m_bg->Init("Assets/modelData/levelTkm/L_SampleStage.tkm");
 	////シャドウレシーバー。
 	//m_bg->SetShadowReciever(true);
-	////軸を合わせる。
-	//Quaternion qRot = Quaternion::Identity;
-	//qRot.SetRotationDeg(Vector3::AxisX, -90.0f);
-	////回転。
-	//m_bg->SetRotation(qRot);
 
 	m_level.Init("Assets/level/StageLevel.tkl", [&](LevelObjectData& objData) {
+		//if (objData.EqualObjectName(L"StageLevelObj") == true) {
+		//	objData.isShadowReceiver = true;
+		//	return false;
+		//}
+		//if (objData.EqualObjectName(L"barrel_G") == true) {
+		//	objData.isShadowCaster = true;
+		//	return false;
+		//}
 		return false;
 	});
 

@@ -290,6 +290,22 @@ SPSInShadow VSMain_ShadowMapSkin(SVSIn vsIn)
 }
 
 /*
+	スキンなしシャドウ描画。
+*/
+SPSInShadow VSMain_ShadowMapNonSkin(SVSIn vsIn)
+{
+	//どのピクセルシェーダに返すか。
+	SPSInShadow psInput = (SPSInShadow)0;
+
+	float4 pos = 0;
+	pos = mul(mWorld, vsIn.pos);				//モデルの頂点をワールド座標系に変換。
+	pos = mul(mView, pos);						//ワールド座標系からカメラ座標系に変換。
+	pos = mul(mProj, pos);						//カメラ座標系からスクリーン座標系に変換。77
+	psInput.pos = pos;
+	return psInput;
+}
+
+/*
 	ピクセルシェーダーのエントリ関数。
 */
 float4 PSMain_ShadowMap(SPSInShadow In) : SV_Target0

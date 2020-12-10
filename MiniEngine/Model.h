@@ -45,18 +45,15 @@ struct ModelInitData {
 class Model {
 
 public:
-
+	~Model();
 	/// <summary>
 	/// モデルのみの初期化。
 	/// </summary>
 	void InitModel(const char* filepath);
 	/// <summary>
 	/// ワールド行列の更新。
+	/// <para>レンダーモードで軸変換するか決めてる。todo:enZUP? enYUP?</para>
 	/// </summary>
-	/// <remarks>
-	/// レンダーモードで軸変換するか決めてる。
-	/// todo:enZUP? enYUP?
-	/// </remarks>
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
@@ -88,7 +85,7 @@ public:
 		m_animation.Play(animNo, interpolateTime);
 	}
 	/// <summary>
-	/// 
+	/// 描画。
 	/// </summary>
 	/// <param name="renderContext"></param>
 	/// <param name="viewMat">ビュー。</param>
@@ -103,19 +100,24 @@ public:
 	{
 		return m_world;
 	}
+
+	const bool& GetAnimFlag() const
+	{
+		return m_isAnimation;
+	}
 	/// <summary>
 	/// シャドウレシーバーとして登録。
 	/// </summary>
-	void SetShadowReciever()
+	void SetShadowReciever(bool flag)
 	{
-		isShadowReciever = true;
+		isShadowReciever = flag;
 	}
 	/// <summary>
 	/// シャドウキャスターとして登録。
 	/// </summary>
-	void SetShadwoCaster()
+	void SetShadwoCaster(bool flag)
 	{
-		isShadowCaster = true;
+		isShadowCaster = flag;
 	}
 	/// <summary>
 	/// シェーダーを設定。
@@ -130,16 +132,14 @@ private:
 	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
 	Matrix			m_world;		//ワールド行列。
 	TkmFile			m_tkmFile;		//tkmファイル。
-	TkaFile			m_tkaFile;		//tkaファイル。
-	Skeleton		m_skeleton;		//スケルトン。
 	MeshParts		m_meshParts;	//メッシュパーツ。
+	Animation		m_animation;	//アニメーション
 	bool			isShadowCaster = false;		//シャドウキャスター？
 	bool			isShadowReciever = false;	//シャドウレシーバー？
+	bool			m_isAnimation = false;		//アニメーションしてる？ todo:頭悪い。
 	void*  m_expandConstantBuffer = nullptr;				//拡張定数バッファ。
 	int m_expandConstantBufferSize = 0;						//拡張定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//拡張SRV
-	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
-	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
-	Animation						m_animation;		//アニメーション
 	const wchar_t* m_shaderFilePath = L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx";			//シェーダーのファイルパス。
+	char m_name[50];									//確認用のネーム。
 };

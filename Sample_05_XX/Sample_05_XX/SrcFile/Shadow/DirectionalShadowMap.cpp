@@ -49,11 +49,6 @@ void DirectionalShadowMap::Update()
 		return;
 	}
 
-	//ライトビュー行列の回転成分を計算
-
-	m_lightDirection.x = 0.0f;
-	m_lightDirection.y = -1.0f;
-	m_lightDirection.z = 0.0f;
 	//ライトビューの前方向 下向き
 	Vector3 lightViewForward = m_lightDirection;
 	//ライトビューの上方向
@@ -254,14 +249,20 @@ void DirectionalShadowMap::RenderToShadowMap()
 			rc.ClearRenderTargetView(m_shadowMaps[i].GetRTVCpuDescriptorHandle(), m_shadowMaps[i].GetRTVClearColor());
 			rc.ClearDepthStencilView(m_shadowMaps[i].GetDSVCpuDescriptorHandle(), 1.0f);
 			for (auto& caster : m_shadowCasters) {
-				//カキカキ
-				caster->Draw(rc, m_lightViewMatrix[i], m_lightProjMatirx[i], enRenderMode_DrawShadow);
-				//DX12の仕様上、定数バッファの値を変更する場合はコマンドリストにのっかっている描画処理を
-				//一旦描画して、コマンドリストを初期化。
-				EngineObj().GetGraphicsEngine()->EndRender(false);
-				//RTVはここでmainRenderTargetに戻る。
-				EngineObj().GetGraphicsEngine()->BeginRender();
+				if (caster->GetAnimFlag()) {
+					//アニメーションありカキカキ
+					caster->Draw(rc, m_lightViewMatrix[i], m_lightProjMatirx[i], enRenderMode_DrawShadow);
+				}
+				else {
+					//アニメーションなしカキカキ
+					caster->Draw(rc, m_lightViewMatrix[i], m_lightProjMatirx[i], enRenderMode_NonSkinDrawShadow);
+				}
 			}
+			//DX12の仕様上、定数バッファの値を変更する場合はコマンドリストにのっかっている描画処理を
+			//一旦描画して、コマンドリストを初期化。
+			EngineObj().GetGraphicsEngine()->EndRender(false);
+			//RTVはここでmainRenderTargetに戻る。
+			EngineObj().GetGraphicsEngine()->BeginRender();
 		}
 		//リスト削除。
 		m_shadowCasters.clear();

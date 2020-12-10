@@ -10,8 +10,6 @@ void SkinModelRender::OnDestroy()
 {
 	//モデルレンダー消えたからGbufferのリストから削除する。
 	GraphicsEngineObj()->GetGBuffer().RemoveModel(this);
-	//モデルレンダー消えたからShadowCasterフラグもOFF。
-	ShadowCaster = false;
 }
 
 bool SkinModelRender::Start()
@@ -119,11 +117,6 @@ void SkinModelRender::Init(const char* tkmFile, const char* tkaFile)
 
 void SkinModelRender::Update()
 {
-	//unitychanをシャドウキャスターとして登録。
-	if (ShadowCaster == true) {
-		GraphicsEngineObj()->GetShadowMap()->RegisterShadowCaster(&m_model);
-	}
-
 	if (m_animation.IsInited()) {
 		//アニメーション初期化されてた。
 		m_animation.Progress(DELTA_TIME);

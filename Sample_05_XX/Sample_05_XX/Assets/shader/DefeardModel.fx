@@ -221,6 +221,9 @@ SPSOut PSMain(SPSIn psIn)
 		//シャドウ出力。
 		psOut.Shadow = CalcShadow(psIn.worldPos, psIn.posInView.z);
 	}
+	else {
+		psOut.Shadow = 0;
+	}
 
 	//GBufferを転送。
 	return psOut;	

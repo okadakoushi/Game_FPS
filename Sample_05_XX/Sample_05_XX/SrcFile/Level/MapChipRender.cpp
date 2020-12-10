@@ -23,7 +23,7 @@ void MapChipRender::Update()
 void MapChipRender::InitRenderObject()
 {
 	//レンダー初期化。
-	m_modelRender = NewGO<SkinModelRender>(0);
+	m_modelRender = NewGO<SkinModelRender>(EnPriority_Render);
 	//パス作成。
 	wchar_t filePath[256];
 	swprintf_s(filePath, L"Assets/modelData/levelTkm/%s.tkm", m_renderObjDatas[0].name);
@@ -51,6 +51,15 @@ void MapChipRender::InitRenderObject()
 	m_modelRender->SetPosition(m_renderObjDatas[0].position);
 	m_modelRender->SetRotation(m_renderObjDatas[0].rotatatin);
 	m_modelRender->SetScale(m_renderObjDatas[0].scale);
+	//if (m_renderObjDatas[0].isShadowCaster) {
+		//シャドウキャスターじゃ！
+	m_modelRender->SetShadwoCaster(true);
+	//}
+	//if (m_renderObjDatas[0].isShadowReceiver) {
+		//シャドウレシーバーじゃ！
+	m_modelRender->SetShadowReciever(true);
+	//}
+
 
 	/*
 	todo:ここにインスタンシング描画の処理を実装する。

@@ -39,6 +39,7 @@ public:
 	/// <param name="frameBufferHeight">フレームバッファの高さ</param>
 	/// <returns>falseが返ってきたら作成に失敗。</returns>
 	bool Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight);
+
 	/// <summary>
 	/// レンダリング開始。
 	/// </summary>

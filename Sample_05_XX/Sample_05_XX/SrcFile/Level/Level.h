@@ -14,6 +14,8 @@ struct LevelObjectData {
 	Quaternion rotatatin;	//回転。
 	Vector3 scale;			//拡大。
 	const wchar_t* name;	//名前。
+	bool isShadowCaster;	//シャドウキャスター。
+	bool isShadowReceiver;	//シャドウレシーバー。
 	/// <summary>
 	/// 引数で渡したオブジェクト名のオブジェクトか判定する。
 	/// </summary>

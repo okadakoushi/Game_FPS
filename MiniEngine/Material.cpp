@@ -94,6 +94,10 @@ void Material::InitPipelineState()
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psSkinShadowDraw.GetCompiledBlob());
 	m_SkinShadowMapDraw.Init(psoDesc);
 
+	//ノンスキンシャドウ用。
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinShadowDraw.GetCompiledBlob());
+	m_NonSkinShadowMapDraw.Init(psoDesc);
+
 	//続いて半透明マテリアル用。
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psModel.GetCompiledBlob());
@@ -131,6 +135,7 @@ void Material::InitShaders(const wchar_t* fx)
 	//とりあえずシャドウ描画はこのfxでしかしないので。
 	m_vsSkinShadowDraw.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain_ShadowMapSkin");
 	m_psSkinShadowDraw.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_ShadowMap");
+	m_vsNonSkinShadowDraw.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain_ShadowMapNonSkin");
 }
 void Material::BeginRender(RenderContext& rc, int renderMode)
 {
@@ -149,6 +154,10 @@ void Material::BeginRender(RenderContext& rc, int renderMode)
 	case enRenderMode_DrawShadow:
 		//シャドウマップ描画パイプライン。
 		rc.SetPipelineState(m_SkinShadowMapDraw);
+		break;
+	case enRenderMode_NonSkinDrawShadow:
+		//ノンスキンシャドウマップ描画。
+		rc.SetPipelineState(m_NonSkinShadowMapDraw);
 		break;
 	}
 }

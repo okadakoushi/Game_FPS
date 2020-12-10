@@ -15,6 +15,20 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 	//ボーンの行列を構築。
 	BuildBoneMatrices();
 
+	////レベルからデータの取得。
+	//struct SParams {
+	//	bool isShadowCaster;
+	//	bool isShadowReceiver;
+	//};
+	//vector<SParams> Params;
+	//m_tklFile.QueryObject([&](TklFile::SObject& tklObj)
+	//	{
+	//		SParams objParam;
+	//		objParam.isShadowCaster = tklObj.isShadowCaster;
+	//		objParam.isShadowReceiver = tklObj.isShadowReceiver;
+	//		Params.push_back(objParam);
+	//	});
+
 	//0はルートボーンなのでいらない。
 	for (int i = 1; i < m_bones.size(); i++) {
 		auto bone = m_bones[i].get();
@@ -27,13 +41,16 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 			objData.position.y = objData.position.z;
 			objData.position.z = -fix;
 
-			//objData.rotatatin.z += 90.0f;
 			fix = objData.rotatatin.y;
 			objData.rotatatin.y = objData.rotatatin.z;
 			objData.rotatatin.z = -fix;
-			objData.name = bone->GetName();
+
 			//入れ替え。
 			std::swap(objData.scale.y, objData.scale.z);
+			//パラメーター。
+			objData.name = bone->GetName();
+			//objData.isShadowCaster = Params.at(i).isShadowCaster;
+			//objData.isShadowReceiver = Params.at(i).isShadowReceiver;
 
 			//フック。
 			bool isHook = false;

@@ -4,7 +4,11 @@
 #include "srcFile/SkinModelRender.h"
 #include <fstream>
 
-
+Model::~Model()
+{
+	//モデルレンダー消えたからShadowCasterフラグもOFF。
+	isShadowCaster = false;
+}
 void Model::InitModel(const char* filepath)
 {
 	//内部のシェーダーをロードする処理が求めているのが
@@ -18,10 +22,12 @@ void Model::InitModel(const char* filepath)
 	mbstowcs(wfxFilePath, filepath, 256);
 	//ロード。
 	m_tkmFile.Load(filepath);
+	//ネーム。
+	strcat(m_name, filepath);
 
 	//とりま強制ライト todo:Set系。
-	m_expandConstantBuffer = &g_light;
-	m_expandConstantBufferSize = sizeof(g_light);
+	//m_expandConstantBuffer = &g_light;
+	//m_expandConstantBufferSize = sizeof(g_light);
 
 	//メッシュパーツを初期化していく。
 	m_meshParts.InitFromTkmFile(
@@ -35,6 +41,10 @@ void Model::InitModel(const char* filepath)
 
 void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm)
 {
+	//シャドウキャスターとして登録。
+	if (isShadowCaster == true) {
+		GraphicsEngineObj()->GetShadowMap()->RegisterShadowCaster(this);
+	}
 	//ワールド座標更新。
 	UpdateWorldMatrix(pos, rot, scale, rm);
 }
@@ -54,6 +64,7 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale, EnRend
 		m_world = mBias * mScale * mRot * mTrans;
 	}
 	else {
+		m_isAnimation = true;
 		m_world = mScale * mRot * mTrans;
 	}
 
