@@ -163,13 +163,13 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ライトの設定。
-	g_light.directionalLight[0].color = { 1.5f, 1.5f, 1.5f, 1.0f };
+	g_light.directionalLight[0].color = { 1.0f, 1.0f, 1.0f, 0.0f };
 	g_light.directionalLight[0].direction = { 0.0f, 0.0f, -1.0f };
 
-	g_light.directionalLight[1].color = { 1.5f, 1.5f, 1.5f, 1.0f };
+	g_light.directionalLight[1].color = { 1.0f, 1.0f, 1.0f, 0.0f };
 	g_light.directionalLight[1].direction = { 0.0f, 0.0f, 1.0f };
 
-	g_light.directionalLight[2].color = { 1.5f, 1.5f, 1.5f, 1.0f };
+	g_light.directionalLight[2].color = { 1.0f, 1.0f, 1.0f, 0.0f };
 	g_light.directionalLight[2].direction = { 0.0f, -1.0f, 0.0f };
 
 	//環境光。

@@ -10,7 +10,7 @@ bool GameCamera::Start()
 {
 	//キャラ映らないように近平面を設定。
 	//todo:なんかいい方法あるんだろうか。
-	GraphicsEngineObj()->GetCamera3D().SetNear(1.0f);
+	GraphicsEngineObj()->GetCamera3D().SetNear(15.0f);
 	return true;
 }
 

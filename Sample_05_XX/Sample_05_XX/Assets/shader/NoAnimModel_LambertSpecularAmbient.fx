@@ -241,9 +241,9 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 		float3 baseColor = max(dot(normal, -directionalLight[ligNo].direction), 0.0f)
 						*directionalLight[ligNo].color;
 		//正規化済み、Disney拡散反射を加算。
-		lig += NormalizedDisneyDiffuse(baseColor, normal, -directionalLight[ligNo].direction, toEye, 0.5f);
+		lig += NormalizedDisneyDiffuse(normal, -directionalLight[ligNo].direction, toEye, 0.5f);
 		//スペキュラ反射。
-		lig += BRDF( -directionalLight[ligNo].direction, toEye, normal) * directionalLight[ligNo].color.xyz * metaric * directionalLight[ligNo].color.w;
+		lig += BRDF( -directionalLight[ligNo].direction, toEye, normal, 0.0f) * directionalLight[ligNo].color.xyz * metaric * directionalLight[ligNo].color.w;
 	}
 	//環境光。
 	lig += ambinentLight; //足し算するだけ

@@ -77,26 +77,37 @@ float4 PSMain( PSInput In ) : SV_Target0
 	//ワールド座標から視点に向かうベクトル。
 	float3 toEye = normalize(eyePos - posInWorld);
 	//反射の度合。
-	float metaric = 0.0f;
+	float metaric = g_specularMap.Sample(g_sampler, In.uv);
 	//テクスチャをサンプリング。
 	float4 albedColor = g_texture.Sample(g_sampler, In.uv);
 
-	//スペキュラの値を持ってくる。
-	metaric = g_specularMap.Sample( g_sampler, In.uv);
 	//ランバート拡散反射と鏡面反射の計算をしていく。
 	for(int ligNo = 0; ligNo < NUM_DIRECTIONAL_LIGHT; ligNo++){
-		//ライトの本数分計算。
-		//法線とライトで内積の性質を利用して、ライトのベースカラーを計算する。
-		//内積の性質...2つのベクトルが同じ向きなら1、反対になるほど-1に近づいていく。
-		float3 baseColor = max(dot(normal, -directionalLight[ligNo].direction), 0.0f)
-						*directionalLight[ligNo].color;
-		//正規化済み、Disney拡散反射を加算。
-		lig += NormalizedDisneyDiffuse(baseColor, normal, -directionalLight[ligNo].direction, toEye, 0.5f);
-		//スペキュラ反射。
-		lig += BRDF( -directionalLight[ligNo].direction, toEye, normal) * directionalLight[ligNo].color.xyz * metaric * directionalLight[ligNo].color.w;
+		//Disney
+		float NdotL = saturate( dot( normal, -directionalLight[ligNo].direction ));
+	#if 1
+		//ディズニーベースの拡散反射を求める。
+		float disneyDiffuse = NormalizedDisneyDiffuse(normal, -directionalLight[ligNo].direction, toEye, 1.0f);
+		//ディズニーベースの拡散反射をランバート拡散反射に乗算する。
+		//ランバート拡散反射は、エネルギー量１に対してπ倍のエネルギーを放出してしまっているので
+		//πで除算して正規化している。
+		float3 diffuse = directionalLight[ligNo].color * NdotL * disneyDiffuse / PI ;
+		//クックトランスモデルの鏡面反射を計算する。
+		float3 spec = BRDF(-directionalLight[ligNo].direction, toEye, normal, metaric) * directionalLight[ligNo].color ;
+	#else
+		float3 diffuse = directionalLight[ligNo].color * NdotL / PI;
+		float3 rvec = reflect( directionalLight[ligNo].direction, normal );
+
+		float3 spec = pow( max( 0.0f, dot( rvec, toEye) ), 5.0f ) * directionalLight[ligNo].color / PI;
+	#endif
+		//拡散反射光と鏡面反射光を線形補完。
+		lig += lerp( diffuse, spec, metaric );
 	}
 	//環境光。
 	lig += ambinentLight; //足し算するだけ
+	//環境光による鏡面反射を計算する。
+	//光が法線方向から入射していると考えて鏡面反射を計算する。
+	lig += BRDF(normal, toEye, normal, metaric) * ambinentLight* metaric ;
 
 	//シャドウ計算。
 	float shadow = g_shadow.Sample(g_sampler, In.uv);

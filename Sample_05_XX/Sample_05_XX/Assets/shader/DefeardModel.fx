@@ -188,6 +188,17 @@ float CalcShadow(float3 wp, float zInView)
 	return Shadow;
 }
 
+float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
+{
+    float3 binSpaceNormal = g_normalMap.SampleLevel ( g_sampler, uv, 0.0f).xyz;
+    binSpaceNormal = (binSpaceNormal * 2.0f) - 1.0f;
+    
+	float3 newNormal = tangent * binSpaceNormal.x + biNormal * binSpaceNormal.y + normal * binSpaceNormal.z; 
+
+    return newNormal;
+}
+
+
 SPSOut PSMain(SPSIn psIn)
 {
 	//GBufferに出力。
@@ -197,16 +208,8 @@ SPSOut PSMain(SPSIn psIn)
 	//法線出力。色々あってSpriteするときに計算させるのというほど
 	//速度変わらない気もするからPBRの法線はここで計算。
 	if (hasNormalMap) {
-		//サンプリング。
-		float3 binSpaceNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
-		//正規化。
-		binSpaceNormal = (binSpaceNormal * 2.0f) - 1.0f;
-		//X方向は接線。
-		//Y方向は従法線。
-		//Z方向は法線。
-		psOut.normal = psIn.Tangent * binSpaceNormal.x
-			+ psIn.BiNormal * binSpaceNormal.y
-			+ psIn.normal * binSpaceNormal.z;
+		//法線を計算。
+		psOut.normal = GetNormal( psIn.normal, psIn.Tangent, psIn.BiNormal, psIn.uv);
 	}else{
 		//ない。
 		psOut.normal = psIn.normal;
