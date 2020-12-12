@@ -143,7 +143,7 @@ float CalcShadowPercent(Texture2D<float4> tex, float2 uv, float depth)
 	float shadow_val = tex.Sample(g_sampler, uv).r;
 	//return shadow_val;
 	//深度テスト
-	if (depth > shadow_val.r + 0.01f) {
+	if (depth > shadow_val.r + 0.0001f) {
 		//手前にあるのでシャドウを落とす。
 		return 1.0f;
 	}

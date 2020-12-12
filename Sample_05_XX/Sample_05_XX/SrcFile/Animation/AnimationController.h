@@ -46,9 +46,9 @@ public:
 				L"エラー",
 				S_OK
 			);
-			m_interpolateEndTime = interpolateTime;
-			m_interpolateTime = 0.0f;
 		}
+		m_interpolateEndTime = interpolateTime;
+		m_interpolateTime = 0.0f;
 	}
 	/// <summary>
 	/// 補間率を取得。
@@ -57,7 +57,6 @@ public:
 	float GetInterpolateRate() const
 	{
 		if (m_interpolateEndTime <= 0.0f) {
-			//値が不正、補間しない。
 			return 1.0f;
 		}
 		return min(1.0f, m_interpolateTime / m_interpolateEndTime);

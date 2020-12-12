@@ -39,10 +39,7 @@ void Animation::Init(Skeleton& skeleton, const vector<unique_ptr<AnimationClip>>
 }
 
 void Animation::UpdateLocalPose(float deltaTime)
-{
-	/*					
-		----再確認----
-	*/				
+{			
 	m_isterpolateTime += deltaTime;
 	if (m_isterpolateTime >= 1.0f) {
 		//補間完了。
@@ -91,11 +88,11 @@ void Animation::UpdateGlobalPose()
 		//ローカルボーン行列。
 		const auto& localBoneMatrix = m_animationController[index].GetBoneLocalMatrix();
 		//フットステップの移動量。
-		auto deltaValueFootStep = m_animationController[index].GetFootstepDeltaValueOnUpdate();
+		//auto deltaValueFootStep = m_animationController[index].GetFootstepDeltaValueOnUpdate();
 		//footstepの補間。
-		m_footstepDeltaValue.Lerp(intepolateRate, m_footstepDeltaValue, deltaValueFootStep);
+		//m_footstepDeltaValue.Lerp(intepolateRate, m_footstepDeltaValue, deltaValueFootStep);
 		for (int boneNo = 0; boneNo < numBone; boneNo++) {
-			//平行移動の補間。
+
 			Matrix m = localBoneMatrix[boneNo];
 			vGlobalPose[boneNo].Lerp(
 				intepolateRate,
@@ -118,7 +115,7 @@ void Animation::UpdateGlobalPose()
 				vGlobalScale[boneNo],
 				vBoneScale
 			);
-			//拡大成分の除去。
+			//拡大成分を除去。
 			m.m[0][0] /= vBoneScale.x;
 			m.m[0][1] /= vBoneScale.x;
 			m.m[0][2] /= vBoneScale.x;
@@ -131,7 +128,7 @@ void Animation::UpdateGlobalPose()
 			m.m[2][1] /= vBoneScale.z;
 			m.m[2][2] /= vBoneScale.z;
 
-			//回転の補間。
+			//回転の補完
 			Quaternion qBone;
 			qBone.SetRotation(m);
 			qGlobalPose[boneNo].Slerp(intepolateRate, qGlobalPose[boneNo], qBone);

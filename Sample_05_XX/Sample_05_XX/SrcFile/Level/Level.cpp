@@ -85,7 +85,7 @@ MapChipRender* Level::CteateMapChipRenderOrAddRenderObject(const LevelObjectData
 	MapChipRender* pMapChipRender = nullptr;
 	if (itFind == m_mapChipRenderPtrs.end()) {
 		//ìoò^Ç≥ÇÍÇƒÇ»Ç¢ÅB
-		auto mapChipRender = NewGO<MapChipRender>(EnPriority_Render);
+		auto mapChipRender = NewGO<MapChipRender>(EnPriority_3DModel);
 		pMapChipRender = mapChipRender;
 		//ìoò^ìoò^ÅB
 		m_mapChipRenderPtrs.insert({ nameKey.GetHashCode(), mapChipRender });

@@ -16,14 +16,6 @@ bool Stage::Start()
 	//m_bg->SetShadowReciever(true);
 
 	m_level.Init("Assets/level/StageLevel.tkl", [&](LevelObjectData& objData) {
-		//if (objData.EqualObjectName(L"StageLevelObj") == true) {
-		//	objData.isShadowReceiver = true;
-		//	return false;
-		//}
-		//if (objData.EqualObjectName(L"barrel_G") == true) {
-		//	objData.isShadowCaster = true;
-		//	return false;
-		//}
 		return false;
 	});
 

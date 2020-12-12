@@ -23,7 +23,7 @@ void MapChipRender::Update()
 void MapChipRender::InitRenderObject()
 {
 	//レンダー初期化。
-	m_modelRender = NewGO<SkinModelRender>(EnPriority_Render);
+	m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
 	//パス作成。
 	wchar_t filePath[256];
 	swprintf_s(filePath, L"Assets/modelData/levelTkm/%s.tkm", m_renderObjDatas[0].name);

@@ -1,5 +1,7 @@
 #pragma once
 
+class GamePlayer;
+
 /// <summary>
 /// ゲーム用のカメラクラス。
 /// </summary>
@@ -57,6 +59,7 @@ private:
 	/// </summary>
 	void MoveCameraOnTPS();
 private:
+	GamePlayer* m_player = nullptr;
 	Vector3 m_playerPos = g_vec3Zero;				//プレイヤーの位置。
 	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//視点または、注視点に向かうベクトル。
 	Vector3 m_cameraRot = g_vec3Zero;					//カメラの回転。

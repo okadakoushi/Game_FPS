@@ -56,12 +56,16 @@ void GameObjectManager::UpdateManager()
 {
 	/// 更新系処理
 	{
+		//Shadowの更新。
+		GraphicsEngineObj()->GetShadowMap()->Update();
+		//更新。
 		Update();
 	}
 	/// 描画系処理
 	{
-
-		//GBufferレンダリング。
+		//Shadowの描画。 todo:PreRender
+		GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
+		//GBufferレンダリング。todo:PreRender
 		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
 		//GBufferを基にディファードレンダリング。
 		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());

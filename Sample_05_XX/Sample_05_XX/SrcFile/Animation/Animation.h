@@ -103,7 +103,7 @@ private:
 		index = GetLastAnimatitonControllerIndex();
 		m_animationController[index].ChangeAnimationClip(nextClip);
 		m_animationController[index].SetInterpolateTime(interpolateTime);
-		interpolateTime = 0.0f;
+		m_isterpolateTime = 0.0f;
 		m_isterpolateTimeEnd = interpolateTime;
 	}
 	/// <summary>

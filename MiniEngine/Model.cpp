@@ -65,7 +65,7 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale, EnRend
 	}
 	else {
 		m_isAnimation = true;
-		m_world = mScale * mRot * mTrans;
+		m_world = mBias * mScale * mRot * mTrans;
 	}
 
 }

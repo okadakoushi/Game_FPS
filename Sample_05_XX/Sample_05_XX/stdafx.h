@@ -1,16 +1,16 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-const float DELTA_TIME = 1.0f / 60.0f;	//更新時間。後でGameTimeクラス作ること。
+const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
 static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 
 //昇順。小さいほうが早い。
 static enum Priority {
 	EnPriority_Game,
+	Enpriority_Camera,
 	EnPriority_3DModel,		//モデル。
-	EnPriority_Camera,		//カメラ。
-	EnPriority_Render,		//レンダー系。
+	EnPriority_Render,
 	EnPriority_UI,			//UI(HDD描画等)。
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };

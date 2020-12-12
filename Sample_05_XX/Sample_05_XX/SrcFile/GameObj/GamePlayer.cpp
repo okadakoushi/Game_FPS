@@ -11,8 +11,14 @@ GamePlayer::~GamePlayer()
 bool GamePlayer::Start()
 {	
 	//unitychan初期化。
-	m_unityChan = NewGO<SkinModelRender>(EnPriority_3DModel, "Unity");
-	m_unityChan->Init("Assets/modelData/unityChan.tkm", "Assets/animData/unityChan/Idle.tka");
+	m_unityChan = NewGO<SkinModelRender>(EnPriority_Render, "Unity");
+	const char* tkaFilePaths[] = {
+		"Assets/animData/soldier/idle.tka",
+		"Assets/animData/soldier/walk.tka",
+		"Assets/animData/soldier/run.tka"
+	};
+	m_unityChan->Init("Assets/modelData/Chara/soldier_green.tkm", tkaFilePaths);
+	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
 	m_unityChan->SetShadwoCaster(true);
 	//スキン描画。
@@ -21,7 +27,7 @@ bool GamePlayer::Start()
 	m_pos = m_unityChan->GetPosition();
 
 	//GameCameraインスタンス化。
-	m_camera = NewGO<GameCamera>(EnPriority_Camera, "GameCamera");
+	m_camera = NewGO<GameCamera>(EnPriority_3DModel, "GameCamera");
 	m_camera->SetCameraType(true);
 
 	return true;
@@ -29,10 +35,42 @@ bool GamePlayer::Start()
 
 void GamePlayer::Update()
 {
-	//移動。
-	Move();
+	if (m_playerState != EnPlayerState_Deth) {
+		Move();
+	}
+
+	switch (m_playerState)
+	{
+	case EnPlayerState_Idle:
+		m_unityChan->PlayAnimation(EnPlayerState_Idle, 0.5f);
+		break;
+	case EnPlayerState_Walk:
+		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
+		break;
+	case EnPlayerState_Run:
+		m_unityChan->PlayAnimation(EnPlayerState_Run, 1.0f);
+		break;
+	case EnPlayerState_Shot:
+		break;
+	case EnPlayerState_Reload:
+		break;
+	case EnPlayerState_Deth:
+		break;
+	case EnPlayerState_Num:
+		break;
+	}
+	m_unityChan->SetPosition(m_pos);
 	//カメラの位置も更新。
 	m_camera->SetEyePos(m_pos);
+
+}
+
+void GamePlayer::Rotation()
+{
+	//カメラに合わせて向きも変える。
+	float angle = atan2(m_camera->GetToPos().x, m_camera->GetToPos().z);
+	m_rot.SetRotation(g_vec3AxisY, angle);
+	m_unityChan->SetRotation(m_rot);
 }
 
 void GamePlayer::Move()
@@ -45,26 +83,33 @@ void GamePlayer::Move()
 	camRight.y = 0.0f;
 	camRight.Normalize();
 	
+	//移動量。
+	Vector3 move = g_vec3Zero;
+
 	//移動処理。
 	//todo:Pad対応？キャラコン対応？慣性？
 	if (GetAsyncKeyState('W')) {
-		m_pos += camForward * m_speed;
+		move += camForward * m_speed;
 	}
 	if (GetAsyncKeyState('S')) {
-		m_pos -= camForward * m_speed;
+		move -= camForward * m_speed;
 	}
 	if (GetAsyncKeyState('D')) {
-		m_pos += camRight * m_speed;
+		move += camRight * m_speed;
 	}
 	if (GetAsyncKeyState('A')) {
-		m_pos -= camRight * m_speed;
+		move -= camRight * m_speed;
 	}
 
-	//カメラに合わせて向きも変える。
-	float angle = atan2(m_camera->GetToPos().x, m_camera->GetToPos().z);
-	m_rot.SetRotation(g_vec3AxisY, angle);
-	m_unityChan->SetRotation(m_rot);
+	if (move.Length() >= 0.5f) {
+		m_playerState = EnPlayerState_Walk;
+	}
+	else if (move.Length() >= 2.0f) {
+		m_playerState = EnPlayerState_Run;
+	}
+	else {
+		m_playerState = EnPlayerState_Idle;
+	}
 
-	//UnityChanの位置更新。
-	m_unityChan->SetPosition(m_pos);
+	m_pos += move;
 }

@@ -23,8 +23,38 @@ public:
 	bool Start() override;
 	/// <summary>
 	/// 初期化。
+	/// <para>todo:T黒魔術使わない修正。</para>
 	/// </summary>
-	void Init(const char* tkmFile, const char* tkaFile = nullptr);
+	/// <param name="tkmFile">tkmファイルパス。</param>
+	/// <param name="tkaFilePaths">tkaファイルパス。</param>
+	template<typename TKA_FILE_ARRAY, std::size_t NUM_TKA_FILE>
+	void Init(const char* tkmFile, TKA_FILE_ARRAY(&tkaFilePaths)[NUM_TKA_FILE])
+	{
+		if (!m_isForwardRender) {
+			//毎回初期化するので面倒なのでDefferdの場合はここで初期化しちゃう。
+			SetDefferedRender();
+		}
+		//モデル初期化。
+		m_model.InitModel(tkmFile);
+		//todo : 複数pushBuck
+		for (auto i = 0; i < NUM_TKA_FILE; i++) {
+			m_tkaFilePaths.push_back(tkaFilePaths[i]);
+		}
+		//モデルの読み込み終了。
+		m_initStep = enInitStep_LoadSkelton;
+		m_filePath = tkmFile;
+	}
+	void Init(const char* tkmFile) {
+		if (!m_isForwardRender) {
+			//毎回初期化するので面倒なのでDefferdの場合はここで初期化しちゃう。
+			SetDefferedRender();
+		}
+		//モデル初期化。
+		m_model.InitModel(tkmFile);
+		//モデルの読み込み終了。
+		m_initStep = enInitStep_LoadSkelton;
+		m_filePath = tkmFile;
+	}
 	/// <summary>
 	/// デストロイ。
 	/// </summary>
@@ -42,7 +72,7 @@ public:
 	/// </summary>
 	void PlayAnimation(int clipNo, float interpolateTime)
 	{
-		m_model.PlayAnim(clipNo, interpolateTime);
+		m_animation.Play(clipNo, interpolateTime);
 	}
 	/// <summary>
 	/// 座標を設定。

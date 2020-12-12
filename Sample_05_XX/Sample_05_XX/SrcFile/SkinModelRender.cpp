@@ -98,23 +98,6 @@ bool SkinModelRender::Start()
 	return inited;
 }
 
-void SkinModelRender::Init(const char* tkmFile, const char* tkaFile)
-{
-	if (!m_isForwardRender) {
-		//毎回初期化するので面倒なのでDefferdの場合はここで初期化しちゃう。
-		SetDefferedRender();
-	}
-	//モデル初期化。
-	m_model.InitModel(tkmFile);
-	//todo : 複数pushBuck
-	if (tkaFile != nullptr) {
-		m_tkaFilePaths.push_back(tkaFile);
-	}
-	//モデルの読み込み終了。
-	m_initStep = enInitStep_LoadSkelton;
-	m_filePath = tkmFile;
-}
-
 void SkinModelRender::Update()
 {
 	if (m_animation.IsInited()) {
