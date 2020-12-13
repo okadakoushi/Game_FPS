@@ -33,8 +33,7 @@ void GameCamera::MoveCameraOnFPS()
 {
 	//視点。
 	Vector3 pos = m_playerPos;
-	pos.y += 100.0f;
-	//pos.z += 5.0f;
+	pos.y += 93.0f;
 	//古い。
 	Vector3 totPosOld = m_toPos;
 	//入力に応じて回す。
@@ -67,7 +66,7 @@ void GameCamera::MoveCameraOnFPS()
 	}
 
 	//カメラの位置補正。MNum
-	Vector3 fix = toTargetDir * 15.0f;
+	Vector3 fix = toTargetDir * 20.0f;
 
 	//視点を計算。
 	Vector3 target = pos + m_toPos;

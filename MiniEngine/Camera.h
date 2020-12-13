@@ -240,10 +240,17 @@ public:
 	/// <summary>
 	/// カメラの右方向を取得。
 	/// </summary>
-
 	const Vector3& GetRight() const
 	{
 		return m_right;
+	}
+	/// <summary>
+	/// カメラから注視点に向かうベクトル。
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetCameraToTaget() const
+	{
+		return m_toTarget;
 	}
 	/// <summary>
 	/// アスペクト比を取得。
@@ -284,6 +291,7 @@ protected:
 	Matrix		m_cameraRotation;						//カメラの回転行列。
 	Vector3		m_forward = g_vec3Front;				//カメラの前方。
 	Vector3		m_right = g_vec3Right;					//カメラの右。
+	Vector3		m_toTarget = g_vec3Zero;				//視点から注視点に向かうベクトル。
 	float		m_near = 1.0f;							//近平面。
 	float		m_far = 5000.0f;						//遠平面。
 	float		m_viewAngle = Math::DegToRad(60.0f);	//画角(ラジアン)。

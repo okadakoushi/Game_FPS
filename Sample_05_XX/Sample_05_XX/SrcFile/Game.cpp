@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "GameObj/Stage.h"
 #include "GameObj/GamePlayer.h"
+#include "GameObj/UIs.h"
 
 //#define Mode_Game;
 //#define Mode_Test;
@@ -22,6 +23,8 @@ bool Game::Start()
 	m_stage = NewGO<Stage>(EnPriority_3DModel, "bg");
 	//GamePlayerÅB
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
+	//UIsÅB
+	//m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
 	
 	return true;
 

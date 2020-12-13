@@ -45,6 +45,8 @@ void Camera::Update()
 	toPos.Subtract(m_position, m_target);
 	m_targetToPositionLen = toPos.Length();
 
+	m_toTarget = m_target - m_position;
+
 	m_isDirty = false;
 }
 void Camera::CalcScreenPositionFromWorldPosition(Vector2& screenPos, const Vector3& worldPos) const

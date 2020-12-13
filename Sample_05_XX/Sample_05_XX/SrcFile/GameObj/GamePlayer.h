@@ -29,6 +29,10 @@ public:
 	/// </summary>
 	void Rotation();
 	/// <summary>
+	/// 発射！！
+	/// </summary>
+	void Shot();
+	/// <summary>
 	/// 位置を取得。
 	/// </summary>
 	/// <returns></returns>
@@ -52,5 +56,6 @@ private:
 	Quaternion m_rot = g_quatIdentity;			//回転。
 	GameCamera* m_camera = nullptr;				//ゲームカメラ。
 	float m_speed = 1.0f;						//移動速度。
+	int m_flame = 0;
 };
 

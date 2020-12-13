@@ -2,6 +2,7 @@
 
 class Stage;
 class GamePlayer;
+class UIs;
 
 class Game : public IGameObject
 {
@@ -15,5 +16,6 @@ private:
 	Stage* m_stage = nullptr;		//ステージ。
 	GamePlayer* m_player = nullptr;	//プレイヤー。
 	Level m_level;					//レベル。
+	UIs* m_UIs;						//UI。
 };
 

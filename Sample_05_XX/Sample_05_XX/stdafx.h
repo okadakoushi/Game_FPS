@@ -10,8 +10,9 @@ static enum Priority {
 	EnPriority_Game,
 	Enpriority_Camera,
 	EnPriority_3DModel,		//モデル。
-	EnPriority_Render,
+	EnPriority_3DRender,
 	EnPriority_UI,			//UI(HDD描画等)。
+	EnPriority_2DRender,
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };
 
@@ -27,8 +28,9 @@ static enum Priority {
 
 #include "SrcFile/GameObject/GameObjectManager.h"
 
-//スキンモデル。
+//レンダー。
 #include "SrcFile/SkinModelRender.h"
+#include "SrcFile/SpriteRender.h"
 
 //シャドウマップ。
 #include "SrcFile/Shadow/DirectionalShadowMap.h"

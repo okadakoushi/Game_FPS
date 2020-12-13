@@ -183,6 +183,8 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Bullet.cpp" />
+    <ClCompile Include="SrcFile\SpriteRender.cpp" />
     <ClCompile Include="SrcFile\Level\MapChipRender.cpp" />
     <ClCompile Include="SrcFile\Level\MapChip.cpp" />
     <ClCompile Include="SrcFile\Level\Level.cpp" />
@@ -208,6 +210,7 @@
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="SrcFile\Level\TklFile.cpp" />
+    <ClCompile Include="SrcFile\GameObj\UIs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -239,6 +242,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\GameObj\Bullet.h" />
+    <ClInclude Include="SrcFile\SpriteRender.h" />
     <ClInclude Include="SrcFile\Level\MapChipRender.h" />
     <ClInclude Include="SrcFile\Level\MapChip.h" />
     <ClInclude Include="SrcFile\Level\Level.h" />
@@ -260,6 +265,10 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="SrcFile\Level\TklFile.h" />
+    <ClInclude Include="SrcFile\GameObj\UIs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\sprite\white_hip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

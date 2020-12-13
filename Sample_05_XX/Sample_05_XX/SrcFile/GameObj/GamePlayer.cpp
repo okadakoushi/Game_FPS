@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GamePlayer.h"
 #include "GameCamera.h"
+#include "Bullet.h"
 
 GamePlayer::~GamePlayer()
 {
@@ -11,7 +12,7 @@ GamePlayer::~GamePlayer()
 bool GamePlayer::Start()
 {	
 	//unitychan初期化。
-	m_unityChan = NewGO<SkinModelRender>(EnPriority_Render, "Unity");
+	m_unityChan = NewGO<SkinModelRender>(EnPriority_3DRender, "Unity");
 	const char* tkaFilePaths[] = {
 		"Assets/animData/soldier/idle.tka",
 		"Assets/animData/soldier/walk.tka",
@@ -36,7 +37,11 @@ bool GamePlayer::Start()
 void GamePlayer::Update()
 {
 	if (m_playerState != EnPlayerState_Deth) {
+		//死んでない。
+		//移動。
 		Move();
+		//射撃。
+		Shot();
 	}
 
 	switch (m_playerState)
@@ -73,6 +78,15 @@ void GamePlayer::Rotation()
 	m_unityChan->SetRotation(m_rot);
 }
 
+void GamePlayer::Shot()
+{
+	m_flame++;
+	if (GetAsyncKeyState(VK_SPACE) && m_flame >= 60) {
+		NewGO<Bullet>(EnPriority_3DModel);
+		m_flame = 0;
+	}
+}
+
 void GamePlayer::Move()
 {
 	//カメラの向き情報。
@@ -101,15 +115,20 @@ void GamePlayer::Move()
 		move -= camRight * m_speed;
 	}
 
+	if (GetAsyncKeyState(VK_SHIFT)) {
+		move *= 3.0f;
+	}
+
 	if (move.Length() >= 0.5f) {
 		m_playerState = EnPlayerState_Walk;
 	}
-	else if (move.Length() >= 2.0f) {
+	if (move.Length() >= 2.0f) {
 		m_playerState = EnPlayerState_Run;
 	}
-	else {
+	if(move.Length() == 0.0f){
 		m_playerState = EnPlayerState_Idle;
 	}
 
 	m_pos += move;
 }
+
