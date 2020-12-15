@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\ModelDataManager.cpp" />
     <ClCompile Include="SrcFile\GameObj\Bullet.cpp" />
     <ClCompile Include="SrcFile\SpriteRender.cpp" />
     <ClCompile Include="SrcFile\Level\MapChipRender.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\ModelDataManager.h" />
     <ClInclude Include="SrcFile\GameObj\Bullet.h" />
     <ClInclude Include="SrcFile\SpriteRender.h" />
     <ClInclude Include="SrcFile\Level\MapChipRender.h" />
@@ -268,6 +270,7 @@
     <ClInclude Include="SrcFile\GameObj\UIs.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
     <Image Include="Assets\sprite\white_hip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -24,7 +24,7 @@ bool Game::Start()
 	//GamePlayerÅB
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
 	//UIsÅB
-	//m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
+	m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
 	
 	return true;
 

@@ -130,8 +130,8 @@ public:
 	}
 private:
 	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
-	Matrix			m_world;		//ワールド行列。
-	TkmFile			m_tkmFile;		//tkmファイル。
+	Matrix			m_world;					//ワールド行列。
+	TkmFile*		m_tkmFile = nullptr;		//tkmファイル。
 	MeshParts		m_meshParts;	//メッシュパーツ。
 	Animation		m_animation;	//アニメーション
 	bool			isShadowCaster = false;		//シャドウキャスター？

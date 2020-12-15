@@ -5,19 +5,20 @@
 
 MeshParts::~MeshParts()
 {
-	for (auto& mesh : m_meshs) {
-		//インデックスバッファを削除。
-		for (auto& ib : mesh->m_indexBufferArray) {
-			delete ib;
-		}
-		//マテリアルを削除。
-		for (auto& mat : mesh->m_materials) {
-			delete mat;
-		}
-		//メッシュを削除。
-		delete mesh;
-	}
+	//for (auto& mesh : m_meshs) {
+	//	//インデックスバッファを削除。
+	//	for (auto& ib : mesh->m_indexBufferArray) {
+	//		delete ib;
+	//	}
+	//	//マテリアルを削除。
+	//	for (auto& mat : mesh->m_materials) {
+	//		delete mat;
+	//	}
+	//	//メッシュを削除。
+	//	delete mesh;
+	//}
 }
+
 void MeshParts::InitFromTkmFile(
 	const TkmFile& tkmFile, 
 	void* expandData,
@@ -96,60 +97,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 	const wchar_t* fxPath
 )
 {
-	//頂点バッファを作成。
-	int numVertex = (int)tkmMesh.vertexBuffer.size();
-	int vertexStride = sizeof(TkmFile::SVertex);
-	auto mesh = new SMesh;
-	mesh->skinFlags.reserve(tkmMesh.materials.size());
-	mesh->m_vertexBuffer.Init(vertexStride * numVertex, vertexStride);
-	mesh->m_vertexBuffer.Copy((void*)&tkmMesh.vertexBuffer[0]);
-
-	auto SetSkinFlag = [&](int index) {
-		if (tkmMesh.vertexBuffer[index].skinWeights.x > 0.0f) {
-			//スキンがある。
-			mesh->skinFlags.push_back(1);
-		}
-		else {
-			//スキンなし。
-			mesh->skinFlags.push_back(0);
-		}
-	};
-	//インデックスバッファを作成。
-	if (!tkmMesh.indexBuffer16Array.empty()) {
-		//インデックスのサイズが2byte
-		mesh->m_indexBufferArray.reserve(tkmMesh.indexBuffer16Array.size());
-		for (auto& tkIb : tkmMesh.indexBuffer16Array) {
-			auto ib = new IndexBuffer;
-			ib->Init(static_cast<int>(tkIb.indices.size()) * 2, 2);
-			ib->Copy((void*)&tkIb.indices.at(0));
-
-			//スキンがあるかどうかを設定する。
-			SetSkinFlag(tkIb.indices[0]);
-
-			mesh->m_indexBufferArray.push_back(ib);
-		}
-	}
-	else {
-		//インデックスのサイズが4byte
-		mesh->m_indexBufferArray.reserve(tkmMesh.indexBuffer32Array.size());
-		for (auto& tkIb : tkmMesh.indexBuffer32Array) {
-			auto ib = new IndexBuffer;
-			ib->Init(static_cast<int>(tkIb.indices.size()) * 4, 4);
-			ib->Copy((void*)&tkIb.indices.at(0));
-
-			//スキンがあるかどうかを設定する。
-			SetSkinFlag(tkIb.indices[0]);
-
-			mesh->m_indexBufferArray.push_back(ib);
-		}
-	}
-	//マテリアルを作成。
-	mesh->m_materials.reserve(tkmMesh.materials.size());
-	for (auto& tkmMat : tkmMesh.materials) {
-		auto mat = new Material;
-		mat->InitFromTkmMaterila(tkmMat, fxPath);
-		mesh->m_materials.push_back(mat);
-	}
+	//メッシュ取得。
+	auto* mesh = EngineObj().GetModelDataManager().LoadMesh(tkmMesh, meshNo, fxPath);
 
 	m_meshs[meshNo] = mesh;
 	

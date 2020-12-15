@@ -21,7 +21,7 @@ void Model::InitModel(const char* filepath)
 	//変換。
 	mbstowcs(wfxFilePath, filepath, 256);
 	//ロード。
-	m_tkmFile.Load(filepath);
+	m_tkmFile = EngineObj().GetModelDataManager().LoadTkm(filepath);
 	//ネーム。
 	strcat(m_name, filepath);
 
@@ -31,7 +31,7 @@ void Model::InitModel(const char* filepath)
 
 	//メッシュパーツを初期化していく。
 	m_meshParts.InitFromTkmFile(
-		m_tkmFile,
+		*m_tkmFile,
 		m_expandConstantBuffer,
 		m_expandConstantBufferSize,
 		m_expandShaderResoruceView,

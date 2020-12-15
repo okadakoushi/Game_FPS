@@ -58,6 +58,8 @@ public:
 	virtual void OnDestroy() {};
 	/// <summary>
 	/// フォワードレンダリング。
+	/// <para>半透明オブジェクトを描画する際に使用してください。</para>
+	/// <para>todo:奥からオブジェクトを書くようにソートする？</para>
 	/// </summary>
 	virtual void ForwardRender() {};
 	/// <summary>

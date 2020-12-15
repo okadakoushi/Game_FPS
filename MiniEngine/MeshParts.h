@@ -32,6 +32,8 @@ public:
 	/// デストラクタ。
 	/// </summary>
 	~MeshParts();
+
+	void Release();
 	/// <summary>
 	/// tkmファイルから初期化
 	/// </summary>

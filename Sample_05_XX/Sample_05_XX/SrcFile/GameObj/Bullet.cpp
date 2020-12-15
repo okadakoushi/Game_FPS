@@ -9,13 +9,10 @@ void Bullet::OnDestroy()
 
 bool Bullet::Start()
 {
-    //見つける。todo:FindGO使いたくないなぁ。
-    m_player = FindGO<GamePlayer>("Player");
-    m_pos = m_player->GetPos();
     //NewGO時の長さ計算しとく。
     m_LengthOnNew = m_pos.Length();
     m_render = NewGO<SkinModelRender>(EnPriority_3DRender);
-    m_render->Init("Assets/modelData/levelTkm/box.tkm");
+    m_render->Init("Assets/modelData/chara/bullet_7mm.tkm");
     //ベクトルを取得。
     m_toTarget = GraphicsEngineObj()->GetCamera3D().GetCameraToTaget();
     m_toTarget.Normalize();

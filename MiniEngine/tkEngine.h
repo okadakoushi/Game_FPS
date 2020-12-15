@@ -1,6 +1,7 @@
 #pragma once
 
 #include "HID/GamePad.h"
+#include "SrcFile/ModelDataManager.h"
 
 class GraphicsEngine;
 class Camera;
@@ -48,8 +49,17 @@ public:
 	{
 		return m_graphicsEngine;
 	}
+	/// <summary>
+	/// モデルデーターマネージャーを取得。
+	/// </summary>
+	/// <returns></returns>
+	ModelDataManager& GetModelDataManager() 
+	{
+		return m_modelDataManager;
+	}
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
+	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 };
 

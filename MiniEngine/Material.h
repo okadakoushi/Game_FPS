@@ -1,6 +1,5 @@
 #pragma once
 
-#include "tkFile/TkmFile.h"
 /// <summary>
 /// マテリアル。
 /// </summary>

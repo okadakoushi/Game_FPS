@@ -81,8 +81,9 @@ void GamePlayer::Rotation()
 void GamePlayer::Shot()
 {
 	m_flame++;
-	if (GetAsyncKeyState(VK_SPACE) && m_flame >= 60) {
-		NewGO<Bullet>(EnPriority_3DModel);
+	if (GetAsyncKeyState(VK_SPACE) && m_flame >= 10) {
+		Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
+		bullet->SetPos({ m_pos.x, m_pos.y + 10.0f, m_pos.z});
 		m_flame = 0;
 	}
 }

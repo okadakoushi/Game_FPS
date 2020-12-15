@@ -16,6 +16,6 @@ private:
 	Stage* m_stage = nullptr;		//ステージ。
 	GamePlayer* m_player = nullptr;	//プレイヤー。
 	Level m_level;					//レベル。
-	UIs* m_UIs;						//UI。
+	UIs* m_UIs = nullptr;			//UI。
 };
 

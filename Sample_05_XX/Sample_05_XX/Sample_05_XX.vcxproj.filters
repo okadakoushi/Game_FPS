@@ -170,6 +170,9 @@
     <ClCompile Include="SrcFile\GameObj\Bullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="SrcFile\ModelDataManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -331,8 +334,12 @@
     <ClInclude Include="SrcFile\GameObj\Bullet.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="SrcFile\ModelDataManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\sprite\white_hip.png" />
+    <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
   </ItemGroup>
 </Project>
