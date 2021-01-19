@@ -6,6 +6,9 @@
 
 Level::~Level()
 {
+	for (auto& mapChipRender : m_mapChipRenderPtrs) {
+		mapChipRender.second->Release();
+	}
 }
 
 void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)> hookFunc)

@@ -79,7 +79,7 @@ void Material::InitPipelineState()
 	//RTV//
 	psoDesc.NumRenderTargets = Gbuffer_Num;
 	psoDesc.RTVFormats[GBuffer_albed] = DXGI_FORMAT_R8G8B8A8_UNORM;				//アルベドカラー出力用。
-	psoDesc.RTVFormats[GBuffer_normal] = DXGI_FORMAT_R16G16B16A16_UNORM;		//法線出力用。	
+	psoDesc.RTVFormats[GBuffer_normal] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//法線出力用。	
 	psoDesc.RTVFormats[GBuffer_spec] = DXGI_FORMAT_R32_FLOAT;					//スペキュラ出力用。
 	psoDesc.RTVFormats[GBuffer_worldPos] = DXGI_FORMAT_R32G32B32A32_FLOAT;		//ワールド座標出力
 	psoDesc.RTVFormats[GBuffer_Shadow] = DXGI_FORMAT_R32_FLOAT;					//シャドウ出力用。

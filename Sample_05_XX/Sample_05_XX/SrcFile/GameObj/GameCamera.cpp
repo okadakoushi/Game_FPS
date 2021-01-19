@@ -33,7 +33,6 @@ void GameCamera::MoveCameraOnFPS()
 {
 	//視点。
 	Vector3 pos = m_playerPos;
-	pos.y += 93.0f;
 	//古い。
 	Vector3 totPosOld = m_toPos;
 	//入力に応じて回す。
@@ -70,6 +69,8 @@ void GameCamera::MoveCameraOnFPS()
 
 	//視点を計算。
 	Vector3 target = pos + m_toPos;
+	//todo:反動。
+
 
 	//メインカメラに設定。
 	GraphicsEngineObj()->GetCamera3D().SetTarget(target);

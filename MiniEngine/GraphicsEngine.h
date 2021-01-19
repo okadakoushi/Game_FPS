@@ -285,5 +285,22 @@ private:
 	GBufferRender m_GBuffer;			//GBuffer。
 	Sprite m_defferdSpr;				//ディファード描画用スプライト。
 	SpriteInitData m_spriteData;
+#ifdef MODE_DEBUG
+	ID3D12Debug* m_d3dDebug = NULL;		//DX12デバッグレイヤー。
+	/// <summary>
+	/// デバッグレイヤー作成。
+	/// </summary>
+	bool CreateDebug()
+	{
+		auto hr = m_d3dDevice->QueryInterface(__uuidof(ID3D12Debug), reinterpret_cast<void**>(&m_d3dDebug));
+		if (FAILED(hr))
+		{
+			//失敗。
+			return false;
+		}
+		//成功。
+		return true;
+	};
+#endif
 };
 extern Light g_light;						//ライト。

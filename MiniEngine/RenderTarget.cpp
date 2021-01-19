@@ -9,7 +9,7 @@ bool RenderTarget::Create(
 	int arraySize,
 	DXGI_FORMAT colorFormat,
 	DXGI_FORMAT depthStencilFormat,
-	float clearColor[4]
+	const float clearColor[4]
 )
 {
 	auto d3dDevice = EngineObj().GetGraphicsEngine()->GetD3DDevice();
@@ -78,7 +78,7 @@ bool RenderTarget::CreateRenderTargetTexture(
 	int mipLevel,
 	int arraySize,
 	DXGI_FORMAT format,
-	float clearColor[4]
+	const float clearColor[4]
 )
 {
 	CD3DX12_RESOURCE_DESC desc(
@@ -98,10 +98,10 @@ bool RenderTarget::CreateRenderTargetTexture(
 	D3D12_CLEAR_VALUE clearValue;
 	clearValue.Format = format;
 	if (clearColor != nullptr) {
-		clearValue.Color[0] = clearColor[0];
-		clearValue.Color[1] = clearColor[1];
-		clearValue.Color[2] = clearColor[2];
-		clearValue.Color[3] = clearColor[3];
+		m_rtvClearColor[0] = clearValue.Color[0] = clearColor[0];
+		m_rtvClearColor[1] = clearValue.Color[1] = clearColor[1];
+		m_rtvClearColor[2] = clearValue.Color[2] = clearColor[2];
+		m_rtvClearColor[3] = clearValue.Color[3] = clearColor[3];
 	}
 	else {
 		clearValue.Color[0] = 0.0f;

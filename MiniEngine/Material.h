@@ -82,7 +82,7 @@ private:
 	Texture	m_specularMap;							//スペキュラマップ。
 	ConstantBuffer m_constantBuffer;				//定数バッファ。
 	RootSignature m_rootSignature;					//ルートシグネチャ。
-	PipelineState m_skinModelPipelineState;			//スキンありモデル用のパイプラインステート。
+	PipelineState m_skinModelPipelineState;			//スキンありモデル用のパイプラインステート。(Not半透明。)
 	PipelineState m_transSkinModelPipelineState;	//スキンありモデル用のパイプラインステート(半透明マテリアル)。
 	PipelineState m_transNonSkinModelPipelineState;	//スキンなしモデル用のパイプラインステート(半透明マテリアル)。
 	PipelineState m_NonSkinShadowMapDraw;			//スキンなしモデル用のシャドウ描画パイプラインステート。

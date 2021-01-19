@@ -7,6 +7,11 @@ Texture::Texture(const wchar_t* filePath)
 }
 Texture::~Texture()
 {
+	Release();
+}
+
+void Texture::Release()
+{
 	if (m_texture) {
 		m_texture->Release();
 	}

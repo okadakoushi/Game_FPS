@@ -127,6 +127,13 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 		MessageBox(hwnd, TEXT("GPUと同期をとるためのオブジェクトの作成に失敗しました。"), TEXT("エラー"), MB_OK);
 		return false;
 	}
+#ifdef MODE_DEBUG
+	if (!CreateDebug()) {
+		MessageBox(hwnd, TEXT("デバッグレイヤーの作成に失敗。"), TEXT("エラー。"), MB_OK);
+	}
+#endif 
+
+
 	
 	//レンダリングコンテキストの作成。
 	m_renderContext.Init(m_commandList);
@@ -163,15 +170,20 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ライトの設定。
-	g_light.directionalLight[0].color = { 1.0f, 1.0f, 1.0f, 0.0f };
-	g_light.directionalLight[0].direction = { 0.0f, 0.0f, -1.0f };
+	g_light.directionalLight[0].color = { 5.8f, 5.8f, 5.8f, 1.0f };
+	g_light.directionalLight[0].direction = { 1.0f, -1.0f, -1.0f};
+	g_light.directionalLight[0].direction.Normalize();
 
-	g_light.directionalLight[1].color = { 1.0f, 1.0f, 1.0f, 0.0f };
-	g_light.directionalLight[1].direction = { 0.0f, 0.0f, 1.0f };
+	g_light.directionalLight[1].color = { 0.5f, 0.5f, 0.5f, 1.0f };
+	g_light.directionalLight[1].direction = { 1.0f, 1.0f, -1.0f };
+	g_light.directionalLight[1].direction.Normalize();
 
-	g_light.directionalLight[2].color = { 1.0f, 1.0f, 1.0f, 0.0f };
-	g_light.directionalLight[2].direction = { 0.0f, -1.0f, 0.0f };
-
+	g_light.directionalLight[2].color = { 0.2f, 0.2f, 0.2f, 1.0f };
+	g_light.directionalLight[2].direction = { 0.0f, 0.0f, -1.0f };
+	
+	g_light.directionalLight[3].color = { 0.1f, 0.1f, 0.1f, 1.0f };
+	g_light.directionalLight[3].direction = { 1.0f, -1.0f, 1.0f };
+	g_light.directionalLight[3].direction.Normalize();
 	//環境光。
 	g_light.ambinetLight = { 0.5f, 0.5f, 0.5f };
 
@@ -186,7 +198,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_spriteData.m_width = FRAME_BUFFER_W;
 	m_spriteData.m_height = FRAME_BUFFER_H;
 	//使用するテクスチャ。 とりまアルベドのみ。
-	//m_spriteData.m_textures[0] = &GraphicsEngineObj()->GetGBuffer().GetTexture(GBuffer_albed);
+	m_spriteData.m_textures[0] = &GraphicsEngineObj()->GetGBuffer().GetTexture(GBuffer_albed);
 	for (int i = 0; i < Gbuffer_Num; i++) {
 		//Gbufferの数だけ初期化。todo:static_cast
 		m_spriteData.m_textures[i] = &GraphicsEngineObj()->GetGBuffer().GetTexture((EnGBuffer)i);
@@ -470,11 +482,11 @@ void GraphicsEngine::BeginRender()
 	//レンダリングターゲットを設定。
 	m_renderContext.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 
-	const float clearColor[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	m_renderContext.ClearRenderTargetView(m_currentFrameBufferRTVHandle, clearColor);
+	m_renderContext.ClearRenderTargetView(m_currentFrameBufferRTVHandle, CLEARCOLOR);
 	m_renderContext.ClearDepthStencilView(m_currentFrameBufferDSVHandle, 1.0f);
 
 }
+
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);

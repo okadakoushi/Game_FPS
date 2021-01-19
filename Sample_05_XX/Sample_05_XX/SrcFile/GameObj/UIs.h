@@ -11,7 +11,10 @@ public:
 	/// 初期化。
 	/// </summary>
 	bool Start() override;
+
+	void Update();
+	void RenderHUD() override;
 private:
-	SpriteRender* m_testSprite = nullptr;	//テストレンダー。
+	Sprite m_reticle;
 };
 

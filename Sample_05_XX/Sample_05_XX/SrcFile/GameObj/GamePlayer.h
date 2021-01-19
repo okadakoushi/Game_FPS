@@ -8,7 +8,7 @@ class GameCamera;
 class GamePlayer : public IGameObject
 {
 public:
-	~GamePlayer();
+	void OnDestroy() override;
 	/// <summary>
 	/// スタート。
 	/// </summary>
@@ -45,6 +45,7 @@ private:
 		EnPlayerState_Idle,		//何もない。
 		EnPlayerState_Walk,		//歩く。
 		EnPlayerState_Run,		//走る。
+		EnPlayerState_Buck,		//後退。
 		EnPlayerState_Shot,		//射撃
 		EnPlayerState_Reload,	//リロード。
 		EnPlayerState_Deth,		//死亡。
@@ -52,10 +53,13 @@ private:
 	};
 	EnPlayerState m_playerState = EnPlayerState_Idle;
 	SkinModelRender* m_unityChan = nullptr;		//ユニティーちゃん。
+	SpriteRender* m_reticle = nullptr;			//レティクル。
 	Vector3 m_pos = g_vec3Zero;					//位置。
+	Vector3 m_cameraPos = g_vec3Zero;			//カメラの位置。
 	Quaternion m_rot = g_quatIdentity;			//回転。
 	GameCamera* m_camera = nullptr;				//ゲームカメラ。
 	float m_speed = 1.0f;						//移動速度。
+	const float fixYToEyePos = 93.0f;					//視点座標に変えるY軸修正。
 	int m_flame = 0;
 };
 

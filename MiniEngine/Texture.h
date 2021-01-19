@@ -11,7 +11,8 @@ public:
 	/// デストラクタ。
 	/// </summary>
 	~Texture();
-
+	
+	void Release();
 	/// <summary>
 	/// ファイルからテクスチャをロードするコンストラクタ
 	/// </summary>

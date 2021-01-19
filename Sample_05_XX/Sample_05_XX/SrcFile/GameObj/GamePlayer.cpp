@@ -3,10 +3,11 @@
 #include "GameCamera.h"
 #include "Bullet.h"
 
-GamePlayer::~GamePlayer()
+void GamePlayer::OnDestroy()
 {
-	DeleteGO(m_unityChan);
+	DeleteGO(m_reticle);
 	DeleteGO(m_camera);
+	DeleteGO(m_unityChan);
 }
 
 bool GamePlayer::Start()
@@ -16,12 +17,15 @@ bool GamePlayer::Start()
 	const char* tkaFilePaths[] = {
 		"Assets/animData/soldier/idle.tka",
 		"Assets/animData/soldier/walk.tka",
-		"Assets/animData/soldier/run.tka"
+		"Assets/animData/soldier/run.tka",
+		"Assets/animData/soldier/buck.tka",
+		"Assets/animData/soldier/singleShot.tka"
 	};
 	m_unityChan->Init("Assets/modelData/Chara/soldier_green.tkm", tkaFilePaths);
 	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
 	m_unityChan->SetShadwoCaster(true);
+	m_unityChan->SetShadowReciever(true);
 	//スキン描画。
 	m_unityChan->SetRenderMode(enRenderMode_Skin);
 	//位置初期化。
@@ -30,6 +34,17 @@ bool GamePlayer::Start()
 	//GameCameraインスタンス化。
 	m_camera = NewGO<GameCamera>(EnPriority_3DModel, "GameCamera");
 	m_camera->SetCameraType(true);
+
+	//レティクル初期化。
+	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
+	SpriteInitData testInitData;
+	//ddsファイル初期化。
+	testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
+	testInitData.m_width = 100.0f;
+	testInitData.m_height = 100.0f;
+	testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+	m_reticle->Init(testInitData);
+	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
 
 	return true;
 }
@@ -42,6 +57,7 @@ void GamePlayer::Update()
 		Move();
 		//射撃。
 		Shot();
+
 	}
 
 	switch (m_playerState)
@@ -53,9 +69,13 @@ void GamePlayer::Update()
 		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Run:
-		m_unityChan->PlayAnimation(EnPlayerState_Run, 1.0f);
+		m_unityChan->PlayAnimation(EnPlayerState_Run, 0.5f);
+		break;
+	case EnPlayerState_Buck:
+		m_unityChan->PlayAnimation(EnPlayerState_Buck, 0.5f);
 		break;
 	case EnPlayerState_Shot:
+		m_unityChan->PlayAnimation(EnPlayerState_Shot, 0.2f);
 		break;
 	case EnPlayerState_Reload:
 		break;
@@ -65,8 +85,9 @@ void GamePlayer::Update()
 		break;
 	}
 	m_unityChan->SetPosition(m_pos);
+	m_cameraPos = { m_pos.x, m_pos.y + fixYToEyePos, m_pos.z };
 	//カメラの位置も更新。
-	m_camera->SetEyePos(m_pos);
+	m_camera->SetEyePos(m_cameraPos);
 
 }
 
@@ -81,10 +102,14 @@ void GamePlayer::Rotation()
 void GamePlayer::Shot()
 {
 	m_flame++;
-	if (GetAsyncKeyState(VK_SPACE) && m_flame >= 10) {
-		Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
-		bullet->SetPos({ m_pos.x, m_pos.y + 10.0f, m_pos.z});
-		m_flame = 0;
+	if (GetAsyncKeyState(VK_SPACE)) {
+		if (m_flame >= 20) {
+			Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
+			bullet->SetPos({ m_pos.x, m_pos.y + fixYToEyePos, m_pos.z });
+			bullet->SetRot(m_rot);
+			m_flame = 0;
+		}
+		m_playerState = EnPlayerState_Shot;
 	}
 }
 
@@ -107,6 +132,7 @@ void GamePlayer::Move()
 		move += camForward * m_speed;
 	}
 	if (GetAsyncKeyState('S')) {
+		m_playerState = EnPlayerState_Buck;
 		move -= camForward * m_speed;
 	}
 	if (GetAsyncKeyState('D')) {
@@ -116,11 +142,12 @@ void GamePlayer::Move()
 		move -= camRight * m_speed;
 	}
 
-	if (GetAsyncKeyState(VK_SHIFT)) {
+	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
+		//射撃、後退時はダメー。
 		move *= 3.0f;
 	}
 
-	if (move.Length() >= 0.5f) {
+	if (move.Length() >= 0.5f && m_playerState != EnPlayerState_Buck) {
 		m_playerState = EnPlayerState_Walk;
 	}
 	if (move.Length() >= 2.0f) {

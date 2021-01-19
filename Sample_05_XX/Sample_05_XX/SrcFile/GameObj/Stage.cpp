@@ -3,7 +3,7 @@
 
 Stage::~Stage()
 {
-	DeleteGO(m_bg);
+	//DeleteGO(m_bg);
 }
 
 bool Stage::Start()

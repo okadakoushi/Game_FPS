@@ -6,9 +6,10 @@ SpriteRender::~SpriteRender()
 {
 }
 
-void SpriteRender::Init(const SpriteInitData& spriteData)
+void SpriteRender::Init(const SpriteInitData& spriteData, bool isDraw3D)
 {
 	m_sprite.Init(spriteData);
+	m_isDraw3D = isDraw3D;
 	m_isInited = true;
 }
 
@@ -22,7 +23,17 @@ void SpriteRender::Update()
 	m_sprite.Update(m_pos, m_rot, m_scale, m_pivot);
 }
 
+
+void SpriteRender::ForwardRender()
+{
+	if (m_isDraw3D == true) {
+		m_sprite.Draw(GraphicsEngineObj()->GetRenderContext());
+	}
+}
+
 void SpriteRender::RenderHUD()
 {
-	m_sprite.Draw(GraphicsEngineObj()->GetRenderContext());
+	if (m_isDraw3D == false) {
+		m_sprite.Draw(GraphicsEngineObj()->GetRenderContext());
+	}
 }

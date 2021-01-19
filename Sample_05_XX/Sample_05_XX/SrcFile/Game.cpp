@@ -14,6 +14,8 @@ Game::Game()
 Game::~Game()
 {
 	DeleteGO(m_stage);
+	//DeleteGO(m_UIs);
+	//最後に消すこと。
 	DeleteGO(m_player);
 }
 
@@ -23,8 +25,8 @@ bool Game::Start()
 	m_stage = NewGO<Stage>(EnPriority_3DModel, "bg");
 	//GamePlayer。
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
-	//UIs。
-	m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
+	//UIs。unityとかもCanvasとかあるしあった方がいいのだろうか。。
+	//m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
 	
 	return true;
 

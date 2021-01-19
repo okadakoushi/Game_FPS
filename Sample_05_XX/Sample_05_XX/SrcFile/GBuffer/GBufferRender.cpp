@@ -8,23 +8,21 @@ GBufferRender::~GBufferRender()
 void GBufferRender::Init()
 {
 	//GBufferの初期化。
-	//クリアカラー。
-	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 0.5f };
 	//アルベド用RTを作成。
 	m_GBuffers[GBuffer_albed].Create(
 		FRAME_BUFFER_W, FRAME_BUFFER_H,
 		1, 1,
 		DXGI_FORMAT_R8G8B8A8_UNORM,
 		DXGI_FORMAT_D32_FLOAT,
-		clearColor
+		CLEARCOLOR
 	);
 	//法線用RTを作成。
 	m_GBuffers[GBuffer_normal].Create(
 		FRAME_BUFFER_W, FRAME_BUFFER_H,
 		1, 1,
-		DXGI_FORMAT_R16G16B16A16_UNORM,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
 		DXGI_FORMAT_UNKNOWN,
-		clearColor
+		CLEARCOLOR
 	);
 	//スペキュラ用RTを作成。
 	m_GBuffers[GBuffer_spec].Create(
@@ -32,7 +30,7 @@ void GBufferRender::Init()
 		1, 1,
 		DXGI_FORMAT_R32_FLOAT,			//αしかとらないので。
 		DXGI_FORMAT_UNKNOWN,
-		clearColor
+		CLEARCOLOR
 	);
 	//ワールド座標用RT作成。
 	m_GBuffers[GBuffer_worldPos].Create(
@@ -40,7 +38,7 @@ void GBufferRender::Init()
 		1, 1,
 		DXGI_FORMAT_R32G32B32A32_FLOAT,	//細かい値を保存。
 		DXGI_FORMAT_UNKNOWN,
-		clearColor
+		CLEARCOLOR
 	);
 	//シャドウ用RT作成。
 	m_GBuffers[GBuffer_Shadow].Create(
@@ -48,7 +46,7 @@ void GBufferRender::Init()
 		1, 1,
 		DXGI_FORMAT_R32_FLOAT,			//深度値しかとらない。
 		DXGI_FORMAT_UNKNOWN,
-		clearColor
+		CLEARCOLOR
 	);
 }
 

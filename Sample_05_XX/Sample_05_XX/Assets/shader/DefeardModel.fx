@@ -49,18 +49,18 @@ struct SVSInNonSkin {
 //ピクセルシェーダーへの入力。
 struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
-	float3 normal		: NORMAL;		//法線。
-	float3 Tangent		: TANGENT;		//正接線。
-	float3 BiNormal		: BINORMAL;		//従法線。
+	float4 normal		: NORMAL;		//法線。
+	float4 Tangent		: TANGENT;		//正接線。
+	float4 BiNormal		: BINORMAL;		//従法線。
 	float2 uv 			: TEXCOORD0;	//uv座標。
-	float3 worldPos		: TEXCOORD1;	//ワールド座標。
+	float4 worldPos		: TEXCOORD1;	//ワールド座標。
 	float4 posInView	: TEXCOORD2;	//ビュー座標。
 };
 //ピクセルシェーダー出力。
 struct SPSOut{
 	float4 albedo		: SV_Target0;	//アルベド。
-	float3 worldPos		: SV_Target3;	//ワールド座標。
-	float3 normal		: SV_Target1;	//法線。
+	float4 worldPos		: SV_Target3;	//ワールド座標。
+	float4 normal		: SV_Target1;	//法線。
 	float spec			: SV_Target2;	//スペキュラ反射。
 	float Shadow		: SV_Target4;	//Z値。
 };
@@ -188,12 +188,12 @@ float CalcShadow(float3 wp, float zInView)
 	return Shadow;
 }
 
-float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
+float4 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
 {
-    float3 binSpaceNormal = g_normalMap.SampleLevel ( g_sampler, uv, 0.0f).xyz;
+	float4 binSpaceNormal = g_normalMap.SampleLevel(g_sampler, uv, 0.0f);
     binSpaceNormal = (binSpaceNormal * 2.0f) - 1.0f;
     
-	float3 newNormal = tangent * binSpaceNormal.x + biNormal * binSpaceNormal.y + normal * binSpaceNormal.z; 
+	float4 newNormal = float4(tangent * binSpaceNormal.x + biNormal * binSpaceNormal.y + normal * binSpaceNormal.z, 0.0f); 
 
     return newNormal;
 }
@@ -219,6 +219,9 @@ SPSOut PSMain(SPSIn psIn)
 	//スペキュラ出力。
 	if (hasSpecularMap) {
 		psOut.spec = g_specularMap.Sample(g_sampler, psIn.uv);	
+	}
+	else {
+		psOut.spec = 0;
 	}
 	if (mShadowReciever) {
 		//シャドウ出力。

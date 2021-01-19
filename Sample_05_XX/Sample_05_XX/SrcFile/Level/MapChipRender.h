@@ -13,7 +13,7 @@ public:
 	/// <summary>
 	/// デストロイ。
 	/// </summary>
-	void OnDestroy() override;
+	void Release();
 	/// <summary>
 	/// 更新。
 	/// </summary>

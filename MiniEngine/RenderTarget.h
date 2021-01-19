@@ -5,6 +5,8 @@
 
 class GraphicsEngine;
 
+static float CLEARCOLOR[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 /// <summary>
 /// レンダリングターゲット。
 /// </summary>
@@ -27,7 +29,7 @@ public:
 		int arraySize,
 		DXGI_FORMAT colorFormat,
 		DXGI_FORMAT depthStencilFormat,
-		float clearColor[4] = nullptr
+		const float clearColor[4] = nullptr
 	);
 	/// <summary>
 	/// CPU側のレンダリングターゲットのディスクリプタハンドルを取得。
@@ -140,7 +142,7 @@ private:
 		int mipLevel,
 		int arraySize,
 		DXGI_FORMAT format,
-		float clearColor[4]
+		const float clearColor[4]
 	);
 	/// <summary>
 	/// 深度ステンシルバッファとなるテクスチャを作成。

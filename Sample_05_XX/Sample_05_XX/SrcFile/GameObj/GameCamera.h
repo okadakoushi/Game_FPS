@@ -27,9 +27,16 @@ public:
 	/// 視点の位置を設定。
 	/// </summary>
 	/// <param name="eyePos">視点。</param>
-	void SetEyePos(Vector3& eyePos)
+	void SetEyePos(const Vector3& eyePos)
 	{
 		m_playerPos = eyePos;
+	}
+
+	void AddRecoil(const float& recoil)
+	{
+		if(m_recoil < 10.0f){
+			m_recoil += recoil;
+		}
 	}
 	/// <summary>
 	/// カメラの種類を設定。
@@ -62,7 +69,8 @@ private:
 	GamePlayer* m_player = nullptr;
 	Vector3 m_playerPos = g_vec3Zero;				//プレイヤーの位置。
 	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//視点または、注視点に向かうベクトル。
-	Vector3 m_cameraRot = g_vec3Zero;					//カメラの回転。
+	Vector3 m_cameraRot = g_vec3Zero;				//カメラの回転。
+	float m_recoil = 0.0f;							//反動。
 	bool m_isFPS = true;					//FPSモード。
 	const float HORIZON = 1.0f;			//横のカメラ速度。
 	const float VERTICAL = 1.0f;		//縦のカメラ速度。

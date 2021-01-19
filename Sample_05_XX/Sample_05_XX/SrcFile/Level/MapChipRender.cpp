@@ -11,7 +11,7 @@ MapChipRender::~MapChipRender()
 {
 }
 
-void MapChipRender::OnDestroy()
+void MapChipRender::Release()
 {
 	DeleteGO(m_modelRender);
 }

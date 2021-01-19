@@ -78,7 +78,7 @@ public:
 	/// À•W‚ğİ’èB
 	/// </summary>
 	/// <param name="pos"></param>
-	void SetPosition(Vector3& pos)
+	void SetPosition(const Vector3& pos)
 	{
 		m_pos = pos;
 	}

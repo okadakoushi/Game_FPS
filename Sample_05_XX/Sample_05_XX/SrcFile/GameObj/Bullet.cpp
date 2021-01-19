@@ -13,6 +13,7 @@ bool Bullet::Start()
     m_LengthOnNew = m_pos.Length();
     m_render = NewGO<SkinModelRender>(EnPriority_3DRender);
     m_render->Init("Assets/modelData/chara/bullet_7mm.tkm");
+    m_render->SetShadwoCaster(true);
     //ベクトルを取得。
     m_toTarget = GraphicsEngineObj()->GetCamera3D().GetCameraToTaget();
     m_toTarget.Normalize();
@@ -23,8 +24,9 @@ void Bullet::Update()
 {
     m_pos += m_toTarget * m_speed;
 
-    m_render->SetPosition(m_pos);
-    if (m_pos.Length() - m_LengthOnNew >= 2000.0f) {
+    m_render->SetPosition({m_pos.x, m_pos.y, m_pos.z});
+    m_render->SetRotation(m_rot);
+    if (m_pos.Length() - m_LengthOnNew >= EffectRange) {
         //500以上は飛んだから消す。
         DeleteGO(this);
     }

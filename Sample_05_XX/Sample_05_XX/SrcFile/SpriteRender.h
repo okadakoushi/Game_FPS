@@ -4,6 +4,7 @@ class Sprite;
 
 /// <summary>
 /// スプライトレンダー。
+/// todo:isDraw3Dあるが機能してないから直す。
 /// </summary>
 class SpriteRender : public IGameObject
 {
@@ -11,8 +12,11 @@ public:
 	~SpriteRender();
 	/// <summary>
 	/// 初期化。
+	/// <para>isDraw機能動いてないかも。</para>
 	/// </summary>
-	void Init(const SpriteInitData& spriteData);
+	/// <param name="spriteData">初期化データー。</param>
+	/// <param name="isDraw3D">3D描画する？</param>
+	void Init(const SpriteInitData& spriteData, bool isDraw3D = false);
 	/// <summary>
 	/// スタート。
 	/// </summary>
@@ -22,6 +26,10 @@ public:
 	/// 更新。
 	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 通常描画。
+	/// </summary>
+	void ForwardRender() override;
 	/// <summary>
 	/// HUD描画。
 	/// </summary>
@@ -50,6 +58,14 @@ public:
 	{
 		m_pivot = pivot;
 	}
+	/// <summary>
+	/// 位置取得。
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetPos() const
+	{
+		return m_pos;
+	}
 private:
 	Sprite m_sprite;			//スプライト。
 	bool m_isInited = false;	//一応初期化フラグ。
@@ -57,5 +73,6 @@ private:
 	Quaternion m_rot = g_quatIdentity;		//回転。
 	Vector3 m_scale = g_vec3One;			//拡大。
 	Vector2 m_pivot = Sprite::DEFAULT_PIVOT;//ピボット。
+	bool m_isDraw3D = false;					//3D描画？
 };
 

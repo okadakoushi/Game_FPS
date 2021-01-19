@@ -11,10 +11,6 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 	};
 	//シャドウ番号。
 	int shadowMapNo = 0;
-	//クリアカラー。
-	float clearColor[] = {
-		1.0f, 1.0f, 1.0f, 1.0f
-	};
 	//シャドウマップを作成。
 	for (auto& sm : m_shadowMaps) {
 		sm.Create(
@@ -24,7 +20,7 @@ void DirectionalShadowMap::Init(int w, int h, float lightHeight)
 			1,
 			DXGI_FORMAT_R32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT,
-			clearColor
+			CLEARCOLOR
 		);
 		m_shadowMaps[shadowMapNo].SetName(L"SHADOW MAP");
 		//次のシャドウマップへ。

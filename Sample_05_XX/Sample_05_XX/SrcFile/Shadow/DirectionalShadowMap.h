@@ -118,7 +118,7 @@ private:
 	Matrix m_lightProjMatirx[NUM_SHADOW_MAP];	//ライトプロジェクション行列
 	SShadowCb m_shadowCBEntity;					//シャドウの値。
 	ConstantBuffer m_shadowConstantBuffer;		//シャドウ用定数バッファ。
-	Vector3 m_lightDirection = { -0.5f, -1.0f, -0.5f };	//ライトの方向。
+	Vector3 m_lightDirection = { 0.5f, -1.0f, 0.0f };	//ライトの方向。
 	float m_lightHeight;						//ライトの高さ。
 	bool m_isEnable = false;					//シャドウマップが有効？
 	float m_shadowAreas[NUM_SHADOW_MAP] = { 400.0f,800.0f,1600.0f };		//影の落ちる範囲。
