@@ -2,6 +2,7 @@
 
 #include "HID/GamePad.h"
 #include "SrcFile/ModelDataManager.h"
+#include "SrcFile/Effect/CEffectEngine.h";
 
 class GraphicsEngine;
 class Camera;
@@ -49,6 +50,11 @@ public:
 	{
 		return m_graphicsEngine;
 	}
+
+	CEffectEngine& GetEffectEngine()
+	{
+		return m_effectEngine;
+	}
 	/// <summary>
 	/// モデルデーターマネージャーを取得。
 	/// </summary>
@@ -59,6 +65,7 @@ public:
 	}
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
+	CEffectEngine m_effectEngine;					//エフェクトエンジン。
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 };
@@ -75,6 +82,11 @@ static inline TkEngine& EngineObj()
 static inline GraphicsEngine* GraphicsEngineObj()
 {
 	return EngineObj().GetGraphicsEngine();
+}
+
+static inline CEffectEngine& EffectEngineObj()
+{
+	return EngineObj().GetEffectEngine();
 }
 
 

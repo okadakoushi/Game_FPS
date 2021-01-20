@@ -18,6 +18,8 @@ static enum Priority {
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };
 
+#include "Effekseer.h"
+#include "EffekseerRendererDX12.h"
 //utill
 #include "SrcFile/util/Noncopyable.h"
 //ゲームオブジェクト。
