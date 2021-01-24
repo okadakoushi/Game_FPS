@@ -50,7 +50,10 @@ public:
 	{
 		return m_graphicsEngine;
 	}
-
+	/// <summary>
+	///	エフェクトエンジン取得。
+	/// </summary>
+	/// <returns></returns>
 	CEffectEngine& GetEffectEngine()
 	{
 		return m_effectEngine;

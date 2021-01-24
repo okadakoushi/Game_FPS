@@ -78,7 +78,14 @@ public:
 	{
 		return m_commandQueue;
 	}
-
+	/// <summary>
+	/// コマンドリスト取得。
+	/// </summary>
+	/// <returns></returns>
+	ID3D12GraphicsCommandList* GetCommandList() const
+	{
+		return m_commandList;
+	}
 	/// <summary>
 	/// CBR_SRVのディスクリプタのサイズを取得。
 	/// </summary>

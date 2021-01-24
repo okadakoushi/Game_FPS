@@ -13,25 +13,13 @@ CEffectEngine::~CEffectEngine()
 
 void CEffectEngine::Release()
 {
-	if (m_effekseerRenderer != nullptr) {
-		//インスタンス破棄
-		m_effekseerRenderer->Destroy();
-	}
-	if (m_sfMemoryPoolEfk != nullptr) {
-		m_sfMemoryPoolEfk->Release();
-	}
-	if (m_commandListEfk != nullptr) {
-		m_commandListEfk->Release();
-	}
-	if (m_manager != nullptr) {
-		//インスタンス破棄
-		m_manager->Destroy();
-	}
+	//マネージャーとかはエフェクシア側でスマートポインタとして管理されてるから、
+	//解放しかなくて大丈夫なはず。
 }
 
 void CEffectEngine::Init()
 {
-	auto format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	auto format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	//レンダラーを初期化。
 	m_effekseerRenderer = EffekseerRendererDX12::Create(
 		GraphicsEngineObj()->GetD3DDevice(),			//D3Dデバイス。
@@ -107,13 +95,13 @@ void CEffectEngine::Render()
 	m_effekseerRenderer->EndRendering();
 }
 
-Effekseer::Effect* CEffectEngine::CreateEffect(const wchar_t* filepath)
+Effekseer::EffectRef CEffectEngine::CreateEffect(const wchar_t* filepath)
 {
 	//作成
 	return Effekseer::Effect::Create(m_manager, (const EFK_CHAR*)filepath);
 }
 
-Effekseer::Handle CEffectEngine::Play(Effekseer::Effect* effect)
+Effekseer::Handle CEffectEngine::Play(Effekseer::EffectRef& effect)
 {
 	//EffectのUpdateでワールド座標は計算
 	return m_manager->Play(effect, 0, 0, 0);

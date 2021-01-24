@@ -49,7 +49,7 @@ public:
 	{
 		for (auto& it : m_resourceMap) {
 			//‘S•”‰ð•ú
-			it.second->Release();
+			it.second->Get()->Release();
 		}
 	}
 private:

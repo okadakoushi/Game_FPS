@@ -65,7 +65,7 @@ namespace myEngine {
 		/// </summary>
 		void Update(); //override;
 	private:
-		Effekseer::Effect*				m_effect = nullptr;			//エフェクト
+		Effekseer::EffectRef			m_effect = nullptr;			//エフェクト
 		Effekseer::Handle				m_handle = -1;				//ハンドル
 		Vector3 m_position =			g_vec3Zero;			//座標
 		Quaternion m_rotation =			g_quatIdentity;	//回転

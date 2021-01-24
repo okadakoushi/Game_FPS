@@ -27,6 +27,7 @@ bool Game::Start()
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
 	//UIs。unityとかもCanvasとかあるしあった方がいいのだろうか。。
 	//m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
+	m_effect = NewGO<myEngine::Effect>(0);
 	
 	return true;
 
@@ -37,5 +38,10 @@ void Game::Update()
 	if(GetAsyncKeyState('R')) {
 		//解放テスト用。
 		DeleteGO(this);
+	}
+	if (GetAsyncKeyState('F') && !m_effect->IsPlay()) {
+		m_effect = NewGO<myEngine::Effect>(0);
+		m_effect->SetScale({ 10.0f, 10.0f, 10.0f });
+		m_effect->Play(L"Assets/effect/test.efk");
 	}
 }

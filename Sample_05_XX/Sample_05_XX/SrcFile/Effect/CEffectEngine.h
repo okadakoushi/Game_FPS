@@ -9,7 +9,7 @@
 
 class CEffectEngine : Noncopyable
 {
-	using CEffectResourceManager = TResourceManager<Effekseer::Effect>;
+	using CEffectResourceManager = TResourceManager<Effekseer::EffectRef>;
 public:
 	CEffectEngine();
 	~CEffectEngine();
@@ -34,14 +34,14 @@ public:
 	/// </summary>
 	/// <param name="filepath">エフェクトのファイルパス</param>
 	/// <returns></returns>
-	Effekseer::Effect* CreateEffect(const wchar_t* filepath);
+	Effekseer::EffectRef CreateEffect(const wchar_t* filepath);
 	/// <summary>
 	/// エフェクトの再生。wraper
 	/// <para>EffectのUpdateで座標軸の変換はすること。</para>
 	/// </summary>
 	/// <param name="effet">再生するエフェクト</param>
 	/// <returns>エフェクトのハンドル</returns>
-	Effekseer::Handle Play(Effekseer::Effect* effet);
+	Effekseer::Handle Play(Effekseer::EffectRef& effet);
 	/// <summary>
 	/// エフェクトの再生を停止。
 	/// </summary>
@@ -51,17 +51,17 @@ public:
 	/// エフェクトマネージャ取得。
 	/// </summary>
 	/// <returns></returns>
-	Effekseer::Manager*& GetEffekseerManager()
+	Effekseer::ManagerRef& GetEffekseerManager()
 	{
-		return *&m_manager;
+		return m_manager;
 	}
 	/// <summary>
 	/// エフェクサーのレンダラー取得。
 	/// </summary>
 	/// <returns></returns>
-	EffekseerRenderer::Renderer*& GetEffekseerRenderer()
+	EffekseerRenderer::RendererRef& GetEffekseerRenderer()
 	{
-		return *&m_effekseerRenderer;
+		return m_effekseerRenderer;
 	}
 	/// <summary>
 	/// エフェクトリソースマネージャーの取得。
@@ -72,10 +72,10 @@ public:
 		return m_effectResourceManager;
 	}
 private:
-	EffekseerRenderer::Renderer* m_effekseerRenderer = nullptr;				//エフェクサーレンダー
+	EffekseerRenderer::RendererRef m_effekseerRenderer = nullptr;				//エフェクサーレンダー
 	EffekseerRenderer::SingleFrameMemoryPool* m_sfMemoryPoolEfk = nullptr;	//エフェクシアーメモリプール。
 	EffekseerRenderer::CommandList* m_commandListEfk = nullptr;				//エフェクシアーコマンドリスト。
-	Effekseer::Manager* m_manager = nullptr;								//エフェクトマネジャー
+	Effekseer::ManagerRef m_manager = nullptr;								//エフェクトマネジャー
 	CEffectResourceManager m_effectResourceManager;							//エフェクトリソースマネジャー
 };
 

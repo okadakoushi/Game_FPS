@@ -60,6 +60,8 @@ void GameObjectManager::UpdateManager()
 		GraphicsEngineObj()->GetShadowMap()->Update();
 		//更新。
 		Update();
+		//エフェクトエンジン更新。
+		EngineObj().GetEffectEngine().Update();
 	}
 	/// 描画系処理
 	{
@@ -71,6 +73,8 @@ void GameObjectManager::UpdateManager()
 		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
 		//フォワードレンダリング。
 		ForwardRender();
+		//エフェクト描画処理。todo:PostRender?
+		EngineObj().GetEffectEngine().Render();
 		//HUDに描画。
 		DrawHUD();
 	}

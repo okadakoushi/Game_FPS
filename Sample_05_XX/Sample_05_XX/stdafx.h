@@ -43,6 +43,8 @@ static enum Priority {
 //レベル関連。
 #include "SrcFile/Level/MapChip.h"
 #include "SrcFile/Level/Level.h"
+//エフェクト。
+#include "SrcFile/Effect/Effect.h"
 
 using namespace std;
 

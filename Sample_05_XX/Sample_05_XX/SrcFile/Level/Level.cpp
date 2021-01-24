@@ -2,6 +2,7 @@
 #include "Level.h"
 #include "MapChip.h"
 #include "MapChipRender.h"
+#include "Skeleton.h"
 #include <comdef.h>
 
 Level::~Level()
