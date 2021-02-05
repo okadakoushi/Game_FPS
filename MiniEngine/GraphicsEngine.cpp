@@ -454,7 +454,7 @@ bool GraphicsEngine::CreateSynchronizationWithGPUObject()
 	}
 	return true;
 }
-void GraphicsEngine::BeginRender()
+void GraphicsEngine::BeginRender(bool IsClear)
 {
 	m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
@@ -480,11 +480,11 @@ void GraphicsEngine::BeginRender()
 	m_renderContext.WaitUntilToPossibleSetRenderTarget(m_renderTargets[m_frameIndex]);
 
 	//レンダリングターゲットを設定。
-	m_renderContext.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
-
-	m_renderContext.ClearRenderTargetView(m_currentFrameBufferRTVHandle, CLEARCOLOR);
-	m_renderContext.ClearDepthStencilView(m_currentFrameBufferDSVHandle, 1.0f);
-
+	if (IsClear) {
+		m_renderContext.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
+		m_renderContext.ClearRenderTargetView(m_currentFrameBufferRTVHandle, CLEARCOLOR);
+		m_renderContext.ClearDepthStencilView(m_currentFrameBufferDSVHandle, 1.0f);
+	}
 }
 
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)

@@ -5,7 +5,7 @@
 
 class GraphicsEngine;
 
-static float CLEARCOLOR[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+static float CLEARCOLOR[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 
 /// <summary>
 /// レンダリングターゲット。

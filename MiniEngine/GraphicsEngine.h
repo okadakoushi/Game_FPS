@@ -46,7 +46,7 @@ public:
 	/// <remarks>
 	/// 1フレームのレンダリングの開始時に呼び出してください。
 	/// </remarks>
-	void BeginRender();
+	void BeginRender(bool IsClear = true);
 	/// <summary>
 	/// レンダリング終了。
 	/// </summary>

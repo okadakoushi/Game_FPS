@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\NaviMesh\NaviMesh.cpp" />
     <ClCompile Include="SrcFile\Effect\CEffectEngine.cpp" />
     <ClCompile Include="SrcFile\Effect\Effect.cpp" />
     <ClCompile Include="SrcFile\ModelDataManager.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="SrcFile\Level\TklFile.cpp" />
     <ClCompile Include="SrcFile\GameObj\UIs.cpp" />
+    <ClCompile Include="SrcFile\TestGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -245,6 +247,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\NaviMesh\NaviMesh.h" />
     <ClInclude Include="SrcFile\Effect\CEffectEngine.h" />
     <ClInclude Include="SrcFile\Effect\Effect.h" />
     <ClInclude Include="SrcFile\ModelDataManager.h" />
@@ -272,6 +275,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="SrcFile\Level\TklFile.h" />
     <ClInclude Include="SrcFile\GameObj\UIs.h" />
+    <ClInclude Include="SrcFile\TestGame.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />

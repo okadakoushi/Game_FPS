@@ -93,6 +93,19 @@ public:
 	{
 		return (int)(m_meshParts.size());
 	}
+	/// <summary>
+	/// インデックスバッファーを取得。
+	/// </summary>
+	/// <returns>メッシュパーツ１番目のインデックスバッファー。</returns>
+	const std::vector<TkmFile::SIndexbuffer16>& GetIndexBuffer()  const 
+	{
+		return m_meshParts[0].indexBuffer16Array;
+	}
+
+	const std::vector<TkmFile::SVertex>& GetVertexBuffer() const
+	{
+		return m_meshParts[0].vertexBuffer;
+	}
 private:
 	/// <summary>
 	/// テクスチャ名をロード。

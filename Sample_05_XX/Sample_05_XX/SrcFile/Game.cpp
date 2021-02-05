@@ -4,9 +4,6 @@
 #include "GameObj/GamePlayer.h"
 #include "GameObj/UIs.h"
 
-//#define Mode_Game;
-//#define Mode_Test;
-
 Game::Game()
 {
 }
@@ -28,6 +25,9 @@ bool Game::Start()
 	//UIsBunity‚Æ‚©‚àCanvas‚Æ‚©‚ ‚é‚µ‚ ‚Á‚½•û‚ª‚¢‚¢‚Ì‚¾‚ë‚¤‚©BB
 	//m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
 	m_effect = NewGO<myEngine::Effect>(0);
+
+	//NavTest
+	
 	
 	return true;
 

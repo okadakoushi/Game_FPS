@@ -4,9 +4,19 @@ static const float PI = 3.14159265358979323846;
 
 float SchlickFresnel(float u, float f0, float f90)
 {
+	//フリネルベース用のコード。
+	//視点の位置によって明るさが変わるようになる。
 	return f0 + (f90 + f0) * pow(1.0f - u, 5.0f);
 }
 
+/*
+	正規化ディズニー拡散反射を求めていく。
+	param1 法線。
+	param2 ライトの位置。
+	param3 視点の位置。
+	param4 粗さ。
+	return 正規化済みディズニー拡散反射。
+*/
 float NormalizedDisneyDiffuse(float3 N, float3 L, float3 V, float roughness)
 {
 	float3 H = normalize(L + V);
@@ -14,7 +24,10 @@ float NormalizedDisneyDiffuse(float3 N, float3 L, float3 V, float roughness)
 	float energyBias = lerp(0.0f, 0.5f, roughness);
 
 	float dotLH = saturate(dot(L, H));
+	//法線とライトの内積。
+		//法線とライトが近ければ近いほど強く屈折光が乱反射するため、拡散反射光が大きくなる。
 	float dotNL = saturate(dot(N, L));
+	//法線と視点の内積。
 	float dotNV = saturate(dot(N, V));
 
 	float Fd90 = energyBias + 2.0f * dotLH * dotLH * roughness;
@@ -24,6 +37,10 @@ float NormalizedDisneyDiffuse(float3 N, float3 L, float3 V, float roughness)
 	return max( 0.2f, (FL * FV) / PI );
 }
 
+/*
+	サーフェイスの凹凸に応じて、
+	鏡面反射の分散具合を求める。
+*/
 float Beckmann(float m, float t)
 {
 	float t2 = t * t;

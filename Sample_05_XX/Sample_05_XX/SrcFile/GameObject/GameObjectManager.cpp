@@ -66,17 +66,17 @@ void GameObjectManager::UpdateManager()
 	/// 描画系処理
 	{
 		//Shadowの描画。 todo:PreRender
-		GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
+		//GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
 		//GBufferレンダリング。todo:PreRender
-		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
+		//GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
 		//GBufferを基にディファードレンダリング。
-		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
+		//GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
 		//フォワードレンダリング。
-		ForwardRender();
+		//ForwardRender();
 		//エフェクト描画処理。todo:PostRender?
-		EngineObj().GetEffectEngine().Render();
+		//EngineObj().GetEffectEngine().Render();
 		//HUDに描画。
-		DrawHUD();
+		//DrawHUD();
 	}
 	//削除
 	ExcuteDeleteGameObject();
