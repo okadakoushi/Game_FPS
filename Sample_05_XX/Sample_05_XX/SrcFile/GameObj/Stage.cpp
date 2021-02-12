@@ -15,7 +15,7 @@ bool Stage::Start()
 	////シャドウレシーバー。
 	//m_bg->SetShadowReciever(true);
 
-	m_level.Init("Assets/level/StageLevel.tkl", [&](LevelObjectData& objData) {
+	m_level.Init("Assets/level/GameStage.tkl", [&](LevelObjectData& objData) {
 		return false;
 	});
 

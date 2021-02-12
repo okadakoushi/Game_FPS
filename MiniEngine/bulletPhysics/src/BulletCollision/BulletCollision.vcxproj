@@ -321,7 +321,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Preview|Win32'">BulletCollision.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">BulletCollision</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Preview|Win32'">BulletCollision</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">BulletCollision</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">BulletCollision_Debug</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">BulletCollision</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Preview|Win32'">.lib</TargetExt>
@@ -348,7 +348,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(ProjectDir)../;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)\..\tkEngine\exlib\x64\</OutDir>
+    <OutDir>Bin\Desktop_2019_Win10\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>

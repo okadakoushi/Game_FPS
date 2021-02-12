@@ -19,15 +19,13 @@ bool TestGame::Start()
 void TestGame::Update()
 {
 	auto qRot = g_quatIdentity;
-
 	//ƒJƒƒ‰‚à‰ñ‚·B
 	qRot.SetRotationDegY(g_pad[0]->GetRStickXF());
 	auto camPos = GraphicsEngineObj()->GetCamera3D().GetPosition();
-	//qRot.Apply(camPos);
+	qRot.Apply(camPos);
 	auto camTarget = GraphicsEngineObj()->GetCamera3D().GetTarget();
 
-	camPos.z += g_pad[0]->GetLStickYF();
-	camPos.x += g_pad[0]->GetLStickXF();
+	camPos.z += g_pad[0]->GetLStickYF() * 5;
 	if (GetAsyncKeyState(VK_SHIFT)) {
 		camPos.y--;
 	}
@@ -35,7 +33,6 @@ void TestGame::Update()
 		camPos.y++;
 	}
 	camTarget.y = camPos.y;
-	camTarget.x = camPos.x;
 	GraphicsEngineObj()->GetCamera3D().SetPosition(camPos);
 	GraphicsEngineObj()->GetCamera3D().SetTarget(camTarget);
 	//•`‰æB

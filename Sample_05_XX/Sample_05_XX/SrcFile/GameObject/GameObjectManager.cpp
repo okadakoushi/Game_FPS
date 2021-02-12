@@ -65,17 +65,17 @@ void GameObjectManager::UpdateManager()
 	}
 	/// 描画系処理
 	{
-		//Shadowの描画。 todo:PreRender
+		////Shadowの描画。 todo:PreRender
 		//GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
-		//GBufferレンダリング。todo:PreRender
+		////GBufferレンダリング。todo:PreRender
 		//GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
-		//GBufferを基にディファードレンダリング。
+		////GBufferを基にディファードレンダリング。
 		//GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
-		//フォワードレンダリング。
+		////フォワードレンダリング。
 		//ForwardRender();
-		//エフェクト描画処理。todo:PostRender?
+		////エフェクト描画処理。todo:PostRender?
 		//EngineObj().GetEffectEngine().Render();
-		//HUDに描画。
+		////HUDに描画。
 		//DrawHUD();
 	}
 	//削除

@@ -66,30 +66,30 @@ void NaviMesh::InitRender(bool isFill)
 	m_indexBuffer.Init(sizeof(m_indexs[0]) * m_indexs.size(), sizeof(m_indexs[0]));
 	m_indexBuffer.Copy(&m_indexs[0]);
 	
-	////背景用頂点バッファー初期化。背景は四角形なので４頂点しかいらない。
-	Vector3 v[6]{
-		//左下の頂点。
-		{m_vMin.x, m_vMin.y, 0.0f},
-		//左上の頂点。
-		{m_vMin.x, m_vMax.y, 0.0f},
-		//右上の頂点。
-		{m_vMax.x, m_vMax.y, 0.0f},
-		//右上の頂点。
-		{m_vMax.x, m_vMax.y, 0.0f},
-		//右下の頂点。
-		{m_vMax.x, m_vMin.y, 0.0f},
-		//左下の頂点。
-		{m_vMin.x, m_vMin.y, 0.0f},
-	};
-	//初期化。
-	m_vertexBuck.Init(sizeof(v), sizeof(v[0]));
-	m_vertexBuck.Copy(&v[0]);
-	//背景用インデックス。
-	int index[6]{
-		0,1,2,3,4,5
-	};
-	m_indexBuck.Init(sizeof(index), sizeof(index[0]));
-	m_indexBuck.Copy(&index[0]);
+	//////背景用頂点バッファー初期化。背景は四角形なので４頂点しかいらない。
+	//Vector3 v[6]{
+	//	//左下の頂点。
+	//	{m_vMin.x, m_vMin.y, 0.0f},
+	//	//左上の頂点。
+	//	{m_vMin.x, m_vMax.y, 0.0f},
+	//	//右上の頂点。
+	//	{m_vMax.x, m_vMax.y, 0.0f},
+	//	//右上の頂点。
+	//	{m_vMax.x, m_vMax.y, 0.0f},
+	//	//右下の頂点。
+	//	{m_vMax.x, m_vMin.y, 0.0f},
+	//	//左下の頂点。
+	//	{m_vMin.x, m_vMin.y, 0.0f},
+	//};
+	////初期化。
+	//m_vertexBuck.Init(sizeof(v), sizeof(v[0]));
+	//m_vertexBuck.Copy(&v[0]);
+	////背景用インデックス。
+	//int index[6]{
+	//	0,1,2,3,4,5
+	//};
+	//m_indexBuck.Init(sizeof(index), sizeof(index[0]));
+	//m_indexBuck.Copy(&index[0]);
 	
 	//定数バッファ初期化。
 	m_CB.Init(sizeof(SConstantBuffer), nullptr);

@@ -53,6 +53,7 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 			std::swap(objData.scale.y, objData.scale.z);
 			//パラメーター。
 			objData.name = bone->GetName();
+			objData.No = i;
 			//objData.isShadowCaster = Params.at(i).isShadowCaster;
 			//objData.isShadowReceiver = Params.at(i).isShadowReceiver;
 
@@ -87,18 +88,19 @@ MapChipRender* Level::CteateMapChipRenderOrAddRenderObject(const LevelObjectData
 	//すでに登録されているオブジェクトかを検索。
 	auto itFind = m_mapChipRenderPtrs.find(nameKey.GetHashCode());
 	MapChipRender* pMapChipRender = nullptr;
-	if (itFind == m_mapChipRenderPtrs.end()) {
+	//todo:インスタンシング実装する場合は、インスタンシング用のコードを書く。
+	//if (itFind == m_mapChipRenderPtrs.end()) {
 		//登録されてない。
 		auto mapChipRender = NewGO<MapChipRender>(EnPriority_3DModel);
 		pMapChipRender = mapChipRender;
 		//登録登録。
-		m_mapChipRenderPtrs.insert({ nameKey.GetHashCode(), mapChipRender });
-	}
-	else {
-		//登録されてた。
-		//描画するオブジェクトを増やす。
-		pMapChipRender = itFind->second;
-	}
+		m_mapChipRenderPtrs.insert({ objData.No, mapChipRender });
+	//}
+	//else {
+	//	//登録されてた。
+	//	//描画するオブジェクトを増やす。
+	//	pMapChipRender = itFind->second;
+	//}
 	pMapChipRender->AddRenderObject(objData);
 
 	return pMapChipRender;
@@ -141,20 +143,20 @@ void Level::BuildBoneMatrices()
 			tklObj.no
 			);
 		//ボーン名判別。
-		auto it = std::find_if(m_bones.begin(), m_bones.end(), [&](auto& bone) {return wcscmp(boneName, bone->GetName()) == 0; });
-		if (it != m_bones.end()) {
-			//同名のボーンを発見。
-			//ボーンの同名定義エラーはここでいちいち直して。。。todo:ボーンまでエラー表示。
-			//_bstr_t b(boneName);
-			//const char* c = b;
-			MessageBox(
-				nullptr,
-				L"Level::BuildBoneMatrices();同名のボーンが見つかりました。",
-				L"エラー。",
-				MB_OK
-			);
-		}
-		//ボーンを積む。
+		//auto it = std::find_if(m_bones.begin(), m_bones.end(), [&](auto& bone) {return wcscmp(boneName, bone->GetName()) == 0; });
+		//if (it != m_bones.end()) {
+		//	//同名のボーンを発見。
+		//	//ボーンの同名定義エラーはここでいちいち直して。。。todo:ボーンまでエラー表示。
+		//	//_bstr_t b(boneName);
+		//	//const char* c = b;
+		//	MessageBox(
+		//		nullptr,
+		//		L"Level::BuildBoneMatrices();同名のボーンが見つかりました。",
+		//		L"エラー。",
+		//		MB_OK
+		//	);
+		//}
+		////ボーンを積む。
 		m_bones.push_back(std::move(bone));
 		});
 	

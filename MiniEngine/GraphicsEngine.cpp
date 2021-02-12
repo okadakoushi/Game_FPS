@@ -171,7 +171,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	//ÉâÉCÉgÇÃê›íËÅB
 	g_light.directionalLight[0].color = { 5.8f, 5.8f, 5.8f, 1.0f };
-	g_light.directionalLight[0].direction = { 1.0f, -1.0f, -1.0f};
+	g_light.directionalLight[0].direction = { -1.0f, -1.0f, -1.0f};
 	g_light.directionalLight[0].direction.Normalize();
 
 	g_light.directionalLight[1].color = { 0.5f, 0.5f, 0.5f, 1.0f };
