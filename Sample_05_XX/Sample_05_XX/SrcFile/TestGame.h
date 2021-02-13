@@ -18,7 +18,7 @@ public:
 	/// </summary>
 	void Update() override;
 private:
-	NaviMesh m_naviMeshBase;
+	//NaviMesh m_naviMeshBase;
 	NaviMesh m_naviMesh;
 };
 

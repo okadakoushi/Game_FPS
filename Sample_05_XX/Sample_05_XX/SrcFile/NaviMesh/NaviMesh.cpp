@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "NaviMesh.h"
 
-void NaviMesh::Load(char* filePath)
+void NaviMesh::Load(char* filePath, bool isBase)
 {
 	FILE* fp = fopen(filePath, "rb");
+	m_isBase = isBase;
 
 	if (fp == nullptr) {
 		MessageBoxA(nullptr, "ナビゲーションメッシュのファイルパスが間違っています。", "NaviMesh::Error", MB_OK);
@@ -18,46 +19,78 @@ void NaviMesh::Load(char* filePath)
 		//配列の先頭アドレスをコピー。
 		std::intptr_t topAddress = (std::intptr_t)m_cellBin;
 		//セルを読み込んでいく。
-		int vertNo= 0;
+		int vertNo = 0;
 		for (int i = 0; i < m_numCell; i++) {
 			//まずは頂点。
 			fread(&m_cellBin[i].pos[0], sizeof(m_cellBin[i].pos[0]), 1, fp);
 			fread(&m_cellBin[i].pos[1], sizeof(m_cellBin[i].pos[1]), 1, fp);
 			fread(&m_cellBin[i].pos[2], sizeof(m_cellBin[i].pos[2]), 1, fp);
+			//パディングをロード。
+			fread(&m_cellBin[i].pad, sizeof(m_cellBin[i].pad), 1, fp);
+
 			//リストに積み積み。
 			m_cellPos.push_back(m_cellBin[i].pos[0]);
 			m_cellPos.push_back(m_cellBin[i].pos[1]);
-			m_cellPos.push_back(m_cellBin[i].pos[2]);
-			//最大、最小頂点も調べておく。
-			m_vMax.Max(m_cellBin[i].pos[0]);
-			m_vMax.Max(m_cellBin[i].pos[1]);
-			m_vMax.Max(m_cellBin[i].pos[2]);
-			m_vMin.Min(m_cellBin[i].pos[0]);
-			m_vMin.Min(m_cellBin[i].pos[1]);
-			m_vMin.Min(m_cellBin[i].pos[2]);
-
-			//続いて隣接セル。ポインタだから64bit。
+			m_cellPos.push_back(m_cellBin[i].pos[2]);				//ベース描画なら別に隣接せる構成しなくていい。
+				//続いて隣接セル。ポインタだから64bit。
 			fread(&m_cellBin[i].linkCell64[0], sizeof(m_cellBin[i].linkCell64[0]), 1, fp);
 			fread(&m_cellBin[i].linkCell64[1], sizeof(m_cellBin[i].linkCell64[1]), 1, fp);
 			fread(&m_cellBin[i].linkCell64[2], sizeof(m_cellBin[i].linkCell64[2]), 1, fp);
 
+
+			//隣接セルの位置情報。
+			//fread(, sizeof(Vector3), 1, fp);
 			//ここでインデックスバッファー構成しとく。
-			 m_indexs.push_back(vertNo);
-			 m_indexs.push_back(vertNo+1);
-			 m_indexs.push_back(vertNo+2);
-			 vertNo += 3;
+			m_indexs.push_back(vertNo);
+			m_indexs.push_back(vertNo + 1);
+			m_indexs.push_back(vertNo + 2);
+			vertNo += 3;
 			//ファイル内相対アドレスを実アドレス化
 			for (int linkCellNo = 0; linkCellNo < 3; linkCellNo++) {
-				m_cellBin[i].linkCell64[linkCellNo] += topAddress;
+				if (m_cellBin[i].linkCell64[linkCellNo] != -1) {
+					m_cellBin[i].linkCell64[linkCellNo] += topAddress;
+				}
+				else {
+					m_cellBin[i].linkCell64[linkCellNo] = 0;
+				}
 			}
-			
-		}
 
+		}
 		fclose(fp);
 	}
+
+	//ここで全セルを調べて、隣接ライン情報を構築する。
+	for (int i = 0; i < m_numCell; i++) {
+		Vector3 CellCenter;
+		for (int posC = 0; posC < 3; posC++) {
+			CellCenter += m_cellBin[i].pos[posC];
+		}
+		//セルの中心。
+		CellCenter /= 3.0f;
+
+
+		//次は隣接セルの真ん中も計算する。todo
+		for (int linkCell = 0; linkCell < 3; linkCell++) {
+			//リンクセル分回す。
+			if (m_cellBin[i].linkCell64[linkCell] != 0) {
+				//隣接セルがある場合。
+				Vector3 linkCellCenterPos;
+				for (int posC = 0; posC < 3; posC++) {
+					linkCellCenterPos += m_cellBin[i].linkCell[linkCell]->pos[posC];
+				}
+				linkCellCenterPos /= 3.0f;
+				//ラインを格納する。
+				Line line;
+				line.start = CellCenter;
+				line.end = linkCellCenterPos;
+				m_linkCellLine.push_back(line);
+			}
+		}
+	}
+	
 }
 
-void NaviMesh::InitRender(bool isFill)
+void NaviMesh::InitRender(bool isWire)
 {
 	//頂点バッファー初期化。
 	m_vertexBuffer.Init(sizeof(m_cellPos[0]) * m_cellPos.size(), sizeof(m_cellPos[0]));
@@ -65,6 +98,21 @@ void NaviMesh::InitRender(bool isFill)
 	//インデックスバッファー初期化。
 	m_indexBuffer.Init(sizeof(m_indexs[0]) * m_indexs.size(), sizeof(m_indexs[0]));
 	m_indexBuffer.Copy(&m_indexs[0]);
+	//セルから、隣接セルに向かう線分の頂点バッファーとインデックスバッファーの形成。
+	//頂点バッファを形成していく。
+	if (!m_isBase) {
+		//ベースは線分を構築しない。
+		m_lineVertexBuffer.Init(sizeof(Line) * m_linkCellLine.size(), sizeof(Line::start));
+		m_lineVertexBuffer.Copy(&m_linkCellLine[0]);
+		//次にインデックスバッファー。
+		//インデックスを形成。
+		for (int indexs = 0; indexs < m_linkCellLine.size() * 2; indexs++) {
+			m_lineIndexs.push_back(indexs);
+		}
+		//バッファー作成。
+		m_lineIndexBuffer.Init(sizeof(m_lineIndexs[0]) * m_lineIndexs.size(), sizeof(m_lineIndexs[0]));
+		m_lineIndexBuffer.Copy(&m_lineIndexs[0]);
+	}
 	
 	//////背景用頂点バッファー初期化。背景は四角形なので４頂点しかいらない。
 	//Vector3 v[6]{
@@ -102,17 +150,22 @@ void NaviMesh::InitRender(bool isFill)
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP
 	);
 
-	Shader vs, ps;
+	Shader vs, ps, psWire, psLine;
 	vs.LoadVS(L"Assets/shader/sample.fx", "VSMain");
 	ps.LoadPS(L"Assets/shader/sample.fx", "PSMain");
+	psWire.LoadPS(L"Assets/shader/sample.fx", "PSMainWire");
+	psLine.LoadPS(L"Assets/shader/sample.fx", "PSMainLine");
 
 	//ディスクリプタヒープ設定。
 	m_heap.RegistConstantBuffer(0, m_CB);
 	m_heap.Commit();
 
 	//パイプラインステートを作成。
-	InitPipelineState(m_pipelineState, m_rootSignature, vs, ps, isFill);
-	InitPipelineState(m_pipelineStateBuck, m_rootSignature, vs, ps, isFill);
+	InitPipelineState(m_pipelineState, m_rootSignature, vs, ps, isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	//背景用のパイプラインステート作成。
+	InitPipelineState(m_pipelineStateBuck, m_rootSignature, vs, psWire, true, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	//線分描画用のパイプラインステート作成。
+	InitPipelineState(m_lineDrawPipelineState, m_rootSignature, vs, psLine, isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
@@ -125,7 +178,7 @@ void NaviMesh::BeginRender()
 {
 }
 
-void NaviMesh::LineRender(const Vector4& color)
+void NaviMesh::Render(const Vector4& color)
 {
 	//まずはカメラの行列を送る。
 	SConstantBuffer cb;
@@ -143,23 +196,23 @@ void NaviMesh::LineRender(const Vector4& color)
 	GraphicsEngineObj()->GetRenderContext().SetIndexBuffer(m_indexBuffer);
 	GraphicsEngineObj()->GetRenderContext().DrawIndexed(m_indexs.size());
 
-	////パイプラインステートを切り替えて。
-	//cb.mColor = { 0.0, 0.0f, 1.0f, 1.0f };
-	//m_CB.CopyToVRAM(&cb);
-	//GraphicsEngineObj()->GetRenderContext().SetPipelineState(m_pipelineStateBuck);
-	//GraphicsEngineObj()->GetRenderContext().SetRootSignature(m_rootSignature);
-	//GraphicsEngineObj()->GetRenderContext().SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//GraphicsEngineObj()->GetRenderContext().SetDescriptorHeap(m_heap);
-	//GraphicsEngineObj()->GetRenderContext().SetVertexBuffer(m_vertexBuffer);
-	//GraphicsEngineObj()->GetRenderContext().SetIndexBuffer(m_indexBuffer);
-	//GraphicsEngineObj()->GetRenderContext().DrawIndexed(m_indexs.size());
+	//パラメーターをパイプライン描画ように変更。
+	GraphicsEngineObj()->GetRenderContext().SetPipelineState(m_pipelineStateBuck);
+	GraphicsEngineObj()->GetRenderContext().DrawIndexed(m_indexs.size());
+
+	//パラメーターを線分用描画に変更して、描画。
+	GraphicsEngineObj()->GetRenderContext().SetPipelineState(m_lineDrawPipelineState);
+	GraphicsEngineObj()->GetRenderContext().SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	GraphicsEngineObj()->GetRenderContext().SetVertexBuffer(m_lineVertexBuffer);
+	GraphicsEngineObj()->GetRenderContext().SetIndexBuffer(m_lineIndexBuffer);
+	GraphicsEngineObj()->GetRenderContext().DrawIndexed(m_lineIndexs.size());
 }
 
 void NaviMesh::EndRender()
 {
 }
 
-void NaviMesh::InitPipelineState(PipelineState& pipelineState, RootSignature& rs, Shader& vs, Shader& ps, bool isWire)
+void NaviMesh::InitPipelineState(PipelineState& pipelineState, RootSignature& rs, Shader& vs, Shader& ps, bool isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE topology)
 {
 
 	// 頂点レイアウトを定義する。
@@ -189,7 +242,7 @@ void NaviMesh::InitPipelineState(PipelineState& pipelineState, RootSignature& rs
 	psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
 	psoDesc.SampleMask = UINT_MAX;
-	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	psoDesc.PrimitiveTopologyType = topology;
 	psoDesc.NumRenderTargets = 1;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;

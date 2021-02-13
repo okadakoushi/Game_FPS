@@ -32,3 +32,13 @@ float4 PSMain(VSOutput vsOut) : SV_Target0
 {
 	return mColor;
 }
+//ワイヤーフレーム用ピクセルシェーダー。
+float4 PSMainWire(VSOutput vsOut) : SV_Target0
+{
+	return float4(1.0f, 0.0f, 0.0f, 1.0f);
+}
+//ライン用ピクセルシェーダー。
+float4 PSMainLine(VSOutput vsOut) : SV_Target0
+{
+	return float4(1.0f, 1.0f,0.0f, 0.0f);
+}
