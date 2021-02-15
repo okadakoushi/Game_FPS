@@ -14,8 +14,7 @@ public:
 		union {
 			std::intptr_t linkCell64[3];
 			CellBin* linkCell[3];
-		};
-		
+		};	
 	};
 public:
 	/// <summary>
@@ -86,33 +85,37 @@ private:
 		Vector3 start;		//始点。
 		Vector3 end;		//終点。
 	};
-	bool m_isBase;						//ワイヤーフレーム用のナビメッシュ？
+
+	struct Cell {
+		Cell* m_parent = nullptr;				//親となるセル。
+		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
+		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
+		float costFromStart = 0.0f;				//スタートから見たコスト。
+		float costToEnd = 0.0f;					//スタート位置からゴール位置までのコスト。
+	};
+	CellBin* m_cellBin;					//読み込み用バイナリデータセル。
 	ConstantBuffer m_CB;				//コンスタントバッファー。
-	ConstantBuffer m_CBBuck;			//コンスタントバッファー。
-	DescriptorHeap m_heap;				//ディスクリプタヒープ。
-	CellBin* m_cellBin;					//バイナリデータセル。
-	std::vector< Line> m_linkCellLine;	//隣接セルを表すラインの配列。
-	vector<Vector3> m_cellPos;			//セルのリスト。
+	vector<Vector3> m_cellPos;			//セルの位置リスト。
 	unsigned int m_numCell = 0;			//セルの数。
+	Vector3 m_eye;						//視点。
+	vector<Cell> m_cell;				//セル。
+
+	//NaviMesh表示用メンバ。
 	VertexBuffer m_vertexBuffer;		//頂点バッファー。
 	IndexBuffer m_indexBuffer;			//インデックスバッファー。
-	VertexBuffer m_vertexBuck;			//背景用頂点バッファー。
-	IndexBuffer m_indexBuck;			//背景用インデックスバッファー。
-	vector<int> m_indexs;				//インデックスバッファーのリスト。
-	vector<Vector3*> m_cellVertexPos;	//セルの頂点座標。
-	RootSignature m_rootSignature;		//ルートシグネチャ。
-	bool m_isLoad = false;				//ロードした？
-	int ibCount = 0;					//インデックスカウント。
 	PipelineState m_pipelineState;		//パイプラインステート。
+	RootSignature m_rootSignature;		//ルートシグネチャ。
+	DescriptorHeap m_heap;				//ディスクリプタヒープ。
+	//セルワイヤーフレーム表示用メンバ。
+	VertexBuffer m_vertexBuck;			//背景用頂点バッファー。
+	vector<int> m_indexs;				//インデックスバッファーのリスト。
+	IndexBuffer m_indexBuck;			//背景用インデックスバッファー。
 	PipelineState m_pipelineStateBuck;	//背景用パイプラインステート。
-	Vector3 m_eye;						//視点。
-	Vector3 m_vMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };	//最大だった頂点。
-	Vector3 m_vMin = { FLT_MAX,FLT_MAX ,FLT_MAX };		//最小だった頂点。
-	//隣接セル構成用のメンバ。
+	//隣接セル表示用メンバ。
 	VertexBuffer m_lineVertexBuffer;		//線分描画の頂点バッファー。
 	vector<int> m_lineIndexs;				//線分描画のインデックス。
 	IndexBuffer m_lineIndexBuffer;			//線分描画インデックスバッファー。
 	PipelineState m_lineDrawPipelineState;	//線分描画パイプラインステート。
-
+	std::vector< Line> m_linkCellLine;		//隣接セルを表すラインの配列。
 };
 

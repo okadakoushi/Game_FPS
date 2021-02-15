@@ -85,7 +85,6 @@ SMesh* ModelDataManager::LoadMesh(const TkmFile::SMesh& tkmMesh, int meshNo, con
 				auto ib = new IndexBuffer;
 				ib->Init(static_cast<int>(tkIb.indices.size()) * 2, 2);
 				ib->Copy((void*)&tkIb.indices.at(0));
-
 				//ƒXƒLƒ“‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğİ’è‚·‚éB
 				SetSkinFlag(tkIb.indices[0]);
 

@@ -4,7 +4,6 @@
 void NaviMesh::Load(char* filePath, bool isBase)
 {
 	FILE* fp = fopen(filePath, "rb");
-	m_isBase = isBase;
 
 	if (fp == nullptr) {
 		MessageBoxA(nullptr, "ナビゲーションメッシュのファイルパスが間違っています。", "NaviMesh::Error", MB_OK);
@@ -31,8 +30,8 @@ void NaviMesh::Load(char* filePath, bool isBase)
 			//リストに積み積み。
 			m_cellPos.push_back(m_cellBin[i].pos[0]);
 			m_cellPos.push_back(m_cellBin[i].pos[1]);
-			m_cellPos.push_back(m_cellBin[i].pos[2]);				//ベース描画なら別に隣接せる構成しなくていい。
-				//続いて隣接セル。ポインタだから64bit。
+			m_cellPos.push_back(m_cellBin[i].pos[2]);				
+			//続いて隣接セル。ポインタだから64bit。
 			fread(&m_cellBin[i].linkCell64[0], sizeof(m_cellBin[i].linkCell64[0]), 1, fp);
 			fread(&m_cellBin[i].linkCell64[1], sizeof(m_cellBin[i].linkCell64[1]), 1, fp);
 			fread(&m_cellBin[i].linkCell64[2], sizeof(m_cellBin[i].linkCell64[2]), 1, fp);
@@ -59,7 +58,8 @@ void NaviMesh::Load(char* filePath, bool isBase)
 		fclose(fp);
 	}
 
-	//ここで全セルを調べて、隣接ライン情報を構築する。
+	m_cell.resize(m_numCell);
+	//ここで全セルを調べて、隣接ライン情報を構築とセルの情報を入れ込む。
 	for (int i = 0; i < m_numCell; i++) {
 		Vector3 CellCenter;
 		for (int posC = 0; posC < 3; posC++) {
@@ -67,6 +67,7 @@ void NaviMesh::Load(char* filePath, bool isBase)
 		}
 		//セルの中心。
 		CellCenter /= 3.0f;
+		m_cell[i].m_CenterPos = CellCenter;
 
 
 		//次は隣接セルの真ん中も計算する。todo
@@ -98,22 +99,20 @@ void NaviMesh::InitRender(bool isWire)
 	//インデックスバッファー初期化。
 	m_indexBuffer.Init(sizeof(m_indexs[0]) * m_indexs.size(), sizeof(m_indexs[0]));
 	m_indexBuffer.Copy(&m_indexs[0]);
+
 	//セルから、隣接セルに向かう線分の頂点バッファーとインデックスバッファーの形成。
 	//頂点バッファを形成していく。
-	if (!m_isBase) {
-		//ベースは線分を構築しない。
-		m_lineVertexBuffer.Init(sizeof(Line) * m_linkCellLine.size(), sizeof(Line::start));
-		m_lineVertexBuffer.Copy(&m_linkCellLine[0]);
-		//次にインデックスバッファー。
-		//インデックスを形成。
-		for (int indexs = 0; indexs < m_linkCellLine.size() * 2; indexs++) {
-			m_lineIndexs.push_back(indexs);
-		}
-		//バッファー作成。
-		m_lineIndexBuffer.Init(sizeof(m_lineIndexs[0]) * m_lineIndexs.size(), sizeof(m_lineIndexs[0]));
-		m_lineIndexBuffer.Copy(&m_lineIndexs[0]);
+	m_lineVertexBuffer.Init(sizeof(Line) * m_linkCellLine.size(), sizeof(Line::start));
+	m_lineVertexBuffer.Copy(&m_linkCellLine[0]);
+	//次にインデックスバッファー。
+	//インデックスを形成。
+	for (int indexs = 0; indexs < m_linkCellLine.size() * 2; indexs++) {
+		m_lineIndexs.push_back(indexs);
 	}
-	
+	//バッファー作成。
+	m_lineIndexBuffer.Init(sizeof(m_lineIndexs[0]) * m_lineIndexs.size(), sizeof(m_lineIndexs[0]));
+	m_lineIndexBuffer.Copy(&m_lineIndexs[0]);
+
 	//////背景用頂点バッファー初期化。背景は四角形なので４頂点しかいらない。
 	//Vector3 v[6]{
 	//	//左下の頂点。
@@ -138,7 +137,7 @@ void NaviMesh::InitRender(bool isWire)
 	//};
 	//m_indexBuck.Init(sizeof(index), sizeof(index[0]));
 	//m_indexBuck.Copy(&index[0]);
-	
+
 	//定数バッファ初期化。
 	m_CB.Init(sizeof(SConstantBuffer), nullptr);
 
@@ -162,7 +161,7 @@ void NaviMesh::InitRender(bool isWire)
 
 	//パイプラインステートを作成。
 	InitPipelineState(m_pipelineState, m_rootSignature, vs, ps, isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-	//背景用のパイプラインステート作成。
+	//ワイヤーフレーム用のパイプラインステート作成。
 	InitPipelineState(m_pipelineStateBuck, m_rootSignature, vs, psWire, true, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	//線分描画用のパイプラインステート作成。
 	InitPipelineState(m_lineDrawPipelineState, m_rootSignature, vs, psLine, isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
