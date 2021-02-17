@@ -13,6 +13,7 @@ void NaviMesh::Load(char* filePath, bool isBase)
 	if (fp) {
 		//セルの数を読み込む
 		fread(&m_numCell, sizeof(m_numCell), 1, fp);
+		m_cell.resize(m_numCell);
 		//セルの数分だけメモリをドカッと確保。
 		m_cellBin = new CellBin[m_numCell];
 		//配列の先頭アドレスをコピー。
@@ -20,6 +21,10 @@ void NaviMesh::Load(char* filePath, bool isBase)
 		//セルを読み込んでいく。
 		int vertNo = 0;
 		for (int i = 0; i < m_numCell; i++) {
+			//todo:ここらもうちょいリファクタリングできると思う。 m_cellBin消すくらいまでリファクタリングできそう。
+			fread(&m_cellBin[i].linkCellNumber[0], sizeof(m_cellBin[i].linkCellNumber[0]), 1, fp);
+			fread(&m_cellBin[i].linkCellNumber[1], sizeof(m_cellBin[i].linkCellNumber[1]), 1, fp);
+			fread(&m_cellBin[i].linkCellNumber[2], sizeof(m_cellBin[i].linkCellNumber[2]), 1, fp);
 			//まずは頂点。
 			fread(&m_cellBin[i].pos[0], sizeof(m_cellBin[i].pos[0]), 1, fp);
 			fread(&m_cellBin[i].pos[1], sizeof(m_cellBin[i].pos[1]), 1, fp);
@@ -36,6 +41,26 @@ void NaviMesh::Load(char* filePath, bool isBase)
 			fread(&m_cellBin[i].linkCell64[1], sizeof(m_cellBin[i].linkCell64[1]), 1, fp);
 			fread(&m_cellBin[i].linkCell64[2], sizeof(m_cellBin[i].linkCell64[2]), 1, fp);
 
+			//読み込んだバイナリセル情報を基に、AStarで使用するセルに情報を流し込んでいく。
+			//隣接セル情報流し込み。
+			for (int linkCellNo = 0; linkCellNo < 3; linkCellNo++) {
+				if (m_cellBin[i].linkCellNumber[linkCellNo] != INT_MAX) {
+					//隣接セル情報あった。
+					m_cell[i].m_linkCell[linkCellNo] = &m_cell[m_cellBin[i].linkCellNumber[linkCellNo]];
+				}
+				else {
+					//なかったのでnull入れる。
+					m_cell[i].m_linkCell[linkCellNo] = nullptr;
+				}
+			}
+			//中心座標流し込み。
+			Vector3 CellCenter;
+			for (int posC = 0; posC < 3; posC++) {
+				CellCenter += m_cellBin[i].pos[posC];
+			}
+			//セルの中心。
+			CellCenter /= 3.0f;
+			m_cell[i].m_CenterPos = CellCenter;
 
 			//隣接セルの位置情報。
 			//fread(, sizeof(Vector3), 1, fp);
@@ -58,32 +83,17 @@ void NaviMesh::Load(char* filePath, bool isBase)
 		fclose(fp);
 	}
 
-	m_cell.resize(m_numCell);
 	//ここで全セルを調べて、隣接ライン情報を構築とセルの情報を入れ込む。
 	for (int i = 0; i < m_numCell; i++) {
-		Vector3 CellCenter;
-		for (int posC = 0; posC < 3; posC++) {
-			CellCenter += m_cellBin[i].pos[posC];
-		}
-		//セルの中心。
-		CellCenter /= 3.0f;
-		m_cell[i].m_CenterPos = CellCenter;
-
-
 		//次は隣接セルの真ん中も計算する。todo
 		for (int linkCell = 0; linkCell < 3; linkCell++) {
 			//リンクセル分回す。
-			if (m_cellBin[i].linkCell64[linkCell] != 0) {
+			if (m_cell[i].m_linkCell[linkCell] != nullptr) {
 				//隣接セルがある場合。
-				Vector3 linkCellCenterPos;
-				for (int posC = 0; posC < 3; posC++) {
-					linkCellCenterPos += m_cellBin[i].linkCell[linkCell]->pos[posC];
-				}
-				linkCellCenterPos /= 3.0f;
 				//ラインを格納する。
 				Line line;
-				line.start = CellCenter;
-				line.end = linkCellCenterPos;
+				line.start = m_cell[i].m_CenterPos;
+				line.end = m_cell[i].m_linkCell[linkCell]->m_CenterPos;
 				m_linkCellLine.push_back(line);
 			}
 		}

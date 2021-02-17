@@ -8,6 +8,7 @@ class NaviMesh
 public:
 	//バイナリデータのセルのデータ構造体。
 	struct CellBin {
+		int linkCellNumber[3] = { 1 };	//隣接セル番号。
 		Vector3 pos[3];
 		std::int32_t pad = 0;	//パディング。
 		//共用体。
@@ -67,6 +68,16 @@ public:
 	{
 		return m_numCell;
 	}
+	/// <summary>
+	/// AStarで使用するセル情報。
+	/// </summary>
+	struct Cell {
+		Cell* m_parent = nullptr;				//親となるセル。
+		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
+		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
+		float costFromStart = 0.0f;				//スタートから見たコスト。
+		float costToEnd = 0.0f;					//スタート位置からゴール位置までのコスト。
+	};
 private:
 	//定数バッファの構造体定義。
 	struct SConstantBuffer {
@@ -85,20 +96,12 @@ private:
 		Vector3 start;		//始点。
 		Vector3 end;		//終点。
 	};
-
-	struct Cell {
-		Cell* m_parent = nullptr;				//親となるセル。
-		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
-		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
-		float costFromStart = 0.0f;				//スタートから見たコスト。
-		float costToEnd = 0.0f;					//スタート位置からゴール位置までのコスト。
-	};
-	CellBin* m_cellBin;					//読み込み用バイナリデータセル。
+	CellBin* m_cellBin;					//読み込み用バイナリデータセル。リファクタリングしたらたぶんいらない。
+	vector<Cell> m_cell;				//AStarで使うセル。OPP的にAStarクラスに乗っけた方がいいのだろうか。
 	ConstantBuffer m_CB;				//コンスタントバッファー。
 	vector<Vector3> m_cellPos;			//セルの位置リスト。
 	unsigned int m_numCell = 0;			//セルの数。
 	Vector3 m_eye;						//視点。
-	vector<Cell> m_cell;				//セル。
 
 	//NaviMesh表示用メンバ。
 	VertexBuffer m_vertexBuffer;		//頂点バッファー。
