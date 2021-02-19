@@ -69,7 +69,7 @@ public:
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	CEffectEngine m_effectEngine;					//エフェクトエンジン。
-	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。
+	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						//
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 };
 

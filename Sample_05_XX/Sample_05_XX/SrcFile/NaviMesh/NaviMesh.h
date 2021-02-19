@@ -17,6 +17,23 @@ public:
 			CellBin* linkCell[3];
 		};	
 	};
+	enum ListNo {
+		EnNoneList,
+		EnCloseList,
+		EnOpenList
+	};
+	/// <summary>
+	/// AStarで使用するセル情報。
+	/// </summary>
+	struct Cell {
+		Cell* m_parent = nullptr;				//親となるセル。
+		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
+		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
+		float costFromStart = 0.0f;				//スタートから見たコスト。
+		float costToEnd = 0.0f;					//スタート位置からゴール位置までのコスト。
+		float totalCost = 0.0f;					//最終的なコスト。
+		int listNum = EnNoneList;				//どのリストに属しているか。
+	};
 public:
 	/// <summary>
 	/// NaviMeshをロード。
@@ -69,15 +86,13 @@ public:
 		return m_numCell;
 	}
 	/// <summary>
-	/// AStarで使用するセル情報。
+	/// セルリストを取得。
 	/// </summary>
-	struct Cell {
-		Cell* m_parent = nullptr;				//親となるセル。
-		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
-		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
-		float costFromStart = 0.0f;				//スタートから見たコスト。
-		float costToEnd = 0.0f;					//スタート位置からゴール位置までのコスト。
-	};
+	/// <returns></returns>
+	std::vector<Cell>& GetCellList()
+	{
+		return m_cell;
+	}
 private:
 	//定数バッファの構造体定義。
 	struct SConstantBuffer {
@@ -97,9 +112,9 @@ private:
 		Vector3 end;		//終点。
 	};
 	CellBin* m_cellBin;					//読み込み用バイナリデータセル。リファクタリングしたらたぶんいらない。
-	vector<Cell> m_cell;				//AStarで使うセル。OPP的にAStarクラスに乗っけた方がいいのだろうか。
+	std::vector<Cell> m_cell;				//AStarで使うセル。OPP的にAStarクラスに乗っけた方がいいのだろうか。
 	ConstantBuffer m_CB;				//コンスタントバッファー。
-	vector<Vector3> m_cellPos;			//セルの位置リスト。
+	std::vector<Vector3> m_cellPos;			//セルの位置リスト。
 	unsigned int m_numCell = 0;			//セルの数。
 	Vector3 m_eye;						//視点。
 
@@ -111,12 +126,12 @@ private:
 	DescriptorHeap m_heap;				//ディスクリプタヒープ。
 	//セルワイヤーフレーム表示用メンバ。
 	VertexBuffer m_vertexBuck;			//背景用頂点バッファー。
-	vector<int> m_indexs;				//インデックスバッファーのリスト。
+	std::vector<int> m_indexs;				//インデックスバッファーのリスト。
 	IndexBuffer m_indexBuck;			//背景用インデックスバッファー。
 	PipelineState m_pipelineStateBuck;	//背景用パイプラインステート。
 	//隣接セル表示用メンバ。
 	VertexBuffer m_lineVertexBuffer;		//線分描画の頂点バッファー。
-	vector<int> m_lineIndexs;				//線分描画のインデックス。
+	std::vector<int> m_lineIndexs;				//線分描画のインデックス。
 	IndexBuffer m_lineIndexBuffer;			//線分描画インデックスバッファー。
 	PipelineState m_lineDrawPipelineState;	//線分描画パイプラインステート。
 	std::vector< Line> m_linkCellLine;		//隣接セルを表すラインの配列。

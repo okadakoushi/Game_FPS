@@ -3,16 +3,11 @@
 
 bool TestGame::Start()
 {
-	//セル除去前のメッシュ。
-	char fBase[128] = "Assets/nvm/NavSampleBase.nvm";
-	//セル除去後のメッシュ。
+	//メッシュをデバッグ描画。
 	char f[128] = "Assets/nvm/NavSample.nvm";
-	//ナビメッシュロード。
-	//m_naviMeshBase.Load(fBase, true);
 	m_naviMesh.Load(f, false);
-	//描画用に初期化。
 	m_naviMesh.InitRender(false);
-	//m_naviMeshBase.InitRender(true);
+	m_astar.Search(m_start, m_end, m_naviMesh.GetCellList());
 	return true;
 }
 
@@ -37,5 +32,4 @@ void TestGame::Update()
 	GraphicsEngineObj()->GetCamera3D().SetTarget(camTarget);
 	//描画。
 	m_naviMesh.Render({ 0.0f, 0.0f, 1.0f, 1.0f });
-	//m_naviMeshBase.Render({1.0f, 0.0f, 0.0f, 1.0f});
 }

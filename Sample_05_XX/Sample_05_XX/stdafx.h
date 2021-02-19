@@ -45,6 +45,9 @@ static enum Priority {
 #include "SrcFile/Level/Level.h"
 //エフェクト。
 #include "SrcFile/Effect/Effect.h"
+//ナビ。
+#include "SrcFile/NaviMesh/NaviMesh.h"
+#include "AStar.h"
 
 using namespace std;
 

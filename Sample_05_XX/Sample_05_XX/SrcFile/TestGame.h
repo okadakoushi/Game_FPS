@@ -1,5 +1,7 @@
 #pragma once
-#include "NaviMesh/NaviMesh.h"
+
+class NaviMesh;
+class AStar;
 
 /// <summary>
 /// テスト用ゲームクラス。
@@ -20,5 +22,8 @@ public:
 private:
 	//NaviMesh m_naviMeshBase;
 	NaviMesh m_naviMesh;
+	AStar m_astar;
+	Vector3 m_start = { 0,0,0 };
+	Vector3 m_end = { 700,0,0 };
 };
 
