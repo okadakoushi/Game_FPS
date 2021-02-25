@@ -38,7 +38,7 @@ public:
 	/// <summary>
 	/// NaviMeshをロード。
 	/// </summary>
-	void Load(char* filePath, bool isBase);
+	void Load(const char* filePath);
 public:
 	//ここからはNaviMeshをテスト描画する際に必要なコードのため、
 	//描画しないユーザーは使用/呼び出ししなくて大丈夫。
@@ -47,7 +47,7 @@ public:
 	/// 描画用初期化。
 	/// </summary>
 	/// <param name="isWire">ワイヤーフレーム描画にする？</param>
-	void InitRender(bool isWire);
+	void InitRender();
 	/// <summary>
 	/// 描画準備。
 	/// </summary>
@@ -55,7 +55,7 @@ public:
 	/// <summary>
 	/// NaviMeshを描画。
 	/// </summary>
-	void Render(const Vector4& color);
+	void Render();
 	/// <summary>
 	/// 描画後処理。
 	/// </summary>
@@ -96,7 +96,7 @@ public:
 private:
 	//定数バッファの構造体定義。
 	struct SConstantBuffer {
-		//Matrix mWorld;		//ワールド行列。
+		Matrix mRot;		//ワールド行列。
 		Matrix mView;			//ビュー行列。
 		Matrix mProj;			//プロジェクション行列。
 		Vector4 mColor;			//ポリゴンまたは線分の色。

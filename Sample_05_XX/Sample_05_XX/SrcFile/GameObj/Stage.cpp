@@ -15,10 +15,14 @@ bool Stage::Start()
 	////シャドウレシーバー。
 	//m_bg->SetShadowReciever(true);
 
-	m_level.Init("Assets/level/GameStage.tkl", [&](LevelObjectData& objData) {
+	m_level.Init("Assets/level/NavTest.tkl", [&](LevelObjectData& objData) {
+#ifdef NAV_DEBUG
+		if (objData.EqualObjectName(L"test_mesh") == true) {
+			return true;
+		}
+#endif
 		return false;
 	});
-
 	return true;
 }
 

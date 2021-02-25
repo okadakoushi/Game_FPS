@@ -3,11 +3,7 @@
 
 bool TestGame::Start()
 {
-	//メッシュをデバッグ描画。
-	char f[128] = "Assets/nvm/NavSample.nvm";
-	m_naviMesh.Load(f, false);
-	m_naviMesh.InitRender(false);
-	m_astar.Search(m_start, m_end, m_naviMesh.GetCellList());
+	NaviMeshObj()->InitRender();
 	return true;
 }
 
@@ -30,6 +26,4 @@ void TestGame::Update()
 	camTarget.y = camPos.y;
 	GraphicsEngineObj()->GetCamera3D().SetPosition(camPos);
 	GraphicsEngineObj()->GetCamera3D().SetTarget(camTarget);
-	//描画。
-	m_naviMesh.Render({ 0.0f, 0.0f, 1.0f, 1.0f });
 }

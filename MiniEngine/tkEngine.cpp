@@ -2,6 +2,10 @@
 #include "tkEngine.h"
 #include "GraphicsEngine.h"
 
+TkEngine::TkEngine()
+{
+}
+
 TkEngine::~TkEngine()
 {
 	m_effectEngine.Release();
@@ -17,6 +21,8 @@ void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	for (int i = 0; i < GamePad::CONNECT_PAD_MAX; i++) {
 		g_pad[i] = &m_pad[i];
 	}
+	m_naviMesh = new NaviMesh;
+	m_naviMesh->Load("Assets/nvm/NavSample.nvm");
 }
 void TkEngine::BeginFrame()
 {

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "NaviMesh.h"
 
-void NaviMesh::Load(char* filePath, bool isBase)
+void NaviMesh::Load(const char* filePath)
 {
 	FILE* fp = fopen(filePath, "rb");
 
@@ -32,6 +32,10 @@ void NaviMesh::Load(char* filePath, bool isBase)
 			//パディングをロード。
 			fread(&m_cellBin[i].pad, sizeof(m_cellBin[i].pad), 1, fp);
 
+			//ZUPに合わせておく。
+			m_cellBin[i].pos[0] = { m_cellBin[i].pos[0].x, m_cellBin[i].pos[0].z, m_cellBin[i].pos[0].y };
+			m_cellBin[i].pos[1] = { m_cellBin[i].pos[1].x, m_cellBin[i].pos[1].z, m_cellBin[i].pos[1].y };
+			m_cellBin[i].pos[2] = { m_cellBin[i].pos[2].x, m_cellBin[i].pos[2].z, m_cellBin[i].pos[2].y };
 			//リストに積み積み。
 			m_cellPos.push_back(m_cellBin[i].pos[0]);
 			m_cellPos.push_back(m_cellBin[i].pos[1]);
@@ -98,10 +102,11 @@ void NaviMesh::Load(char* filePath, bool isBase)
 			}
 		}
 	}
-	
+	//描画用初期化。
+	InitRender();
 }
 
-void NaviMesh::InitRender(bool isWire)
+void NaviMesh::InitRender()
 {
 	//頂点バッファー初期化。
 	m_vertexBuffer.Init(sizeof(m_cellPos[0]) * m_cellPos.size(), sizeof(m_cellPos[0]));
@@ -170,11 +175,11 @@ void NaviMesh::InitRender(bool isWire)
 	m_heap.Commit();
 
 	//パイプラインステートを作成。
-	InitPipelineState(m_pipelineState, m_rootSignature, vs, ps, isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	InitPipelineState(m_pipelineState, m_rootSignature, vs, ps, false, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	//ワイヤーフレーム用のパイプラインステート作成。
 	InitPipelineState(m_pipelineStateBuck, m_rootSignature, vs, psWire, true, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	//線分描画用のパイプラインステート作成。
-	InitPipelineState(m_lineDrawPipelineState, m_rootSignature, vs, psLine, isWire, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
+	InitPipelineState(m_lineDrawPipelineState, m_rootSignature, vs, psLine, false, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
@@ -187,13 +192,12 @@ void NaviMesh::BeginRender()
 {
 }
 
-void NaviMesh::Render(const Vector4& color)
+void NaviMesh::Render()
 {
 	//まずはカメラの行列を送る。
 	SConstantBuffer cb;
 	cb.mView = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
 	cb.mProj = GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix();
-	cb.mColor = color;
 	m_CB.CopyToVRAM(&cb);
 	
 	//描画。

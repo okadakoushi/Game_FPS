@@ -142,7 +142,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -184,6 +184,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="AStar.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy.cpp" />
     <ClCompile Include="NaviAgent.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\NaviMesh.cpp" />
     <ClCompile Include="SrcFile\Effect\CEffectEngine.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="AStar.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy.h" />
     <ClInclude Include="NaviAgent.h" />
     <ClInclude Include="SrcFile\NaviMesh\NaviMesh.h" />
     <ClInclude Include="SrcFile\Effect\CEffectEngine.h" />

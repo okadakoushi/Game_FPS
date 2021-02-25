@@ -99,16 +99,17 @@ public:
 	/// <returns>前ノードからのリサーチノードへのコスト。</returns>
 	float ClacTraverseCost(cell* node, cell* reserchNode);
 	/// <summary>
-	/// 目的地までのノードを作成。
+	/// 目的地までのノードを作成して返却する。
 	/// </summary>
-	void CreateNode();
+	/// <returns>目的地までのノード(セル)。</returns>
+	NaviMesh::Cell* CreateNode();
 	/// <summary>
 	/// 経路を探索。
 	/// </summary>
 	/// <param name="start">スタート位置。</param>
 	/// <param name="goal">ゴール位置。</param>
 	/// <param name="cells">セル。</param>
-	void Search(Vector3& start, Vector3& goal, std::vector<cell>& cells);
+	NaviMesh::Cell* Search(Vector3& start, Vector3& goal, std::vector<cell>& cells);
 private:
 	std::vector<cell*> m_openCellList;		//開いてるセルリスト(経路探査中のセルリストになる)。
 	std::vector<cell*> m_closeCellList;		//閉じてるセルリスト(経路探査済みのセルのリストになる)。

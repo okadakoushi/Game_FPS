@@ -34,7 +34,7 @@ bool SkinModelRender::Start()
 		skeltonFilePath.replace(pos, 4, ".tks");
 		//ファイルストリーム。
 		std::ifstream ifs(skeltonFilePath);
-		if (ifs.is_open()) {
+		if (ifs.is_open() && m_renderMode != enRenderMode_NonSkin) {
 			//tksファイルがあるので読み込む。
 			m_skeleton.Init(skeltonFilePath.c_str());
 			m_initStep = enInitStep_LoadAnimation;

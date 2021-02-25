@@ -3,12 +3,15 @@
 #include "HID/GamePad.h"
 #include "SrcFile/ModelDataManager.h"
 #include "SrcFile/Effect/CEffectEngine.h";
+//#include "SrcFile/NaviMesh/NaviMesh.h"
 
 class GraphicsEngine;
 class Camera;
+class NaviMesh;
 
 class TkEngine : Noncopyable{
 public:
+	TkEngine();
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
@@ -66,11 +69,20 @@ public:
 	{
 		return m_modelDataManager;
 	}
+	/// <summary>
+	/// ナビメッシュを取得。
+	/// </summary>
+	/// <returns></returns>
+	NaviMesh* GetNaviMesh()
+	{
+		return m_naviMesh;
+	}
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	CEffectEngine m_effectEngine;					//エフェクトエンジン。
-	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						//
+	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
+	NaviMesh* m_naviMesh = nullptr;							//ナビメッシュ。
 };
 
 /// <summary>
@@ -91,5 +103,11 @@ static inline CEffectEngine& EffectEngineObj()
 {
 	return EngineObj().GetEffectEngine();
 }
+
+static inline NaviMesh* NaviMeshObj()
+{
+	return EngineObj().GetNaviMesh();
+}
+
 
 

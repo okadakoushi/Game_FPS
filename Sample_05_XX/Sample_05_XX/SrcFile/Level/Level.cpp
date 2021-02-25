@@ -159,6 +159,8 @@ void Level::BuildBoneMatrices()
 		////ボーンを積む。
 		m_bones.push_back(std::move(bone));
 		});
+
+	//ここまでコピーしただけ。
 	
 	for (auto& bone : m_bones) {
 		if (bone->GetParentBoneNo() != -1) {

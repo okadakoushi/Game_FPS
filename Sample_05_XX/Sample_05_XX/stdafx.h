@@ -1,11 +1,12 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
+//#define GAME
+#define NAV_DEBUG
+
 const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
 static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
-
-//#define MODE_DEBUG
 
 //昇順。小さいほうが早い。
 static enum Priority {

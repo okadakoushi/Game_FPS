@@ -3,31 +3,25 @@
 #include "SrcFile/Game.h"
 #include "SrcFile/TestGame.h"
 
-//#define Mode_Game
-#define Mode_Test
 
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
 ///////////////////////////////////////////////////////////////////
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	
-
+#ifdef NAV_DEBUG
+	AllocConsole();
+	freopen("CON", "r", stdin);
+	freopen("CON", "w", stdout);
+#endif // DEBUG
 	//ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 	//エンジンの初期化。
 	EngineObj().Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
 	const auto& renderContext = EngineObj().GetGraphicsEngine();
 
-#ifdef Mode_Game
 	//ゲームのインスタンス作成。
 	NewGO<Game>(EnPriority_Game);
-#endif // Mode_Game
-
-#ifdef Mode_Test
-	//テスト用ゲームのインスタンス作成。
-	NewGO<TestGame>(EnPriority_Game);
-#endif // Mode_Test
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

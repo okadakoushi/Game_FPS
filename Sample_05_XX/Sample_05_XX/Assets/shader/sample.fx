@@ -9,6 +9,7 @@ struct VSOutput{
 //VP行列。
 cbuffer VP : register(b0)
 {
+	float4x4 mRot;	//回転。
 	float4x4 mview;	//ビュー。
 	float4x4 mproj;	//プロジェ。
 	float4 mColor;	//色。
@@ -20,6 +21,7 @@ VSOutput VSMain(VSInput In)
 {
 	VSOutput vsOut;
 	//ビューとプロジェかけていく。
+	In.pos = mul(mRot, In.pos);
 	In.pos = mul(mview, In.pos);
 	In.pos = mul(mproj, In.pos);
 	//座標。
@@ -30,7 +32,7 @@ VSOutput VSMain(VSInput In)
 //ピクセルシェーダー。
 float4 PSMain(VSOutput vsOut) : SV_Target0
 {
-	return mColor;
+	return float4(0.0f, 1.0f, 0.0f, 1.0f);
 }
 //ワイヤーフレーム用ピクセルシェーダー。
 float4 PSMainWire(VSOutput vsOut) : SV_Target0

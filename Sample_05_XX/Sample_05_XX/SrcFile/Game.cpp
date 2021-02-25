@@ -3,6 +3,7 @@
 #include "GameObj/Stage.h"
 #include "GameObj/GamePlayer.h"
 #include "GameObj/UIs.h"
+#include "GameObj/Enemy.h"
 
 Game::Game()
 {
@@ -22,11 +23,13 @@ bool Game::Start()
 	m_stage = NewGO<Stage>(EnPriority_3DModel, "bg");
 	//GamePlayer。
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
+	//Enemy。
+	m_enemy = NewGO<Enemy>(EnPriority_3DModel, "Enemy");
+	//Effect。
+	m_effect = NewGO<myEngine::Effect>(0);
 	//UIs。unityとかもCanvasとかあるしあった方がいいのだろうか。。
 	//m_UIs = NewGO<UIs>(EnPriority_UI, "UIs");
-	m_effect = NewGO<myEngine::Effect>(0);
 
-	//NavTest
 	
 	
 	return true;

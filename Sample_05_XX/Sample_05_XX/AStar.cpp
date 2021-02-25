@@ -64,13 +64,8 @@ float AStar::ClacTraverseCost(cell* node, cell* reserchNode)
 	return cost = dist.Length();
 }
 
-void AStar::CreateNode()
+NaviMesh::Cell* AStar::CreateNode()
 {
-	//for (int cellCount = 0; cellCount < 3; cellCount++) {
-	//	//スタートの隣接セルをオープンリストに積む。
-	//	moveCellList<vector<cell*>>(m_openCellList, m_startCell->m_linkCell[cellCount], NaviMesh::EnOpenList);
-	//}
-
 	while (m_openCellList.size() != 0) {
 		//調査対象セル。
 		cell* reserchCell = nullptr;
@@ -90,7 +85,7 @@ void AStar::CreateNode()
 			//調査のセルがゴールのセルだった。
 			//todo:本来ここから、スタートからゴールまでのノードを返す処理が入る。
 			MessageBoxA(nullptr, "経路探索完了！！", "NaviMesh::AStar", MB_OK);
-			throw;
+			return reserchCell;
 		}
 		else {
 			//ゴールセルではない。
@@ -104,7 +99,7 @@ void AStar::CreateNode()
 			}
 			//隣接セルを調査する必要があるのかの識別を行う。
 			for (auto& linkCell : linkNodeList) {
-				float newCost = linkCell->costFromStart + ClacTraverseCost(reserchCell, linkCell);
+				float newCost = linkNodeList.back()->costFromStart + ClacTraverseCost(reserchCell, linkCell);
 				//クローズセルに積まれているか検索する。
 				auto closeListPtr = std::find(m_closeCellList.begin(), m_closeCellList.end(), linkCell);
 				//調査する必要があるかの識別。
@@ -126,13 +121,15 @@ void AStar::CreateNode()
 		//調査終わったのでクローズリストに積む。
 		moveCellList(m_closeCellList, reserchCell, NaviMesh::EnCloseList);
 	}//オープンリストが0になった。ゴールまでの経路なし。
-	printf("AStarが経路探査に失敗しました。NaviMeshとCreateCellListパラメーターを確認してください。\n");
+	MessageBoxA(nullptr, "経路の検索に失敗しました。", "NaviMesh::AStar", MB_OK);
+	return nullptr;
 }
 
-void AStar::Search(Vector3& start, Vector3& goal, std::vector<cell>& cells)
+NaviMesh::Cell* AStar::Search(Vector3& start, Vector3& goal, std::vector<cell>& cells)
 {
 	CreateCellList(start, goal, cells);
-	CreateNode();
+	cell* goalCellNode = CreateNode();
+	return goalCellNode;
 }
 
 

@@ -20,10 +20,7 @@ public:
 	/// </summary>
 	void Update() override;
 private:
-	//NaviMesh m_naviMeshBase;
-	NaviMesh m_naviMesh;
-	AStar m_astar;
 	Vector3 m_start = { 0,0,0 };
-	Vector3 m_end = { 700,0,0 };
+	Vector3 m_end = { 200,0,0 };
 };
 

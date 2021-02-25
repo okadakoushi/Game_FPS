@@ -4,6 +4,7 @@ class Stage;
 class GamePlayer;
 class UIs;
 class Effect;
+class Enemy;
 
 class Game : public IGameObject
 {
@@ -18,6 +19,7 @@ private:
 	GamePlayer* m_player = nullptr;		//プレイヤー。
 	Level m_level;						//レベル。
 	UIs* m_UIs = nullptr;				//UI。
+	Enemy* m_enemy = nullptr;			//エネミー。
 	myEngine::Effect* m_effect = nullptr;	//エフェクト。
 };
 

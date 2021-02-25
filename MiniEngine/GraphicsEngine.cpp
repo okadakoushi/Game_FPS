@@ -509,6 +509,7 @@ void GraphicsEngine::EndRender(bool ChangeTarget)
 #else
 	// Present the frame.
 	if (ChangeTarget) {
+		//present(‚’¼“¯Šú‚ğ‰½‰ñ‚Ü‚Â‚©A)
 		m_swapChain->Present(1, 0);
 	}
 

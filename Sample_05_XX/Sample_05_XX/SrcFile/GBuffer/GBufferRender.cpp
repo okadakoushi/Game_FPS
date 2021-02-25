@@ -68,6 +68,11 @@ void GBufferRender::Render(RenderContext& rc)
 	//クリア。
 	ge->GetRenderContext().ClearRenderTargetViews(Gbuffer_Num, rtv);
 
+#ifdef NAV_DEBUG
+	//ナビメッシュのデバッグ表示。
+	EngineObj().GetNaviMesh()->Render();
+#endif // NAV_DEBUG
+
 	for (auto& model : m_models) {
 		//登録されたオブジェクトはGbufferを描画。
 		model->GetModel().Draw(rc, ge->GetCamera3D().GetViewMatrix(), ge->GetCamera3D().GetProjectionMatrix(), model->GetRenderMode());
