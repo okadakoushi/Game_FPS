@@ -26,6 +26,7 @@ public:
 	/// AStarで使用するセル情報。
 	/// </summary>
 	struct Cell {
+		Vector3 pos[3];							//３頂点。
 		Cell* m_parent = nullptr;				//親となるセル。
 		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
 		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
@@ -96,10 +97,9 @@ public:
 private:
 	//定数バッファの構造体定義。
 	struct SConstantBuffer {
-		Matrix mRot;		//ワールド行列。
+		Matrix mRot;			//回転行列。
 		Matrix mView;			//ビュー行列。
 		Matrix mProj;			//プロジェクション行列。
-		Vector4 mColor;			//ポリゴンまたは線分の色。
 	};
 	struct SColorCB {
 		Vector4 mColor;			//ポリゴンまたは線分の色。

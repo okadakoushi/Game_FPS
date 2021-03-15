@@ -202,7 +202,7 @@ void DirectionalShadowMap::Update()
 		//エンティティに積む
 		m_shadowCBEntity.mLVP[i] = m_LVPMatrix[i];
 		//どこまで影を落とすか(きわきわだと変な境界が発生するので少し狭める。)
-		m_shadowCBEntity.shadowAreaDepthInViewSpace[i] = farPlaneZ * 0.9f;
+		m_shadowCBEntity.shadowAreaDepthInViewSpace[i] = farPlaneZ;
 		//次の近平面は今の遠平面。
 		nearPlaneZ = farPlaneZ;
 		

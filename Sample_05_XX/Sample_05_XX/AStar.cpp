@@ -1,8 +1,97 @@
 #include "stdafx.h"
 #include "AStar.h"
 
+namespace {
+	struct Line {
+		Vector3 start;
+		Vector3 end;
+	};
+	float CalcLen(Vector3& v0, Vector3& v1)
+	{
+		float len;
+		len = sqrt((v0.x - v1.x) * (v0.x - v1.x) + (v0.y - v1.y) * (v0.y - v1.y) + (v0.z - v1.z) * (v0.z - v1.z));
+		return len;
+	}
+	/// <summary>
+	/// ラインとラインのXZ平面での当たり判定。
+	/// </summary>
+	/// <param name="line0">ライン０</param>
+	/// <param name="line1">ライン１</param>
+	/// <returns>trueが返ってくると当たっている</returns>
+	bool IntersectLineToLineXZ(Line& line0, Line& line1)
+	{
+		//ライン0にXZ平面で直交する単位ベクトルを求める。
+		//XZ平面での判定。
+		line0.start.y = 0;
+		line0.end.y = 0;
+		line1.start.y = 0;
+		line1.end.y = 0;
+		//ライン0の始点から終点。
+		Vector3 nom = line0.end - line0.start;
+		//ラインの法線を求める。
+		nom.Cross({ 0,1,0 });
+		nom.Normalize();
+		
+		//ライン0を含む無限線分との交差判定。
+		//ライン0の始点からライン1の終点。
+		Vector3 L0StoL1EN = line1.end - line0.start;
+		//ライン0の始点からライン1の始点。
+		Vector3 L0StoL1SN = line1.start - line0.start;
+		//L1の終点と法線の内積。
+		float startDot = L0StoL1EN.Dot(nom);
+		//L1の始点と法線の内積。
+		float endDot = L0StoL1SN.Dot(nom);
+		//交差しているなら違う方向。
+		float dot = startDot * endDot;
+		if (dot < 0.0f) {
+			//交差しているので交点を求めていく。
+			//辺の絶対値求める。
+			float EndLen = fabsf(endDot);
+			float StartLen = fabsf(startDot);
+			if ((StartLen + EndLen) > 0.0f) {
+				//交点の位置を求める。
+				//辺の割合を求める。
+				float t = EndLen / (StartLen + EndLen);
+				//終点から始点。
+				Vector3 EtoS = line1.start - line1.end;
+				//終点から交点。
+				Vector3 EtoHit = EtoS * t;
+				//交点。
+				Vector3 hitPos = line1.end + EtoHit;
+			
+				auto len = CalcLen(line0.end, line0.start);
+				auto len1 = CalcLen(hitPos, line0.start);
+				auto len2 = CalcLen(line0.end ,hitPos);
+				
+				if (len == len1 + len2) {
+					return true;
+				}
+
+				//if ((VSL < hitL && hitL < VEL) || (VEL < hitL && hitL < VSL)) {
+				//	//片方が小さくて、片方が大きい。
+				//}
+			}
+			//StartLenとEndLenが0よりも小さくなったおかしい。
+			return false;
+		}
+		//交点なし。
+		return false;
+	}
+}
 void AStar::CreateCellList(Vector3& start, Vector3& goal, std::vector<cell>& cells)
 {
+#if 0
+	//交差ラインテスト。
+	Line line0, line1;
+	line0.start = { 0, 500, 0 };
+	line0.end = { 200, 500, 0 };
+	line1.start = { 100, 500, -100 };
+	line1.end = { 100, 500, 100 };
+	//判定。
+	if (IntersectLineToLineXZ(line0, line1) == true) {
+		printf("交差していました。\n");
+	}
+#else
 	//リストをクリア。
 	m_openCellList.clear();
 	m_closeCellList.clear();
@@ -53,6 +142,7 @@ void AStar::CreateCellList(Vector3& start, Vector3& goal, std::vector<cell>& cel
 	m_startCell->costToEnd = dist;
 	//始点はオープンされる。
 	moveCellList(m_openCellList, m_startCell, NaviMesh::EnOpenList);
+#endif
 }
 
 float AStar::ClacTraverseCost(cell* node, cell* reserchNode)
@@ -84,7 +174,8 @@ NaviMesh::Cell* AStar::CreateNode()
 		if (reserchCell == m_goalCell) {
 			//調査のセルがゴールのセルだった。
 			//todo:本来ここから、スタートからゴールまでのノードを返す処理が入る。
-			MessageBoxA(nullptr, "経路探索完了！！", "NaviMesh::AStar", MB_OK);
+			//MessageBoxA(nullptr, "経路探索完了！！", "NaviMesh::AStar", MB_OK);
+
 			return reserchCell;
 		}
 		else {
@@ -125,11 +216,91 @@ NaviMesh::Cell* AStar::CreateNode()
 	return nullptr;
 }
 
-NaviMesh::Cell* AStar::Search(Vector3& start, Vector3& goal, std::vector<cell>& cells)
+void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 {
+//#ifdef NAV_DEBUG
+	//ナビゲーションデバッグ用。
+	//最初のセル。
+	auto* baseCell = nodeCellList.back();
+	//隣接セルとはスムージング処理を行わなくていいので、隣接セルの次のセルから当たり判定調査を行う。
+	auto* reserchCell = baseCell->m_parent->m_parent;
+	while (reserchCell != nullptr) {
+		//ゴールに到着するまで、スムージング処理を行う。
+		//ベースのセルの中心から、調査セルの中心に向かう線分を求める。
+		Line BaseLine;
+		BaseLine.start = baseCell->m_CenterPos;
+		BaseLine.end = reserchCell->m_CenterPos;
+		//セルを構成する３本の線分を求める。
+		Line line[3];
+		line[0].start = reserchCell->pos[0];
+		line[0].end = reserchCell->pos[1];
+		line[1].start = reserchCell->pos[1];
+		line[1].end = reserchCell->pos[2];
+		line[2].start = reserchCell->pos[2];
+		line[2].end = reserchCell->pos[0];
+		//ここから当たり判定を行う。
+		bool hantei = false;
+		for (int lineNo = 0; lineNo < 3; lineNo++) {
+			hantei = IntersectLineToLineXZ(BaseLine, line[lineNo]);
+			if (hantei == true) {
+				//衝突したのでノードリストから該当セルを削除。
+				auto it = std::find(nodeCellList.begin(), nodeCellList.end(), reserchCell);
+				nodeCellList.erase(it);
+				//リサーチセルを更新。
+				reserchCell = reserchCell->m_parent;
+				break;
+			}
+		}
+
+		if (hantei == false) {
+			//衝突しているセルは存在していないので、ベースセルを更新する。
+			baseCell = reserchCell;
+			//リサーチセルも更新する。
+			if (reserchCell->m_parent != nullptr) {
+				reserchCell = baseCell->m_parent->m_parent;
+			}
+			else {
+				//これ以上リサーチセルは存在しないため終了。
+				break;
+			}
+
+		}
+	}
+
+	//ゴールまでのノードを再構成する。
+	for (int nodeNo = 0; nodeNo < nodeCellList.size(); nodeNo++) {
+		if (nodeCellList[nodeNo]->costToEnd != 0.0f) {
+			//ゴールじゃないなら。親ノードをつなぎなおす。
+			nodeCellList[nodeNo]->m_parent = nodeCellList[nodeNo + 1];
+		}
+	}
+//#endif
+}
+
+
+
+std::vector<NaviMesh::Cell*> AStar::Search(Vector3& start, Vector3& goal, std::vector<cell>& cells)
+{
+	//セルリストの初期化。
 	CreateCellList(start, goal, cells);
+	//ノードを作成。
 	cell* goalCellNode = CreateNode();
-	return goalCellNode;
+
+	//ノード情報を管理しやすいように、リストに変換。
+	//スタート位置から近い順。
+	std::vector<cell*> m_nodeCellList;
+	//現在のセル。
+	cell* currentNode = goalCellNode;
+	while (currentNode != nullptr)
+	{
+		//リストに積む。
+		m_nodeCellList.insert(m_nodeCellList.begin(), currentNode);
+		currentNode = currentNode->m_parent;
+	}
+
+	//スムージング。
+	Smoothing(m_nodeCellList);
+	return m_nodeCellList;
 }
 
 

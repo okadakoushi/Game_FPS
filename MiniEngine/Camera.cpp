@@ -10,6 +10,7 @@ void Camera::Update()
 {
 	//アスペクト比を計算する。
 	m_aspect = (float)EngineObj().GetGraphicsEngine()->GetFrameBufferWidth() / (float)EngineObj().GetGraphicsEngine()->GetFrameBufferHeight();
+	m_viewMatrix.MakeLookAt(m_position, m_target, m_up);
 	if(m_isNeedUpdateProjectionMatrix){
 		if (m_updateProjMatrixFunc == enUpdateProjMatrixFunc_Perspective) {
 			//透視変換行列を計算。

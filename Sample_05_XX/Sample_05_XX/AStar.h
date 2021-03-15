@@ -6,14 +6,13 @@ class NaviMesh;
 /// 経路探査用の計算を行うクラス。
 /// </summary>
 /// <code>
-/// 1.開いてる/閉じてるセルリストの作成を行う。
-/// CreateCellList(param);
-/// 
+/// -user呼び出しはこいつのみ。
+/// Search(param);
 /// </code>
 class AStar
 {
 	using cell = NaviMesh::Cell;
-public:
+private:
 	/// <summary>
 	/// 該当リストに積む。積んだ際にリスト番号も更新する。
 	/// </summary>
@@ -104,12 +103,20 @@ public:
 	/// <returns>目的地までのノード(セル)。</returns>
 	NaviMesh::Cell* CreateNode();
 	/// <summary>
+	/// 経路探査を行ったセルに対してスムージングを行う。
+	/// </summary>
+	/// <param name="nodeList">ゴールまでのノード。</param>
+	/// <returns></returns>
+	void Smoothing(std::vector<cell*>& nodeList);
+public:
+	/// <summary>
 	/// 経路を探索。
+	/// <para>ローカル変数返すから参照付けたらダメ絶対。</para>
 	/// </summary>
 	/// <param name="start">スタート位置。</param>
 	/// <param name="goal">ゴール位置。</param>
 	/// <param name="cells">セル。</param>
-	NaviMesh::Cell* Search(Vector3& start, Vector3& goal, std::vector<cell>& cells);
+	std::vector<cell*> Search(Vector3& start, Vector3& goal, std::vector<cell>& cells);
 private:
 	std::vector<cell*> m_openCellList;		//開いてるセルリスト(経路探査中のセルリストになる)。
 	std::vector<cell*> m_closeCellList;		//閉じてるセルリスト(経路探査済みのセルのリストになる)。

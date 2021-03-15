@@ -32,10 +32,6 @@ void NaviMesh::Load(const char* filePath)
 			//パディングをロード。
 			fread(&m_cellBin[i].pad, sizeof(m_cellBin[i].pad), 1, fp);
 
-			//ZUPに合わせておく。
-			m_cellBin[i].pos[0] = { m_cellBin[i].pos[0].x, m_cellBin[i].pos[0].z, m_cellBin[i].pos[0].y };
-			m_cellBin[i].pos[1] = { m_cellBin[i].pos[1].x, m_cellBin[i].pos[1].z, m_cellBin[i].pos[1].y };
-			m_cellBin[i].pos[2] = { m_cellBin[i].pos[2].x, m_cellBin[i].pos[2].z, m_cellBin[i].pos[2].y };
 			//リストに積み積み。
 			m_cellPos.push_back(m_cellBin[i].pos[0]);
 			m_cellPos.push_back(m_cellBin[i].pos[1]);
@@ -60,6 +56,7 @@ void NaviMesh::Load(const char* filePath)
 			//中心座標流し込み。
 			Vector3 CellCenter;
 			for (int posC = 0; posC < 3; posC++) {
+				m_cell[i].pos[posC] = m_cellBin[i].pos[posC];
 				CellCenter += m_cellBin[i].pos[posC];
 			}
 			//セルの中心。
@@ -194,8 +191,11 @@ void NaviMesh::BeginRender()
 
 void NaviMesh::Render()
 {
+	Quaternion qRot;
+	qRot.SetRotationDegY(0.0f);
 	//まずはカメラの行列を送る。
 	SConstantBuffer cb;
+	cb.mRot.MakeRotationFromQuaternion(qRot);
 	cb.mView = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
 	cb.mProj = GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix();
 	m_CB.CopyToVRAM(&cb);

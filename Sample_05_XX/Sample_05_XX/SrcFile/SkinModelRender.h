@@ -94,7 +94,7 @@ public:
 	/// ‰ñ“]‚ğİ’èB
 	/// </summary>
 	/// <param name="qRot"></param>
-	void SetRotation(Quaternion& qRot)
+	void SetRotation(const Quaternion& qRot)
 	{
 		m_rot = qRot;
 	}

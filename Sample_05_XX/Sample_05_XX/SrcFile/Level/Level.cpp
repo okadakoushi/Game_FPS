@@ -162,21 +162,21 @@ void Level::BuildBoneMatrices()
 
 	//ここまでコピーしただけ。
 	
-	for (auto& bone : m_bones) {
-		if (bone->GetParentBoneNo() != -1) {
-			m_bones.at(bone->GetParentBoneNo())->AddChild(bone.get());
-			//ローカルマトリクス計算。
-			const Matrix& parentMatrix = m_bones.at(bone->GetParentBoneNo())->GetInvBindPoseMatrix();
-			Matrix localMatrix;
-			//平行移動行列はかき消す。
-			localMatrix = bone->GetBindPoseMatrix() * parentMatrix;
-			bone->SetLocalMatrix(localMatrix);
-		}
-		else {
-			//これ以上親いない。
-			bone->SetLocalMatrix(bone->GetBindPoseMatrix());
-		}
-	}
+	//for (auto& bone : m_bones) {
+	//	if (bone->GetParentBoneNo() != -1) {
+	//		m_bones.at(bone->GetParentBoneNo())->AddChild(bone.get());
+	//		//ローカルマトリクス計算。
+	//		const Matrix& parentMatrix = m_bones.at(bone->GetParentBoneNo())->GetInvBindPoseMatrix();
+	//		Matrix localMatrix;
+	//		//平行移動行列はかき消す。
+	//		localMatrix = bone->GetBindPoseMatrix() * parentMatrix;
+	//		bone->SetLocalMatrix(localMatrix);
+	//	}
+	//	else {
+	//		//これ以上親いない。
+	//		bone->SetLocalMatrix(bone->GetBindPoseMatrix());
+	//	}
+	//}
 
 	//ボーン行列を確保。
 	m_boneMatirxs = std::make_unique<Matrix[]>(m_bones.size());

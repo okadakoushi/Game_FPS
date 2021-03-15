@@ -9,10 +9,9 @@ struct VSOutput{
 //VP行列。
 cbuffer VP : register(b0)
 {
-	float4x4 mRot;	//回転。
+	float4x4 mrot;	//回転。
 	float4x4 mview;	//ビュー。
 	float4x4 mproj;	//プロジェ。
-	float4 mColor;	//色。
 }	
 //頂点シェーダー。
 //１．引数は変換前の頂点情報。
@@ -21,7 +20,7 @@ VSOutput VSMain(VSInput In)
 {
 	VSOutput vsOut;
 	//ビューとプロジェかけていく。
-	In.pos = mul(mRot, In.pos);
+	In.pos = mul(In.pos, mrot);
 	In.pos = mul(mview, In.pos);
 	In.pos = mul(mproj, In.pos);
 	//座標。
