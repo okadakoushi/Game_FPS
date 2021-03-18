@@ -22,6 +22,7 @@ void Enemy::Update()
         //更新必要。
         m_nodeList = m_astar.Search(m_pos, m_targetPos, NaviMeshObj()->GetCellList());
         NaviMesh::Cell* parentCell = m_nodeCell;
+        NaviMeshObj()->AgentNodeRender(m_nodeList);
         m_dirty = true;
     }
 
@@ -48,7 +49,6 @@ void Enemy::Update()
             seifu = -1;
         }
         //最終的な角度  角度を動かす 角度に正負をかける 
-        //Bullet.cppにで使う際に楽なので変数化
         m_kakudo = kakudo1 * seifu;
         qRot.SetRotation(Vector3::AxisY, m_kakudo - 3.14);
         //回転を加算
@@ -69,5 +69,9 @@ void Enemy::Update()
         m_modelRender->PlayAnimation(1, 0.5f);
     }
     m_modelRender->SetPosition(m_pos);
+}
+
+void Enemy::ForwardRender()
+{
 }
 

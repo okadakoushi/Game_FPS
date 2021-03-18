@@ -53,19 +53,44 @@ namespace {
 				//辺の割合を求める。
 				float t = EndLen / (StartLen + EndLen);
 				//終点から始点。
-				Vector3 EtoS = line1.start - line1.end;
+				Vector3 EtoS = line1.end - line1.start ;
 				//終点から交点。
 				Vector3 EtoHit = EtoS * t;
-				//交点。
-				Vector3 hitPos = line1.end + EtoHit;
-			
-				auto len = CalcLen(line0.end, line0.start);
-				auto len1 = CalcLen(hitPos, line0.start);
-				auto len2 = CalcLen(line0.end ,hitPos);
-				
-				if (len == len1 + len2) {
-					return true;
+				//衝突点。
+				Vector3 hitPoint = line1.start + EtoHit;
+				//始点から衝突点。
+				Vector3 StoHit = hitPoint - line1.start;
+				EtoHit.Normalize();
+				StoHit.Normalize();
+				//line1の内積。
+				float LineDot = Dot(EtoHit, StoHit);
+				if (LineDot < 0) {
+					//向かい合っていないので、線分上にない。
+					return false;
 				}
+				//line0
+				EtoHit = hitPoint - line0.start;
+				StoHit = hitPoint - line0.end;
+				LineDot = Dot(EtoHit, StoHit);
+				if (LineDot > 0) {
+					//向かい合っていないので、線分上にない。
+					return false;
+				}
+				return true;
+
+				////交点。
+				//Vector3 hitPos = line1.end + EtoHit;
+
+				////始点、終点への交点。
+				//Vector3 StoHit = hitPos - StoHit;
+			
+				//auto len = CalcLen(line1.end, line1.start);
+				//auto len1 = CalcLen(hitPos, line1.start);
+				//auto len2 = CalcLen(line1.end ,hitPos);
+				//
+				//if (len == len1 + len2) {
+				//	return true;
+				//}
 
 				//if ((VSL < hitL && hitL < VEL) || (VEL < hitL && hitL < VSL)) {
 				//	//片方が小さくて、片方が大きい。
@@ -83,13 +108,16 @@ void AStar::CreateCellList(Vector3& start, Vector3& goal, std::vector<cell>& cel
 #if 0
 	//交差ラインテスト。
 	Line line0, line1;
-	line0.start = { 0, 500, 0 };
-	line0.end = { 200, 500, 0 };
-	line1.start = { 100, 500, -100 };
-	line1.end = { 100, 500, 100 };
+	line0.start = { -100, 500, 300 };
+	line0.end = { 300, 500, 150 };
+	line1.start = { -100, 500, 200 };
+	line1.end = { -200, 500, 500 };
 	//判定。
 	if (IntersectLineToLineXZ(line0, line1) == true) {
 		printf("交差していました。\n");
+	}
+	else {
+		printf("交差していません\n");
 	}
 #else
 	//リストをクリア。
@@ -173,9 +201,7 @@ NaviMesh::Cell* AStar::CreateNode()
 		//調査セル求まったので経路のノードを作成していく。
 		if (reserchCell == m_goalCell) {
 			//調査のセルがゴールのセルだった。
-			//todo:本来ここから、スタートからゴールまでのノードを返す処理が入る。
 			//MessageBoxA(nullptr, "経路探索完了！！", "NaviMesh::AStar", MB_OK);
-
 			return reserchCell;
 		}
 		else {
@@ -218,54 +244,90 @@ NaviMesh::Cell* AStar::CreateNode()
 
 void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 {
-//#ifdef NAV_DEBUG
-	//ナビゲーションデバッグ用。
 	//最初のセル。
-	auto* baseCell = nodeCellList.back();
-	//隣接セルとはスムージング処理を行わなくていいので、隣接セルの次のセルから当たり判定調査を行う。
-	auto* reserchCell = baseCell->m_parent->m_parent;
-	while (reserchCell != nullptr) {
-		//ゴールに到着するまで、スムージング処理を行う。
+	cell* baseCell = nodeCellList.back();
+	//スムーズ可能かどうか調べるための目的地セル。
+	cell* targetCell = baseCell->m_parent->m_parent;
+	//リサーチセルはベースセルの親。
+	cell* reserchCell = baseCell->m_parent;
+
+	cell* deleteCell = nullptr;
+	//ベースセルの親ノードは確定でスムージング可能なのでスムージングする。
+	nodeCellList.erase(std::find(nodeCellList.begin(), nodeCellList.end(), baseCell->m_parent));
+	//削除予定リスト。
+	std::vector<cell*> deleteCellList;
+
+
+	while (baseCell->m_parent != nullptr) {
+		//ノードがなくなるまでスムージングチェック。
+
+		//ベースセルとターゲットセルの間に存在するセルと、ベースセルからターゲットセルに向かう線分と
+		//あたり判定調査を行い間に存在するセルすべてと衝突しているならセルをスムージング可能。
+
 		//ベースのセルの中心から、調査セルの中心に向かう線分を求める。
 		Line BaseLine;
 		BaseLine.start = baseCell->m_CenterPos;
-		BaseLine.end = reserchCell->m_CenterPos;
-		//セルを構成する３本の線分を求める。
-		Line line[3];
+		BaseLine.end = targetCell->m_CenterPos;
+
+		//セルを構成する3本の線分を求める。
+		const int MAXLINE = 3;
+		Line line[MAXLINE];
 		line[0].start = reserchCell->pos[0];
 		line[0].end = reserchCell->pos[1];
 		line[1].start = reserchCell->pos[1];
 		line[1].end = reserchCell->pos[2];
 		line[2].start = reserchCell->pos[2];
 		line[2].end = reserchCell->pos[0];
-		//ここから当たり判定を行う。
-		bool hantei = false;
-		for (int lineNo = 0; lineNo < 3; lineNo++) {
-			hantei = IntersectLineToLineXZ(BaseLine, line[lineNo]);
-			if (hantei == true) {
-				//衝突したのでノードリストから該当セルを削除。
-				auto it = std::find(nodeCellList.begin(), nodeCellList.end(), reserchCell);
-				nodeCellList.erase(it);
-				//リサーチセルを更新。
+
+		//衝突したかフラグ。
+		bool isHit = false;
+		for (int lineCount = 0; lineCount < MAXLINE; lineCount++) {
+			//当たり判定調査。
+			isHit = IntersectLineToLineXZ(BaseLine, line[lineCount]);
+			if (isHit) {
+				//このセルの当たり判定調査は終了。
 				reserchCell = reserchCell->m_parent;
 				break;
 			}
 		}
 
-		if (hantei == false) {
-			//衝突しているセルは存在していないので、ベースセルを更新する。
-			baseCell = reserchCell;
-			//リサーチセルも更新する。
-			if (reserchCell->m_parent != nullptr) {
-				reserchCell = baseCell->m_parent->m_parent;
+		if (!isHit) {
+			//間に存在するセルと衝突していない、スムージング不可能。
+			//セルを更新。
+			baseCell = targetCell;
+			if (baseCell->m_parent != nullptr) {
+				targetCell = baseCell->m_parent->m_parent;
+				reserchCell = baseCell->m_parent;	
+				if (deleteCell != nullptr) {
+					deleteCellList.erase(std::find(deleteCellList.begin(), deleteCellList.end(), deleteCell));
+					deleteCell = nullptr;
+				}
+				//ベースセルの親ノードは確定でスムージング可能なのでスムージングする。
+				nodeCellList.erase(std::find(nodeCellList.begin(), nodeCellList.end(), baseCell->m_parent));
 			}
 			else {
-				//これ以上リサーチセルは存在しないため終了。
 				break;
 			}
+		}
 
+		if (reserchCell == targetCell) {
+			//ターゲットセルまで到着、スムージング可能なので削除予定リストに積む。
+			deleteCell = targetCell;
+			deleteCellList.push_back(targetCell);
+			//セルを更新。
+			targetCell = targetCell->m_parent;
+			reserchCell = baseCell->m_parent;
+		}
+	}//ノードがなくなった調査終了。
+
+	for (auto deleteC : deleteCellList) {
+		//削除予定リストに乗ってたセルは全部消す。
+		auto it = std::find(nodeCellList.begin(), nodeCellList.end(), deleteC);
+		if (it != nodeCellList.end()) {
+			nodeCellList.erase(it);
 		}
 	}
+
 
 	//ゴールまでのノードを再構成する。
 	for (int nodeNo = 0; nodeNo < nodeCellList.size(); nodeNo++) {
@@ -274,7 +336,6 @@ void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 			nodeCellList[nodeNo]->m_parent = nodeCellList[nodeNo + 1];
 		}
 	}
-//#endif
 }
 
 
@@ -296,10 +357,13 @@ std::vector<NaviMesh::Cell*> AStar::Search(Vector3& start, Vector3& goal, std::v
 		//リストに積む。
 		m_nodeCellList.insert(m_nodeCellList.begin(), currentNode);
 		currentNode = currentNode->m_parent;
+		if (currentNode != nullptr) {
+			currentNode->child = m_nodeCellList.front();
+		}
 	}
 
 	//スムージング。
-	Smoothing(m_nodeCellList);
+	//Smoothing(m_nodeCellList);
 	return m_nodeCellList;
 }
 

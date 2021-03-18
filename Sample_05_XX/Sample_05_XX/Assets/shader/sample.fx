@@ -41,5 +41,10 @@ float4 PSMainWire(VSOutput vsOut) : SV_Target0
 //ライン用ピクセルシェーダー。
 float4 PSMainLine(VSOutput vsOut) : SV_Target0
 {
-	return float4(1.0f, 1.0f,0.0f, 0.0f);
+	return float4(0.0f, 0.0f,1.0f, 0.0f);
+}
+
+float4 PSMainLineRoot(VSOutput vsOut) : SV_Target0
+{
+	return float4(1.0f, 0.0f, 1.0f, 1.0f);
 }

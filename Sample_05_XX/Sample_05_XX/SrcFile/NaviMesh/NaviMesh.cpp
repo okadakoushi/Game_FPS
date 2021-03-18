@@ -103,6 +103,33 @@ void NaviMesh::Load(const char* filePath)
 	InitRender();
 }
 
+void NaviMesh::AgentNodeRender(std::vector<NaviMesh::Cell*>& rootList)
+{
+	if (!m_rootInited) {
+		//ライン構成。
+		for (auto* Cell : rootList) {
+			if (Cell->m_parent != nullptr) {
+				Line line;
+				line.start = Cell->m_CenterPos;
+				line.end = Cell->m_parent->m_CenterPos;
+				//ルートを形成。
+				m_rootCellLine.push_back(line);
+			}
+		}
+		//頂点バッファを形成していく。
+		m_rootVertexBuffer.Init(sizeof(Line) * m_rootCellLine.size(), sizeof(Line::start));
+		m_rootVertexBuffer.Copy(&m_rootCellLine[0]);
+		//インデックスを形成。
+		for (int indexs = 0; indexs < m_rootCellLine.size() * 2; indexs++) {
+			m_rootIndexs.push_back(indexs);
+		}
+		//バッファー作成。
+		m_rootIndexBuffer.Init(sizeof(m_rootIndexs[0]) * m_rootIndexs.size(), sizeof(m_rootIndexs[0]));
+		m_rootIndexBuffer.Copy(&m_rootIndexs[0]);
+		m_rootInited = true;
+	}
+}
+
 void NaviMesh::InitRender()
 {
 	//頂点バッファー初期化。
@@ -161,11 +188,12 @@ void NaviMesh::InitRender()
 		D3D12_TEXTURE_ADDRESS_MODE_CLAMP
 	);
 
-	Shader vs, ps, psWire, psLine;
+	Shader vs, ps, psWire, psLine, psLineRoot;
 	vs.LoadVS(L"Assets/shader/sample.fx", "VSMain");
 	ps.LoadPS(L"Assets/shader/sample.fx", "PSMain");
 	psWire.LoadPS(L"Assets/shader/sample.fx", "PSMainWire");
 	psLine.LoadPS(L"Assets/shader/sample.fx", "PSMainLine");
+	psLineRoot.LoadPS(L"Assets/shader/sample.fx", "PSMainLineRoot");
 
 	//ディスクリプタヒープ設定。
 	m_heap.RegistConstantBuffer(0, m_CB);
@@ -177,6 +205,8 @@ void NaviMesh::InitRender()
 	InitPipelineState(m_pipelineStateBuck, m_rootSignature, vs, psWire, true, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	//線分描画用のパイプラインステート作成。
 	InitPipelineState(m_lineDrawPipelineState, m_rootSignature, vs, psLine, false, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
+
+	InitPipelineState(m_rootDrawPipelineState, m_rootSignature, vs, psLineRoot, false, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
@@ -219,6 +249,13 @@ void NaviMesh::Render()
 	GraphicsEngineObj()->GetRenderContext().SetVertexBuffer(m_lineVertexBuffer);
 	GraphicsEngineObj()->GetRenderContext().SetIndexBuffer(m_lineIndexBuffer);
 	GraphicsEngineObj()->GetRenderContext().DrawIndexed(m_lineIndexs.size());
+
+	//初期化終わったから描画処理～
+	GraphicsEngineObj()->GetRenderContext().SetPipelineState(m_rootDrawPipelineState);
+	GraphicsEngineObj()->GetRenderContext().SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	GraphicsEngineObj()->GetRenderContext().SetVertexBuffer(m_rootVertexBuffer);
+	GraphicsEngineObj()->GetRenderContext().SetIndexBuffer(m_rootIndexBuffer);
+	GraphicsEngineObj()->GetRenderContext().DrawIndexed(m_rootIndexs.size());
 }
 
 void NaviMesh::EndRender()

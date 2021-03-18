@@ -28,6 +28,7 @@ public:
 	struct Cell {
 		Vector3 pos[3];							//３頂点。
 		Cell* m_parent = nullptr;				//親となるセル。
+		Cell* child = nullptr;					//子供となるセル。
 		Cell* m_linkCell[3] = { nullptr };		//隣接セル。
 		Vector3 m_CenterPos = g_vec3Zero;		//セルの中央座標。
 		float costFromStart = 0.0f;				//スタートから見たコスト。
@@ -49,6 +50,12 @@ public:
 	/// </summary>
 	/// <param name="isWire">ワイヤーフレーム描画にする？</param>
 	void InitRender();
+	/// <summary>
+	/// エージェントの経路を描画。
+	/// <para>todo:こいつすごい構造がばある、早いうちに直そう。。</para>
+	/// <para>仕様上、ルート更新とかできないなぁ。。。Astarに移譲しよ。</para>
+	/// </summary>
+	void AgentNodeRender(std::vector<NaviMesh::Cell*>& rootList);
 	/// <summary>
 	/// 描画準備。
 	/// </summary>
@@ -135,5 +142,12 @@ private:
 	IndexBuffer m_lineIndexBuffer;			//線分描画インデックスバッファー。
 	PipelineState m_lineDrawPipelineState;	//線分描画パイプラインステート。
 	std::vector< Line> m_linkCellLine;		//隣接セルを表すラインの配列。
+	//エージェントのルート描画用レンダー。
+	bool m_rootInited = false;				//初期化フラグ。init作るのめんどくさいからまぁいいや。
+	PipelineState m_rootDrawPipelineState;	//線分描画パイプラインステート。
+	VertexBuffer m_rootVertexBuffer;		//ルート描画用頂点。
+	std::vector<int> m_rootIndexs;			//ルートインデックス。
+	IndexBuffer m_rootIndexBuffer;			//線分描画インデックスバッファー。
+	std::vector<Line> m_rootCellLine;		//隣接セルを表すラインの配列。
 };
 

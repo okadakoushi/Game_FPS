@@ -110,7 +110,7 @@ public:
 	/// Šg‘å—¦‚ğİ’èB
 	/// </summary>
 	/// <param name="scale"></param>
-	void SetScale(Vector3& scale)
+	void SetScale(const Vector3& scale)
 	{	
 		m_scale = scale;
 	}
