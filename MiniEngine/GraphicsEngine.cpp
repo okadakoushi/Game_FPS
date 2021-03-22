@@ -170,7 +170,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ライトの設定。
-	g_light.directionalLight[0].color = { 5.8f, 5.8f, 5.8f, 1.0f };
+	g_light.directionalLight[0].color = { 3.8f, 3.8f, 3.8f, 1.0f };
 	g_light.directionalLight[0].direction = { -1.0f, -1.0f, -1.0f};
 	g_light.directionalLight[0].direction.Normalize();
 
@@ -213,7 +213,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
-	m_shadow->Init(2500, 2500, 800.0f);
+	m_shadow->Init(5000, 5000, 2000.0f);
 
 	return true;
 }

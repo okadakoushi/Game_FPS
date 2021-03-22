@@ -121,6 +121,6 @@ private:
 	Vector3 m_lightDirection = { -1.0f, -1.0f, -1.0f };	//ライトの方向。
 	float m_lightHeight;						//ライトの高さ。
 	bool m_isEnable = false;					//シャドウマップが有効？
-	float m_shadowAreas[NUM_SHADOW_MAP] = { 1000.0f,1500.0f,1500.0f };		//影の落ちる範囲。
+	float m_shadowAreas[NUM_SHADOW_MAP] = { 500.0f,1000.0f,2500.0f };		//影の落ちる範囲。
 };
 

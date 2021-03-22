@@ -13,11 +13,22 @@ public:
 	void Update() override;
 
 	void ForwardRender() override;
+
+	void SetPosition(Vector3& pos)
+	{
+		m_pos = pos;
+	}
+
+	void SetTarget(const Vector3& pos)
+	{
+		m_targetPos = pos;
+	}
 private:
 	SkinModelRender* m_modelRender;			//モデルレンダー。
 	Vector3 m_pos = g_vec3Zero;				//位置。
 	Quaternion m_rot = g_quatIdentity;		//回転。
 	Vector3 m_targetPos = {0, 0, -800};		//目的地点。
+	Vector3 m_nextTarget = g_vec3Zero;		//次の目的地。
 	const float m_spped = 1.0f;				//スピード。
 	AStar m_astar;							//経路探査。
 	NaviMesh::Cell* m_nodeCell = nullptr;	//ノードセル。

@@ -5,14 +5,15 @@ bool Enemy::Start()
 {
     m_modelRender = NewGO<SkinModelRender>(EnPriority_3DRender);
     const char* tkaFilePaths[]{
-        "Assets/animData/robo/walk.tka",
-        "Assets/animData/robo/idle.tka",
+        "Assets/animData/soldierMob/walk.tka",
+        "Assets/animData/soldierMob/idle.tka",
     };
-    m_modelRender->Init("Assets/modelData/Chara/enemy_robo.tkm", tkaFilePaths);
+    m_modelRender->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFilePaths);
     m_modelRender->SetRenderMode(enRenderMode_Skin);
+    m_modelRender->SetShadwoCaster(true);
+    m_modelRender->SetShadowReciever(true);
     Vector3 scale = { 1.5f, 1.5f, 1.5f };
     m_modelRender->SetScale(scale);
-    m_pos = { 0,0,0 };
     return true;
 }
 
@@ -22,7 +23,9 @@ void Enemy::Update()
         //更新必要。
         m_nodeList = m_astar.Search(m_pos, m_targetPos, NaviMeshObj()->GetCellList());
         NaviMesh::Cell* parentCell = m_nodeCell;
-        NaviMeshObj()->AgentNodeRender(m_nodeList);
+        //NaviMeshObj()->AgentNodeRender(m_nodeList);
+        //次の目的地は今の場所。
+        m_nextTarget = m_pos;
         m_dirty = true;
     }
 
@@ -34,6 +37,7 @@ void Enemy::Update()
         toNextCell.Normalize();
         m_pos += toNextCell * m_spped;
 
+        //todo:ここから昔書いたコード持ってきただけだから後でリファクタリング。
         //初期化
         Quaternion qRot = Quaternion::Identity;
         //角度を決める
@@ -67,6 +71,9 @@ void Enemy::Update()
     else {
         //動いてない。
         m_modelRender->PlayAnimation(1, 0.5f);
+        //更新。
+        m_targetPos = m_nextTarget;
+        m_dirty = false;
     }
     m_modelRender->SetPosition(m_pos);
 }

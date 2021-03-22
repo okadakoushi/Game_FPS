@@ -28,7 +28,7 @@ bool GamePlayer::Start()
 	m_unityChan->SetShadowReciever(true);
 	//スキン描画。
 	m_unityChan->SetRenderMode(enRenderMode_Skin);
-	m_unityChan->SetScale(g_vec3Zero);
+	m_unityChan->SetScale(g_vec3One);
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
 
@@ -37,15 +37,15 @@ bool GamePlayer::Start()
 	m_camera->SetCameraType(true);
 
 	//レティクル初期化。
-	//m_reticle = NewGO<SpriteRender>(EnPriority_UI);
-	//SpriteInitData testInitData;
-	////ddsファイル初期化。
-	//testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
-	//testInitData.m_width = 100.0f;
-	//testInitData.m_height = 100.0f;
-	//testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
-	//m_reticle->Init(testInitData);
-	//m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
+	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
+	SpriteInitData testInitData;
+	//ddsファイル初期化。
+	testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
+	testInitData.m_width = 50.0f;
+	testInitData.m_height = 50.0f;
+	testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+	m_reticle->Init(testInitData);
+	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
 
 	return true;
 }

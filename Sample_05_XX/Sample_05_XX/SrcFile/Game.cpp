@@ -40,7 +40,7 @@ void Game::Update()
 {
 	if(GetAsyncKeyState('R')) {
 		//解放テスト用。
-		DeleteGO(this);
+		//DeleteGO(this);
 	}
 	if (GetAsyncKeyState('F') && !m_effect->IsPlay()) {
 		m_effect = NewGO<myEngine::Effect>(0);

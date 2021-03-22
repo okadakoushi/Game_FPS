@@ -88,7 +88,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(ProjectDir)/Effekseer/include;$(IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)/../MiniEngine;$(ProjectDir)/</IncludePath>
-    <LibraryPath>$(SolutionDir)/../MiniEngine/DirectXTK/Bin/Desktop_2019_Win10/x64/Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)/../MiniEngine/DirectXTK/Bin/Desktop_2019_Win10/x64/Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -183,7 +183,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
-    <ClCompile Include="AStar.cpp" />
+    <ClCompile Include="SrcFile\NaviMesh\AStar.cpp" />
     <ClCompile Include="SrcFile\GameObj\Enemy.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\NaviMesh.cpp" />
     <ClCompile Include="SrcFile\Effect\CEffectEngine.cpp" />
@@ -249,7 +249,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
-    <ClInclude Include="AStar.h" />
+    <ClInclude Include="SrcFile\NaviMesh\AStar.h" />
     <ClInclude Include="SrcFile\GameObj\Enemy.h" />
     <ClInclude Include="SrcFile\NaviMesh\NaviMesh.h" />
     <ClInclude Include="SrcFile\Effect\CEffectEngine.h" />
