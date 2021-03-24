@@ -55,11 +55,11 @@ void GameCamera::MoveCameraOnFPS()
 	//回転上限のチェック。
 	Vector3 toTargetDir = m_toPos;
 	toTargetDir.Normalize();
-	if (toTargetDir.y < -0.5f) {
+	if (toTargetDir.y < -0.9f) {
 		//上向きすぎ。
 		m_toPos = totPosOld;
 	}
-	else if (toTargetDir.y > 0.8f) {
+	else if (toTargetDir.y > 0.9f) {
 		//下向きすぎ。
 		m_toPos = totPosOld;
 	}

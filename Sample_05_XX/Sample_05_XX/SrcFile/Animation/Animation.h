@@ -42,18 +42,21 @@ public:
 	/// </summary>
 	/// <param name="clipName">アニメーションクリップ名。</param>
 	/// <param name="flag">フラグ。</param>
-	void SetAnimationClipLoopFlag(const wchar_t* clipName, bool flag)
+	void SetAnimationClipLoopFlag(const int& animNum, const bool flag)
 	{
 		//クリップネームでイテレーター。
-		auto it = find_if(
+		auto it = find(
 			m_animationClips.begin(),
 			m_animationClips.end(),
-			[clipName](auto& clip) {return clip->GetName() == clipName; }
+			m_animationClips[animNum]
 		);
 		if (it == m_animationClips.end()) {
 			//見つからなかった。
 			return;
 		}
+
+		m_animationClips[animNum]->SetLoopFlag(false);
+
 		(*it)->SetLoopFlag(flag);
 	}
 
@@ -68,7 +71,7 @@ public:
 	/// <para>インターフェイス側処理。</para>
 	/// </summary>
 	/// <param name="deltaTime"></param>
-	void Progress(float deltaTime);
+	void Progress(float deltaTime, int& waitTime);
 
 	//Vector3 CalcFootstepDeltaValueInWorldSpace(Quaternion rot, Vector3 scale) const;
 

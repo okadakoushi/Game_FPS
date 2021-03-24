@@ -170,20 +170,26 @@ void Animation::UpdateGlobalPose()
 			numAnimationController = m_numAnimationPlayController - i;
 		}
 	}
+
 	m_numAnimationPlayController = numAnimationController;
 }
 
-void Animation::Progress(float deltaTime) {
-	if (m_numAnimationPlayController == 0) {
-		//アニメーションなし。
-		return;
+void Animation::Progress(float deltaTime, int& waitTime) {
+	if (waitTime == 0) {
+		if (m_numAnimationPlayController == 0) {
+			//アニメーションなし。
+			return;
+		}
+		//更新時間。
+		m_deltaTimeOnUpdate = deltaTime;
+		//ローカルポーズの更新。
+		UpdateLocalPose(deltaTime);
+		//グローバルポーズを計算。
+		UpdateGlobalPose();
 	}
-	//更新時間。
-	m_deltaTimeOnUpdate = deltaTime;
-	//ローカルポーズの更新。
-	UpdateLocalPose(deltaTime);
-	//グローバルポーズを計算。
-	UpdateGlobalPose();
+	else {
+		waitTime--;
+	}
 }
 
 //Vector3 Animation::CalcFootstepDeltaValueInWorldSpace(Quaternion rot, Vector3 scale) const

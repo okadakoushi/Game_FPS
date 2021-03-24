@@ -25,6 +25,7 @@ bool Game::Start()
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
 	//Enemy。
 	m_enemy = NewGO<Enemy>(EnPriority_3DModel, "Enemy");
+	m_enemy->SetPosition({ 950,0,650 });
 	//Effect。
 	m_effect = NewGO<myEngine::Effect>(0);
 	//UIs。unityとかもCanvasとかあるしあった方がいいのだろうか。。

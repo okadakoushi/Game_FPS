@@ -9,6 +9,7 @@ void AnimationClip::Load(const char* filePath)
 {
 	//tkaファイルロード。
 	m_tkaFile.Load(filePath);
+	m_clipName = filePath;
 	if (m_tkaFile.IsLoaded() == false) {
 		//読み込み失敗。
 		MessageBox(

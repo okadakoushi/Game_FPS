@@ -75,12 +75,37 @@ public:
 		m_animation.Play(clipNo, interpolateTime);
 	}
 	/// <summary>
+	/// アニメーションフラグ。
+	/// </summary>
+	/// <returns></returns>
+	const bool& isPlayAnim() const 
+	{
+		return m_animation.IsPlaying();
+	}
+	/// <summary>
+	/// ループフラグを設定。
+	/// </summary>
+	/// <param name="animName"></param>
+	/// <param name="flag"></param>
+	void SetAnimLoop(const int& animNo, const bool& flag)
+	{
+		m_loopMap[animNo] = flag;
+	}
+	/// <summary>
 	/// 座標を設定。
 	/// </summary>
 	/// <param name="pos"></param>
 	void SetPosition(const Vector3& pos)
 	{
 		m_pos = pos;
+	}
+	/// <summary>
+	/// アニメーションのウェイトタイムを設定（フレーム）。
+	/// </summary>
+	/// <param name="wait"></param>
+	void SetWaitTimeForAnim(int wait)
+	{
+		m_waitTime = wait;
 	}
 	/// <summary>
 	/// 座標取得。
@@ -198,9 +223,12 @@ private:
 	};
 	Model m_model;						//モデル。
 	Skeleton m_skeleton;				//スケルトン。
+	std::map<int, bool>	m_loopMap;		//ループフラグ管理マップ。
 	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。
+	std::vector<const char*>		m_noLoopAnimations;	//ループしないアニメーション。
 	Animation						m_animation;		//アニメーション
+	int m_waitTime = 0;									//アニメーションのウェイトタイム。
 	std::string						m_filePath;			//tkmファイルパス。
 	Vector3 m_pos = g_vec3Zero;			//座標。
 	Quaternion m_rot = g_quatIdentity;	//回転。

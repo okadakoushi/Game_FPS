@@ -1,8 +1,8 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-//#define GAME
-#define NAV_DEBUG
+#define GAME
+//#define NAV_DEBUG
 
 const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
@@ -30,6 +30,8 @@ static enum Priority {
 
 //#include "SrcFile/util/Util.h"
 #include "SrcFile/util/TNameKey.h"
+#include "SrcFile/Timer/tkStopwatch.h"
+#include "SrcFile/Timer/GameTime.h"
 
 #include "SrcFile/GameObject/GameObjectManager.h"
 

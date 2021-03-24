@@ -10,10 +10,10 @@
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 #ifdef NAV_DEBUG
+#endif // DEBUG
 	AllocConsole();
 	freopen("CON", "r", stdin);
 	freopen("CON", "w", stdout);
-#endif // DEBUG
 	//ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 	//エンジンの初期化。
@@ -29,17 +29,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//レンダリング開始。
 		EngineObj().BeginFrame();
 		EngineObj().Update();
-		//////////////////////////////////////
-		//ここから絵を描くコードを記述する。
-		//////////////////////////////////////
 
 		g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
-
-		//////////////////////////////////////
-		//絵を描くコードを書くのはここまで！！！
-		//////////////////////////////////////
-		//レンダリング終了。
-		EngineObj().EndFrame();
 	}
 	//エンジンの終了処理。
 	EngineObj().Final();

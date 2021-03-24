@@ -71,14 +71,14 @@ public:
 	/// クリップ名を取得。
 	/// </summary>
 	/// <returns>クリップ名。</returns>
-	const wchar_t* GetName() const
+	const char* GetName() const
 	{
 		//文字列のポインタを返却。
-		return m_clipName.c_str();
+		return m_clipName;
 	}
 private:
 	using KeyFramePtr = std::unique_ptr<KeyFrame>;					//キーフレームポインタ。
-	std::wstring				m_clipName;							//アニメーションクリップの名前。
+	const char*						m_clipName;							//アニメーションクリップの名前。
 	bool						m_isLoop;							//ループ判定。
 	std::vector<KeyFramePtr>	m_keyFrames;						//キーフレームのリスト。
 	std::vector<KeyFramePtrList>		m_keyFramePtrListArray;		//キーフレームリストの配列。

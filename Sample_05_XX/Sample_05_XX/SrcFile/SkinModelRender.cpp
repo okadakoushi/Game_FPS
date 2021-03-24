@@ -85,6 +85,12 @@ bool SkinModelRender::Start()
 			}
 			//アニメーションを初期化。
 			m_animation.Init(m_skeleton, m_animationClips);
+
+			//ループフラグ設定。
+			for (auto& list : m_loopMap) {
+				//２次元配列でいいなこれ。
+				m_animation.SetAnimationClipLoopFlag(list.first, list.second);
+			}
 			//アニメーションクリップのロード終了。
 			m_initStep = enInitStep_Completed;
 		}
@@ -102,7 +108,7 @@ void SkinModelRender::Update()
 {
 	if (m_animation.IsInited()) {
 		//アニメーション初期化されてた。
-		m_animation.Progress(DELTA_TIME);
+		m_animation.Progress(DELTA_TIME, m_waitTime);
 	}
 	//ワールド座標更新。
 	m_model.Update(m_pos, m_rot, m_scale, m_renderMode);

@@ -28,7 +28,7 @@ bool GamePlayer::Start()
 	m_unityChan->SetShadowReciever(true);
 	//スキン描画。
 	m_unityChan->SetRenderMode(enRenderMode_Skin);
-	m_unityChan->SetScale(g_vec3One);
+	m_unityChan->SetScale(g_vec3Zero);
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
 
@@ -156,6 +156,10 @@ void GamePlayer::Move()
 	}
 	if(move.Length() == 0.0f){
 		m_playerState = EnPlayerState_Idle;
+	}
+
+	if (move.Length() != 0) {
+		printf("%f, %f \n", m_pos.x, m_pos.z);
 	}
 
 	m_pos += move;

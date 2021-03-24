@@ -3,6 +3,7 @@
 #include "HID/GamePad.h"
 #include "SrcFile/ModelDataManager.h"
 #include "SrcFile/Effect/CEffectEngine.h";
+#include "SrcFile/Timer/tkStopwatch.h"
 //#include "SrcFile/NaviMesh/NaviMesh.h"
 
 class GraphicsEngine;
@@ -78,6 +79,7 @@ public:
 		return m_naviMesh;
 	}
 private:
+	CStopwatch m_sw;								//ストップウォッチ。
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	CEffectEngine m_effectEngine;					//エフェクトエンジン。
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						

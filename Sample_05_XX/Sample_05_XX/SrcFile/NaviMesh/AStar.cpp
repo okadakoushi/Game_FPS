@@ -251,15 +251,15 @@ void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 	cell* targetCell = baseCell->m_parent->m_parent;
 	//リサーチセルはベースセルの親。
 	cell* reserchCell = baseCell->m_parent;
-
-	cell* deleteCell = nullptr;
-	//ベースセルの親ノードは確定でスムージング可能なのでスムージングする。
-	nodeCellList.erase(std::find(nodeCellList.begin(), nodeCellList.end(), baseCell->m_parent));
 	//削除予定リスト。
 	std::vector<cell*> deleteCellList;
+	//ベースセルの親ノードは確定でスムージング可能なのでスムージングする。
+	deleteCellList.push_back(baseCell->m_parent);
+	//前の当たり判定調査で消されたセル（復帰可能性のあるセル。）
+	cell* deleteCell = baseCell->m_parent;
 
 
-	while (baseCell->m_parent != nullptr) {
+	while (baseCell->m_parent->m_parent != nullptr) {
 		//ノードがなくなるまでスムージングチェック。
 
 		//ベースセルとターゲットセルの間に存在するセルと、ベースセルからターゲットセルに向かう線分と
@@ -296,18 +296,20 @@ void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 			//間に存在するセルと衝突していない、スムージング不可能。
 			//セルを更新。
 			baseCell = targetCell;
-			if (baseCell->m_parent->m_parent != nullptr) {
+			if (baseCell->m_parent != nullptr) {
 				targetCell = baseCell->m_parent->m_parent;
-				reserchCell = baseCell->m_parent;	
+				reserchCell = baseCell->m_parent;
 				if (deleteCell != nullptr) {
 					//スムージング不可能なので前セルを削除予定リストから復帰させる。
 					deleteCellList.erase(std::find(deleteCellList.begin(), deleteCellList.end(), deleteCell));
-					deleteCell = nullptr;
 				}
 				//ベースセルの親ノードは確定でスムージング可能なのでスムージングする。
-				nodeCellList.erase(std::find(nodeCellList.begin(), nodeCellList.end(), baseCell->m_parent));
+				deleteCellList.push_back(baseCell->m_parent);
+				//消す予定セルを更新。
+				deleteCell = baseCell->m_parent;
 			}
 			else {
+				//親親が存在しない。
 				break;
 			}
 		}
@@ -315,11 +317,13 @@ void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 		if (reserchCell == targetCell) {
 			//セルを更新。
 			if (targetCell->m_parent == nullptr) {
+				//ターゲットせるの親切れ。
 				break;
 			}
 			//ターゲットセルまで到着、スムージング可能なので削除予定リストに積む。
-			deleteCell = targetCell;
 			deleteCellList.push_back(targetCell);
+			//このセルは、次のセルの当たり判定で復帰する可能性があるのでバックアップをとっておく。
+			deleteCell = targetCell;
 			targetCell = targetCell->m_parent;
 			reserchCell = baseCell->m_parent;
 		}
@@ -338,9 +342,11 @@ void AStar::Smoothing(std::vector<cell*>& nodeCellList)
 	for (int nodeNo = 0; nodeNo < nodeCellList.size(); nodeNo++) {
 		if (nodeCellList[nodeNo]->costToEnd != 0.0f) {
 			//ゴールじゃないなら。親ノードをつなぎなおす。
+			//printf("%f, %f\n", nodeCellList[nodeNo]->m_CenterPos.x, nodeCellList[nodeNo]->m_CenterPos.z);
 			nodeCellList[nodeNo]->m_parent = nodeCellList[nodeNo + 1];
 		}
 	}
+
 }
 
 

@@ -28,6 +28,24 @@ bool Stage::Start()
 			return true;
 		}
 #endif
+		if (objData.EqualObjectName(L"soldierDoc") == true) {
+			//医者オブジェ。
+			SkinModelRender* modelReder = NewGO<SkinModelRender>(EnPriority_3DRender);
+			const char* tkaFilePaths[]{
+				"Assets/animData/soldierMob/talk.tka"
+			};
+			modelReder->Init("Assets/modelData/Chara/soldierDoc.tkm" ,tkaFilePaths);
+			modelReder->SetRenderMode(enRenderMode_Skin);
+			modelReder->SetPosition(objData.position);
+			modelReder->SetScale(objData.scale);
+			modelReder->SetRotation(objData.rotatatin);
+			modelReder->SetShadwoCaster(true);
+			modelReder->SetShadowReciever(true);
+			//ちょっとアニメーションずらす。
+			modelReder->SetWaitTimeForAnim(m_mobCount * 61);
+			m_mobCount++;
+			return true;
+		}
 		//レベルからスポーン情報持ってきて、そこにスポーンさせる。
 		//todo:enumとかでうまく管理できるかな？
 		if (objData.EqualObjectName(L"noneArea") == true) {

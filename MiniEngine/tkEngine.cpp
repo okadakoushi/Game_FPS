@@ -35,10 +35,17 @@ void TkEngine::BeginFrame()
 }
 void TkEngine::Update()
 {
+	//スタート。
+	m_sw.Start();
 	//GOMの初期化。
 	gameObjectManager().Start();
 	//GOMの更新。
 	gameObjectManager().UpdateManager();
+	//描画終わり。
+	EndFrame();
+	//ストップ。
+	m_sw.Stop();
+	GameTime().PushFrameDeltaTime((float)m_sw.GetElapsed());
 }
 
 void TkEngine::EndFrame()

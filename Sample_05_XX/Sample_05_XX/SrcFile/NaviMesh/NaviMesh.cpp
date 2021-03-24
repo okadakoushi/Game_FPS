@@ -107,11 +107,12 @@ void NaviMesh::AgentNodeRender(std::vector<NaviMesh::Cell*>& rootList)
 {
 	if (!m_rootInited) {
 		//ライン構成。
-		for (auto* Cell : rootList) {
-			if (Cell->m_parent != nullptr) {
+		for (int lineC = 0; lineC < rootList.size(); lineC++) {
+			if (rootList[lineC] != rootList.back()) {
+				//最後はいらない。
 				Line line;
-				line.start = Cell->m_CenterPos;
-				line.end = Cell->m_parent->m_CenterPos;
+				line.start = rootList[lineC]->m_CenterPos;
+				line.end = rootList[lineC]->m_parent->m_CenterPos;
 				//ルートを形成。
 				m_rootCellLine.push_back(line);
 			}
