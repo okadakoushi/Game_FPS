@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Rifle.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\AStar.cpp" />
     <ClCompile Include="SrcFile\GameObj\Enemy.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\NaviMesh.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\GameObj\Rifle.h" />
     <ClInclude Include="SrcFile\NaviMesh\AStar.h" />
     <ClInclude Include="SrcFile\GameObj\Enemy.h" />
     <ClInclude Include="SrcFile\NaviMesh\NaviMesh.h" />

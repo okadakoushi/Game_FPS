@@ -5,6 +5,7 @@ class GamePlayer;
 class UIs;
 class Effect;
 class Enemy;
+class Rifle;
 
 class Game : public IGameObject
 {
@@ -17,6 +18,7 @@ public:
 private:
 	Stage* m_stage = nullptr;			//ステージ。
 	GamePlayer* m_player = nullptr;		//プレイヤー。
+	Rifle* m_wepon;						//武器。
 	Level m_level;						//レベル。
 	UIs* m_UIs = nullptr;				//UI。
 	Enemy* m_enemy = nullptr;			//エネミー。

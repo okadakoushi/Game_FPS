@@ -208,6 +208,14 @@ public:
 	{
 		return m_model;
 	}
+	/// <summary>
+	/// スケルトンを取得。
+	/// </summary>
+	/// <returns></returns>
+	Skeleton& GetSkelton()
+	{
+		return m_skeleton;
+	}
 private:
 	/// <summary>
 	/// モデルの初期化ステップ。

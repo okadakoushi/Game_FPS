@@ -9,13 +9,17 @@ Stage::~Stage()
 
 bool Stage::Start()
 {
-	////ステージのインスタンス。
-	//m_bg = NewGO<SkinModelRender>(EnPriority_Render);
-	////初期化。
-	//m_bg->Init("Assets/modelData/levelTkm/L_SampleStage.tkm");
-	////シャドウレシーバー。
-	//m_bg->SetShadowReciever(true);
-
+	//モブキャラ増やす場合は、ここも増やしてね。
+	//インデックス。
+	int spawnPointIndex = 0;
+	//スポーン位置
+	Vector3 spawnPos[10] = {
+		{ -1500.0f, 0.0f, -500.0f },
+		{ 800.0f, 0.0f, -1900.0f },
+		{ -1500.0f, 0.0f, -500.0f },
+		{ -700.0f, 0.0f, 1600.0f },
+		{ 0.0, 0.0f, 0.0 }
+	};
 	m_level.Init("Assets/level/GameStage.tkl", [&](LevelObjectData& objData) {
 #ifdef NAV_DEBUG
 		if (objData.EqualObjectName(L"test_mesh") == true) {
@@ -46,33 +50,14 @@ bool Stage::Start()
 			m_mobCount++;
 			return true;
 		}
-		//レベルからスポーン情報持ってきて、そこにスポーンさせる。
-		//todo:enumとかでうまく管理できるかな？
-		if (objData.EqualObjectName(L"noneArea") == true) {
+		if (wcsstr(objData.name, L"Area\0") != nullptr) {
+			//エリアオブジェクトが見つかった。
+			//モブキャラを作成。
 			Enemy* enemy = NewGO<Enemy>(EnPriority_3DModel);
 			enemy->SetPosition(objData.position);
-			enemy->SetTarget({ -1500.0f, 0.0f, -500.0f });
-			return true;
-		}		
-		if (objData.EqualObjectName(L"factoryArea") == true) {
-			//ノーンエリアに出す。
-			Enemy* enemy = NewGO<Enemy>(EnPriority_3DModel);
-			enemy->SetPosition(objData.position);
-			enemy->SetTarget({ 800.0f, 0.0f, -1900.0f });
-			return true;
-		}		
-		if (objData.EqualObjectName(L"loadArea") == true) {
-			//ノーンエリアに出す。
-			Enemy* enemy = NewGO<Enemy>(EnPriority_3DModel);
-			enemy->SetPosition(objData.position);
-			enemy->SetTarget({ -1500.0f, 0.0f, -500.0f });
-			return true;
-		}		
-		if (objData.EqualObjectName(L"tentArea") == true) {
-			//ノーンエリアに出す。
-			Enemy* enemy = NewGO<Enemy>(EnPriority_3DModel);
-			enemy->SetPosition(objData.position);
-			enemy->SetTarget({ -700.0f, 0.0f, 1600.0f });
+			//モブキャラ増やしたら、spawnPointも増やしてね。
+			enemy->SetTarget(spawnPos[spawnPointIndex]);
+			spawnPointIndex++;
 			return true;
 		}
 		return false;

@@ -93,7 +93,7 @@ void GameCamera::MoveCameraOnTPS()
 
 	//Y²ü‚è‚Ì‰ñ“]ì¬B
 	Quaternion qRot;
-	qRot.SetRotationDeg(g_vec3AxisY, HORIZON * x);
+	qRot.SetRotationDeg(g_vec3AxisY * 1.0f, HORIZON * x);
 	qRot.Apply(m_toPos);
 
 	//X²ü‚è‚Ì‰ñ“]ì¬B

@@ -2,6 +2,7 @@
 #include "GamePlayer.h"
 #include "GameCamera.h"
 #include "Bullet.h"
+#include "Rifle.h"
 
 void GamePlayer::OnDestroy()
 {
@@ -21,20 +22,23 @@ bool GamePlayer::Start()
 		"Assets/animData/soldier/buck.tka",
 		"Assets/animData/soldier/singleShot.tka"
 	};
-	m_unityChan->Init("Assets/modelData/Chara/soldier_green.tkm", tkaFilePaths);
+	m_unityChan->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFilePaths);
 	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
 	m_unityChan->SetShadwoCaster(true);
 	m_unityChan->SetShadowReciever(true);
 	//スキン描画。
 	m_unityChan->SetRenderMode(enRenderMode_Skin);
-	m_unityChan->SetScale(g_vec3Zero);
+	m_unityChan->SetScale({ 1.5f, 1.5f, 1.5f });
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
 
 	//GameCameraインスタンス化。
 	m_camera = NewGO<GameCamera>(EnPriority_3DModel, "GameCamera");
 	m_camera->SetCameraType(true);
+
+	//武器。
+	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
 
 	//レティクル初期化。
 	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
@@ -97,6 +101,7 @@ void GamePlayer::Rotation()
 	//カメラに合わせて向きも変える。
 	float angle = atan2(m_camera->GetToPos().x, m_camera->GetToPos().z);
 	m_rot.SetRotation(g_vec3AxisY, angle);
+	//m_rot.AddRotationY(3.14);
 	m_unityChan->SetRotation(m_rot);
 }
 

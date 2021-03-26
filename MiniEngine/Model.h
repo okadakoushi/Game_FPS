@@ -134,8 +134,8 @@ private:
 	TkmFile*		m_tkmFile = nullptr;		//tkmファイル。
 	MeshParts		m_meshParts;	//メッシュパーツ。
 	Animation		m_animation;	//アニメーション
-	bool			isShadowCaster = false;		//シャドウキャスター？
-	bool			isShadowReciever = false;	//シャドウレシーバー？
+	bool			isShadowCaster = true;		//シャドウキャスター？
+	bool			isShadowReciever = true;	//シャドウレシーバー？
 	bool			m_isAnimation = false;		//アニメーションしてる？ todo:頭悪い。
 	void*  m_expandConstantBuffer = nullptr;				//拡張定数バッファ。
 	int m_expandConstantBufferSize = 0;						//拡張定数バッファのサイズ。

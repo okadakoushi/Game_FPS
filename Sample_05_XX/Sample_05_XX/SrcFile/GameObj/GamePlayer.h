@@ -1,6 +1,7 @@
 #pragma once
 
 class GameCamera;
+class Rifle;
 
 /// <summary>
 /// プレイヤークラス。
@@ -40,6 +41,14 @@ public:
 	{
 		return m_pos;
 	}
+	/// <summary>
+	/// レンダー取得。
+	/// </summary>
+	/// <returns></returns>
+	SkinModelRender* GetRender()
+	{
+		return m_unityChan;
+	}
 private:
 	enum EnPlayerState {
 		EnPlayerState_Idle,		//何もない。
@@ -58,8 +67,9 @@ private:
 	Vector3 m_cameraPos = g_vec3Zero;			//カメラの位置。
 	Quaternion m_rot = g_quatIdentity;			//回転。
 	GameCamera* m_camera = nullptr;				//ゲームカメラ。
+	Rifle* m_wepon = nullptr;					//武器。
 	float m_speed = 1.0f;						//移動速度。
-	const float fixYToEyePos = 93.0f;					//視点座標に変えるY軸修正。
+	const float fixYToEyePos = 110.0f;					//視点座標に変えるY軸修正。
 	int m_flame = 0;
 };
 

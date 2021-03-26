@@ -8,7 +8,8 @@
 
 void Bone::CalcWorldTRS(Vector3& trans, Quaternion& rot, Vector3& scale)
 {
-	Matrix mWorld = m_worldMatrix;
+	Matrix mWorld = g_matIdentity;
+	mWorld = m_worldMatrix;
 	//s—ñ‚©‚çŠg‘å—¦‚ğæ“¾‚·‚éB
 	scale.x = mWorld.v[0].Length();
 	scale.y = mWorld.v[1].Length();

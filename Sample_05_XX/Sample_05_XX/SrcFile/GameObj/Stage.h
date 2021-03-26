@@ -19,6 +19,6 @@ public:
 private:
 	SkinModelRender* m_bg = nullptr;			//ステージ。
 	Level m_level;								//レベル。
-	int m_mobCount = 0;
+	int m_mobCount = 0;							//モブカウント。
 };
 

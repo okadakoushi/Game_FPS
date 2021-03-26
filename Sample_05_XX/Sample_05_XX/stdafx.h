@@ -1,8 +1,8 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-#define GAME
-//#define NAV_DEBUG
+//#define GAME
+#define NAV_DEBUG
 
 const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
@@ -12,8 +12,9 @@ static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 static enum Priority {
 	EnPriority_Game,
 	Enpriority_Camera,
-	EnPriority_3DModel,		//モデル。
 	EnPriority_3DRender,
+	EnPriority_3DModel,		//モデル。
+
 	EnPriority_UI,			//UI(HDD描画等)。
 	EnPriority_2DRender,
 	EnPriority_Num = 9		//todo:マジックナンバー。
@@ -27,6 +28,8 @@ static enum Priority {
 #include "SrcFile/GameObject/IGameObject.h"
 
 #include "MiniEngine.h"
+
+#include "Skeleton.h"
 
 //#include "SrcFile/util/Util.h"
 #include "SrcFile/util/TNameKey.h"

@@ -16,91 +16,95 @@ bool SkinModelRender::Start()
 {
 	//初期化終わった？
 	bool inited = false;
-	switch (m_initStep)
-	{
-	case enInitStep_None:
-		//モデルの初期化まち。
-		break;
-	case enInitStep_LoadSkelton:
-		//swich caseによりコンストラクタがスキップされることがあるので
-		//{...}で囲む。
-	{
-		//スケルトンをロードする。
-		//モデルの初期化、メッシュ作成が終わっている。
-		//スケルトンデータの読み込み。
-		std::string skeltonFilePath = m_filePath;
-		int pos = (int)skeltonFilePath.find(".tkm");
-		//.tkmを.tksに置き換え。
-		skeltonFilePath.replace(pos, 4, ".tks");
-		//ファイルストリーム。
-		std::ifstream ifs(skeltonFilePath);
-		if (ifs.is_open() && m_renderMode != enRenderMode_NonSkin) {
-			//tksファイルがあるので読み込む。
-			m_skeleton.Init(skeltonFilePath.c_str());
-			m_initStep = enInitStep_LoadAnimation;
-		}
-		else {
-			//なかった。
-			m_initStep = enInitStep_Completed;
-		}
-	}
-		break;
-	case enInitStep_LoadAnimation:
-		//バインドポーズとかの計算。
-		m_skeleton.BuildBoneMatrices();
-		//スケルトンとモデルの関連付け。
-		if (m_skeleton.IsInited()) {
-			//スケルトンが初期化されてた。
-			//モデルとスケルトンを結び付け。
-			m_model.BindSkeleton(m_skeleton);
-		}
-
-		//アニメーションクリップのロード。
-		if (m_tkaFilePaths.empty() == false) {
-			//アニメーションクリップがあった。
-			for (auto& m_tkaFilePath : m_tkaFilePaths) {
-				//アニメーションのファイルパス分回す。
-				auto animClip = make_unique<AnimationClip>();
-				//ファイルパスをロード。
-				animClip->Load(m_tkaFilePath.c_str());
-				//アニメーションクリップにメモリを移譲。
-				m_animationClips.push_back(move(animClip));
+	
+	while (!inited) {
+		switch (m_initStep)
+		{
+		case enInitStep_None:
+			//モデルの初期化まち。
+			break;
+		case enInitStep_LoadSkelton:
+			//swich caseによりコンストラクタがスキップされることがあるので
+			//{...}で囲む。
+		{
+			//スケルトンをロードする。
+			//モデルの初期化、メッシュ作成が終わっている。
+			//スケルトンデータの読み込み。
+			std::string skeltonFilePath = m_filePath;
+			int pos = (int)skeltonFilePath.find(".tkm");
+			//.tkmを.tksに置き換え。
+			skeltonFilePath.replace(pos, 4, ".tks");
+			//ファイルストリーム。
+			std::ifstream ifs(skeltonFilePath);
+			if (ifs.is_open() && m_renderMode != enRenderMode_NonSkin) {
+				//tksファイルがあるので読み込む。
+				m_skeleton.Init(skeltonFilePath.c_str());
+				m_initStep = enInitStep_LoadAnimation;
+			}
+			else {
+				//なかった。
+				m_initStep = enInitStep_Completed;
 			}
 		}
-
-	case enInitStep_InitAnimationClip: {
-		bool isLoaded = true;
-		for (auto& animClip : m_animationClips) {
-			if (animClip->IsLoaded() == false) {
-				isLoaded = false;
-				break;
+		break;
+		case enInitStep_LoadAnimation:
+			//バインドポーズとかの計算。
+			m_skeleton.BuildBoneMatrices();
+			//スケルトンとモデルの関連付け。
+			if (m_skeleton.IsInited()) {
+				//スケルトンが初期化されてた。
+				//モデルとスケルトンを結び付け。
+				m_model.BindSkeleton(m_skeleton);
 			}
-		}
-		if (isLoaded == true) {
-			//全アニメーションクリップのロード終了。
-			//キーフレームとアニメーションクリップの構築。
+
+			//アニメーションクリップのロード。
+			if (m_tkaFilePaths.empty() == false) {
+				//アニメーションクリップがあった。
+				for (auto& m_tkaFilePath : m_tkaFilePaths) {
+					//アニメーションのファイルパス分回す。
+					auto animClip = make_unique<AnimationClip>();
+					//ファイルパスをロード。
+					animClip->Load(m_tkaFilePath.c_str());
+					//アニメーションクリップにメモリを移譲。
+					m_animationClips.push_back(move(animClip));
+				}
+			}
+
+		case enInitStep_InitAnimationClip: {
+			bool isLoaded = true;
 			for (auto& animClip : m_animationClips) {
-				animClip->SetLoopFlag(true);
-				animClip->BuildKeyFrames();
+				if (animClip->IsLoaded() == false) {
+					isLoaded = false;
+					break;
+				}
 			}
-			//アニメーションを初期化。
-			m_animation.Init(m_skeleton, m_animationClips);
+			if (isLoaded == true) {
+				//全アニメーションクリップのロード終了。
+				//キーフレームとアニメーションクリップの構築。
+				for (auto& animClip : m_animationClips) {
+					animClip->SetLoopFlag(true);
+					animClip->BuildKeyFrames();
+				}
+				//アニメーションを初期化。
+				m_animation.Init(m_skeleton, m_animationClips);
 
-			//ループフラグ設定。
-			for (auto& list : m_loopMap) {
-				//２次元配列でいいなこれ。
-				m_animation.SetAnimationClipLoopFlag(list.first, list.second);
+				//ループフラグ設定。
+				for (auto& list : m_loopMap) {
+					//２次元配列でいいなこれ。
+					m_animation.SetAnimationClipLoopFlag(list.first, list.second);
+				}
+				//アニメーションクリップのロード終了。
+				m_initStep = enInitStep_Completed;
 			}
-			//アニメーションクリップのロード終了。
-			m_initStep = enInitStep_Completed;
+		}
+		break;
+		case enInitStep_Completed:
+			//初期化終わり！
+			inited = true;
+			break;
 		}
 	}
-		break;
-	case enInitStep_Completed:
-		//初期化終わり！
-		inited = true;
-		break;
-	}
+
 	return inited;
 }
 
