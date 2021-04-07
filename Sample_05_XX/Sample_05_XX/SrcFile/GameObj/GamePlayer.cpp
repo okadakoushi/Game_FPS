@@ -14,7 +14,7 @@ void GamePlayer::OnDestroy()
 bool GamePlayer::Start()
 {	
 	//unitychan初期化。
-	m_unityChan = NewGO<SkinModelRender>(EnPriority_3DRender, "Unity");
+	m_unityChan = NewGO<SkinModelRender>(EnPriority_3DModel, "Unity");
 	const char* tkaFilePaths[] = {
 		"Assets/animData/soldier/idle.tka",
 		"Assets/animData/soldier/walk.tka",
@@ -22,20 +22,14 @@ bool GamePlayer::Start()
 		"Assets/animData/soldier/buck.tka",
 		"Assets/animData/soldier/singleShot.tka"
 	};
-	m_unityChan->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFilePaths);
+	m_unityChan->Init("Assets/modelData/Chara/soldier_green.tkm", tkaFilePaths);
 	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
 	m_unityChan->SetShadwoCaster(true);
 	m_unityChan->SetShadowReciever(true);
-	//スキン描画。
-	m_unityChan->SetRenderMode(enRenderMode_Skin);
 	m_unityChan->SetScale({ 1.5f, 1.5f, 1.5f });
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
-
-	//GameCameraインスタンス化。
-	m_camera = NewGO<GameCamera>(EnPriority_3DModel, "GameCamera");
-	m_camera->SetCameraType(true);
 
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
@@ -90,10 +84,6 @@ void GamePlayer::Update()
 		break;
 	}
 	m_unityChan->SetPosition(m_pos);
-	m_cameraPos = { m_pos.x, m_pos.y + fixYToEyePos, m_pos.z };
-	//カメラの位置も更新。
-	m_camera->SetEyePos(m_cameraPos);
-
 }
 
 void GamePlayer::Rotation()

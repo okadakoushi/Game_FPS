@@ -55,6 +55,13 @@ public:
 	{
 		return m_toPos;
 	}
+	/// <summary>
+	/// カメラの修正値を設定。
+	/// </summary>
+	void SetFixVal(const float& val)
+	{
+		fixVal = val;
+	}
 private:
 	/// <summary>
 	/// FPSカメラ。
@@ -67,11 +74,13 @@ private:
 	void MoveCameraOnTPS();
 private:
 	GamePlayer* m_player = nullptr;
+	Bone* m_headBone = nullptr;
 	Vector3 m_playerPos = g_vec3Zero;				//プレイヤーの位置。
 	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//視点または、注視点に向かうベクトル。
 	Vector3 m_cameraRot = g_vec3Zero;				//カメラの回転。
 	float m_recoil = 0.0f;							//反動。
 	bool m_isFPS = true;					//FPSモード。
+	float fixVal = 15.0f;				//修正値。
 	const float HORIZON = 1.0f;			//横のカメラ速度。
 	const float VERTICAL = 1.0f;		//縦のカメラ速度。
 };

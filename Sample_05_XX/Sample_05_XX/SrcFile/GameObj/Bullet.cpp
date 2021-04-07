@@ -11,7 +11,7 @@ bool Bullet::Start()
 {
     //NewGO時の長さ計算しとく。
     m_LengthOnNew = m_pos.Length();
-    m_render = NewGO<SkinModelRender>(EnPriority_3DRender);
+    m_render = NewGO<SkinModelRender>(EnPriority_3DModel);
     m_render->Init("Assets/modelData/chara/bullet_7mm.tkm");
     m_render->SetShadwoCaster(true);
     //ベクトルを取得。

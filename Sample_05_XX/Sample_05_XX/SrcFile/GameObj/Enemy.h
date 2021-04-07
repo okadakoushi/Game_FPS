@@ -62,7 +62,7 @@ private:
 	GamePlayer* m_player = nullptr;			//プレイヤー。
 	const float m_helloTime = 15.0f;	//挨拶クールタイム。
 	float time = m_helloTime;			//タイム。
-	const float m_FOV = 45.0f;			//エネミー側の視野角。
+	const float m_FOV = 20.0f;			//エネミー側の視野角。
 	const float m_vision = 500.0f;		//エネミーのビジョン。
 };
 

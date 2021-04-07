@@ -11,8 +11,14 @@ bool GameCamera::Start()
 {
 	//キャラ映らないように近平面を設定。
 	//todo:なんかいい方法あるんだろうか。
-	GraphicsEngineObj()->GetCamera3D().SetNear(5.0f);
+	GraphicsEngineObj()->GetCamera3D().SetNear(1.0f);
 	m_player = FindGO<GamePlayer>("Player");
+	m_playerPos = m_player->GetPos();
+	m_playerPos.y += 110.0f;
+	//頭のボーン取得。
+	Skeleton& skeleton = m_player->GetRender()->GetSkelton();
+	int headNo = skeleton.FindBoneID(L"mixamorig:Head");
+	m_headBone = skeleton.GetBone(headNo);
 	return true;
 }
 
@@ -31,6 +37,9 @@ void GameCamera::Update()
 
 void GameCamera::MoveCameraOnFPS()
 {
+	Quaternion a;
+	Vector3 b;
+	m_headBone->CalcWorldTRS(m_playerPos, a, b);
 	//視点。
 	Vector3 pos = m_playerPos;
 	//古い。
@@ -64,19 +73,18 @@ void GameCamera::MoveCameraOnFPS()
 		m_toPos = totPosOld;
 	}
 
-	//カメラの位置補正。MNum
-	Vector3 fix = toTargetDir * 20.0f;
-
 	//視点を計算。
 	Vector3 target = pos + m_toPos;
-	//todo:反動。
+	//pos.y -= 25.0f;
+	//視点の位置を補正。
+	toTargetDir.y = 0;
+	Vector3 fix = toTargetDir * 15.0f;
+	//todo:反動
 
 
 	//メインカメラに設定。
 	GraphicsEngineObj()->GetCamera3D().SetTarget(target);
 	GraphicsEngineObj()->GetCamera3D().SetPosition(pos + fix);
-	//更新。
-	//GraphicsEngineObj()->GetCamera3D().Update();
 }
 
 void GameCamera::MoveCameraOnTPS()

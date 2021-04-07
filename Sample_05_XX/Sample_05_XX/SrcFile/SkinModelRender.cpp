@@ -12,11 +12,10 @@ void SkinModelRender::OnDestroy()
 	GraphicsEngineObj()->GetGBuffer().RemoveModel(this);
 }
 
-bool SkinModelRender::Start()
+void SkinModelRender::AnimInit()
 {
-	//‰Šú‰»I‚í‚Á‚½H
 	bool inited = false;
-	
+
 	while (!inited) {
 		switch (m_initStep)
 		{
@@ -104,8 +103,6 @@ bool SkinModelRender::Start()
 			break;
 		}
 	}
-
-	return inited;
 }
 
 void SkinModelRender::Update()

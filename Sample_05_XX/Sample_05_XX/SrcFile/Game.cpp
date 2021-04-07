@@ -4,6 +4,8 @@
 #include "GameObj/GamePlayer.h"
 #include "GameObj/UIs.h"
 #include "GameObj/Enemy.h"
+#include "GameObj/GameCamera.h"
+#include "GameObj/Rifle.h"
 
 Game::Game()
 {
@@ -23,6 +25,9 @@ bool Game::Start()
 	m_stage = NewGO<Stage>(EnPriority_3DModel, "bg");
 	//GamePlayer。
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
+	//GameCameraインスタンス化。
+	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
+	m_player->SetCamera(m_camera);
 	//Enemy。
 	m_enemy = NewGO<Enemy>(EnPriority_3DModel, "Enemy");
 	m_enemy->SetPosition({ 950,0,650 });

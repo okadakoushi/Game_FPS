@@ -34,7 +34,7 @@ bool Stage::Start()
 #endif
 		if (objData.EqualObjectName(L"soldierDoc") == true) {
 			//医者オブジェ。
-			SkinModelRender* modelReder = NewGO<SkinModelRender>(EnPriority_3DRender);
+			SkinModelRender* modelReder = NewGO<SkinModelRender>(EnPriority_3DModel);
 			const char* tkaFilePaths[]{
 				"Assets/animData/soldierMob/talk.tka"
 			};

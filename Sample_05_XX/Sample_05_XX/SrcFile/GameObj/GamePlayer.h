@@ -49,6 +49,11 @@ public:
 	{
 		return m_unityChan;
 	}
+
+	void SetCamera(GameCamera* camera)
+	{
+		m_camera = camera;
+	}
 private:
 	enum EnPlayerState {
 		EnPlayerState_Idle,		//âΩÇ‡Ç»Ç¢ÅB

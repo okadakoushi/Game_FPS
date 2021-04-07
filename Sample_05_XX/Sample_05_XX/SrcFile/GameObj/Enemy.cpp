@@ -5,14 +5,14 @@
 bool Enemy::Start()
 {
     //モデル初期化。
-    m_modelRender = NewGO<SkinModelRender>(EnPriority_3DRender);
+    m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
     const char* tkaFilePaths[]{
         "Assets/animData/soldierMob/walk.tka",
         "Assets/animData/soldierMob/idle.tka",
         "Assets/animData/soldierMob/hello.tka"
     };
-    m_modelRender->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFilePaths);
     m_modelRender->SetAnimLoop(2, false);
+    m_modelRender->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFilePaths);
     m_modelRender->SetRenderMode(enRenderMode_Skin);
     m_modelRender->SetShadwoCaster(true);
     m_modelRender->SetShadowReciever(true);
@@ -66,33 +66,16 @@ void Enemy::Move()
     //次のセルに向かうベクトル。
     if (m_nodeList.size() != 0) {
         Vector3 toNextCell = m_nodeList.front()->m_CenterPos - m_pos;
+        //方位化する前に、距離取っとく。
+        float dist = toNextCell.Length();
         //方位ベクトル化。
         toNextCell.Normalize();
+        //動かす。
         m_pos += toNextCell * m_spped;
+        //回転計算。
+        m_rot.SetRotation(Vector3::AxisY, atan2f(toNextCell.x * -1.0f, toNextCell.z * -1.0f));
 
-        //todo:ここから昔書いたコード持ってきただけだから後でリファクタリング。
-        //初期化
-        m_rot = Quaternion::Identity;
-        //角度を決める
-        float kakudo1 = toNextCell.Dot(Vector3::AxisZ);
-        //1~-1
-        float kakudo = toNextCell.Dot(Vector3::AxisX);
-        //角度の計算
-        kakudo1 = acos(kakudo1);
-        int seifu = 1;
-        //ここで角度の正負の決定
-        if (kakudo < 0)
-        {
-            seifu = -1;
-        }
-        //最終的な角度  角度を動かす 角度に正負をかける 
-        m_kakudo = kakudo1 * seifu;
-        m_rot.SetRotation(Vector3::AxisY, m_kakudo - 3.14);
-        //モデルを回転させる
-        m_modelRender->SetRotation(m_rot);
-
-        toNextCell = m_nodeList.front()->m_CenterPos - m_pos;
-        float dist = toNextCell.Length();
+        //ノードに到達したか判定。
         if (dist < 5) {
             m_nodeList.erase(m_nodeList.begin());
         }
@@ -106,6 +89,7 @@ void Enemy::Move()
         m_targetPos = m_nextTarget;
         m_dirty = false;
     }
+    m_modelRender->SetRotation(m_rot);
     m_modelRender->SetPosition(m_pos);
 }
 

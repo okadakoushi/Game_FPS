@@ -20,7 +20,9 @@ public:
 	/// <summary>
 	/// スタート。
 	/// </summary>
-	bool Start() override;
+	bool Start() { 		//アニメーション初期化。
+		return true;
+	};
 	/// <summary>
 	/// 初期化。
 	/// <para>todo:T黒魔術使わない修正。</para>
@@ -43,6 +45,10 @@ public:
 		//モデルの読み込み終了。
 		m_initStep = enInitStep_LoadSkelton;
 		m_filePath = tkmFile;
+		//スキン描画。
+		m_renderMode = enRenderMode_Skin;
+		//アニメーション初期化。
+		AnimInit();
 	}
 	void Init(const char* tkmFile) {
 		if (!m_isForwardRender) {
@@ -54,7 +60,13 @@ public:
 		//モデルの読み込み終了。
 		m_initStep = enInitStep_LoadSkelton;
 		m_filePath = tkmFile;
+		//ノンスキン描画。
+		m_renderMode = enRenderMode_NonSkin;
+		//アニメーション初期化。
+		AnimInit();
 	}
+
+	void AnimInit();
 	/// <summary>
 	/// デストロイ。
 	/// </summary>
