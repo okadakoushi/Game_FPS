@@ -19,6 +19,9 @@ static enum Priority {
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };
 
+//physics
+#include "btBulletDynamicsCommon.h"
+
 #include "Effekseer.h"
 #include "EffekseerRendererDX12.h"
 //utill
