@@ -52,11 +52,12 @@ void GamePlayer::Update()
 {
 	if (m_playerState != EnPlayerState_Deth) {
 		//死んでない。
+		//回転。
+		Rotation();
 		//移動。
 		Move();
 		//射撃。
 		Shot();
-
 	}
 
 	switch (m_playerState)
@@ -87,11 +88,13 @@ void GamePlayer::Update()
 }
 
 void GamePlayer::Rotation()
-{
-	//カメラに合わせて向きも変える。
-	float angle = atan2(m_camera->GetToPos().x, m_camera->GetToPos().z);
-	m_rot.SetRotation(g_vec3AxisY, angle);
-	//m_rot.AddRotationY(3.14);
+{	
+	float x = g_pad[0]->GetRStickXF();
+	float y = g_pad[0]->GetRStickYF();
+	//Y軸周りの回転作成。
+	Quaternion qRot;
+	qRot.SetRotationDeg(g_vec3AxisY, m_camera->GetHorizonSpeed() * x);
+	m_rot.Multiply(qRot);
 	m_unityChan->SetRotation(m_rot);
 }
 

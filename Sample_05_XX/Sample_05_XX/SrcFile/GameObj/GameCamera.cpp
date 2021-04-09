@@ -30,9 +30,6 @@ void GameCamera::Update()
 	else {
 		MoveCameraOnTPS();
 	}
-	//1ƒtƒŒ[ƒ€‚¸‚ê‚é‘Îô‚Å‚±‚±‚ÅRotation‚³‚¹‚éB
-	//todo:NotFindGO
-	m_player->Rotation();
 }
 
 void GameCamera::MoveCameraOnFPS()

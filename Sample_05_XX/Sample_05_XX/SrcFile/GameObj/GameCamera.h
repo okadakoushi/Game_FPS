@@ -62,6 +62,14 @@ public:
 	{
 		fixVal = val;
 	}
+	/// <summary>
+	/// カメラ水平方向のスピードを取得。
+	/// </summary>
+	/// <returns></returns>
+	const float& GetHorizonSpeed() const
+	{
+		return HORIZON;
+	}
 private:
 	/// <summary>
 	/// FPSカメラ。

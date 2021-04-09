@@ -28,7 +28,17 @@ void Rifle::Update()
 	m_rHandBone->CalcWorldTRS(m_Rpos, m_Rrot, m_scale);
 	//右手から左手伸びるベクトル。
 	Vector3 RHtoLH = m_Rpos - m_Lpos;
-	m_rot.SetRotation(Vector3::AxisY, atan2f(RHtoLH.x, RHtoLH.z));
+	//RHtoLH.z = 0;
+	m_rot.SetRotation(g_vec3Front, RHtoLH);
+	//Y軸側の角度。
+	//m_rot.SetRotation(Vector3::AxisY, atan2f(RHtoLH.x, RHtoLH.z));
+	//X軸側の角度を求めていく。
+	//float angle = atan2f(RHtoLH.z, RHtoLH.y);
+	//RHtoLH.Normalize();
+	//m_Lpos.Normalize();
+	//Vector3 Axis = Cross(RHtoLH, { 0 ,m_Lpos.y, 0 });
+	//Quaternion qRot;
+	//qRot.SetRotation(Axis, angle);
 	m_render->SetPosition(m_Rpos);
 	m_render->SetRotation(m_rot);
 	m_render->SetScale({1.5f, 1.5f, 1.5f});

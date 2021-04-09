@@ -77,14 +77,6 @@ public:
 		m_meshParts.BindSkeleton(skeleton);
 	}
 	/// <summary>
-	/// アニメーションを再生。
-	/// </summary>
-	/// <param name="animNo">クリップ番号。</param>
-	/// <param name="interpolateTime">補間率。</param>
-	void PlayAnim(int animNo, float interpolateTime) {
-		m_animation.Play(animNo, interpolateTime);
-	}
-	/// <summary>
 	/// 描画。
 	/// </summary>
 	/// <param name="renderContext"></param>
@@ -133,7 +125,6 @@ private:
 	Matrix			m_world;					//ワールド行列。
 	TkmFile*		m_tkmFile = nullptr;		//tkmファイル。
 	MeshParts		m_meshParts;	//メッシュパーツ。
-	Animation		m_animation;	//アニメーション
 	bool			isShadowCaster = true;		//シャドウキャスター？
 	bool			isShadowReciever = true;	//シャドウレシーバー？
 	bool			m_isAnimation = false;		//アニメーションしてる？ todo:頭悪い。

@@ -21,12 +21,12 @@ Game::~Game()
 
 bool Game::Start()
 {
+	//GameCameraインスタンス化。
+	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
 	//stage。
 	m_stage = NewGO<Stage>(EnPriority_3DModel, "bg");
 	//GamePlayer。
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
-	//GameCameraインスタンス化。
-	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
 	m_player->SetCamera(m_camera);
 	//Enemy。
 	m_enemy = NewGO<Enemy>(EnPriority_3DModel, "Enemy");
