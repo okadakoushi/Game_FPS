@@ -21,6 +21,7 @@ static enum Priority {
 
 //physics
 #include "btBulletDynamicsCommon.h"
+#include "BulletCollision\CollisionDispatch\btGhostObject.h"
 
 #include "Effekseer.h"
 #include "EffekseerRendererDX12.h"
@@ -30,6 +31,8 @@ static enum Priority {
 #include "SrcFile/GameObject/IGameObject.h"
 
 #include "MiniEngine.h"
+
+#include "SrcFile/Physics/PhysicsWorld.h"
 
 #include "Skeleton.h"
 
