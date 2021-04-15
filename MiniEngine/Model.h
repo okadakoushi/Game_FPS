@@ -120,6 +120,14 @@ public:
 	{
 		m_shaderFilePath = fxPath;
 	}
+	/// <summary>
+	/// tkmファイルを取得。
+	/// </summary>
+	/// <returns></returns>
+	const TkmFile* GetTkmFile() const 
+	{
+		return m_tkmFile;
+	}
 private:
 	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
 	Matrix			m_world;					//ワールド行列。

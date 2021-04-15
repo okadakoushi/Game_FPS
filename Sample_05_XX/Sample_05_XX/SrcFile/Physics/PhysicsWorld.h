@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RigidBody.h"
+
 /// <summary>
 /// フィジックスワールド。
 /// </summary>
@@ -41,6 +43,30 @@ public:
 	btDiscreteDynamicsWorld* GetDynamicWorld()
 	{
 		return m_dynamicWorld.get();
+	}
+	/// <summary>
+	/// 剛体を登録。
+	/// </summary>
+	/// <param name="rb">剛体。</param>
+	void AddRigidBody(RigidBody& rb)
+	{
+		if (rb.IsAddPhysicsWorld() == false) {
+			//登録＆マーク付け。
+			m_dynamicWorld->addRigidBody(rb.GetBody());
+			rb.SetMarkAddPhysicsWorld();
+		}
+	}
+	/// <summary>
+	/// 剛体を削除。
+	/// </summary>
+	/// <param name="rb">剛体。</param>
+	void RemoveRigidBody(RigidBody& rb)
+	{
+		if (rb.IsAddPhysicsWorld() == true) {
+			//登録解除＆マーク消し。
+			m_dynamicWorld->removeRigidBody(rb.GetBody());
+			rb.SetUnmarkAddPhysicsWorld();
+		}
 	}
 	/// <summary>
 	/// コリジョンオブジェクトをワールドに登録。

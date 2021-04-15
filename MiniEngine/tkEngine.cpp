@@ -15,6 +15,8 @@ void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	//グラフィックエンジンの初期化。
 	m_graphicsEngine = new GraphicsEngine();
 	m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight);
+	//物理ワールド初期化。
+	m_physicsWorld.Init();
 	//エフェクトエンジン初期化。
 	m_effectEngine.Init();
 	//ゲームパッドの初期化。
@@ -37,6 +39,8 @@ void TkEngine::Update()
 {
 	//スタート。
 	m_sw.Start();
+	//物理ワールド更新。
+	m_physicsWorld.Update();
 	//GOMの初期化。
 	gameObjectManager().Start();
 	//GOMの更新。

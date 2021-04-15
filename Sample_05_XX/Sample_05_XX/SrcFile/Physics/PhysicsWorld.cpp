@@ -1,6 +1,33 @@
 #include "stdafx.h"
 #include "PhysicsWorld.h"
 
+struct MyContactResultCallBack : public btCollisionWorld::ContactResultCallback{
+	//コールバック関数。
+	using ContantTestCallback = function<void(const btCollisionObject& contactCollisionObhect)>;
+	//コールバック関数(ユーザ定義)
+	ContantTestCallback m_cb;
+	//コリジョンオブジェクト。
+	btCollisionObject* m_me = nullptr;
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="cp"></param>
+	/// <param name="colObj0Wrap"></param>
+	/// <param name="partId0"></param>
+	/// <param name="index0"></param>
+	/// <param name="colObj1Wrap"></param>
+	/// <param name="partID1"></param>
+	/// <param name="index1"></param>
+	/// <returns></returns>
+	virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partID1, int index1)override
+	{
+		if (m_me == colObj0Wrap->getCollisionObject()) {
+			m_cb(*colObj1Wrap->getCollisionObject());
+		}
+		return 0.0f;
+	}
+};
+
 PhysicsWorld::~PhysicsWorld()
 {
 	Release();
@@ -49,5 +76,7 @@ void PhysicsWorld::Update()
 
 void PhysicsWorld::ContactTest(btCollisionObject* colObj, std::function<void(const btCollisionObject& contactCollisionObject)> cb)
 {
-	
+	MyContactResultCallBack myContactResultCallback;
+	myContactResultCallback.m_cb = cb;
+	m_dynamicWorld->contactTest(colObj, myContactResultCallback);
 }

@@ -4,6 +4,7 @@
 #include "SrcFile/ModelDataManager.h"
 #include "SrcFile/Effect/CEffectEngine.h";
 #include "SrcFile/Timer/tkStopwatch.h"
+#include "SrcFile/Physics/PhysicsWorld.h"
 //#include "SrcFile/NaviMesh/NaviMesh.h"
 
 class GraphicsEngine;
@@ -71,6 +72,14 @@ public:
 		return m_modelDataManager;
 	}
 	/// <summary>
+	/// 物理ワールドを取得。
+	/// </summary>
+	/// <returns>物理ワールド。</returns>
+	PhysicsWorld& GetPhysicsWorld() 
+	{
+		return m_physicsWorld;
+	}
+	/// <summary>
 	/// ナビメッシュを取得。
 	/// </summary>
 	/// <returns></returns>
@@ -81,10 +90,11 @@ public:
 private:
 	CStopwatch m_sw;								//ストップウォッチ。
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
+	PhysicsWorld m_physicsWorld;					//フィジックスワールド。		
 	CEffectEngine m_effectEngine;					//エフェクトエンジン。
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
-	NaviMesh* m_naviMesh = nullptr;							//ナビメッシュ。
+	NaviMesh* m_naviMesh = nullptr;					//ナビメッシュ。
 };
 
 /// <summary>
@@ -95,17 +105,34 @@ static inline TkEngine& EngineObj()
 {
 	return TkEngine::GetEngine();
 }
-
+/// <summary>
+/// グラフィックスエンジン取得。
+/// </summary>
+/// <returns></returns>
 static inline GraphicsEngine* GraphicsEngineObj()
 {
 	return EngineObj().GetGraphicsEngine();
 }
-
+/// <summary>
+/// エフェクトエンジン取得。
+/// </summary>
+/// <returns></returns>
 static inline CEffectEngine& EffectEngineObj()
 {
 	return EngineObj().GetEffectEngine();
 }
-
+/// <summary>
+/// 物理ワールド取得。
+/// </summary>
+/// <returns></returns>
+static inline PhysicsWorld& PhysicObj()
+{
+	return EngineObj().GetPhysicsWorld();
+}
+/// <summary>
+/// ナビメッシュ取得。
+/// </summary>
+/// <returns></returns>
 static inline NaviMesh* NaviMeshObj()
 {
 	return EngineObj().GetNaviMesh();

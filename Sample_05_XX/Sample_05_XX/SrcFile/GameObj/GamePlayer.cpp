@@ -30,6 +30,8 @@ bool GamePlayer::Start()
 	m_unityChan->SetScale({ 1.5f, 1.5f, 1.5f });
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
+	//キャラコン初期化。
+	m_cCon.Init(5.0f, 10.0f, m_pos);
 
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
@@ -146,10 +148,10 @@ void GamePlayer::Move()
 		move *= 3.0f;
 	}
 
-	if (move.Length() >= 0.5f && m_playerState != EnPlayerState_Buck) {
+	if (move.Length() >= 120.0f && m_playerState != EnPlayerState_Buck) {
 		m_playerState = EnPlayerState_Walk;
 	}
-	if (move.Length() >= 2.0f) {
+	if (move.Length() >= 240.0f) {
 		m_playerState = EnPlayerState_Run;
 	}
 	if(move.Length() == 0.0f){
@@ -160,6 +162,6 @@ void GamePlayer::Move()
 		printf("%f, %f \n", m_pos.x, m_pos.z);
 	}
 
-	m_pos += move;
+	m_pos = m_cCon.Execute(move);
 }
 

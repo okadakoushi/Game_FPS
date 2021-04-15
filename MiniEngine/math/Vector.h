@@ -148,6 +148,16 @@ public:
 		dst.z = z;
 	}
 	/// <summary>
+	/// 物理用ベクトルコピー。
+	/// </summary>
+	/// <param name="dst"></param>
+	void CopyTo(btVector3& dst) const
+	{
+		dst.setX(x);
+		dst.setY(y);
+		dst.setZ(z);
+	}
+	/// <summary>
 	/// ベクトルの設定。
 	/// </summary>
 	/// <param name="_x"></param>
@@ -163,6 +173,16 @@ public:
 	void Set(TVector& _v)
 	{
 		Set(_v.x, _v.y, _v.z);
+	}
+	/// <summary>
+	/// 物理用ベクトルを設定。
+	/// </summary>
+	/// <param name="_v"></param>
+	void Set(btVector3& _v)
+	{
+		this->x = _v.x();
+		this->y = _v.y();
+		this->z = _v.z();
 	}
 		
 	/// <summary>
@@ -465,7 +485,17 @@ public:
 		dst.z = z;
 		dst.w = w;
 	}
-	
+	/// <summary>
+	/// 物理ベクトルのコピー。
+	/// </summary>
+	/// <param name="dst"></param>
+	void CopyTo(btQuaternion& dst) const
+	{
+		dst.setX(x);
+		dst.setY(y);
+		dst.setZ(z);
+		dst.setW(w);
+	}
 	/// <summary>
 	/// 代入演算子。
 	/// </summary>
@@ -524,6 +554,17 @@ public:
 	void Set(const Vector4& _v)
 	{
 		*this = _v;
+	}
+	/// <summary>
+	/// 物理用ベクトルを設定。
+	/// </summary>
+	/// <param name="rot"></param>
+	void Set(const btQuaternion& rot)
+	{
+		x = rot.x();
+		y = rot.y();
+		z = rot.z();
+		w = rot.w();
 	}
 	/// <summary>
 	/// 3次元ベクトルデータをもとに、ベクトルを設定。

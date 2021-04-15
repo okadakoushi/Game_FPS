@@ -183,6 +183,13 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\Character\CharacterController.cpp" />
+    <ClCompile Include="SrcFile\Physics\PhysicsStaticObject.cpp" />
+    <ClCompile Include="SrcFile\Physics\SphereCollider.cpp" />
+    <ClCompile Include="SrcFile\Physics\CapsuleCollider.cpp" />
+    <ClCompile Include="SrcFile\Physics\MeshCollider.cpp" />
+    <ClCompile Include="SrcFile\Physics\BoxCollider.cpp" />
+    <ClCompile Include="SrcFile\Physics\RigidBody.cpp" />
     <ClCompile Include="SrcFile\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="SrcFile\GameObj\Rifle.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\AStar.cpp" />
@@ -251,6 +258,14 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\Character\CharacterController.h" />
+    <ClInclude Include="SrcFile\Physics\PhysicsStaticObject.h" />
+    <ClInclude Include="SrcFile\Physics\SphereCollider.h" />
+    <ClInclude Include="SrcFile\Physics\CapsuleCollider.h" />
+    <ClInclude Include="SrcFile\Physics\MeshCollider.h" />
+    <ClInclude Include="SrcFile\Physics\BoxCollider.h" />
+    <ClInclude Include="SrcFile\Physics\ICollider.h" />
+    <ClInclude Include="SrcFile\Physics\RigidBody.h" />
     <ClInclude Include="SrcFile\Physics\PhysicsWorld.h" />
     <ClInclude Include="SrcFile\GameObj\Rifle.h" />
     <ClInclude Include="SrcFile\NaviMesh\AStar.h" />
@@ -260,6 +275,7 @@
     <ClInclude Include="SrcFile\Effect\Effect.h" />
     <ClInclude Include="SrcFile\ModelDataManager.h" />
     <ClInclude Include="SrcFile\GameObj\Bullet.h" />
+    <ClInclude Include="SrcFile\Physics\CollisionAttr.h" />
     <ClInclude Include="SrcFile\SpriteRender.h" />
     <ClInclude Include="SrcFile\Level\MapChipRender.h" />
     <ClInclude Include="SrcFile\Level\MapChip.h" />
