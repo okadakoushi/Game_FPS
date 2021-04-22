@@ -30,6 +30,16 @@ public:
 	{
 		return m_vertexBufferView;
 	}
+	/// <summary>
+	/// 解放。
+	/// </summary>
+	void Release()
+	{
+		if (m_vertexBuffer != nullptr) {
+			m_vertexBuffer->Release();
+			m_vertexBuffer = nullptr;
+		}
+	}
 private:
 	ID3D12Resource* m_vertexBuffer = nullptr;		//頂点バッファ。
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;	//頂点バッファビュー。

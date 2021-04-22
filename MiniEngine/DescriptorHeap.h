@@ -1,5 +1,7 @@
 #pragma once
 
+class IUnorderAccessResrouce;
+
 /// <summary>
 /// ディスクリプタヒープ。
 /// </summary>

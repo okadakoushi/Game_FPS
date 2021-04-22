@@ -73,6 +73,8 @@ void GameObjectManager::UpdateManager()
 		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
 		//フォワードレンダリング。
 		ForwardRender();
+		//フィジックスデバッグ描画。
+		//PhysicObj().DebugDrawWorld(GraphicsEngineObj()->GetRenderContext());
 		//エフェクト描画処理。todo:PostRender?
 		EngineObj().GetEffectEngine().Render();
 		//HUDに描画。

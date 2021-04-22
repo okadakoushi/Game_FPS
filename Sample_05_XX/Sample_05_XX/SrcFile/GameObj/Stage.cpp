@@ -9,6 +9,7 @@ Stage::~Stage()
 
 bool Stage::Start()
 {
+	//レベルの初期化。
 	//モブキャラ増やす場合は、ここも増やしてね。
 	//インデックス。
 	int spawnPointIndex = 0;

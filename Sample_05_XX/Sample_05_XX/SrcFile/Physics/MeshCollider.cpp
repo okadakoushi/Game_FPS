@@ -20,7 +20,7 @@ void MeshCollider::CreateFromTkmFile(const TkmFile& tkmFile, const Matrix* offse
 	m_stridingMeshInterface = std::make_unique<btTriangleIndexVertexArray>();
 	int numMesh = 0;
 
-	tkmFile.QueryMeshParts([&numMesh, &mBias](const TkmFile::SMesh& mesh) {
+	tkmFile.QueryMeshParts([&](const TkmFile::SMesh& mesh) {
 		//モデルの頂点バッファから、物理エンジン用の頂点バッファを作成。
 		VertexBufferPtr vertexBuffer = std::make_unique<VertexBuffer>();
 		for (auto& vb : mesh.vertexBuffer) {
@@ -48,26 +48,30 @@ void MeshCollider::CreateFromTkmFile(const TkmFile& tkmFile, const Matrix* offse
 				}
 			}
 		}
+		//プッシュ。
+		m_vertexBufferArray.push_back(std::move(vertexBuffer));
+		m_indexBufferArray.push_back(move(indexBuffer));
 		numMesh++;
+		//モデルからバッファーを作成し終えたので、BulletPhysicsのインデックスメッシュを形成。
+		btIndexedMesh indexMesh;
+		//最後尾。
+		IndexBuffer* ib = m_indexBufferArray.back().get();
+		VertexBuffer* vb = m_vertexBufferArray.back().get();
+		//パラメーター設定。
+		//三角形の数は(インデックス/3)
+		indexMesh.m_numTriangles = (int)ib->size() / 3;
+		//ベースは一番最初のインデックス。
+		indexMesh.m_triangleIndexBase = (unsigned char*)(&ib->front());
+		indexMesh.m_triangleIndexStride = 12;
+		indexMesh.m_numVertices = (int)vb->size();
+		//ベースは１番最初のバーテックス。
+		indexMesh.m_vertexBase = (unsigned char*)(&vb->front());
+		indexMesh.m_vertexStride = sizeof(Vector3);
+		//作成。
+		m_stridingMeshInterface->addIndexedMesh(indexMesh);	
 	}//obj
 	);
-	//モデルからバッファーを作成し終えたので、BulletPhysicsのインデックスメッシュを形成。
-	btIndexedMesh indexMesh;
-	//最後尾。
-	IndexBuffer* ib = m_indexBufferArray.back().get();
-	VertexBuffer* vb = m_vertexBufferArray.back().get();
-	//パラメーター設定。
-	//三角形の数は(インデックス/3)
-	indexMesh.m_numTriangles = (int)ib->size() / 3;
-	//ベースは一番最初のインデックス。
-	indexMesh.m_triangleIndexBase = (unsigned char*)(&ib->front());
-	indexMesh.m_triangleIndexStride = 12;
-	indexMesh.m_numVertices = (int)vb->size();
-	//ベースは１番最初のバーテックス。
-	indexMesh.m_vertexBase = (unsigned char*)(&vb->front());
-	indexMesh.m_vertexStride = sizeof(Vector3);
-	//作成。
-	m_stridingMeshInterface->addIndexedMesh(indexMesh);
+	m_meshShape = std::make_unique<btBvhTriangleMeshShape>(m_stridingMeshInterface.get(), true);
 }
 
 void MeshCollider::CreateFromModel(const Model& model, const Matrix* offsetMatirx)

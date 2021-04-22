@@ -59,8 +59,8 @@ void MapChipRender::InitRenderObject()
 		//シャドウレシーバーじゃ！
 	m_modelRender->SetShadowReciever(true);
 	//}
-
-
+	//当たり判定追加。
+	m_physicsStaticObject.CreateMesh(m_modelRender->GetPosition(), m_modelRender->GetRotation(), m_modelRender->GetScale(), m_modelRender);
 	/*
 	todo:ここにインスタンシング描画の処理を実装する。
 	インスタンシング描画と通常描画の差別化もしてね！

@@ -31,7 +31,7 @@ bool GamePlayer::Start()
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
 	//キャラコン初期化。
-	m_cCon.Init(5.0f, 10.0f, m_pos);
+	m_cCon.Init(25.0f, 150.0f, m_pos);
 
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
@@ -103,7 +103,7 @@ void GamePlayer::Rotation()
 void GamePlayer::Shot()
 {
 	m_flame++;
-	if (GetAsyncKeyState(VK_SPACE)) {
+	if (GetAsyncKeyState('F')) {
 		if (m_flame >= 20) {
 			Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
 			bullet->SetPos({ m_pos.x, m_pos.y + fixYToEyePos, m_pos.z });
@@ -116,6 +116,7 @@ void GamePlayer::Shot()
 
 void GamePlayer::Move()
 {
+	float deltaTime = GameTime().GetFrameDeltaTime();
 	//カメラの向き情報。
 	Vector3 camForward = GraphicsEngineObj()->GetCamera3D().GetForward();
 	Vector3 camRight = GraphicsEngineObj()->GetCamera3D().GetRight();
@@ -124,44 +125,60 @@ void GamePlayer::Move()
 	camRight.y = 0.0f;
 	camRight.Normalize();
 	
-	//移動量。
-	Vector3 move = g_vec3Zero;
+	//加速度。
+	Vector3 acc;
 
 	//移動処理。
 	//todo:Pad対応？キャラコン対応？慣性？
 	if (GetAsyncKeyState('W')) {
-		move += camForward * m_speed;
+		acc += camForward * m_speed;
 	}
 	if (GetAsyncKeyState('S')) {
 		m_playerState = EnPlayerState_Buck;
-		move -= camForward * m_speed;
+		acc -= camForward * m_speed;
 	}
 	if (GetAsyncKeyState('D')) {
-		move += camRight * m_speed;
+		acc += camRight * m_speed;
 	}
 	if (GetAsyncKeyState('A')) {
-		move -= camRight * m_speed;
+		acc -= camRight * m_speed;
 	}
-
 	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
 		//射撃、後退時はダメー。
-		move *= 3.0f;
+		acc *= 3.0f;
+	}
+	if (m_cCon.IsOnGround()) {
+		if (GetAsyncKeyState(VK_SPACE)) {
+			acc += {0, m_JUMPFORSE, 0};
+		}
+	}
+	else {
+		acc += {0, -m_GRAVITY, 0};
 	}
 
-	if (move.Length() >= 120.0f && m_playerState != EnPlayerState_Buck) {
+
+	acc *= 250.0f;
+	m_move += acc * deltaTime;
+
+	if (m_move.Length() >= 300.0f && m_playerState != EnPlayerState_Buck) {
 		m_playerState = EnPlayerState_Walk;
 	}
-	if (move.Length() >= 240.0f) {
+	if (m_move.Length() >= 700.0f) {
 		m_playerState = EnPlayerState_Run;
 	}
-	if(move.Length() == 0.0f){
+	if(m_move.Length() == 0.0f){
 		m_playerState = EnPlayerState_Idle;
 	}
 
-	if (move.Length() != 0) {
+	if (m_move.Length() != 0) {
 		printf("%f, %f \n", m_pos.x, m_pos.z);
 	}
 
-	m_pos = m_cCon.Execute(move);
+
+	//摩擦。
+	m_move.x += m_move.x * -0.5f;
+	m_move.z += m_move.z * -0.5f;
+	m_move.y += m_move.y * -0.1f;
+	m_pos = m_cCon.Execute(m_move);
 }
 

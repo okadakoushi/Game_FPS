@@ -6,6 +6,13 @@
 class IndexBuffer {
 public:
 	/// <summary>
+	/// インデックスの型。
+	/// </summary>
+	enum EnIndexType {
+		enIndexType_16,		//!<16ビットインデックス。
+		enIndexType_32,		//!<32ビットインデックス。
+	};
+	/// <summary>
 	/// デストラクタ。
 	/// </summary>
 	~IndexBuffer(); 
@@ -35,6 +42,13 @@ public:
 	int GetCount() const
 	{
 		return m_count;
+	}
+	void Release()
+	{
+		if (m_indexBuffer != nullptr) {
+			m_indexBuffer->Release();
+			m_indexBuffer = nullptr;
+		}
 	}
 private:
 	ID3D12Resource* m_indexBuffer = nullptr;	//インデックスバッファ。

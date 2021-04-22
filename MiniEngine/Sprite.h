@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Indexbuffer.h"
-#include "VertexBuffer.h"
-#include "ConstantBuffer.h"
-#include "DescriptorHeap.h"
+//#include "Indexbuffer.h"
+//#include "VertexBuffer.h"
+//#include "ConstantBuffer.h"
+//#include "DescriptorHeap.h"
 
 class Texture;
 

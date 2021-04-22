@@ -32,6 +32,8 @@ static enum Priority {
 
 #include "MiniEngine.h"
 
+#include "SrcFile/Primitive.h"
+
 #include "SrcFile/Physics/PhysicsWorld.h"
 
 #include "Skeleton.h"
@@ -51,16 +53,19 @@ static enum Priority {
 #include "SrcFile/Shadow/DirectionalShadowMap.h"
 //GBuffer
 #include "SrcFile/GBuffer/GBufferRender.h"
+//Physics
+#include "SrcFile/Character/CharacterController.h"
+#include "SrcFile/Physics/BoxCollider.h"
+#include "SrcFile/Physics/PhysicsStaticObject.h"
 //レベル関連。
 #include "SrcFile/Level/MapChip.h"
 #include "SrcFile/Level/Level.h"
-
-#include "SrcFile/Character/CharacterController.h"
 //エフェクト。
 #include "SrcFile/Effect/Effect.h"
 //ナビ。
 #include "SrcFile/NaviMesh/NaviMesh.h"
 #include "SrcFile/NaviMesh/Astar.h"
+#include "SrcFile/Physics/PhysicsDebugDraw.h"
 
 using namespace std;
 

@@ -42,6 +42,13 @@ void PhysicsWorld::Release()
 	m_collisionConfig.reset();
 }
 
+void PhysicsWorld::DebugDrawWorld(RenderContext& rc)
+{
+	m_debugDraw.BeginDraw(rc);
+	m_dynamicWorld->debugDrawWorld();
+	m_debugDraw.EndDraw();
+}
+
 void PhysicsWorld::Init()
 {
 	Release();
@@ -67,6 +74,9 @@ void PhysicsWorld::Init()
 
 	//重力設定。
 	m_dynamicWorld->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+	//デバッグ描画。
+	//m_debugDraw.Init();
+	//m_dynamicWorld->setDebugDrawer(&m_debugDraw);
 }
 
 void PhysicsWorld::Update()

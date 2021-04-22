@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RigidBody.h"
+#include "PhysicsDebugDraw.h"
 
 /// <summary>
 /// フィジックスワールド。
@@ -13,7 +14,7 @@ private:
 	std::unique_ptr<btBroadphaseInterface>					m_overlappingPairCache;	//ブロードフェーズ。衝突判定の枝切。
 	std::unique_ptr<btSequentialImpulseConstraintSolver>	m_constrainSolver;		//コンストレイントソルバー。拘束条件の解決処理。
 	std::unique_ptr<btDiscreteDynamicsWorld>				m_dynamicWorld;			//ワールド。
-
+	PhysicsDebugDraw										m_debugDraw;			//デバッグ描画。
 public:
 	~PhysicsWorld();
 	/// <summary>
@@ -28,6 +29,11 @@ public:
 	/// 解放。
 	/// </summary>
 	void Release();
+	/// <summary>
+	/// フィジックスワールドのデバッグ描画。
+	/// </summary>
+	/// <param name="rc">レンダーコンテキスト。</param>
+	void DebugDrawWorld(RenderContext& rc);
 	/// <summary>
 	/// 重力を設定。
 	/// </summary>

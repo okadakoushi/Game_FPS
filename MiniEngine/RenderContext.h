@@ -185,6 +185,14 @@ public:
 			0,
 			nullptr);
 	}
+
+	void Draw(
+		unsigned int vertexCount,
+		unsigned int startVertexLocation
+	)
+	{
+		m_commandList->DrawInstanced(vertexCount, 1, startVertexLocation, 0);
+	}
 	/// <summary>
 	/// レンダリングターゲットへの描き込み待ち。
 	/// </summary>

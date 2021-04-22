@@ -52,5 +52,6 @@ private:
 	int m_numRenderCount = 0;						//描画するオブジェクトの数。
 	SkinModelRender* m_modelRender = nullptr;		//描画するオブジェクトのデーター配列。
 	std::vector<LevelObjectData> m_renderObjDatas;	//モデルレンダー。
+	PhysicsStaticObject m_physicsStaticObject;		//静的物理オブジェクト。
 };
 
