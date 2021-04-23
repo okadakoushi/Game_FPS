@@ -7,6 +7,7 @@ class Effect;
 class Enemy;
 class Rifle;
 class GameCamera;
+class Map;
 
 class Game : public IGameObject
 {
@@ -24,6 +25,7 @@ private:
 	Level m_level;						//レベル。
 	UIs* m_UIs = nullptr;				//UI。
 	Enemy* m_enemy = nullptr;			//エネミー。
+	Map* m_map = nullptr;				//マップ。
 	myEngine::Effect* m_effect = nullptr;	//エフェクト。
 };
 

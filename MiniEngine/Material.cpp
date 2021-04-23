@@ -74,6 +74,7 @@ void Material::InitPipelineState()
 	psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
+	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	//RTV//
@@ -97,7 +98,6 @@ void Material::InitPipelineState()
 	//ノンスキンシャドウ用。
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsNonSkinShadowDraw.GetCompiledBlob());
 	m_NonSkinShadowMapDraw.Init(psoDesc);
-
 	//続いて半透明マテリアル用。
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psModel.GetCompiledBlob());

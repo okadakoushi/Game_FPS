@@ -20,6 +20,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	EngineObj().Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
 	const auto& renderContext = EngineObj().GetGraphicsEngine();
 
+#ifdef PHYSICS_DEBUG
+	//フィジックスのデバッグ。
+	EngineObj().GetPhysicsWorld().SetPhysicsDebgug(btIDebugDraw::DBG_DrawWireframe);
+#endif //PHYSICS_DEBUG
+
 	//ゲームのインスタンス作成。
 	NewGO<Game>(EnPriority_Game);
 

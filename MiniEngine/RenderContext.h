@@ -274,6 +274,14 @@ public:
 		m_commandList->DrawIndexedInstanced(indexCount, 1, 0, 0, 0);
 	}
 	/// <summary>
+	/// プリミティブを描画。
+	/// </summary>
+	/// <param name="indexCount">インデックスの数。</param>
+	void DrawInstanced(UINT indexCount)
+	{
+		m_commandList->DrawInstanced(indexCount, 1, 0, 0);
+	}
+	/// <summary>
 	/// コンピュートシェーダーをディスパッチ。
 	/// </summary>
 	/// <param name="ThreadGroupCountX"></param>

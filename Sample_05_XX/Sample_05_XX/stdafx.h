@@ -1,8 +1,9 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-#define GAME
+//#define GAME
 //#define NAV_DEBUG
+#define PHYSICS_DEBUG
 
 const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。

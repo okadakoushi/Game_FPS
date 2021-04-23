@@ -54,6 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -184,6 +185,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Map.cpp" />
     <ClCompile Include="SrcFile\Primitive.cpp" />
     <ClCompile Include="SrcFile\Physics\PhysicsDebugDraw.cpp" />
     <ClCompile Include="SrcFile\Character\CharacterController.cpp" />
@@ -263,6 +265,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\GameObj\Map.h" />
     <ClInclude Include="SrcFile\Primitive.h" />
     <ClInclude Include="SrcFile\Physics\PhysicsDebugDraw.h" />
     <ClInclude Include="SrcFile\Character\CharacterController.h" />
@@ -313,9 +316,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
+    <ImageContentTask Include="Assets\sprite\map.png" />
     <Image Include="Assets\sprite\white_hip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />
   </ImportGroup>
 </Project>

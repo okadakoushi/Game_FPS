@@ -71,10 +71,10 @@ void GameObjectManager::UpdateManager()
 		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
 		//GBufferを基にディファードレンダリング。
 		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
+		//フィジックスデバッグ描画。
+		PhysicObj().DebugDrawWorld(GraphicsEngineObj()->GetRenderContext());
 		//フォワードレンダリング。
 		ForwardRender();
-		//フィジックスデバッグ描画。
-		//PhysicObj().DebugDrawWorld(GraphicsEngineObj()->GetRenderContext());
 		//エフェクト描画処理。todo:PostRender?
 		EngineObj().GetEffectEngine().Render();
 		//HUDに描画。

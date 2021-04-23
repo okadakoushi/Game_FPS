@@ -18,7 +18,7 @@ void RigidBody::Create(RigidBodyInfo& rbInfo)
 	btTransform transform;
 	transform.setIdentity();
 	transform.setOrigin(btVector3(rbInfo.pos.x, rbInfo.pos.y, rbInfo.pos.z));
-	transform.setRotation(btQuaternion(rbInfo.rot.x, rbInfo.rot.y, rbInfo.rot.z));
+	transform.setRotation(btQuaternion(rbInfo.rot.x, rbInfo.rot.y, rbInfo.rot.z, rbInfo.rot.w));
 	//オフセット適用。
 	m_myMotionState = make_unique<btDefaultMotionState>();
 	m_myMotionState->setWorldTransform(transform);

@@ -6,7 +6,8 @@
 #include "GameObj/Enemy.h"
 #include "GameObj/GameCamera.h"
 #include "GameObj/Rifle.h"
-#include "GameObj/testObj/TestBox.h"
+#include "GameObj/testObj/TestBox.h"7
+#include "GameObj/Map.h"
 
 Game::Game()
 {
@@ -34,6 +35,8 @@ bool Game::Start()
 	m_enemy->SetPosition({ 950,0,650 });
 	//testObj
 	NewGO<TestBox>(EnPriority_3DModel);
+	//map。
+	m_map = NewGO<Map>(EnPriority_UI, "Map");
 	//Effect。
 	m_effect = NewGO<myEngine::Effect>(0);
 	//UIs。unityとかもCanvasとかあるしあった方がいいのだろうか。。

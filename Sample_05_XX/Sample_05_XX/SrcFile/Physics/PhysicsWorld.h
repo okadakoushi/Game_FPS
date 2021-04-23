@@ -113,5 +113,10 @@ public:
 		btCollisionObject* colObj,
 		std::function<void(const btCollisionObject& contactCollisionObject)> cb
 	);
+
+	void SetPhysicsDebgug(int DebugMode)
+	{
+		m_debugDraw.setDebugMode(DebugMode);
+	}
 };
 

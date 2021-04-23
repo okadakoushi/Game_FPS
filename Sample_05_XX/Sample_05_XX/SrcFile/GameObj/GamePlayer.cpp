@@ -144,15 +144,17 @@ void GamePlayer::Move()
 		acc -= camRight * m_speed;
 	}
 	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
-		//射撃、後退時はダメー。
+		//ダッシュ。
 		acc *= 3.0f;
 	}
 	if (m_cCon.IsOnGround()) {
 		if (GetAsyncKeyState(VK_SPACE)) {
+			//ジャンプ。
 			acc += {0, m_JUMPFORSE, 0};
 		}
 	}
 	else {
+		//重力。
 		acc += {0, -m_GRAVITY, 0};
 	}
 
@@ -178,7 +180,7 @@ void GamePlayer::Move()
 	//摩擦。
 	m_move.x += m_move.x * -0.5f;
 	m_move.z += m_move.z * -0.5f;
-	m_move.y += m_move.y * -0.1f;
+	m_move.y += m_move.y * -0.05f;
 	m_pos = m_cCon.Execute(m_move);
 }
 

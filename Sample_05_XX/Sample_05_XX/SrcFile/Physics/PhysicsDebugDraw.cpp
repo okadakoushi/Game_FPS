@@ -3,24 +3,29 @@
 
 void PhysicsDebugDraw::Init()
 {
-	//m_primitive.Init(
-	//	D3D_PRIMITIVE_TOPOLOGY_LINELIST,
-	//	static_cast<int>(m_vertexBuffer.size()),
-	//	sizeof(Vector4),
-	//	1,
-	//	IndexBuffer::enIndexType_32
-	//);
+	//頂点バッファ初期化。
+	m_vertexBuffer.Init(static_cast<int>(m_vertexs.size()), sizeof(Vector4));
+	m_vertexBuffer.Copy((void*)&m_vertexs[0]);
+	//セット。
+	//GraphicsEngineObj()->GetRenderContext().SetVertexBuffer(m_vertexBuffer);
 
-	m_rootSignature.Init(
-		D3D12_FILTER_MIN_MAG_MIP_LINEAR,
-		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
-		D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
-		D3D12_TEXTURE_ADDRESS_MODE_CLAMP
-	);
-	Shader vs, ps;  
+	//シェーダーロード。
+	Shader vs, ps;
 	vs.LoadVS(L"Assets/shader/linePrimitive.fx", "VSMain");
 	ps.LoadPS(L"Assets/shader/linePrimitive.fx", "PSMain");
-	m_cb.Init(sizeof(SConstantBuffer), nullptr);
+
+	//定数バッファ。
+	m_cb.Init(sizeof(SConstantBuffer), &s_cb);
+
+	//ルートシグネチャ初期化。
+	m_rootSignature.Init(
+		D3D12_FILTER_MIN_MAG_MIP_LINEAR,
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+		D3D12_TEXTURE_ADDRESS_MODE_WRAP
+	);
+	
+	//ヒープに定数バッファを設定。
 	m_heap.RegistConstantBuffer(0, m_cb);
 	m_heap.Commit();
 	
@@ -60,14 +65,8 @@ void PhysicsDebugDraw::Init()
 void PhysicsDebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
 	int baseIndex = m_numLine * 2;
-	//m_vertexBuffer[baseIndex].Set(Vector3(from.x(), from.y(), from.z()));
-	//m_vertexBuffer[baseIndex + 1].Set(Vector3(to.x(), to.y(), to.z()));
-	//from側。
-	m_indexs.push_back(m_numLine);
-	m_vertexs.push_back(Vector3(from.x(), from.y(), from.z()));
-	//to側。
-	m_indexs.push_back(m_numLine + 1);
-	m_vertexs.push_back(Vector3(to.x(), to.y(), to.z()));
+	m_vertexs[baseIndex].Set(Vector3(from.x(), from.y(), from.z()));
+	m_vertexs[baseIndex + 1].Set(Vector3(to.x(), to.y(), to.z()));
 	m_numLine++;
 }
 
@@ -75,23 +74,16 @@ void PhysicsDebugDraw::drawLine(const btVector3& from, const btVector3& to, cons
 void PhysicsDebugDraw::EndDraw()
 {
 	//更新。
-	SConstantBuffer cb;
-	cb.mView = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
-	cb.mProj = GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix();
-	
-	//初期化。
-	m_indexBuffer.Init(sizeof(int) * m_indexs.size(), sizeof(int));
-	m_indexBuffer.Copy(&m_indexs[0]);
-	m_vertexBuffer.Init(sizeof(Vector3) * m_vertexs.size(), sizeof(Vector3));
-	m_vertexBuffer.Copy(&m_vertexs[0]);
-
-
-	m_rc->SetRootSignature(m_rootSignature);
+	m_vertexBuffer.Copy((void*)&m_vertexs[0]);
+	s_cb.mView = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
+	s_cb.mProj = GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix();
+	m_cb.CopyToVRAM(&s_cb);
+	//レンコンに設定。
 	m_rc->SetPipelineState(m_pipeline);
+	m_rc->SetRootSignature(m_rootSignature);
+	m_rc->SetVertexBuffer(m_vertexBuffer);
 	m_rc->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	m_rc->SetDescriptorHeap(m_heap);
-	//m_rc->SetVertexBuffer(m_vertexBuffer);
-	//m_rc->SetIndexBuffer(m_indexBuffer);
-	m_rc->DrawIndexed(m_indexs.size());
+	m_rc->DrawInstanced(m_numLine * 2);
 }
 

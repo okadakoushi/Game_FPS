@@ -15,17 +15,14 @@ private:
 		Matrix mView;
 		Matrix mProj;
 	};
-	int m_debugMode = btIDebugDraw::DBG_DrawWireframe;	//デバッグモード。
+	int m_debugMode = btIDebugDraw::DBG_NoDebug;	//デバッグモード。
 	ConstantBuffer m_cb;							//定数バッファ。
+	SConstantBuffer s_cb;
 	static const int VERTEX_MAX = 10000000;			//最大頂点。
-	//std::array<Vector4, VERTEX_MAX> m_vertexBuffer;	//頂点バッファー。
+	std::array<Vector4, VERTEX_MAX> m_vertexs;		//頂点バッファーとインデックス。
 	RenderContext* m_rc;							//レンコン。
-	//Primitive m_primitive;
 	PipelineState m_pipeline;						//パイプラインステート。
-	std::vector<int> m_indexs;						//インデックスリスト。
-	std::vector<Vector3> m_vertexs;					//頂点リスト。
 	VertexBuffer m_vertexBuffer;
-	IndexBuffer m_indexBuffer;
 	DescriptorHeap m_heap;
 	RootSignature m_rootSignature;
 	
@@ -36,7 +33,7 @@ public:
 	void BeginDraw(RenderContext& rc)
 	{
 		m_rc = &rc;
-		m_numLine = 0;;
+		m_numLine = 0;
 	}
 	void EndDraw();
 	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) override;
