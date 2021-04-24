@@ -5,7 +5,7 @@
 #include "SrcFile/Effect/CEffectEngine.h";
 #include "SrcFile/Timer/tkStopwatch.h"
 #include "SrcFile/Physics/PhysicsWorld.h"
-//#include "SrcFile/NaviMesh/NaviMesh.h"
+#include "SrcFile/InputKeyCode.h"
 
 class GraphicsEngine;
 class Camera;
@@ -64,6 +64,14 @@ public:
 		return m_effectEngine;
 	}
 	/// <summary>
+	/// キーコードの取得。
+	/// </summary>
+	/// <returns></returns>
+	InputKeyCode& GetInputKeyCode()
+	{
+		return m_inputKeyCode;
+	}
+	/// <summary>
 	/// モデルデーターマネージャーを取得。
 	/// </summary>
 	/// <returns></returns>
@@ -94,6 +102,7 @@ private:
 	CEffectEngine m_effectEngine;					//エフェクトエンジン。
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
+	InputKeyCode m_inputKeyCode;					//キーボード入力。
 	NaviMesh* m_naviMesh = nullptr;					//ナビメッシュ。
 };
 
@@ -120,6 +129,14 @@ static inline GraphicsEngine* GraphicsEngineObj()
 static inline CEffectEngine& EffectEngineObj()
 {
 	return EngineObj().GetEffectEngine();
+}
+/// <summary>
+/// キーコード取得。
+/// </summary>
+/// <returns></returns>
+static inline InputKeyCode& KeyCodeObj()
+{
+	return EngineObj().GetInputKeyCode();
 }
 /// <summary>
 /// 物理ワールド取得。

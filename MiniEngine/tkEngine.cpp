@@ -23,6 +23,8 @@ void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	for (int i = 0; i < GamePad::CONNECT_PAD_MAX; i++) {
 		g_pad[i] = &m_pad[i];
 	}
+	//キーコードの初期化。
+	m_inputKeyCode.Init();
 	m_naviMesh = new NaviMesh;
 	m_naviMesh->Load("Assets/nvm/NavSample.nvm");
 }
@@ -41,6 +43,8 @@ void TkEngine::Update()
 	m_sw.Start();
 	//物理ワールド更新。
 	m_physicsWorld.Update();
+	//キーコードの更新。
+	m_inputKeyCode.Update();
 	//GOMの初期化。
 	gameObjectManager().Start();
 	//GOMの更新。

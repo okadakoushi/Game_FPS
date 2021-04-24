@@ -22,4 +22,21 @@ bool Map::Start()
 
 void Map::Update()
 {
+	if (KeyCodeObj().IsTriggerKey('M')) {
+		if (m_isExpansion) {
+			//Šg‘åÏ‚Ý‚È‚Ì‚Åƒ}ƒbƒv‚ðk¬‚·‚éB
+			m_pos = { -540, 260, 0 };
+			m_scale = g_vec3One;
+			m_isExpansion = false;
+		}
+		else {
+			//Šg‘åÏ‚Ý‚Å‚Í‚È‚¢‚Ì‚Åƒ}ƒbƒv‚ðŠg‘å‚·‚éB
+			m_pos = g_vec3Zero;
+			m_scale.x = GraphicsEngineObj()->GetFrameBufferWidth() / m_WIDTH;
+			m_scale.y = GraphicsEngineObj()->GetFrameBufferHeight() / m_HEIGHT;
+			m_isExpansion = true;
+		}
+	}
+	m_spriteRender->SetPos(m_pos);
+	m_spriteRender->SetScale(m_scale);
 }
