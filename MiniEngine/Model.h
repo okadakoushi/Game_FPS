@@ -6,6 +6,7 @@
 #include "Skeleton.h"
 #include "srcFile/Animation/AnimationClip.h"
 #include "srcFile/Animation/Animation.h"
+#include "srcFile/Culling/ObjectFrustumCulling.h"
 
 class IShaderResource;
 
@@ -141,4 +142,5 @@ private:
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//拡張SRV
 	const wchar_t* m_shaderFilePath = L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx";			//シェーダーのファイルパス。
 	char m_name[50];									//確認用のネーム。
+	ObjectFrustumCulling m_frustomCulling;				//視錐台カリング。
 };

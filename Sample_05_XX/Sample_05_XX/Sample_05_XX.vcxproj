@@ -185,6 +185,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\Culling\ObjectFrustumCulling.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerPoint.cpp" />
     <ClCompile Include="SrcFile\InputKeyCode.cpp" />
     <ClCompile Include="SrcFile\Map.cpp" />
@@ -208,6 +209,7 @@
     <ClCompile Include="SrcFile\Effect\Effect.cpp" />
     <ClCompile Include="SrcFile\ModelDataManager.cpp" />
     <ClCompile Include="SrcFile\GameObj\Bullet.cpp" />
+    <ClCompile Include="SrcFile\Shape\Box.cpp" />
     <ClCompile Include="SrcFile\SpriteRender.cpp" />
     <ClCompile Include="SrcFile\Level\MapChipRender.cpp" />
     <ClCompile Include="SrcFile\Level\MapChip.cpp" />
@@ -267,6 +269,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\Culling\ObjectFrustumCulling.h" />
+    <ClInclude Include="SrcFile\Culling\IObjectCulling.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerPoint.h" />
     <ClInclude Include="SrcFile\InputKeyCode.h" />
     <ClInclude Include="SrcFile\Map.h" />
@@ -292,6 +296,7 @@
     <ClInclude Include="SrcFile\ModelDataManager.h" />
     <ClInclude Include="SrcFile\GameObj\Bullet.h" />
     <ClInclude Include="SrcFile\Physics\CollisionAttr.h" />
+    <ClInclude Include="SrcFile\Shape\Box.h" />
     <ClInclude Include="SrcFile\SpriteRender.h" />
     <ClInclude Include="SrcFile\Level\MapChipRender.h" />
     <ClInclude Include="SrcFile\Level\MapChip.h" />

@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "srcFile/Animation/AnimationClip.h"
 #include "srcFile/SkinModelRender.h"
+#include "SrcFile/Shape/Box.h"
 #include <fstream>
 
 Model::~Model()
@@ -37,6 +38,8 @@ void Model::InitModel(const char* filepath)
 		m_expandShaderResoruceView,
 		m_shaderFilePath
 	);
+	//‹‘äƒJƒŠƒ“ƒO‰Šú‰»B
+	m_frustomCulling.Init();
 }
 
 void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm)

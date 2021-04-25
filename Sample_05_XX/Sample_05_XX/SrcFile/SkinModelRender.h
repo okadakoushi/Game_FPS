@@ -249,9 +249,9 @@ private:
 	Animation						m_animation;		//アニメーション
 	int m_waitTime = 0;									//アニメーションのウェイトタイム。
 	std::string						m_filePath;			//tkmファイルパス。
-	Vector3 m_pos = g_vec3Zero;			//座標。
-	Quaternion m_rot = g_quatIdentity;	//回転。
-	Vector3 m_scale = g_vec3One;		//拡大。
+	Vector3 m_pos = g_vec3Zero;							//座標。
+	Quaternion m_rot = g_quatIdentity;					//回転。
+	Vector3 m_scale = g_vec3One;						//拡大。
 	EnRenderMode m_renderMode = enRenderMode_NonSkin;	//描画モード。
 	EnModelInitStep m_initStep = enInitStep_None;		//初期化ステップ。
 	bool m_isForwardRender = false;		//フォワードレンダリングする？
