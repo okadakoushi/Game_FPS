@@ -31,7 +31,7 @@ bool GamePlayer::Start()
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
 	//キャラコン初期化。
-	m_cCon.Init(25.0f, 150.0f, m_pos);
+	m_cCon.Init(25.0f, 60.0f, m_pos);
 
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
@@ -131,6 +131,7 @@ void GamePlayer::Move()
 	//移動処理。
 	//todo:Pad対応？キャラコン対応？慣性？
 	if (GetAsyncKeyState('W')) {
+		m_playerState = EnPlayerState_Walk;
 		acc += camForward * m_speed;
 	}
 	if (GetAsyncKeyState('S')) {
@@ -138,9 +139,11 @@ void GamePlayer::Move()
 		acc -= camForward * m_speed;
 	}
 	if (GetAsyncKeyState('D')) {
+		m_playerState = EnPlayerState_Walk;
 		acc += camRight * m_speed;
 	}
 	if (GetAsyncKeyState('A')) {
+		m_playerState = EnPlayerState_Walk;
 		acc -= camRight * m_speed;
 	}
 	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
@@ -159,8 +162,8 @@ void GamePlayer::Move()
 	}
 
 
-	acc *= 250.0f;
-	m_move += acc * deltaTime;
+
+	m_move += acc * 2.0;
 
 	if (m_move.Length() >= 300.0f && m_playerState != EnPlayerState_Buck) {
 		m_playerState = EnPlayerState_Walk;

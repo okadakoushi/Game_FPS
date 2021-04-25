@@ -75,9 +75,9 @@ private:
 	GameCamera* m_camera = nullptr;				//ゲームカメラ。
 	Rifle* m_wepon = nullptr;					//武器。
 	Vector3 m_move = g_vec3Zero;				//移動。
-	float m_speed = 120.0f;						//移動速度。
-	float const m_JUMPFORSE = 1000.0f;			//ジャンプ。
-	float const m_GRAVITY = 40.0f;				//重力。
+	float m_speed = 100.0f;						//移動速度。
+	float const m_JUMPFORSE = 800.0f;			//ジャンプ。
+	float const m_GRAVITY = 30.0f;				//重力。
 	const float fixYToEyePos = 110.0f;			//視点座標に変えるY軸修正。
 	int m_flame = 0;
 };
