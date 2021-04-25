@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// •`‰æB
 	/// </summary>
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc, const Matrix& view, const Matrix& proj, bool Clear = true);
 	/// <summary>
 	/// ƒ‚ƒfƒ‹‚ğ“o˜^B
 	/// <para>Dont call from User.</para>

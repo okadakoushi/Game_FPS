@@ -42,7 +42,6 @@ void PhysicsDebugDraw::Init()
 		psoDesc.pRootSignature = m_rootSignature.Get();
 		psoDesc.VS = CD3DX12_SHADER_BYTECODE(vs.GetCompiledBlob());
 		psoDesc.PS = CD3DX12_SHADER_BYTECODE(ps.GetCompiledBlob());
-		GraphicsEngineObj()->GetRenderContext().SetDescriptorHeap(m_heap);
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		psoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 		psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;

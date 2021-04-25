@@ -4,12 +4,14 @@
 
 SkinModelRender::SkinModelRender()
 {
+	GraphicsEngineObj()->RegistRender(this);
 }
 
 void SkinModelRender::OnDestroy()
 {
 	//モデルレンダー消えたからGbufferのリストから削除する。
 	GraphicsEngineObj()->GetGBuffer().RemoveModel(this);
+	GraphicsEngineObj()->RemoveRender(this);
 }
 
 void SkinModelRender::AnimInit()

@@ -83,7 +83,7 @@ void MeshParts::CreateDescriptorHeaps()
 				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer); //Light
 			}
 			descriptorHeap.RegistConstantBuffer(2, EngineObj().GetGraphicsEngine()->GetShadowMap()->GetShadowCB());	//Shadow
-			descriptorHeap.RegistConstantBuffer(3, mesh->m_materials[matNo]->GetConstantBuffer());		//matParam
+			descriptorHeap.RegistConstantBuffer(3, mesh->m_materials[matNo]->GetConstantBuffer());					//matParam
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
 			descriptorHeapNo++;

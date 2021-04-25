@@ -59,12 +59,45 @@ public:
 		m_pivot = pivot;
 	}
 	/// <summary>
+	/// 乗算カラーを設定。
+	/// </summary>
+	/// <param name="color"></param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_sprite.SetMulColor(color);
+	}
+	/// <summary>
+	/// ビューを設定。
+	/// </summary>
+	/// <param name="view"></param>
+	void SetView(const Matrix& view) 
+	{
+		m_view = view;
+	}
+	/// <summary>
+	/// プロジェ。
+	/// </summary>
+	/// <param name="proj"></param>
+	void SetProj(const Matrix& proj)
+	{
+		m_proj = proj;
+	}
+	/// <summary>
 	/// 位置取得。
 	/// </summary>
 	/// <returns></returns>
 	const Vector3& GetPos() const
 	{
 		return m_pos;
+	}
+	/// <summary>
+	/// テクスチャを取得。
+	/// </summary>
+	/// <param name="index">添え字。</param>
+	/// <returns></returns>
+	Texture* GetTexture(int index) 
+	{
+		return m_sprite.GetTexture(index);
 	}
 private:
 	Sprite m_sprite;			//スプライト。
@@ -74,5 +107,7 @@ private:
 	Vector3 m_scale = g_vec3One;			//拡大。
 	Vector2 m_pivot = Sprite::DEFAULT_PIVOT;//ピボット。
 	bool m_isDraw3D = false;					//3D描画？
+	Matrix m_view;							//ビュー。
+	Matrix m_proj;							//プロジェ。
 };
 

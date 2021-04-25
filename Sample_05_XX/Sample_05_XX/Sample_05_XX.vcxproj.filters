@@ -230,10 +230,13 @@
     <ClCompile Include="SrcFile\Primitive.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SrcFile\GameObj\Map.cpp">
+    <ClCompile Include="SrcFile\InputKeyCode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SrcFile\InputKeyCode.cpp">
+    <ClCompile Include="SrcFile\GameObj\PlayerPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\Map.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -466,10 +469,13 @@
     <ClInclude Include="SrcFile\Primitive.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SrcFile\GameObj\Map.h">
+    <ClInclude Include="SrcFile\InputKeyCode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SrcFile\InputKeyCode.h">
+    <ClInclude Include="SrcFile\GameObj\PlayerPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\Map.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

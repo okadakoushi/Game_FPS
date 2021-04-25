@@ -185,8 +185,9 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\GameObj\PlayerPoint.cpp" />
     <ClCompile Include="SrcFile\InputKeyCode.cpp" />
-    <ClCompile Include="SrcFile\GameObj\Map.cpp" />
+    <ClCompile Include="SrcFile\Map.cpp" />
     <ClCompile Include="SrcFile\Primitive.cpp" />
     <ClCompile Include="SrcFile\Physics\PhysicsDebugDraw.cpp" />
     <ClCompile Include="SrcFile\Character\CharacterController.cpp" />
@@ -266,8 +267,9 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\GameObj\PlayerPoint.h" />
     <ClInclude Include="SrcFile\InputKeyCode.h" />
-    <ClInclude Include="SrcFile\GameObj\Map.h" />
+    <ClInclude Include="SrcFile\Map.h" />
     <ClInclude Include="SrcFile\Primitive.h" />
     <ClInclude Include="SrcFile\Physics\PhysicsDebugDraw.h" />
     <ClInclude Include="SrcFile\Character\CharacterController.h" />

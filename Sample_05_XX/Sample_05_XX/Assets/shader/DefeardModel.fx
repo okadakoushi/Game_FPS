@@ -11,6 +11,7 @@ Texture2D<float>  g_specularMap : register(t2);	//スペキュラ。
 Texture2D<float4> ShadowMap0 : register(t15);	//1枚目
 Texture2D<float4> ShadowMap1 : register(t16);	//2枚目
 Texture2D<float4> ShadowMap2 : register(t17);	//3枚目
+//Texture2D<float4> MINIMAP : register(t18);		//ミニマップ。
 
 //ボーン行列 
 StructuredBuffer<float4x4> boneMatrix : register(t20); 

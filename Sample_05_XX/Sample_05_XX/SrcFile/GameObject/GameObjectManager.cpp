@@ -68,11 +68,13 @@ void GameObjectManager::UpdateManager()
 		//Shadowの描画。 todo:PreRender
 		GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
 		//GBufferレンダリング。todo:PreRender
-		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext());
+		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix());
 		//GBufferを基にディファードレンダリング。
-		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext());
+		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera2D().GetViewMatrix(), GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix());
+#ifdef PHYSICS_DEBUG
 		//フィジックスデバッグ描画。
 		PhysicObj().DebugDrawWorld(GraphicsEngineObj()->GetRenderContext());
+#endif
 		//フォワードレンダリング。
 		ForwardRender();
 		//エフェクト描画処理。todo:PostRender?

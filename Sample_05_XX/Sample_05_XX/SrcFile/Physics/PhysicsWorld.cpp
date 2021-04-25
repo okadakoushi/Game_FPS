@@ -74,9 +74,11 @@ void PhysicsWorld::Init()
 
 	//重力設定。
 	m_dynamicWorld->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+#ifdef PHYSICS_DEBUG
 	//デバッグ描画。
 	m_debugDraw.Init();
 	m_dynamicWorld->setDebugDrawer(&m_debugDraw);
+#endif
 }
 
 void PhysicsWorld::Update()

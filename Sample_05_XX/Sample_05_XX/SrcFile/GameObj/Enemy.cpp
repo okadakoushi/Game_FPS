@@ -20,6 +20,7 @@ bool Enemy::Start()
     m_modelRender->SetScale(scale);
     //findÅB
     m_player = FindGO<GamePlayer>("Player");
+    SetPosition({ 950,0,650 });
 
     return true;
 }

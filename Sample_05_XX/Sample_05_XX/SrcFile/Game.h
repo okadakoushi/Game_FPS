@@ -17,6 +17,7 @@ public:
 	
 	bool Start() override;
 	void Update() override;
+
 private:
 	Stage* m_stage = nullptr;			//ステージ。
 	GamePlayer* m_player = nullptr;		//プレイヤー。
@@ -25,7 +26,6 @@ private:
 	Level m_level;						//レベル。
 	UIs* m_UIs = nullptr;				//UI。
 	Enemy* m_enemy = nullptr;			//エネミー。
-	Map* m_map = nullptr;				//マップ。
+	Map* m_map;							//ミニマップ。
 	myEngine::Effect* m_effect = nullptr;	//エフェクト。
 };
-

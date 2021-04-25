@@ -7,7 +7,7 @@
 #include "GameObj/GameCamera.h"
 #include "GameObj/Rifle.h"
 #include "GameObj/testObj/TestBox.h"7
-#include "GameObj/Map.h"
+#include "SrcFile/Map.h"
 
 Game::Game()
 {
@@ -32,9 +32,6 @@ bool Game::Start()
 	m_player->SetCamera(m_camera);
 	//EnemyÅB
 	m_enemy = NewGO<Enemy>(EnPriority_3DModel, "Enemy");
-	m_enemy->SetPosition({ 950,0,650 });
-	//testObj
-	NewGO<TestBox>(EnPriority_3DModel);
 	//mapÅB
 	m_map = NewGO<Map>(EnPriority_UI, "Map");
 	//EffectÅB
@@ -59,4 +56,5 @@ void Game::Update()
 		m_effect->SetScale({ 10.0f, 10.0f, 10.0f });
 		m_effect->Play(L"Assets/effect/test.efk");
 	}
+	m_map->SetTargetPos(m_player->GetPos());
 }

@@ -25,6 +25,6 @@ void UIs::Update()
 
 void UIs::RenderHUD()
 {
-	m_reticle.Draw(GraphicsEngineObj()->GetRenderContext());
+	m_reticle.Draw(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera2D().GetViewMatrix(), GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix());
 }
 

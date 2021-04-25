@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// <summary>
 /// スキンモデルレンダー。
 /// </summary>

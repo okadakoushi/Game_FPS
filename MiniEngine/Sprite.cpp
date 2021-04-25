@@ -220,16 +220,16 @@
 		m_world = m_world * mRot;
 		m_world = m_world * mTrans;
 	}
-	void Sprite::Draw(RenderContext& renderContext)
+	void Sprite::Draw(RenderContext& renderContext, const Matrix& view, const Matrix& proj)
 	{
-		Matrix viewMatrix = GraphicsEngineObj()->GetCamera2D().GetViewMatrix();
-		Matrix projMatrix = GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix();
+		Matrix viewMatrix = view;
+		Matrix projMatrix = proj;
 
 		m_constantBufferCPU.mvp = m_world * viewMatrix * projMatrix;
-		m_constantBufferCPU.mulColor.x = 1.0f;
-		m_constantBufferCPU.mulColor.y = 1.0f;
-		m_constantBufferCPU.mulColor.z = 1.0f;
-		m_constantBufferCPU.mulColor.w = 1.0f;
+		//m_constantBufferCPU.mulColor.x = 1.0f;
+		//m_constantBufferCPU.mulColor.y = 1.0f;
+		//m_constantBufferCPU.mulColor.z = 1.0f;
+		//m_constantBufferCPU.mulColor.w = 1.0f;
 		m_constantBufferCPU.screenParam.x = GraphicsEngineObj()->GetCamera3D().GetNear();
 		m_constantBufferCPU.screenParam.y = GraphicsEngineObj()->GetCamera3D().GetFar();
 		m_constantBufferCPU.screenParam.z = FRAME_BUFFER_W;

@@ -63,7 +63,24 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="renderContext">レンダリングコンテキスト/param>
-	void Draw(RenderContext& renderContext);
+	void Draw(RenderContext& renderContext, const Matrix& view, const Matrix& proj);
+	/// <summary>
+	/// 乗算カラーを設定。
+	/// </summary>
+	/// <param name="color"></param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_constantBufferCPU.mulColor = color;
+	}
+	/// <summary>
+	/// テクスチャを取得。
+	/// </summary>
+	/// <param name="index">テクスチャの添え字。</param>
+	/// <returns></returns>
+	Texture* GetTexture(int index)
+	{
+		return m_textureExternal[index];
+	}
 private:
 	/// <summary>
 	/// テクスチャを初期化。
@@ -107,7 +124,7 @@ private:
 
 	struct LocalConstantBuffer {
 		Matrix mvp;
-		Vector4 mulColor;
+		Vector4 mulColor = Vector4::White;
 		Vector4 screenParam;
 	};
 	LocalConstantBuffer m_constantBufferCPU;	//CPU側の定数バッファ。

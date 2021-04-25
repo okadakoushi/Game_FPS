@@ -95,6 +95,14 @@ public:
 	{
 		m_isEnable = flag;
 	}
+	/// <summary>
+	/// シャドウキャスターリスト取得。
+	/// </summary>
+	/// <returns></returns>
+	std::vector<Model*>& GetShadowCaster()
+	{
+		return m_shadowCasters;
+	}
 private://ユーザー側が使う必要のない関数。
 	/// <summary>
 	/// ライトの位置を計算。

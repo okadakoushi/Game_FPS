@@ -197,8 +197,6 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//全体レンダリング。
 	m_spriteData.m_width = FRAME_BUFFER_W;
 	m_spriteData.m_height = FRAME_BUFFER_H;
-	//使用するテクスチャ。 とりまアルベドのみ。
-	m_spriteData.m_textures[0] = &GraphicsEngineObj()->GetGBuffer().GetTexture(GBuffer_albed);
 	for (int i = 0; i < Gbuffer_Num; i++) {
 		//Gbufferの数だけ初期化。todo:static_cast
 		m_spriteData.m_textures[i] = &GraphicsEngineObj()->GetGBuffer().GetTexture((EnGBuffer)i);
@@ -518,8 +516,8 @@ void GraphicsEngine::EndRender(bool ChangeTarget)
 	WaitDraw();
 }
 
-void GraphicsEngine::DeffardRender(RenderContext& rc)
+void GraphicsEngine::DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj)
 {
 	//描画。
-	m_defferdSpr.Draw(rc);
+	m_defferdSpr.Draw(rc, view, proj);
 }

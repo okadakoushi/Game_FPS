@@ -15,6 +15,7 @@
 
 #include "SrcFile/Shadow/DirectionalShadowMap.h"
 #include "SrcFile/GBuffer/GBufferRender.h"
+#include "SrcFile/Map.h"
 #include "Sprite.h"
 
 class Light;
@@ -127,7 +128,11 @@ public:
 	/// ディファードレンダリング。
 	/// </summary>
 	/// <param name="rc">rc</param>
-	void DeffardRender(RenderContext& rc);
+	void DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj);
+	//void DrawMiniMap(RenderContext& rc, const Matrix& view, const Matrix& proj)
+	//{
+	//	m_miniMapSpr.Draw(rc, view, proj);
+	//}
 	/// <summary>
 	/// 現在描画中のレンダーターゲットを取得。
 	/// </summary>
@@ -183,6 +188,42 @@ public:
 	Camera& GetCamera3D() 
 	{
 		return m_camera3D;
+	}
+	/// <summary>
+	/// レンダーを登録。
+	/// </summary>
+	/// <param name="render"></param>
+	void RegistRender(SkinModelRender* render)
+	{
+		m_renders.push_back(render);
+	}
+	/// <summary>
+	/// リストから除去。
+	/// </summary>
+	/// <param name="model"></param>
+	void RemoveRender(SkinModelRender* model)
+	{
+		auto it = std::find(m_renders.begin(), m_renders.end(), model);
+		if (it != m_renders.end()) {
+			//見つかった。
+			m_renders.erase(it);
+		}
+	}
+	/// <summary>
+	/// レンダーのリストを取得。
+	/// </summary>
+	/// <returns></returns>
+	const std::vector<SkinModelRender*>& GetRenderList() const 
+	{
+		return m_renders;
+	}
+	/// <summary>
+	/// ミニマップのスプライトを取得。
+	/// </summary>
+	/// <returns></returns>
+	Sprite& GetDefferdSprite()
+	{
+		return m_defferdSpr;
 	}
 private:
 	/// <summary>
@@ -291,7 +332,9 @@ private:
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
 	GBufferRender m_GBuffer;			//GBuffer。
 	Sprite m_defferdSpr;				//ディファード描画用スプライト。
+	
 	SpriteInitData m_spriteData;
+	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。
 #ifdef MODE_DEBUG
 	ID3D12Debug* m_d3dDebug = NULL;		//DX12デバッグレイヤー。
 	/// <summary>

@@ -50,7 +50,7 @@ void GBufferRender::Init()
 	);
 }
 
-void GBufferRender::Render(RenderContext& rc)
+void GBufferRender::Render(RenderContext& rc, const Matrix& view, const Matrix& proj, bool Clear)
 {
 	RenderTarget* rtv[]{
 		&m_GBuffers[GBuffer_albed],
@@ -75,10 +75,12 @@ void GBufferRender::Render(RenderContext& rc)
 
 	for (auto& model : m_models) {
 		//登録されたオブジェクトはGbufferを描画。
-		model->GetModel().Draw(rc, ge->GetCamera3D().GetViewMatrix(), ge->GetCamera3D().GetProjectionMatrix(), model->GetRenderMode());
+		model->GetModel().Draw(rc, view, proj, model->GetRenderMode());
 	}
 	//描画終わったので、リストの中身をクリア。
-	m_models.clear();
+	if (Clear) {
+		m_models.clear();
+	}
 	//レンダーターゲットをもとに戻す。
 	ge->ChangeRenderTargetToFrameBuffer(rc);
 }
