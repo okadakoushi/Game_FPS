@@ -32,7 +32,9 @@ bool GamePlayer::Start()
 	m_pos = m_unityChan->GetPosition();
 	//キャラコン初期化。
 	m_cCon.Init(25.0f, 60.0f, m_pos);
-
+	//腰のボーン取得。
+	int spineBoneNo = m_unityChan->GetSkelton().FindBoneID(L"mixamorig:Spine");
+	m_spineBone = m_unityChan->GetSkelton().GetBone(spineBoneNo);
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
 
@@ -91,10 +93,19 @@ void GamePlayer::Update()
 
 void GamePlayer::Rotation()
 {	
-	float x = g_pad[0]->GetRStickXF();
-	float y = g_pad[0]->GetRStickYF();
-	//Y軸周りの回転作成。
+	//X軸周りの回転を計算。
 	Quaternion qRot;
+	Vector3 to = m_camera->GetToPos();
+	to.Normalize();
+	qRot.SetRotation(g_vec3AxisX, atan2f(to.y * -1.5f, g_vec3Front.z ));
+	Matrix local = m_spineBone->GetLocalMatrix();
+	Matrix trans;
+	trans.MakeRotationFromQuaternion(qRot);
+	local *= trans;
+	m_spineBone->SetLocalMatrixFromUser(local);
+
+	//Y軸周りの回転作成。
+	float x = g_pad[0]->GetRStickXF();
 	qRot.SetRotationDeg(g_vec3AxisY, m_camera->GetHorizonSpeed() * x);
 	m_rot.Multiply(qRot);
 	m_unityChan->SetRotation(m_rot);

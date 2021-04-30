@@ -30,6 +30,11 @@ public:
 	{
 		return m_vertexBufferView;
 	}
+
+	ID3D12Resource* GetResource()
+	{
+		return m_vertexBuffer;
+	}
 	/// <summary>
 	/// ‰ğ•úB
 	/// </summary>

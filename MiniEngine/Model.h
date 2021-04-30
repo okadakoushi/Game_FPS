@@ -130,6 +130,10 @@ public:
 		return m_tkmFile;
 	}
 private:
+	/// <summary>
+	/// aabbを初期化。
+	/// </summary>
+	void InitAABB();
 	using AnimationClipPtr = std:: unique_ptr<AnimationClip>;
 	Matrix			m_world;					//ワールド行列。
 	TkmFile*		m_tkmFile = nullptr;		//tkmファイル。
@@ -142,5 +146,6 @@ private:
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//拡張SRV
 	const wchar_t* m_shaderFilePath = L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx";			//シェーダーのファイルパス。
 	char m_name[50];									//確認用のネーム。
-	ObjectFrustumCulling m_frustomCulling;				//視錐台カリング。
+	Box m_aabb;									//ボックス。
+	//ObjectFrustumCulling m_frustomCulling;				//視錐台カリング。
 };

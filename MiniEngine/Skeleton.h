@@ -107,6 +107,35 @@ public:
 	{
 		return m_offsetLocalMatrix;
 	}
+	/// <summary>
+	/// ユーザー定義型の行列使うかのフラグ。
+	/// </summary>
+	/// <returns></returns>
+	const bool& GetIsUseUserMatFlag() const
+	{
+		return m_isUseUserMat;
+	}
+	/// <summary>
+	/// ユーザ定義型ローカルマトリクスを取得。
+	/// </summary>
+	/// <returns></returns>
+	const Matrix& GetLocalMatrixFromUser() const
+	{
+		return m_localMatrixFromUser;
+	}
+	/// <summary>
+	/// ユーザー定義型ローカル行列を設定。
+	/// <para>ボーンをコード上で任意の行列の場所まで移動させたい場合に使用してください。</para>
+	/// </summary>
+	/// <remarks>
+	/// 元のローカル行列戻す処理はまだ実装していないのでtodo。
+	/// </remarks>
+	/// <param name="mat">行列。</param>
+	void SetLocalMatrixFromUser(const Matrix& mat)
+	{
+		m_isUseUserMat = true;
+		m_localMatrixFromUser = mat;
+	}
 	/*!
 		*@brief	名前の取得。
 		*/
@@ -132,6 +161,8 @@ private:
 	Matrix			m_localMatrix;			//ローカル行列。
 	Matrix			m_worldMatrix;			//ワールド行列。
 	Matrix			m_offsetLocalMatrix;
+	Matrix			m_localMatrixFromUser;	//ユーザ定義型のローカル行列。指定されている場合はこちらを優先して計算を行う。
+	bool			m_isUseUserMat = false;	//ユーザー定義型の行列を使用するか。
 	Vector3			m_positoin;				//このボーンのワールド空間での位置。最後にCalcWorldTRSを実行したときの結果が格納されている。
 	Vector3			m_scale;				//このボーンの拡大率。最後にCalcWorldTRSを実行したときの結果が格納されている。
 	Quaternion		m_rotation;				//このボーンの回転。最後にCalcWorldTRSを実行したときの結果が格納されている。
@@ -249,6 +280,7 @@ public:
 private:
 	TksFile m_tksFile;								//TKSファイル。
 	static const int BONE_MAX = 512;				//ボーンの最大数。
+	int m_customBoneNo = -1;			//カスタムボーン番号。
 	using BonePtr = std::unique_ptr<Bone>;
 	std::vector<BonePtr>	m_bones;				//ボーンの配列。
 	std::unique_ptr<Matrix[]>	m_boneMatrixs;		//ボーン行列。

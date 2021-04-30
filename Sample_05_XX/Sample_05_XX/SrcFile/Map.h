@@ -41,7 +41,7 @@ private:
 	void SwichMiniMapSize();
 private:
 	const float m_CAMERA_HEIGHT = 300.0f;		//カメラの高さ。
-	const float m_SHRINK_WITH_HEIGHT = 1300.0f;	//縮小時のマップの横縦。
+	const float m_SHRINK_WITH_HEIGHT = 100.0f;	//縮小時のマップの横縦。
 	const int m_WIDTH = 300.0f;					//スプライトの横。
 	const int m_HEIGHT = 300.0f;				//スプライトの縦。
 	const Vector4 m_COLOR = Vector4::White;		//乗算カラー。

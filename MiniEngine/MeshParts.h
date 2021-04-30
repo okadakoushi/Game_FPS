@@ -62,6 +62,11 @@ public:
 	/// </summary>
 	/// <param name="skeleton">スケルトン</param>
 	void BindSkeleton(Skeleton& skeleton) ;
+
+	std::vector< SMesh* >& GetMeshList()
+	{
+		return m_meshs;
+	}
 private:
 	/// <summary>
 	/// tkmメッシュからメッシュを作成。

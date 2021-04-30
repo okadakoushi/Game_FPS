@@ -74,6 +74,7 @@ private:
 	Quaternion m_rot = g_quatIdentity;			//回転。
 	GameCamera* m_camera = nullptr;				//ゲームカメラ。
 	Rifle* m_wepon = nullptr;					//武器。
+	Bone* m_spineBone = nullptr;				//腰のボーン。
 	Vector3 m_move = g_vec3Zero;				//移動。
 	float m_speed = 100.0f;						//移動速度。
 	float const m_JUMPFORSE = 800.0f;			//ジャンプ。

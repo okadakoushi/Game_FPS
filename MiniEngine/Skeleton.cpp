@@ -37,7 +37,13 @@ Skeleton::~Skeleton()
 void Skeleton::UpdateBoneWorldMatrix(Bone& bone, const Matrix& parentMatrix)
 {
 	Matrix mBoneWorld;
-	Matrix localMatrix = bone.GetLocalMatrix();
+	Matrix localMatrix;
+	if (bone.GetIsUseUserMatFlag()) {
+		localMatrix = bone.GetLocalMatrixFromUser();
+	}
+	else {
+		localMatrix = bone.GetLocalMatrix();
+	}
 	mBoneWorld = localMatrix * parentMatrix;
 	
 	bone.SetWorldMatrix(mBoneWorld);
