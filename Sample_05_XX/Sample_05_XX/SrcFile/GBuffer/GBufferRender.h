@@ -62,6 +62,14 @@ public:
 	{
 		return m_GBuffers[gbufferNum].GetRenderTargetTexture();
 	}
+	/// <summary>
+	/// Gbufferのデプスを返却。
+	/// </summary>
+	/// <returns></returns>
+	const D3D12_CPU_DESCRIPTOR_HANDLE& GetDSV() const 
+	{
+		return m_GBuffers[GBuffer_albed].GetDSVCpuDescriptorHandle();
+	}
 private:
 	std::vector<SkinModelRender*> m_models;			//モデルのリスト。
 	RenderTarget m_GBuffers[Gbuffer_Num];			//GBuffer。

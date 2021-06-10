@@ -14,8 +14,9 @@ public:
 	/// 初期化。
 	/// </summary>
 	/// <param name="ViewProj">ビュープロジェ。</param>
-	void Init()
+	void Init(Camera* camera)
 	{
+		m_camera = camera;
 		m_isAvtive = true;
 	}
 	/// <summary>
@@ -23,8 +24,9 @@ public:
 	/// </summary>
 	/// <param name="box">AABB。</param>
 	/// <param name="viewProj">viewProj。</param>
-	void Excute(const Box& box, const Matrix& viewProj) override;
+	void Excute(const Box& box) override;
 private:
 	bool m_isAvtive = false;		//有効かどうか。
+	Camera* m_camera = nullptr;
 };
 

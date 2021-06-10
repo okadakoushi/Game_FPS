@@ -36,11 +36,11 @@ void Model::InitModel(const char* filepath)
 		m_expandConstantBuffer,
 		m_expandConstantBufferSize,
 		m_expandShaderResoruceView,
-		m_shaderFilePath
+		m_shaderFilePath, m_vsEntry, m_psEntry
 	);
-	//InitAABB();
+	InitAABB();
 	//視錐台カリング初期化。
-	//m_frustomCulling.Init();
+	m_frustomCulling.Init(&GraphicsEngineObj()->GetCamera3D());
 }
 
 void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm)
@@ -49,6 +49,9 @@ void Model::Update(Vector3 pos, Quaternion rot, Vector3 scale, EnRenderMode& rm)
 	if (isShadowCaster == true) {
 		GraphicsEngineObj()->GetShadowMap()->RegisterShadowCaster(this);
 	}
+	//バウンティングボックス更新。
+	m_aabb.Update(m_world);
+	m_frustomCulling.Excute(m_aabb);
 	//ワールド座標更新。
 	UpdateWorldMatrix(pos, rot, scale, rm);
 }
@@ -75,50 +78,25 @@ void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale, EnRend
 }
 void Model::Draw(RenderContext& rc, Matrix viewMat, Matrix projMat, int RenderMode)
 {
-	m_meshParts.Draw(
-		rc, 
-		m_world, 
-		viewMat,
-		projMat,
-		isShadowReciever,
-		RenderMode
-	);
+	//if(!m_frustomCulling.IsCulling()) {
+		//カリング不可能オブジェクト。
+		m_meshParts.Draw(
+			rc,
+			m_world,
+			viewMat,
+			projMat,
+			isShadowReciever,
+			RenderMode
+		);
+	//}
 }
 
 void Model::InitAABB()
 {
-	//m_tkmFile->QueryMeshParts([&](const TkmFile::SMesh& mesh) {
-	Vector3 vMax = Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-	Vector3 vMin = Vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-	auto dv = GraphicsEngineObj()->GetD3DDevice();
-	{
-		for (auto mesh : m_meshParts.GetMeshList()) {
-			//ビュー。Desc?
-			auto view = mesh->m_vertexBuffer.GetView();
-			//cpuVB
-			void* vertexBufferCPU;
-			CD3DX12_RANGE readRange(0, 0);
-			//map
-			HRESULT hr = mesh->m_vertexBuffer.GetResource()->Map(0, &readRange, reinterpret_cast<void**>(&vertexBufferCPU));
-			if (FAILED(hr)) {
-				MessageBoxA(nullptr, "マッピングに失敗しました。", "Model::InitAABB", MB_OK);
-			}
-			memcpy(vertexBufferCPU, &mesh->m_vertexBuffer, sizeof(mesh->m_vertexBuffer));
-			//頂点数。
-			auto vertexCount = (int)(view.SizeInBytes / view.StrideInBytes);
-			//開始アドレス。
-			auto pData = reinterpret_cast<char*>(vertexBufferCPU);
-			for (int i = 0; i < vertexCount; i++) {
-				auto pos = *reinterpret_cast<Vector3*>(pData);
-				vMax.Max(pos);
-				vMin.Min(pos);
-				//次の頂点。
-				pData += view.StrideInBytes;
-			}
-			mesh->m_vertexBuffer.GetResource()->Unmap(0, &readRange);
-		}
-		Vector3 halfSize = (vMax - vMin) * 0.5f;
-		m_aabb.Init(halfSize);
-	}
-	//});
+	//最大、最小頂点をtkmファイルから取得。
+	Vector3 vMax = m_tkmFile->GetMaxVertex();
+	Vector3 vMin = m_tkmFile->GetMinVertex();
+	//ハーフサイズ。
+	Vector3 half = (vMax - vMin) * 0.5f;
+	m_aabb.Init(half);
 }

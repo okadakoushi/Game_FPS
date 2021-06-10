@@ -106,6 +106,23 @@ public:
 	{
 		return m_meshParts[0].vertexBuffer;
 	}
+
+	/// <summary>
+	/// 最大頂点を取得。
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetMaxVertex() const
+	{
+		return m_vMax;
+	}
+	/// <summary>
+	/// 最小頂点を取得。
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetMinVertex() const
+	{
+		return m_vMin;
+	}
 private:
 	/// <summary>
 	/// テクスチャ名をロード。
@@ -132,4 +149,6 @@ private:
 	void BuildTangentAndBiNormal();
 private:
 	std::vector< SMesh>	m_meshParts;		//メッシュパーツ。
+	Vector3 m_vMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };	//最大だった頂点。
+	Vector3 m_vMin = { FLT_MAX,FLT_MAX ,FLT_MAX };		//最小だった頂点。
 };

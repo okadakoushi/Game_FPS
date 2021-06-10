@@ -46,7 +46,9 @@ public:
 		void* expandData,
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView,
-		const wchar_t* fxPath
+		const wchar_t* filePath, 
+		const char* VSEntry, 
+		const char* PSEntry
 	) ;
 	/// <summary>
 	/// 描画。
@@ -62,10 +64,25 @@ public:
 	/// </summary>
 	/// <param name="skeleton">スケルトン</param>
 	void BindSkeleton(Skeleton& skeleton) ;
-
+	/// <summary>
+	/// 乗算カラーを設定。
+	/// </summary>
+	void SetMulColor(const Vector4& color)
+	{
+		m_mulColor = color;
+	}
+	/// <summary>
+	/// メッシュリストを取得。
+	/// </summary>
+	/// <returns></returns>
 	std::vector< SMesh* >& GetMeshList()
 	{
 		return m_meshs;
+	}
+
+	std::vector<DescriptorHeap>& GetDescriptorHeap()
+	{
+		return m_descriptorHeap;
 	}
 private:
 	/// <summary>
@@ -79,7 +96,9 @@ private:
 	void CreateMeshFromTkmMesh(
 		const TkmFile::SMesh& mesh, 
 		int meshNo,
-		const wchar_t* fxPath
+		const wchar_t* filePath, 
+		const char* VSEntry, 
+		const char* PSEntry
 	);
 	/// <summary>
 	/// ディスクリプタヒープを作成。
@@ -98,6 +117,7 @@ private:
 		Matrix mWorld;			//ワールド行列。
 		Matrix mView;			//ビュー行列。
 		Matrix mProj;			//プロジェクション行列。
+		Vector4 mulColor;			//乗算カラー。
 		int isShadowReciever;	//シャドウレシーバー？
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
@@ -109,4 +129,5 @@ private:
 	Skeleton* m_skeleton = nullptr;							//スケルトン。
 	void* m_expandData = nullptr;							//ユーザー拡張データ。
 	bool m_isCreateDescriptorHeap = false;					//ディスクリプタヒープが作成済み？
+	Vector4 m_mulColor = Vector4::White;					//乗算カラー。
 };

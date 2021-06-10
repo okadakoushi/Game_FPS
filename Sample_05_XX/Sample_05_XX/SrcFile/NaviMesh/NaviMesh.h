@@ -119,7 +119,7 @@ private:
 		Vector3 end;		//終点。
 	};
 	CellBin* m_cellBin;					//読み込み用バイナリデータセル。リファクタリングしたらたぶんいらない。
-	std::vector<Cell> m_cell;				//AStarで使うセル。OPP的にAStarクラスに乗っけた方がいいのだろうか。
+	std::vector<Cell> m_cell;			//AStarで使うセル。
 	ConstantBuffer m_CB;				//コンスタントバッファー。
 	std::vector<Vector3> m_cellPos;			//セルの位置リスト。
 	unsigned int m_numCell = 0;			//セルの数。
@@ -133,12 +133,12 @@ private:
 	DescriptorHeap m_heap;				//ディスクリプタヒープ。
 	//セルワイヤーフレーム表示用メンバ。
 	VertexBuffer m_vertexBuck;			//背景用頂点バッファー。
-	std::vector<int> m_indexs;				//インデックスバッファーのリスト。
+	std::vector<int> m_indexs;			//インデックスバッファーのリスト。
 	IndexBuffer m_indexBuck;			//背景用インデックスバッファー。
 	PipelineState m_pipelineStateBuck;	//背景用パイプラインステート。
 	//隣接セル表示用メンバ。
 	VertexBuffer m_lineVertexBuffer;		//線分描画の頂点バッファー。
-	std::vector<int> m_lineIndexs;				//線分描画のインデックス。
+	std::vector<int> m_lineIndexs;			//線分描画のインデックス。
 	IndexBuffer m_lineIndexBuffer;			//線分描画インデックスバッファー。
 	PipelineState m_lineDrawPipelineState;	//線分描画パイプラインステート。
 	std::vector< Line> m_linkCellLine;		//隣接セルを表すラインの配列。

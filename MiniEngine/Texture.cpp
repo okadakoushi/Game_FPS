@@ -82,6 +82,7 @@ void Texture::LoadTextureFromDDSFile(const wchar_t* filePath)
 	re.End(EngineObj().GetGraphicsEngine()->GetCommandQueue());
 
 	if (FAILED(hr)) {
+		MessageBoxA(nullptr, "テクスチャ作成失敗", "LoadTextureFromDDSFile", MB_OK);
 		//テクスチャの作成に失敗しました。
 		return;
 	}
@@ -97,8 +98,17 @@ void Texture::RegistShaderResourceView(D3D12_CPU_DESCRIPTOR_HANDLE descriptorHan
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = m_textureDesc.Format;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = m_textureDesc.MipLevels;
+		if (m_textureDesc.DepthOrArraySize == 1) {
+			//テクスチャが1枚。
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.Texture2D.MipLevels = m_textureDesc.MipLevels;
+		}
+		else {
+			//テクスチャが複数枚。
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+			srvDesc.TextureCube.MipLevels = m_textureDesc.MipLevels;
+		}
 		device->CreateShaderResourceView(m_texture, &srvDesc, descriptorHandle);
 	}
 }
+

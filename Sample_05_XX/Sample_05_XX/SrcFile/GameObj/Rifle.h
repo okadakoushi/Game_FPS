@@ -31,5 +31,6 @@ private:
 	GamePlayer* m_player = nullptr;	//プレイヤー。
 	Bone* m_rHandBone = nullptr;	//右手ボーン。
 	Bone* m_lHandBone = nullptr;	//右手ボーン。
+	Vector3 origin = g_vec3Zero;	//
 };
 

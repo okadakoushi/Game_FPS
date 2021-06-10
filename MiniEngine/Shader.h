@@ -22,6 +22,11 @@ public:
 	/// <param name="entryFuncName"></param>
 	void LoadCS(const wchar_t* filePath, const char* entryFuncName);
 	/// <summary>
+	/// コンパイル済みシェーダーをセット。
+	/// </summary>
+	/// <param name="shader"></param>
+	void SetShader(Shader& shader);
+	/// <summary>
 	/// コンパイル済みシェーダーデータを取得。
 	/// </summary>
 	/// <returns></returns>

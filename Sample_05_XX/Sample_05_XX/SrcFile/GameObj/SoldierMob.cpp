@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "Enemy.h"
+#include "SoldierMob.h"
 #include "GamePlayer.h"
 
-bool Enemy::Start()
+bool SoldierMob::Start()
 {
     //モデル初期化。
     m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
@@ -25,13 +25,13 @@ bool Enemy::Start()
     return true;
 }
 
-void Enemy::Update()
+void SoldierMob::Update()
 {
     time += GameTime().GetFrameDeltaTime();
 
     switch (m_currentState)
     {
-    case En_Move:
+    case En_Move://移動処理。
         Move();
         if (IsFindPlayer() && time > m_helloTime) {
             //プレイヤーいたのでけいれーい！！
@@ -40,7 +40,7 @@ void Enemy::Update()
             time = 0;
         }
         break;
-    case En_Hello:
+    case En_Hello://敬礼。
         if (m_modelRender->isPlayAnim() == false) {
             //アニメーション終わったので移動に戻す。
             m_currentState = En_Move;
@@ -51,7 +51,7 @@ void Enemy::Update()
 
 }
 
-void Enemy::Move()
+void SoldierMob::Move()
 {
     if (m_dirty == false) {
         //更新必要。
@@ -94,7 +94,7 @@ void Enemy::Move()
     m_modelRender->SetPosition(m_pos);
 }
 
-bool Enemy::IsFindPlayer()
+bool SoldierMob::IsFindPlayer()
 {
     //最初はZ軸が前。
     Vector3 enemyForward = Vector3::Back;
@@ -119,4 +119,3 @@ bool Enemy::IsFindPlayer()
     //見つけてない。
     return false;
 }
-

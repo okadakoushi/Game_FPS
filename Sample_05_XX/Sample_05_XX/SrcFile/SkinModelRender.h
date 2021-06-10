@@ -24,7 +24,6 @@ public:
 	};
 	/// <summary>
 	/// 初期化。
-	/// <para>todo:T黒魔術使わない修正。</para>
 	/// </summary>
 	/// <param name="tkmFile">tkmファイルパス。</param>
 	/// <param name="tkaFilePaths">tkaファイルパス。</param>
@@ -210,6 +209,14 @@ public:
 		m_isForwardRender = false;
 		//ディファードレンダー設定するのでシェーダーも一緒に変更する。
 		m_model.SetShader(L"Assets/shader/DefeardModel.fx");
+	}
+	/// <summary>
+	/// 乗算カラーを設定。
+	/// </summary>
+	/// <param name="color"></param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_model.SetMulColor(color);
 	}
 	/// <summary>
 	/// モデルを取得。

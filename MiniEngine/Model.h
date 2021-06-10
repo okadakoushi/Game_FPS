@@ -114,7 +114,6 @@ public:
 	}
 	/// <summary>
 	/// シェーダーを設定。
-	///<para>ちょっと実用性がない実装かも。todo:修正。</para>
 	/// </summary>
 	/// <param name="fxPath">シェーダーのファイルパス。</param>
 	void SetShader(const wchar_t* fxPath)
@@ -128,6 +127,48 @@ public:
 	const TkmFile* GetTkmFile() const 
 	{
 		return m_tkmFile;
+	}
+	/// <summary>
+	/// 乗算カラーを設定。
+	/// </summary>
+	/// <param name="color"></param>
+	void SetMulColor(const Vector4& color)
+	{
+		m_meshParts.SetMulColor(color);
+	}
+	/// <summary>
+	/// メッシュパーツを取得。
+	/// </summary>
+	/// <returns></returns>
+	MeshParts& GetMeshParts()
+	{
+		return m_meshParts;
+	}
+	/// <summary>
+	/// メッシュパーツに対してクエリ。
+	/// </summary>
+	/// <param name="func"></param>
+	void QueryMeshParts(std::function<void(const SMesh*mesh)> func)
+	{
+		for (auto* mesh : m_meshParts.GetMeshList()) {
+			func(mesh);
+		}
+	}
+	/// <summary>
+	/// シェーダーのファイルパスを設定。
+	/// </summary>
+	/// <param name="filePath"></param>
+	void SetShaderPath(const wchar_t* filePath)
+	{
+		m_shaderFilePath = filePath;
+	}
+	/// <summary>
+	/// PSシェーダーのエントリーポイントを設定。
+	/// </summary>
+	/// <param name="entry"></param>
+	void SetPSEntry(const char* entry)
+	{
+		m_psEntry = entry;
 	}
 private:
 	/// <summary>
@@ -145,7 +186,9 @@ private:
 	int m_expandConstantBufferSize = 0;						//拡張定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//拡張SRV
 	const wchar_t* m_shaderFilePath = L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx";			//シェーダーのファイルパス。
+	const char* m_vsEntry = "VSMain";
+	const char* m_psEntry = "PSMain";
 	char m_name[50];									//確認用のネーム。
 	Box m_aabb;									//ボックス。
-	//ObjectFrustumCulling m_frustomCulling;				//視錐台カリング。
+	ObjectFrustumCulling m_frustomCulling;				//視錐台カリング。
 };

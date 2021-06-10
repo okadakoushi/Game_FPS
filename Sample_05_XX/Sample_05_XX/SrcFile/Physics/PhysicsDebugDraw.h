@@ -7,24 +7,13 @@
 #include "IndexBuffer.h"
 #include "RootSignature.h"
 #include "DescriptorHeap.h"
+#include "SrcFile/Debug/LineDraw.h"
 
 class PhysicsDebugDraw : public btIDebugDraw
 {
 private:
-	struct SConstantBuffer {
-		Matrix mView;
-		Matrix mProj;
-	};
 	int m_debugMode = btIDebugDraw::DBG_NoDebug;	//デバッグモード。
-	ConstantBuffer m_cb;							//定数バッファ。
-	SConstantBuffer s_cb;
-	static const int VERTEX_MAX = 10000000;			//最大頂点。
-	std::array<Vector4, VERTEX_MAX> m_vertexs;		//頂点バッファーとインデックス。
-	RenderContext* m_rc;							//レンコン。
-	PipelineState m_pipeline;						//パイプラインステート。
-	VertexBuffer m_vertexBuffer;
-	DescriptorHeap m_heap;
-	RootSignature m_rootSignature;
+	LineDraw m_lineDraw;
 	
 	int m_numLine;		//ライン数。
 public:
@@ -32,8 +21,7 @@ public:
 
 	void BeginDraw(RenderContext& rc)
 	{
-		m_rc = &rc;
-		m_numLine = 0;
+		m_lineDraw.BeginDraw(rc);
 	}
 	void EndDraw();
 	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) override;

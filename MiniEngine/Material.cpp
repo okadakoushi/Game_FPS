@@ -22,7 +22,9 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 }
 void Material::InitFromTkmMaterila(
 	const TkmFile::SMaterial& tkmMat,
-	const wchar_t* fxPath
+	const wchar_t* filePath, 
+	const char* VSEntry, 
+	const char* PSEntry
 )
 {
 	//テクスチャをロード。
@@ -42,7 +44,7 @@ void Material::InitFromTkmMaterila(
 		D3D12_TEXTURE_ADDRESS_MODE_WRAP);
 
 	//シェーダーを初期化。
-	InitShaders(fxPath);
+	InitShaders(filePath, VSEntry, PSEntry);
 
 	//パイプラインステートを初期化。
 	InitPipelineState();
@@ -125,13 +127,11 @@ void Material::InitPipelineState()
 	//m_transNonSkinModelPipelineState.Init(NonSkinDesc);
 
 }
-void Material::InitShaders(const wchar_t* fx)
+void Material::InitShaders(const wchar_t* filePath, const char* VSEntry, const char* PSEntry)
 {
-	//エントリーポイントを固定にしてるので、fxファイル間で統一すること。
-	m_vsSkinModel.LoadVS(fx, "VSMain");
-	m_vsNonSkinModel.LoadVS(fx, "VSMainNonSkin");
-	m_psModel.LoadPS(fx, "PSMain");
-	//m_vsNonSkinShadowDraw.LoadVS(fxFilePath, "VSMain_ShadowMapNonSkin");
+	m_vsSkinModel.LoadVS(filePath, VSEntry);
+	m_vsNonSkinModel.LoadVS(filePath, "VSMainNonSkin");
+	m_psModel.LoadPS(filePath, PSEntry);
 	//とりあえずシャドウ描画はこのfxでしかしないので。
 	m_vsSkinShadowDraw.LoadVS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "VSMain_ShadowMapSkin");
 	m_psSkinShadowDraw.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_ShadowMap");

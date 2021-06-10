@@ -14,7 +14,7 @@ public:
 	/// 更新。
 	/// </summary>
 	/// <param name="aabb"></param>
-	virtual void Excute(const Box& aabb, const Matrix& viewProj) = 0;
+	virtual void Excute(const Box& aabb) = 0;
 	/// <summary>
 	/// カリングされているかの判定。
 	/// </summary>

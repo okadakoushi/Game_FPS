@@ -58,6 +58,8 @@ void GameObjectManager::UpdateManager()
 	{
 		//Shadowの更新。
 		GraphicsEngineObj()->GetShadowMap()->Update();
+		//ライン描画準備。
+		GraphicsEngineObj()->GetLineDraw().BeginDraw(GraphicsEngineObj()->GetRenderContext());
 		//更新。
 		Update();
 		//エフェクトエンジン更新。
@@ -71,6 +73,8 @@ void GameObjectManager::UpdateManager()
 		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix());
 		//GBufferを基にディファードレンダリング。
 		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera2D().GetViewMatrix(), GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix());
+		//ライン描画。
+		//GraphicsEngineObj()->GetLineDraw().Draw();
 #ifdef PHYSICS_DEBUG
 		//フィジックスデバッグ描画。
 		PhysicObj().DebugDrawWorld(GraphicsEngineObj()->GetRenderContext());

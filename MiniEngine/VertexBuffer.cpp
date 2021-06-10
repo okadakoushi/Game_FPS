@@ -12,10 +12,10 @@ void VertexBuffer::Init(int size, int stride)
 {
 	auto d3dDevice = EngineObj().GetGraphicsEngine()->GetD3DDevice();
 	d3dDevice->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		&CD3DX12_HEAP_PROPERTIES(/*D3D12_HEAP_TYPE_UPLOAD*/D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(size),
-		D3D12_RESOURCE_STATE_COPY_DEST,
+		/*D3D12_RESOURCE_STATE_GENERIC_READ*/D3D12_RESOURCE_STATE_COPY_DEST,
 		nullptr,
 		IID_PPV_ARGS(&m_vertexBuffer));
 	

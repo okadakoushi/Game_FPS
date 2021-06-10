@@ -56,5 +56,18 @@ void Box::Update(const Matrix& worldMat)
 
 	for (auto& pos : m_vertexPosition) {
 		worldMat.Apply(pos);
+		pos.y += m_halfSize.z;
 	}
+
+	//DrawBox();
 }
+
+void Box::DrawBox()
+{
+	auto& lineDraw = GraphicsEngineObj()->GetLineDraw();
+	lineDraw.AddLine(m_vertexPosition[0], m_vertexPosition[1]);//X
+	lineDraw.AddLine(m_vertexPosition[0], m_vertexPosition[2]);//Y
+	lineDraw.AddLine(m_vertexPosition[0], m_vertexPosition[4]);//Z
+}
+
+

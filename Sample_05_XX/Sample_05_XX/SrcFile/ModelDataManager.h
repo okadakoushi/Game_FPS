@@ -5,6 +5,7 @@
 class IShaderResource;
 class MeshParts;
 class SMesh;
+class Shader;
 
 /// <summary>
 /// FlyWeightパターン。
@@ -29,7 +30,9 @@ public:
 	SMesh* LoadMesh(
 		const TkmFile::SMesh& tkmMesh,
 		int meshNo,
-		const wchar_t* fxPath
+		const wchar_t* filePath, 
+		const char* VSEntry, 
+		const char* PSEntry
 	);
 private:
 	std::map<std::string, TkmFile*> m_tkmMap;

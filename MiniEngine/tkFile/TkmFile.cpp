@@ -346,8 +346,9 @@ void TkmFile::Load(const char* filePath)
 			vertex.indices[1] = vertexTmp.indices[1] != -1 ? vertexTmp.indices[1] : 0;
 			vertex.indices[2] = vertexTmp.indices[2] != -1 ? vertexTmp.indices[2] : 0;
 			vertex.indices[3] = vertexTmp.indices[3] != -1 ? vertexTmp.indices[3] : 0;
+			m_vMax.Max(vertex.pos);
+			m_vMin.Min(vertex.pos);
 		}
-		
 		//続いてインデックスバッファ。
 		//インデックスバッファはマテリアルの数分だけ存在するんじゃよ。
 		if (meshPartsHeader.indexSize == 2) {

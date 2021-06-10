@@ -15,6 +15,7 @@
 
 #include "SrcFile/Shadow/DirectionalShadowMap.h"
 #include "SrcFile/GBuffer/GBufferRender.h"
+#include "SrcFile/Debug/LineDraw.h"
 #include "SrcFile/Map.h"
 #include "Sprite.h"
 
@@ -129,10 +130,6 @@ public:
 	/// </summary>
 	/// <param name="rc">rc</param>
 	void DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj);
-	//void DrawMiniMap(RenderContext& rc, const Matrix& view, const Matrix& proj)
-	//{
-	//	m_miniMapSpr.Draw(rc, view, proj);
-	//}
 	/// <summary>
 	/// 現在描画中のレンダーターゲットを取得。
 	/// </summary>
@@ -224,6 +221,11 @@ public:
 	Sprite& GetDefferdSprite()
 	{
 		return m_defferdSpr;
+	}
+
+	LineDraw& GetLineDraw()
+	{
+		return m_lineDraw;
 	}
 private:
 	/// <summary>
@@ -332,6 +334,7 @@ private:
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
 	GBufferRender m_GBuffer;			//GBuffer。
 	Sprite m_defferdSpr;				//ディファード描画用スプライト。
+	LineDraw m_lineDraw;				//線分描画。
 	
 	SpriteInitData m_spriteData;
 	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。

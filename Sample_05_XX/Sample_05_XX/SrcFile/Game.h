@@ -4,10 +4,12 @@ class Stage;
 class GamePlayer;
 class UIs;
 class Effect;
-class Enemy;
+class SoldierMob;
+class RifleEnemy;
 class Rifle;
 class GameCamera;
 class Map;
+class SkyBox;
 
 class Game : public IGameObject
 {
@@ -23,9 +25,10 @@ private:
 	GamePlayer* m_player = nullptr;		//プレイヤー。
 	GameCamera* m_camera = nullptr;		//カメラ。
 	Rifle* m_wepon;						//武器。
+	RifleEnemy* m_enemy = nullptr;			//敵。	
 	Level m_level;						//レベル。
 	UIs* m_UIs = nullptr;				//UI。
-	Enemy* m_enemy = nullptr;			//エネミー。
 	Map* m_map;							//ミニマップ。
+	SkyBox* m_sky = nullptr;			//空。
 	myEngine::Effect* m_effect = nullptr;	//エフェクト。
 };

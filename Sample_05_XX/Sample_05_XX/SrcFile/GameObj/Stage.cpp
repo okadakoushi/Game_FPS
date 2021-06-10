@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Stage.h"
-#include "Enemy.h"
+#include "SoldierMob.h"
 
 Stage::~Stage()
 {
@@ -54,10 +54,10 @@ bool Stage::Start()
 		if (wcsstr(objData.name, L"Area\0") != nullptr) {
 			//エリアオブジェクトが見つかった。
 			//モブキャラを作成。
-			Enemy* enemy = NewGO<Enemy>(EnPriority_3DModel);
-			enemy->SetPosition(objData.position);
+			SoldierMob* mob = NewGO<SoldierMob>(EnPriority_3DModel);
+			mob->SetPosition(objData.position);
 			//モブキャラ増やしたら、spawnPointも増やしてね。
-			enemy->SetTarget(spawnPos[spawnPointIndex]);
+			mob->SetTarget(spawnPos[spawnPointIndex]);
 			spawnPointIndex++;
 			return true;
 		}

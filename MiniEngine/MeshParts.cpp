@@ -24,14 +24,16 @@ void MeshParts::InitFromTkmFile(
 	void* expandData,
 	int expandDataSize,
 	IShaderResource* expandShaderResourceView,
-	const wchar_t* fxPath
+	const wchar_t* filePath, 
+	const char* VSEntry, 
+	const char* PSEntry
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
 	int meshNo = 0;
 	tkmFile.QueryMeshParts([&](const TkmFile::SMesh& mesh) {
 		//tkmファイルのメッシュ情報からメッシュを作成する。
-		CreateMeshFromTkmMesh(mesh, meshNo, fxPath);
+		CreateMeshFromTkmMesh(mesh, meshNo, filePath, VSEntry, PSEntry);
 
 
 		meshNo++;
@@ -94,11 +96,13 @@ void MeshParts::CreateDescriptorHeaps()
 void MeshParts::CreateMeshFromTkmMesh(
 	const TkmFile::SMesh& tkmMesh, 
 	int meshNo,
-	const wchar_t* fxPath
+	const wchar_t* filePath, 
+	const char* VSEntry, 
+	const char* PSEntry
 )
 {
 	//メッシュ取得。
-	auto* mesh = EngineObj().GetModelDataManager().LoadMesh(tkmMesh, meshNo, fxPath);
+	auto* mesh = EngineObj().GetModelDataManager().LoadMesh(tkmMesh, meshNo, filePath, VSEntry, PSEntry);
 
 	m_meshs[meshNo] = mesh;
 	
@@ -137,6 +141,7 @@ void MeshParts::Draw(
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
+	cb.mulColor = m_mulColor;
 	cb.isShadowReciever = isShadowReciever;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);

@@ -46,4 +46,9 @@ void Shader::LoadCS(const wchar_t* filePath, const char* entryFuncName)
 	Load(filePath, entryFuncName, g_csShaderModelName);
 }
 
+void Shader::SetShader(Shader& shader)
+{
+	m_blob = shader.GetCompiledBlob();
+}
+
 

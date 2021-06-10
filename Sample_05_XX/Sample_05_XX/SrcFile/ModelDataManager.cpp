@@ -47,7 +47,7 @@ TkmFile* ModelDataManager::LoadTkm(const char* filePath)
 	return retTkm;
 }
 
-SMesh* ModelDataManager::LoadMesh(const TkmFile::SMesh& tkmMesh, int meshNo, const wchar_t* fxPath)
+SMesh* ModelDataManager::LoadMesh(const TkmFile::SMesh& tkmMesh, int meshNo, const wchar_t* filePath, const char* VSEntry, const char* PSEntry)
 {
 	//•Ô‹p’lB
 	SMesh* retMesh = nullptr;
@@ -109,7 +109,7 @@ SMesh* ModelDataManager::LoadMesh(const TkmFile::SMesh& tkmMesh, int meshNo, con
 		mesh->m_materials.reserve(tkmMesh.materials.size());
 		for (auto& tkmMat : tkmMesh.materials) {
 			auto mat = new Material;
-			mat->InitFromTkmMaterila(tkmMat, fxPath);
+			mat->InitFromTkmMaterila(tkmMat,filePath, VSEntry, PSEntry);
 			mesh->m_materials.push_back(mat);
 		}
 		retMesh = mesh;

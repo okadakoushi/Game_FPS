@@ -10,7 +10,7 @@ ObjectFrustumCulling::~ObjectFrustumCulling()
 {
 }
 
-void ObjectFrustumCulling::Excute(const Box& box, const Matrix& viewProj)
+void ObjectFrustumCulling::Excute(const Box& box)
 {
 	if (m_isAvtive) {
 		//フラグ初期化。
@@ -22,7 +22,7 @@ void ObjectFrustumCulling::Excute(const Box& box, const Matrix& viewProj)
 		Vector3 vMin = Vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 		for (int i = 0; i < 8; i++) {
 			Vector4 vertPos(box.GetVertexPosition(i));
-			viewProj.Apply(vertPos);
+			m_camera->GetViewProjectionMatrix().Apply(vertPos);
 			//正規化座標系。
 			vertPos.x /= vertPos.w;
 			vertPos.y /= vertPos.w;

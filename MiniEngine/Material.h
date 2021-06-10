@@ -11,7 +11,9 @@ public:
 	/// <param name="tkmMat">tkmマテリアル</param>
 	void InitFromTkmMaterila(
 		const TkmFile::SMaterial& tkmMat,
-		const wchar_t* fxPath
+		const wchar_t* filePath, 
+		const char* VSEntry, 
+		const char* PSEntry
 		);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
@@ -19,7 +21,14 @@ public:
 	/// <param name="rc">レンダリングコンテキスト</param>
 	/// <param name="hasSkin">スキンがあるかどうかのフラグ</param>
 	void BeginRender(RenderContext& rc, int renderMode);
-
+	/// <summary>
+	/// アルベドマップを設定。
+	/// </summary>
+	/// <param name="tex"></param>
+	void SetAlbedoMap(Texture& tex)
+	{
+		m_albedoMap = tex;
+	}
 	/// <summary>
 	/// アルベドマップを取得。
 	/// </summary>
@@ -52,18 +61,32 @@ public:
 	{
 		return m_constantBuffer;
 	}
-private:
+	/// <summary>
+	/// モデル用頂点シェーダーを設定。
+	/// </summary>
+	/// <param name="isAnim">アニメーションする？</param>
+	/// <param name="shader">シェーダー。</param>
+	void SetModelVS_Shader(bool& isAnim, Shader& shader)
+	{
+		if (isAnim) {
+			m_vsSkinModel.SetShader(shader);
+		}
+		else {
+			m_vsNonSkinModel.SetShader(shader);
+		}
+	}
 	/// <summary>
 	/// パイプラインステートの初期化。
 	/// </summary>
 	void InitPipelineState();
+private:
 	/// <summary>
 	/// シェーダーの初期化。
 	/// </summary>
 	/// <param name="fxFilePath">fxファイルのファイルパス</param>
 	/// <param name="vsEntryPointFunc">頂点シェーダーのエントリーポイントの関数名</param>
 	/// <param name="psEntryPointFunc">ピクセルシェーダーのエントリーポイントの関数名</param>
-	void InitShaders(const wchar_t* fx);
+	void InitShaders(const wchar_t* filePath, const char* VSEntry, const char* PSEntry);
 	/// <summary>
 	/// テクスチャを初期化。
 	/// </summary>
@@ -93,7 +116,6 @@ private:
 	Shader m_vsNonSkinShadowDraw;					//スキンなしシャドウ描画用ピクセルシェーダー。
 	Shader m_vsSkinShadowDraw;						//スキンありシャドウ描画用ピクセルシェーダー。
 	Shader m_psSkinShadowDraw;						//シャドウ描画用ピクセルシェーダー。
-
 };
 
 

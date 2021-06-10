@@ -314,3 +314,16 @@ float4 PSMain_ShadowMap(SPSInShadow In) : SV_Target0
 	float z = In.pos.z / In.pos.w;
 	return z;
 }
+
+//キューブマップ用のテクスチャ。
+TextureCube<float4> skyCubeMap : register(t0);
+
+/*
+	空用のシェーダー。
+*/
+float4 PSMain_SkyCube(SPSIn In) : SV_Target0
+{
+	float4 color = skyCubeMap.Sample( g_sampler, In.normal);
+	//todo:ここに自己発光処理。
+	return color;
+}

@@ -28,6 +28,7 @@ void Rifle::Update()
 	m_rHandBone->CalcWorldTRS(m_Rpos, m_Rrot, m_scale);
 	//右手から左手伸びるベクトル。
 	Vector3 RHtoLH = m_Rpos - m_Lpos;
+	RHtoLH.Normalize();
 	//RHtoLH.z = 0;
 	m_rot.SetRotation(g_vec3Front, RHtoLH);
 	//Y軸側の角度。

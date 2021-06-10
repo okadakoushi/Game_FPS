@@ -213,6 +213,8 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_shadow = new DirectionalShadowMap;
 	m_shadow->Init(5000, 5000, 2000.0f);
 
+	m_lineDraw.Init();
+
 	return true;
 }
 IDXGIFactory4* GraphicsEngine::CreateDXGIFactory()
@@ -487,7 +489,7 @@ void GraphicsEngine::BeginRender(bool IsClear)
 
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
-	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
+	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_GBuffer.GetDSV());
 	rc.SetViewport(m_viewport);
 }
 void GraphicsEngine::EndRender(bool ChangeTarget)

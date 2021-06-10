@@ -2,7 +2,10 @@
 
 class GamePlayer;
 
-class Enemy : public IGameObject
+/// <summary>
+/// ReadyPheseの徘徊Mobクラス。
+/// </summary>
+class SoldierMob : public IGameObject
 {
 public:
 	/// <summary>
@@ -51,7 +54,7 @@ private:
 	SkinModelRender* m_modelRender;			//モデルレンダー。
 	Vector3 m_pos = g_vec3Zero;				//位置。
 	Quaternion m_rot = g_quatIdentity;		//回転。
-	Vector3 m_targetPos = {1230, 0, 960};		//目的地点。
+	Vector3 m_targetPos = { 1230, 0, 960 };		//目的地点。
 	Vector3 m_nextTarget = g_vec3Zero;		//次の目的地。
 	const float m_spped = 1.0f;				//スピード。
 	AStar m_astar;							//経路探査。

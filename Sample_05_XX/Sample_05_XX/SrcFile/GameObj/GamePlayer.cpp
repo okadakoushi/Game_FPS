@@ -97,11 +97,13 @@ void GamePlayer::Rotation()
 	Quaternion qRot;
 	Vector3 to = m_camera->GetToPos();
 	to.Normalize();
+	//腰への回転は少し強めに取る。
 	qRot.SetRotation(g_vec3AxisX, atan2f(to.y * -1.5f, g_vec3Front.z ));
 	Matrix local = m_spineBone->GetLocalMatrix();
 	Matrix trans;
 	trans.MakeRotationFromQuaternion(qRot);
 	local *= trans;
+	//腰のボーンに回転を適用させる。
 	m_spineBone->SetLocalMatrixFromUser(local);
 
 	//Y軸周りの回転作成。
@@ -169,7 +171,7 @@ void GamePlayer::Move()
 	}
 	else {
 		//重力。
-		acc += {0, -m_GRAVITY, 0};
+		//acc += {0, -m_GRAVITY, 0};
 	}
 
 
@@ -187,7 +189,7 @@ void GamePlayer::Move()
 	}
 
 	if (m_move.Length() != 0) {
-		printf("%f, %f \n", m_pos.x, m_pos.z);
+		printf("%f, %f, %f \n", m_pos.x,m_pos.y, m_pos.z);
 	}
 
 

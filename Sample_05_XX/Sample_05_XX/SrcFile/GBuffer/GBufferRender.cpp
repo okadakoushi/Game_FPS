@@ -59,7 +59,6 @@ void GBufferRender::Render(RenderContext& rc, const Matrix& view, const Matrix& 
 		&m_GBuffers[GBuffer_worldPos],
 		&m_GBuffers[GBuffer_Shadow]
 	};
-
 	auto ge = GraphicsEngineObj();
 	//使用可能までまつ。
 	ge->GetRenderContext().WaitUntilToPossibleSetRenderTargets(Gbuffer_Num, rtv);

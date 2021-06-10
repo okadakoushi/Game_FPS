@@ -24,6 +24,7 @@ cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	float4 mulColor;
 	int mShadowReciever;
 };
 
@@ -206,6 +207,7 @@ SPSOut PSMain(SPSIn psIn)
 	SPSOut psOut;
 	//アルベド出力。
 	psOut.albedo = g_texture.Sample(g_sampler, psIn.uv);
+	psOut.albedo *= mulColor;
 	//法線出力。色々あってSpriteするときに計算させるのというほど
 	//速度変わらない気もするからPBRの法線はここで計算。
 	if (hasNormalMap) {

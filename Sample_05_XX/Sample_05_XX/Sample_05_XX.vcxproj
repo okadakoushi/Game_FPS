@@ -185,6 +185,10 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\nature\SkyBox.cpp" />
+    <ClCompile Include="SrcFile\Debug\LineDraw.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\RifleEnemy.cpp" />
+    <ClCompile Include="SrcFile\GameObj\SoldierMob.cpp" />
     <ClCompile Include="SrcFile\Culling\ObjectFrustumCulling.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerPoint.cpp" />
     <ClCompile Include="SrcFile\InputKeyCode.cpp" />
@@ -203,7 +207,6 @@
     <ClCompile Include="SrcFile\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="SrcFile\GameObj\Rifle.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\AStar.cpp" />
-    <ClCompile Include="SrcFile\GameObj\Enemy.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\NaviMesh.cpp" />
     <ClCompile Include="SrcFile\Effect\CEffectEngine.cpp" />
     <ClCompile Include="SrcFile\Effect\Effect.cpp" />
@@ -269,6 +272,11 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\nature\SkyBox.h" />
+    <ClInclude Include="SrcFile\Debug\LineDraw.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\IEnemy.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\RifleEnemy.h" />
+    <ClInclude Include="SrcFile\GameObj\SoldierMob.h" />
     <ClInclude Include="SrcFile\Culling\ObjectFrustumCulling.h" />
     <ClInclude Include="SrcFile\Culling\IObjectCulling.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerPoint.h" />
@@ -289,7 +297,6 @@
     <ClInclude Include="SrcFile\Physics\PhysicsWorld.h" />
     <ClInclude Include="SrcFile\GameObj\Rifle.h" />
     <ClInclude Include="SrcFile\NaviMesh\AStar.h" />
-    <ClInclude Include="SrcFile\GameObj\Enemy.h" />
     <ClInclude Include="SrcFile\NaviMesh\NaviMesh.h" />
     <ClInclude Include="SrcFile\Effect\CEffectEngine.h" />
     <ClInclude Include="SrcFile\Effect\Effect.h" />
