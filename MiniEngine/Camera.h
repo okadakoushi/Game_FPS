@@ -293,7 +293,7 @@ protected:
 	Vector3		m_right = g_vec3Right;					//カメラの右。
 	Vector3		m_toTarget = g_vec3Zero;				//視点から注視点に向かうベクトル。
 	float		m_near = 1.0f;							//近平面。
-	float		m_far = 10000.0f;						//遠平面。
+	float		m_far = 100000.0f;						//遠平面。
 	float		m_viewAngle = Math::DegToRad(60.0f);	//画角(ラジアン)。
 	float		m_aspect = 1.0f;						//アスペクト比。
 	float		m_width = 1280.0f;						//平行投影行列を作成するときに使用される幅。

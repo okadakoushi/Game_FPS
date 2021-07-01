@@ -23,6 +23,7 @@ bool SkyBox::Start()
 	//m_psShader.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_SkyCube");
 
 	//マテリアルのシェーダーとテクスチャを切り替え。
+	//ラムダ使ったほうがいいと思いつつ、とりまforatuoでやっちゃお
 	for (auto* mesh : m_modelRender->GetModel().GetMeshParts().GetMeshList()) {
 		for (auto mat : mesh->m_materials) {
 			mat->SetAlbedoMap(m_skyCube);

@@ -2,6 +2,11 @@
 #include "SoldierMob.h"
 #include "GamePlayer.h"
 
+void SoldierMob::OnDestroy()
+{
+    DeleteGO(m_modelRender);
+}
+
 bool SoldierMob::Start()
 {
     //モデル初期化。
@@ -18,9 +23,13 @@ bool SoldierMob::Start()
     m_modelRender->SetShadowReciever(true);
     Vector3 scale = { 1.5f, 1.5f, 1.5f };
     m_modelRender->SetScale(scale);
+    m_modelRender->SetPosition({ 100.0f, 0,0 });
+    
     //find。
     m_player = FindGO<GamePlayer>("Player");
-    SetPosition({ 950,0,650 });
+
+    //コリジョン初期化。
+    collision.Init(m_modelRender);
 
     return true;
 }
@@ -29,26 +38,26 @@ void SoldierMob::Update()
 {
     time += GameTime().GetFrameDeltaTime();
 
-    switch (m_currentState)
-    {
-    case En_Move://移動処理。
-        Move();
-        if (IsFindPlayer() && time > m_helloTime) {
-            //プレイヤーいたのでけいれーい！！
-            m_modelRender->PlayAnimation(2, 0.5f);
-            m_currentState = En_Hello;
-            time = 0;
-        }
-        break;
-    case En_Hello://敬礼。
-        if (m_modelRender->isPlayAnim() == false) {
-            //アニメーション終わったので移動に戻す。
-            m_currentState = En_Move;
-        }
-        break;
-    }
-
-
+    //switch (m_currentState)
+    //{
+    //case En_Move://移動処理。
+    //    Move();
+    //    if (IsFindPlayer() && time > m_helloTime) {
+    //        //プレイヤーいたのでけいれーい！！
+    //        m_modelRender->PlayAnimation(2, 0.5f);
+    //        m_currentState = En_Hello;
+    //        time = 0;
+    //    }
+    //    break;
+    //case En_Hello://敬礼。
+    //    if (m_modelRender->isPlayAnim() == false) {
+    //        //アニメーション終わったので移動に戻す。
+    //        m_currentState = En_Move;
+    //    }
+    //    break;
+    //}
+    //コリジョン更新。
+    collision.Update();
 }
 
 void SoldierMob::Move()

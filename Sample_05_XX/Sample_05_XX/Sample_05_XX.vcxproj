@@ -185,6 +185,11 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\GameObj\SoldierCollision.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\Enemy_MeleeSoldier.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Stages\BattleStage1.cpp" />
+    <ClCompile Include="EnablePoint.cpp" />
+    <ClCompile Include="SrcFile\GameObj\guide.cpp" />
     <ClCompile Include="SrcFile\nature\SkyBox.cpp" />
     <ClCompile Include="SrcFile\Debug\LineDraw.cpp" />
     <ClCompile Include="SrcFile\GameObj\Enemy\RifleEnemy.cpp" />
@@ -230,7 +235,8 @@
     <ClCompile Include="SrcFile\Game.cpp" />
     <ClCompile Include="SrcFile\Animation\AnimationClip.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SrcFile\GameObj\Stage.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Stages\Stage.cpp" />
+    <ClCompile Include="SrcFile\GameObj\StageGenerator.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -272,6 +278,11 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\GameObj\SoldierCollision.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\Enemy_MeleeSoldier.h" />
+    <ClInclude Include="SrcFile\GameObj\Stages\BattleStage1.h" />
+    <ClInclude Include="EnablePoint.h" />
+    <ClInclude Include="SrcFile\GameObj\guide.h" />
     <ClInclude Include="SrcFile\nature\SkyBox.h" />
     <ClInclude Include="SrcFile\Debug\LineDraw.h" />
     <ClInclude Include="SrcFile\GameObj\Enemy\IEnemy.h" />
@@ -323,7 +334,8 @@
     <ClInclude Include="SrcFile\Timer\GameTime.h" />
     <ClInclude Include="SrcFile\util\TNameKey.h" />
     <ClInclude Include="SrcFile\util\Util.h" />
-    <ClInclude Include="SrcFile\GameObj\Stage.h" />
+    <ClInclude Include="SrcFile\GameObj\Stages\Stage.h" />
+    <ClInclude Include="SrcFile\GameObj\StageGenerator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="SrcFile\Level\TklFile.h" />

@@ -32,9 +32,9 @@ float NormalizedDisneyDiffuse(float3 N, float3 L, float3 V, float roughness)
 
 	float Fd90 = energyBias + 2.0f * dotLH * dotLH * roughness;
 
-	float FL = SchlickFresnel(1.0f, Fd90, dotNL);
-	float FV = SchlickFresnel(1.0f, Fd90, dotNV);
-	return max( 0.2f, (FL * FV) / PI );
+	float FL = SchlickFresnel(dotNL,1.0f, Fd90 );
+	float FV = SchlickFresnel(dotNV,1.0f, Fd90 );
+	return max( 0.2f, (FL * FV) );
 }
 
 /*

@@ -7,7 +7,6 @@
 void GamePlayer::OnDestroy()
 {
 	DeleteGO(m_reticle);
-	DeleteGO(m_camera);
 	DeleteGO(m_unityChan);
 }
 
@@ -17,7 +16,7 @@ bool GamePlayer::Start()
 	m_unityChan = NewGO<SkinModelRender>(EnPriority_3DModel, "Unity");
 	const char* tkaFilePaths[] = {
 		"Assets/animData/soldier/idle.tka",
-		"Assets/animData/soldier/walk.tka",
+		"Assets/animData/soldier/Walk_BattleMode.tka",
 		"Assets/animData/soldier/run.tka",
 		"Assets/animData/soldier/buck.tka",
 		"Assets/animData/soldier/singleShot.tka"
@@ -37,6 +36,7 @@ bool GamePlayer::Start()
 	m_spineBone = m_unityChan->GetSkelton().GetBone(spineBoneNo);
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
+	m_wepon->SetRefBoneRender(m_unityChan);	
 
 	//レティクル初期化。
 	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
@@ -48,6 +48,8 @@ bool GamePlayer::Start()
 	testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 	m_reticle->Init(testInitData);
 	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
+
+	m_pos = { 0.0f, 0.0f, 0.0f };
 
 	return true;
 }
@@ -73,10 +75,10 @@ void GamePlayer::Update()
 		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Run:
-		m_unityChan->PlayAnimation(EnPlayerState_Run, 0.5f);
+		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Buck:
-		m_unityChan->PlayAnimation(EnPlayerState_Buck, 0.5f);
+		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Shot:
 		m_unityChan->PlayAnimation(EnPlayerState_Shot, 0.2f);
@@ -93,12 +95,12 @@ void GamePlayer::Update()
 
 void GamePlayer::Rotation()
 {	
-	//X軸周りの回転を計算。
 	Quaternion qRot;
-	Vector3 to = m_camera->GetToPos();
+	//X軸周りの回転を計算。
+	Vector3 to = GraphicsEngineObj()->GetCamera3D().GetForward();
 	to.Normalize();
 	//腰への回転は少し強めに取る。
-	qRot.SetRotation(g_vec3AxisX, atan2f(to.y * -1.5f, g_vec3Front.z ));
+	qRot.SetRotation(g_vec3AxisX, atan2f(to.y * -1.2f, g_vec3Front.z ));
 	Matrix local = m_spineBone->GetLocalMatrix();
 	Matrix trans;
 	trans.MakeRotationFromQuaternion(qRot);
@@ -108,7 +110,7 @@ void GamePlayer::Rotation()
 
 	//Y軸周りの回転作成。
 	float x = g_pad[0]->GetRStickXF();
-	qRot.SetRotationDeg(g_vec3AxisY, m_camera->GetHorizonSpeed() * x);
+	qRot.SetRotationDeg(g_vec3AxisY, 1.0f * x);
 	m_rot.Multiply(qRot);
 	m_unityChan->SetRotation(m_rot);
 }
@@ -119,7 +121,7 @@ void GamePlayer::Shot()
 	if (GetAsyncKeyState('F')) {
 		if (m_flame >= 20) {
 			Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
-			bullet->SetPos({ m_pos.x, m_pos.y + fixYToEyePos, m_pos.z });
+			bullet->SetPos(m_wepon->GetPos());
 			bullet->SetRot(m_rot);
 			m_flame = 0;
 		}

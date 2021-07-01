@@ -8,7 +8,13 @@
 class ObjectFrustumCulling : public IObjectCulling
 {
 public:
+	/// <summary>
+	/// コンストラクタ。
+	/// </summary>
 	ObjectFrustumCulling();
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~ObjectFrustumCulling();
 	/// <summary>
 	/// 初期化。

@@ -34,7 +34,7 @@ private:
 	SkinModelRender* m_modelRender = nullptr;			//モデルレンダー。
 	Texture m_skyCube;									//スカイキューブ。
 	Shader m_psShader;									//スカイ用のシェーダー。
-	Vector3 m_scale = { 5000.0f, 5000.0f, 5000.0f };	//空の拡大。
+	Vector3 m_scale = { 8000.0f, 8000.0f, 8000.0f };	//空の拡大。
 	Vector3 m_position = Vector3::Zero;					//位置。
 	Vector3 m_emissionColor = Vector3::Zero;			//自己発光。
 	bool m_isDirty = false;								//ダーティフラグ。

@@ -9,11 +9,13 @@ MapChipRender::MapChipRender()
 
 MapChipRender::~MapChipRender()
 {
+	Release();
 }
 
 void MapChipRender::Release()
 {
 	DeleteGO(m_modelRender);
+	m_physicsStaticObject.Release();
 }
 
 void MapChipRender::Update()

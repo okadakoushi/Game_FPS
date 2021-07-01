@@ -170,11 +170,11 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ÉâÉCÉgÇÃê›íËÅB
-	g_light.directionalLight[0].color = { 3.8f, 3.8f, 3.8f, 1.0f };
+	g_light.directionalLight[0].color = { 0.8f, 0.8f, 0.8f, 0.8f };
 	g_light.directionalLight[0].direction = { -1.0f, -1.0f, -1.0f};
 	g_light.directionalLight[0].direction.Normalize();
 
-	g_light.directionalLight[1].color = { 0.5f, 0.5f, 0.5f, 1.0f };
+	g_light.directionalLight[1].color = { 0.3f, 0.3f, 0.3f, 1.0f };
 	g_light.directionalLight[1].direction = { 1.0f, 1.0f, -1.0f };
 	g_light.directionalLight[1].direction.Normalize();
 

@@ -41,6 +41,12 @@ public:
 	{
 		return m_pos;
 	}
+
+	void GetRHandPos(Vector3& vec, Quaternion& qRot) const
+	{
+		vec = m_rHandBonePos;
+		qRot = m_rHandBoneRot;
+	}
 	/// <summary>
 	/// レンダー取得。
 	/// </summary>
@@ -49,10 +55,10 @@ public:
 	{
 		return m_unityChan;
 	}
-
-	void SetCamera(GameCamera* camera)
+	void SetPos(Vector3& pos)
 	{
-		m_camera = camera;
+		m_pos = pos;
+		m_cCon.SetPosition(m_pos);
 	}
 private:
 	enum EnPlayerState {
@@ -72,9 +78,11 @@ private:
 	Vector3 m_pos = g_vec3Zero;					//位置。
 	Vector3 m_cameraPos = g_vec3Zero;			//カメラの位置。
 	Quaternion m_rot = g_quatIdentity;			//回転。
-	GameCamera* m_camera = nullptr;				//ゲームカメラ。
 	Rifle* m_wepon = nullptr;					//武器。
 	Bone* m_spineBone = nullptr;				//腰のボーン。
+	Bone* m_rHandBone = nullptr;				//右手のボーン。
+	Vector3 m_rHandBonePos = g_vec3Zero;
+	Quaternion m_rHandBoneRot = g_quatIdentity;	
 	Vector3 m_move = g_vec3Zero;				//移動。
 	float m_speed = 100.0f;						//移動速度。
 	float const m_JUMPFORSE = 800.0f;			//ジャンプ。
