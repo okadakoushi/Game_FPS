@@ -87,14 +87,6 @@ public:
 	{
 		return m_physicsWorld;
 	}
-	/// <summary>
-	/// ナビメッシュを取得。
-	/// </summary>
-	/// <returns></returns>
-	NaviMesh* GetNaviMesh()
-	{
-		return m_naviMesh;
-	}
 private:
 	CStopwatch m_sw;								//ストップウォッチ。
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
@@ -103,7 +95,6 @@ private:
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 	InputKeyCode m_inputKeyCode;					//キーボード入力。
-	NaviMesh* m_naviMesh = nullptr;					//ナビメッシュ。
 };
 
 /// <summary>
@@ -145,14 +136,6 @@ static inline InputKeyCode& KeyCodeObj()
 static inline PhysicsWorld& PhysicObj()
 {
 	return EngineObj().GetPhysicsWorld();
-}
-/// <summary>
-/// ナビメッシュ取得。
-/// </summary>
-/// <returns></returns>
-static inline NaviMesh* NaviMeshObj()
-{
-	return EngineObj().GetNaviMesh();
 }
 
 

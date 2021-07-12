@@ -56,6 +56,7 @@ void SoldierMob::Update()
     //    }
     //    break;
     //}
+    m_modelRender->PlayAnimation(1, 0.5f);
     //コリジョン更新。
     collision.Update();
 }
@@ -64,7 +65,7 @@ void SoldierMob::Move()
 {
     if (m_dirty == false) {
         //更新必要。
-        m_nodeList = m_astar.Search(m_pos, m_targetPos, NaviMeshObj()->GetCellList());
+        m_nodeList = m_astar.Search(m_pos, m_targetPos, m_naviMesh->GetCellList());
         NaviMesh::Cell* parentCell = m_nodeCell;
         //NaviMeshObj()->AgentNodeRender(m_nodeList);
         //次の目的地は今の場所。

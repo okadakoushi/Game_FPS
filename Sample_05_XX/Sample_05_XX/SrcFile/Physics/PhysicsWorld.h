@@ -35,6 +35,15 @@ public:
 	/// <param name="rc">レンダーコンテキスト。</param>
 	void DebugDrawWorld(RenderContext& rc);
 	/// <summary>
+	/// 描画準備。
+	/// </summary>
+	/// <param name="rc"></param>
+	void BeginDraw(RenderContext& rc);
+	/// <summary>
+	/// 
+	/// </summary>
+	void PhysicsDraw();
+	/// <summary>
 	/// 重力を設定。
 	/// </summary>
 	/// <param name="g"></param>
@@ -118,5 +127,7 @@ public:
 	{
 		m_debugDraw.setDebugMode(DebugMode);
 	}
+
+	void RayTest(const Vector3& rayFrom, const Vector3& rayTo);
 };
 

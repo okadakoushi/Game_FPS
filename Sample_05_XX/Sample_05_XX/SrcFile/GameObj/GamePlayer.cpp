@@ -39,15 +39,15 @@ bool GamePlayer::Start()
 	m_wepon->SetRefBoneRender(m_unityChan);	
 
 	//レティクル初期化。
-	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
-	SpriteInitData testInitData;
-	//ddsファイル初期化。
-	testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
-	testInitData.m_width = 50.0f;
-	testInitData.m_height = 50.0f;
-	testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
-	m_reticle->Init(testInitData);
-	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
+	//m_reticle = NewGO<SpriteRender>(EnPriority_UI);
+	//SpriteInitData testInitData;
+	////ddsファイル初期化。
+	//testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
+	//testInitData.m_width = 50.0f;
+	//testInitData.m_height = 50.0f;
+	//testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+	//m_reticle->Init(testInitData);
+	//m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
 
 	m_pos = { 0.0f, 0.0f, 0.0f };
 
@@ -127,6 +127,7 @@ void GamePlayer::Shot()
 		}
 		m_playerState = EnPlayerState_Shot;
 	}
+	PhysicObj().RayTest(GraphicsEngineObj()->GetCamera3D().GetPosition(), GraphicsEngineObj()->GetCamera3D().GetTarget());
 }
 
 void GamePlayer::Move()

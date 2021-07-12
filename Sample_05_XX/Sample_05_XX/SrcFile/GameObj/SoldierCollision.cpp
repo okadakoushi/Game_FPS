@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "SoldierCollision.h"
 
+SoldierCollision::~SoldierCollision()
+{
+    //解放かもー。
+    for (auto& col : m_collision) {
+        col.Release();
+    }
+}
+
 void SoldierCollision::Init(SkinModelRender* render)
 {
     //コリジョンを作成。

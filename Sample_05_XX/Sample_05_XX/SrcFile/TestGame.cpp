@@ -3,7 +3,7 @@
 
 bool TestGame::Start()
 {
-	NaviMeshObj()->InitRender();
+	//NaviMeshObj()->InitRender();
 	return true;
 }
 

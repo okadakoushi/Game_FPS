@@ -3,6 +3,7 @@
 class GamePlayer;
 class Guide;
 class SoldierMob;
+class NaviMesh;
 
 /// <summary>
 /// スタンバイステージクラス。
@@ -25,6 +26,7 @@ public:
 	/// 更新。
 	/// </summary>
 	void Update() override;
+	void ForwardRender() override;
 	/// <summary>
 	/// プレイヤーを設定。
 	/// </summary>
@@ -41,5 +43,6 @@ private:
 	PhysicsStaticObject m_physicsStaticObject;	//静的オブジェクト。
 	GamePlayer* m_player = nullptr;				//プレイヤー。
 	Guide* m_guide = nullptr;					//ガイド。
+	NaviMesh* m_naviMesh = nullptr;				//ナビゲーションメッシュ。
 };
 

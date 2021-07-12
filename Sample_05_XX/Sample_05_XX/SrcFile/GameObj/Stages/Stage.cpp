@@ -13,6 +13,7 @@ Stage::Stage()
 	for (auto* soldier : m_soldierMob) {
 		soldier = nullptr;
 	}
+	delete m_naviMesh;
 }
 
 
@@ -40,6 +41,11 @@ void Stage::OnDestroy()
 
 bool Stage::Start()
 {
+	//ナビメッシュ作成。
+	m_naviMesh = new NaviMesh;
+	m_naviMesh->Load("Assets/nvm/StanbyStage.nvm");
+	m_naviMesh->InitRender();
+
 	int spawnPointIndex = 0;	//Mobソルジャー用添字。
 	int renderIndex = 0;		//レンダー用の添字。
 	//スポーン位置
@@ -108,4 +114,11 @@ bool Stage::Start()
 void Stage::Update()
 {
 
+}
+
+void Stage::ForwardRender()
+{
+#ifndef MASTER
+	m_naviMesh->Render();
+#endif
 }

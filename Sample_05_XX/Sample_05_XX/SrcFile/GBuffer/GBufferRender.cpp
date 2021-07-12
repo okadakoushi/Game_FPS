@@ -69,7 +69,7 @@ void GBufferRender::Render(RenderContext& rc, const Matrix& view, const Matrix& 
 
 #ifdef NAV_DEBUG
 	//ナビメッシュのデバッグ表示。
-	EngineObj().GetNaviMesh()->Render();
+	//EngineObj().GetNaviMesh()->Render();
 #endif // NAV_DEBUG
 
 	for (auto& model : m_models) {

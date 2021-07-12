@@ -2,6 +2,7 @@
 
 class GameCamera;
 class Rifle;
+class Bullet;
 
 /// <summary>
 /// プレイヤークラス。

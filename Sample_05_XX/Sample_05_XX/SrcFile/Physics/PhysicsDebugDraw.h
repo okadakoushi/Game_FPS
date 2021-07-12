@@ -9,6 +9,11 @@
 #include "DescriptorHeap.h"
 #include "SrcFile/Debug/LineDraw.h"
 
+
+/// <summary>
+/// こいつ使い勝手よくするために、デバッグドロー統括オブジェにしよう。
+/// Physicsだけの描画じゃない。
+/// </summary>
 class PhysicsDebugDraw : public btIDebugDraw
 {
 private:

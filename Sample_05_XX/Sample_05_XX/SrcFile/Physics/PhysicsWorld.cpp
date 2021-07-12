@@ -49,6 +49,17 @@ void PhysicsWorld::DebugDrawWorld(RenderContext& rc)
 	m_debugDraw.EndDraw();
 }
 
+void PhysicsWorld::BeginDraw(RenderContext& rc)
+{
+	m_debugDraw.BeginDraw(rc);
+}
+
+void PhysicsWorld::PhysicsDraw()
+{
+	m_dynamicWorld->debugDrawWorld();
+	m_debugDraw.EndDraw();
+}
+
 void PhysicsWorld::Init()
 {
 	Release();
@@ -91,4 +102,24 @@ void PhysicsWorld::ContactTest(btCollisionObject* colObj, std::function<void(con
 	MyContactResultCallBack myContactResultCallback;
 	myContactResultCallback.m_cb = cb;
 	m_dynamicWorld->contactTest(colObj, myContactResultCallback);
+}
+
+void PhysicsWorld::RayTest(const Vector3& rayFrom,  const Vector3& rayTo)
+{
+	//btに変換。
+	btVector3 btRayFrom;
+	btRayFrom.setValue(rayFrom.x, rayFrom.y, rayFrom.z);
+	btVector3 btRayTo;
+	btRayTo.setValue(rayTo.x, rayTo.y, rayTo.z);
+
+	//コールバック構造体を作成。
+	btCollisionWorld::ClosestRayResultCallback closestRayResultCB(btRayFrom, btRayTo);
+	
+	//レイテスト。
+	m_dynamicWorld->rayTest(btRayFrom, btRayTo, closestRayResultCB);
+	if (closestRayResultCB.hasHit()) {
+		printf("命中。\n");
+	}
+
+	m_debugDraw.drawLine(btRayFrom, btRayTo, { 0.0f, 1.0f, 0.0f });
 }

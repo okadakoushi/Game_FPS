@@ -60,6 +60,7 @@ private:
 	Quaternion m_rot = g_quatIdentity;		//回転。
 	const float m_spped = 1.0f;				//スピード。
 	//経路探査Param。
+	NaviMesh* m_naviMesh = nullptr;				//ナビ。
 	AStar m_astar;								//経路探査。
 	NaviMesh::Cell* m_nodeCell = nullptr;		//ノードセル。
 	bool m_dirty = false;						//更新必要？

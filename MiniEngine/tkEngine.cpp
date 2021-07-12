@@ -25,8 +25,6 @@ void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	}
 	//キーコードの初期化。
 	m_inputKeyCode.Init();
-	m_naviMesh = new NaviMesh;
-	m_naviMesh->Load("Assets/nvm/NavSample.nvm");
 }
 void TkEngine::BeginFrame()
 {

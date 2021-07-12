@@ -35,14 +35,14 @@ bool Game::Start()
 
 	//スタンバイステージを作成。
 	m_stageGenerator->SetPlayer(m_player);
-	//m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_StanbyStage);
-
+#if 1
+	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_StanbyStage);
+#else
 	//Test
-	//m_effect = NewGO<myEngine::Effect>(0);
-	//NewGO<RifleEnemy>(EnPriority_3DModel, "Enemy");
-	//NewGO<SoldierMob>(0);
+	m_effect = NewGO<myEngine::Effect>(0);
+	NewGO<SoldierMob>(0);
 	//NewGO<Guide>(0);
-
+#endif
 	return true;
 
 }

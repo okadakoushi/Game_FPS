@@ -8,6 +8,7 @@
 class SoldierCollision
 {
 public:
+	~SoldierCollision();
 	/// <summary>
 	/// ‰Šú‰»B
 	/// </summary>
