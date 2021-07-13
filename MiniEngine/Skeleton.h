@@ -150,6 +150,13 @@ public:
 	*@param[out]	scale		拡大率の格納先。
 	*/
 	void CalcWorldTRS(Vector3& trans, Quaternion& rot, Vector3& scale);
+
+	/// <summary>
+	/// このボーンのワールド空間での位置と回転を計算する。
+	/// </summary>
+	/// <param name="trans">位置。</param>
+	/// <param name="rot">回転。</param>
+	void CalcWorldTRS(Vector3& trans, Quaternion& rot);
 		
 private:
 	

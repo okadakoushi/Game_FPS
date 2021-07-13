@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "PhysicsStaticObject.h"
 #include "PhysicsObjectBase.h"
+#include "SrcFile/Physics/CollisionAttr.h"
+
+PhysicsStaticObject::PhysicsStaticObject()
+{
+}
 
 void PhysicsStaticObject::Release()
 {

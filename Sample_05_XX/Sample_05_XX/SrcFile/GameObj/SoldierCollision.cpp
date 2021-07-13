@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SoldierCollision.h"
+#include "SrcFile/Physics/CollisionAttr.h"
 
 SoldierCollision::~SoldierCollision()
 {
@@ -20,6 +21,11 @@ void SoldierCollision::Init(SkinModelRender* render)
         Vector3 scale;  //�̂āB
         m_boneList[boneNum]->CalcWorldTRS(pos, rot, scale);
         m_collision[boneNum].CreateBox(pos, rot, m_collisionScales[boneNum]);
+        if(m_isEnemy) {
+            m_collision[boneNum].GetRigidBody().GetBody()->setUserIndex(enCollisionAttr_Enemy);
+            m_collision[boneNum].GetRigidBody().GetBody()->setUserPointer(m_pointer);
+        }
+
     }
     m_isInited = true;
 }

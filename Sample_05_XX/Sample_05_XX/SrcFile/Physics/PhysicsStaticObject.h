@@ -5,6 +5,7 @@
 class PhysicsStaticObject : public PhysicsObjectBase
 {
 public:
+	PhysicsStaticObject();
 	~PhysicsStaticObject()
 	{
 		Release();

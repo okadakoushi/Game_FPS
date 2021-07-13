@@ -64,6 +64,10 @@ public:
 		AnimInit();
 	}
 
+	void SetPostAnimationProgressFunc(std::function<void()> func)
+	{
+		m_onPostAnimationProgress = func;
+	}
 	void AnimInit();
 	/// <summary>
 	/// デストロイ。
@@ -262,5 +266,6 @@ private:
 	EnRenderMode m_renderMode = enRenderMode_NonSkin;	//描画モード。
 	EnModelInitStep m_initStep = enInitStep_None;		//初期化ステップ。
 	bool m_isForwardRender = false;		//フォワードレンダリングする？
+	std::function<void()> m_onPostAnimationProgress;		//アニメーションの再生処理が終わったあとで呼ばれる処理。
 };
 

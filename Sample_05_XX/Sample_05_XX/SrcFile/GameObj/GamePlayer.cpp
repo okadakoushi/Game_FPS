@@ -3,6 +3,7 @@
 #include "GameCamera.h"
 #include "Bullet.h"
 #include "Rifle.h"
+#include "Enemy/RifleEnemy.h"
 
 void GamePlayer::OnDestroy()
 {
@@ -27,6 +28,8 @@ bool GamePlayer::Start()
 	m_unityChan->SetShadwoCaster(true);
 	m_unityChan->SetShadowReciever(true);
 	m_unityChan->SetScale({ 1.5f, 1.5f, 1.5f });
+	//SkinModelRenderのアニメーション再生が終わったタイミングで呼ばれる処理を設定。
+	m_unityChan->SetPostAnimationProgressFunc([&] {	OnPostAnimationProgress(); });
 	//位置初期化。
 	m_pos = m_unityChan->GetPosition();
 	//キャラコン初期化。
@@ -39,15 +42,15 @@ bool GamePlayer::Start()
 	m_wepon->SetRefBoneRender(m_unityChan);	
 
 	//レティクル初期化。
-	//m_reticle = NewGO<SpriteRender>(EnPriority_UI);
-	//SpriteInitData testInitData;
-	////ddsファイル初期化。
-	//testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
-	//testInitData.m_width = 50.0f;
-	//testInitData.m_height = 50.0f;
-	//testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
-	//m_reticle->Init(testInitData);
-	//m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
+	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
+	SpriteInitData testInitData;
+	//ddsファイル初期化。
+	testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
+	testInitData.m_width = 50.0f;
+	testInitData.m_height = 50.0f;
+	testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+	m_reticle->Init(testInitData);
+	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
 
 	m_pos = { 0.0f, 0.0f, 0.0f };
 
@@ -93,23 +96,28 @@ void GamePlayer::Update()
 	m_unityChan->SetPosition(m_pos);
 }
 
-void GamePlayer::Rotation()
-{	
+void GamePlayer::OnPostAnimationProgress()
+{
 	Quaternion qRot;
 	//X軸周りの回転を計算。
 	Vector3 to = GraphicsEngineObj()->GetCamera3D().GetForward();
 	to.Normalize();
 	//腰への回転は少し強めに取る。
-	qRot.SetRotation(g_vec3AxisX, atan2f(to.y * -1.2f, g_vec3Front.z ));
+	qRot.SetRotation(g_vec3AxisX, atan2f(to.y * -1.2f, g_vec3Front.z));
 	Matrix local = m_spineBone->GetLocalMatrix();
+
 	Matrix trans;
 	trans.MakeRotationFromQuaternion(qRot);
 	local *= trans;
 	//腰のボーンに回転を適用させる。
 	m_spineBone->SetLocalMatrixFromUser(local);
-
+}
+void GamePlayer::Rotation()
+{	
+	
 	//Y軸周りの回転作成。
 	float x = g_pad[0]->GetRStickXF();
+	Quaternion qRot;
 	qRot.SetRotationDeg(g_vec3AxisY, 1.0f * x);
 	m_rot.Multiply(qRot);
 	m_unityChan->SetRotation(m_rot);
@@ -117,6 +125,12 @@ void GamePlayer::Rotation()
 
 void GamePlayer::Shot()
 {
+	//レイのコールバック。
+	RayTestCallBack::PlayerRayTestResult rayCallBack;
+	//レイテストを行う。
+	Vector3 toDir = GraphicsEngineObj()->GetCamera3D().GetTarget() - GraphicsEngineObj()->GetCamera3D().GetPosition();
+	PhysicObj().RayTest(GraphicsEngineObj()->GetCamera3D().GetPosition(), toDir * 1000.0f, rayCallBack);
+
 	m_flame++;
 	if (GetAsyncKeyState('F')) {
 		if (m_flame >= 20) {
@@ -124,10 +138,17 @@ void GamePlayer::Shot()
 			bullet->SetPos(m_wepon->GetPos());
 			bullet->SetRot(m_rot);
 			m_flame = 0;
+			printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
+			printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
+			if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist > rayCallBack.CharacterObjectDist) {
+				//敵にレイが命中。
+				//生ポインタから敵に強制キャスト。
+				RifleEnemy* enemy = reinterpret_cast<RifleEnemy*>(rayCallBack.m_collisionObject->getUserPointer());
+				enemy->SetState(EnEnemyState_Damage);
+			}
 		}
 		m_playerState = EnPlayerState_Shot;
 	}
-	PhysicObj().RayTest(GraphicsEngineObj()->GetCamera3D().GetPosition(), GraphicsEngineObj()->GetCamera3D().GetTarget());
 }
 
 void GamePlayer::Move()
@@ -174,7 +195,9 @@ void GamePlayer::Move()
 	}
 	else {
 		//重力。
-		//acc += {0, -m_GRAVITY, 0};
+#ifdef MASTER
+		acc += {0, -m_GRAVITY, 0};
+#endif
 	}
 
 
@@ -199,7 +222,7 @@ void GamePlayer::Move()
 	//摩擦。
 	m_move.x += m_move.x * -0.5f;
 	m_move.z += m_move.z * -0.5f;
-	m_move.y += m_move.y * -0.05f;
+	m_move.y += m_move.y * -0.025f;
 	m_pos = m_cCon.Execute(m_move);
 }
 

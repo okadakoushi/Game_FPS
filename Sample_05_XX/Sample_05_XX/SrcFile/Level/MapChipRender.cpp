@@ -2,6 +2,7 @@
 #include "MapChipRender.h"
 #include "Level.h"
 #include <mbstring.h>
+#include "SrcFile/Physics/CollisionAttr.h"
 
 MapChipRender::MapChipRender()
 {
@@ -63,6 +64,8 @@ void MapChipRender::InitRenderObject()
 	//}
 	//当たり判定追加。
 	m_physicsStaticObject.CreateMesh(m_modelRender->GetPosition(), m_modelRender->GetRotation(), m_modelRender->GetScale(), m_modelRender);
+	m_physicsStaticObject.GetRigidBody().GetBody()->setUserIndex(enCollisionAttr_StaticObject);
+
 	/*
 	todo:ここにインスタンシング描画の処理を実装する。
 	インスタンシング描画と通常描画の差別化もしてね！

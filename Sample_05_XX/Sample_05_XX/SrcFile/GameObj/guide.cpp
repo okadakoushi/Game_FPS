@@ -19,6 +19,7 @@ bool Guide::Start()
 	m_skinModelRender->Init("Assets/modelData/Chara/guide.tkm", animFilePaths);
 	m_skinModelRender->SetScale({ 1.2f, 1.2f, 1.2f});
 	m_player = FindGO<GamePlayer>("Player");
+	m_collision.SetEnemyFlag(false);
 	m_collision.Init(m_skinModelRender);
 	return true;
 }

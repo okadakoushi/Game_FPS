@@ -107,17 +107,19 @@ void SkinModelRender::AnimInit()
 	}
 }
 
-static bool isStop = false;
+//static bool isStop = false;
 void SkinModelRender::Update()
 {
 	if (m_animation.IsInited()) {
 		//アニメーション初期化されてた。
-		if (g_pad[0]->IsTrigger(enButtonA) ){
-			m_animation.Progress(1.0f/30.0f, m_waitTime);
-		}
+		m_animation.Progress(DELTA_TIME, m_waitTime);
 	}
 	//ワールド座標更新。
 	m_model.Update(m_pos, m_rot, m_scale, m_renderMode);
+	
+	if (m_onPostAnimationProgress) {
+		m_onPostAnimationProgress();
+	}
 
 	if (!m_isForwardRender) {
 		//フォワードレンダーしないのでGBuffer描画。

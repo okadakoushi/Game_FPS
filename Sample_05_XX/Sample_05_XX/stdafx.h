@@ -5,10 +5,10 @@
 
 #ifndef MASTER
 //	#define NAV_DEBUG
-//	#define PHYSICS_DEBUG
+	#define PHYSICS_DEBUG
 #endif
 
-const float DELTA_TIME = 1.0f / 240.0f;	//更新時間。後でGameTimeクラス作ること。
+const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。
 const int NUM_DIRECTIONAL_LIGHT = 4;	//ディレクションライトの数。
 static const int NUM_SHADOW_MAP = 3;			//カスケードシャドウマップの数。
 

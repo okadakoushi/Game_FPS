@@ -18,6 +18,23 @@ public:
 	/// 更新。
 	/// </summary>
 	void Update();
+	/// <summary>
+	/// 本体ポインタを設定。
+	/// <para>Initの前に呼び出すこと。</para>
+	/// </summary>
+	/// <param name="p"></param>
+	void SetPointer(void* p)
+	{
+		m_pointer = p;
+	}
+	/// <summary>
+	/// エネミーかどうかのフラグ。
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetEnemyFlag(const bool& flag)
+	{
+		m_isEnemy = flag;
+	}
 private:
 	bool m_isInited = false;
 	//当たり判定Param。
@@ -35,8 +52,10 @@ private:
 		{15.0f, 30.0f, 15.0f},	//右足.
 		{15.0f, 38.0f, 15.0f}	//左足。
 	};
-	Bone* m_boneList[COLLISION_COUNT]; 				//ボーン。
+	Bone* m_boneList[COLLISION_COUNT]; 					//ボーン。
 	Vector3 m_bonePosition = g_vec3Zero;				//ボーンの位置。
 	Quaternion m_boneRotation = g_quatIdentity;			//ボーンの回転。
+	void* m_pointer = nullptr;
+	bool m_isEnemy = true;
 };
 

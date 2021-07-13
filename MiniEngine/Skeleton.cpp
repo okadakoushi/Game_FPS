@@ -26,6 +26,22 @@ void Bone::CalcWorldTRS(Vector3& trans, Quaternion& rot, Vector3& scale)
 	rot.SetRotation(mWorld);
 	m_rotation = rot;
 }
+
+void Bone::CalcWorldTRS(Vector3& trans, Quaternion& rot)
+{
+	Matrix mWorld = g_matIdentity;
+	mWorld = m_worldMatrix;
+	//行列から平行移動量を取得する。
+	trans.Set(mWorld.v[3]);
+	m_positoin = trans;
+	//行列から拡大率と平行移動量を除去して回転量を取得する。
+	mWorld.v[0].Normalize();
+	mWorld.v[1].Normalize();
+	mWorld.v[2].Normalize();
+	mWorld.v[3].Set(0.0f, 0.0f, 0.0f, 1.0f);
+	rot.SetRotation(mWorld);
+	m_rotation = rot;
+}
 Skeleton::Skeleton()
 {
 	//リザーブ。
@@ -142,6 +158,59 @@ void Skeleton::Update(const Matrix& mWorld)
 		Matrix mBone;
 		mBone = bonePtr->GetInvBindPoseMatrix() * bonePtr->GetWorldMatrix();
 		m_boneMatrixs[boneNo] = mBone;
+		//char hoge[256];
+		//sprintf(hoge, "boneNo = %d\n", boneNo);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[0][0] = %.5f", m_boneMatrixs[boneNo].m[0][0] );
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[0][1] = %.5f", m_boneMatrixs[boneNo].m[0][1] );
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[0][2] = %.5f", m_boneMatrixs[boneNo].m[0][2]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[0][3] = %.5f\n", m_boneMatrixs[boneNo].m[0][3]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[1][0] = %.5f", m_boneMatrixs[boneNo].m[1][0]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[1][1] = %.5f", m_boneMatrixs[boneNo].m[1][1]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[1][2] = %.5f", m_boneMatrixs[boneNo].m[1][2]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[1][3] = %.5f\n", m_boneMatrixs[boneNo].m[1][3]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[2][0] = %.5f", m_boneMatrixs[boneNo].m[2][0]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[2][1] = %.5f", m_boneMatrixs[boneNo].m[2][1]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[2][2] = %.5f", m_boneMatrixs[boneNo].m[2][2]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[2][3] = %.5f\n", m_boneMatrixs[boneNo].m[2][3]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[3][0] = %.5f", m_boneMatrixs[boneNo].m[3][0]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[3][1] = %.5f", m_boneMatrixs[boneNo].m[3][1]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[3][2] = %.5f", m_boneMatrixs[boneNo].m[3][2]);
+		//OutputDebugStringA(hoge);
+
+		//sprintf(hoge, "m[3][3] = %.5f\n", m_boneMatrixs[boneNo].m[3][3]);
+		//OutputDebugStringA(hoge);
+
+
 		boneNo++;
 	}
 		

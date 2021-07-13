@@ -239,7 +239,7 @@ NaviMesh::Cell* AStar::CreateNode()
 		//調査終わったのでクローズリストに積む。
 		moveCellList(m_closeCellList, reserchCell, NaviMesh::EnCloseList);
 	}//オープンリストが0になった。ゴールまでの経路なし。
-	MessageBoxA(nullptr, "経路の検索に失敗しました。", "NaviMesh::AStar", MB_OK);
+	//MessageBoxA(nullptr, "経路の検索に失敗しました。", "NaviMesh::AStar", MB_OK);
 	return nullptr;
 }
 
@@ -373,8 +373,11 @@ std::vector<NaviMesh::Cell*> AStar::Search(Vector3& start, Vector3& goal, std::v
 		}
 	}
 
-	//スムージング。
-	Smoothing(m_nodeCellList);
+	//スムージングできる？
+	if (m_nodeCellList.size() > 2) {
+		//スムージング。
+		Smoothing(m_nodeCellList);
+	}
 	return m_nodeCellList;
 }
 

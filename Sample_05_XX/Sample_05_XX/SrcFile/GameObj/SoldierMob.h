@@ -40,6 +40,11 @@ public:
 	{
 		m_targetPos = pos;
 	}
+
+	void SetNaviMesh(NaviMesh* navi)
+	{
+		m_naviMesh = navi;
+	}
 private:
 	/// <summary>
 	/// プレイヤーが視野角内に存在しているかどうか。

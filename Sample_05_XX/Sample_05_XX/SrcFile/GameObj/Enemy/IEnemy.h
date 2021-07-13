@@ -4,6 +4,7 @@
 #include "SrcFile/SkinModelRender.h"
 
 class NaviMesh;
+class GamePlayer;
 
 /// <summary>
 /// エネミーのインターフェイス。
@@ -14,15 +15,6 @@ class NaviMesh;
 /// メンバ継承(state,render)はどうなんだろう。efectiveには「protectedはカプセル化を進めるものではない」とあるけど。
 /// </remarks>
 class Enemy : public IGameObject{
-public:
-	enum EnEnemyState {
-		EnEnemyState_Wandering,		//徘徊。
-		EnEnemyState_Tracking,		//追跡。
-		EnEnemyState_Attack,		//攻撃。
-		EnEnemyState_AttackWait,	//攻撃待機時間。
-		EnEnemyState_Death,			//死亡。
-		EnEnemyState_Num
-	};
 public:
 	virtual ~Enemy() {};
 	virtual bool Start() override = 0;
@@ -35,9 +27,17 @@ public:
 	{
 		m_naviMesh = mesh;
 	}
+	/// <summary>
+	/// プレイヤーをFindして取得。
+	/// <para>複数回使用しないように。</para>
+	/// </summary>
+	/// <returns></returns>
+	GamePlayer* GetPlayerForUseFind() const 
+	{
+		return FindGO<GamePlayer>("Player");
+	}
 protected:
 	//基本Param。
-	EnEnemyState					m_enemyState = EnEnemyState_Wandering;	//エネミーのステート。
 	SkinModelRender*				m_modelRender;							//モデルレンダー。
 	Vector3							m_pos = g_vec3Zero;						//位置。
 	Quaternion						m_rot = g_quatIdentity;					//回転。
@@ -51,4 +51,6 @@ protected:
 	std::vector<NaviMesh::Cell*>	m_nodeList;								//ノードリスト。		
 	Vector3							m_targetPos = g_vec3Zero;				//目的地点。
 	Vector3							m_nextTarget = g_vec3Zero;				//次の目的地。
+	//
+	GamePlayer*						m_player = nullptr;						//プレイヤー。
 };

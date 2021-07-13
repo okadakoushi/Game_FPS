@@ -104,22 +104,19 @@ void PhysicsWorld::ContactTest(btCollisionObject* colObj, std::function<void(con
 	m_dynamicWorld->contactTest(colObj, myContactResultCallback);
 }
 
-void PhysicsWorld::RayTest(const Vector3& rayFrom,  const Vector3& rayTo)
+void PhysicsWorld::RayTest(const Vector3& rayFrom,  const Vector3& rayTo, btCollisionWorld::RayResultCallback& callBuck)
 {
 	//btに変換。
 	btVector3 btRayFrom;
 	btRayFrom.setValue(rayFrom.x, rayFrom.y, rayFrom.z);
 	btVector3 btRayTo;
 	btRayTo.setValue(rayTo.x, rayTo.y, rayTo.z);
-
-	//コールバック構造体を作成。
-	btCollisionWorld::ClosestRayResultCallback closestRayResultCB(btRayFrom, btRayTo);
 	
 	//レイテスト。
-	m_dynamicWorld->rayTest(btRayFrom, btRayTo, closestRayResultCB);
-	if (closestRayResultCB.hasHit()) {
-		printf("命中。\n");
-	}
+	m_dynamicWorld->rayTest(btRayFrom, btRayTo, callBuck);
 
+#ifdef PHYSICS_DEBUG
 	m_debugDraw.drawLine(btRayFrom, btRayTo, { 0.0f, 1.0f, 0.0f });
+#endif 
+
 }

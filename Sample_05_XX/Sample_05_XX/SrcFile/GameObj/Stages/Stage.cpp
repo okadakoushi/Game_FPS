@@ -103,6 +103,7 @@ bool Stage::Start()
 			m_soldierMob[spawnPointIndex]->SetPosition(objData.position);
 			//モブキャラ増やしたら、spawnPointも増やしてね。
 			m_soldierMob[spawnPointIndex]->SetTarget(spawnPos[spawnPointIndex]);
+			m_soldierMob[spawnPointIndex]->SetNaviMesh(m_naviMesh);
 			spawnPointIndex++;
 			return true;
 		}

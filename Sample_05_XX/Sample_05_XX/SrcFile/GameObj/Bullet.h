@@ -42,7 +42,7 @@ private:
 	Vector3 m_toTarget = g_vec3Zero;	//注視点に向かうベクトル。
 	Quaternion m_rot = g_quatIdentity;	//回転。
 	float m_LengthOnNew = 0.0f;		//NewGO時の長さ。
-	const float m_speed = 20.0f;		//速さ。
+	const float m_speed = 150.0f;		//速さ。
 	const float m_fixY = 10.0f;		//Y軸の補正。
 	const float m_fixZ = 50.0f;		//Z軸の補正。
 	const float EffectRange = 4000.0f;	//有効射程。

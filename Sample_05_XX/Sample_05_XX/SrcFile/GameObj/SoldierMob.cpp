@@ -13,10 +13,10 @@ bool SoldierMob::Start()
     m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
     const char* tkaFilePaths[]{
         "Assets/animData/soldierMob/walk.tka",
-        "Assets/animData/soldierMob/idle.tka",
-        "Assets/animData/soldierMob/hello.tka"
+        "Assets/animData/soldierMob/hello.tka",
+        "Assets/animData/soldierMob/idle.tka"
     };
-    m_modelRender->SetAnimLoop(2, false);
+    m_modelRender->SetAnimLoop(En_Hello, false);
     m_modelRender->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFilePaths);
     m_modelRender->SetRenderMode(enRenderMode_Skin);
     m_modelRender->SetShadwoCaster(true);
@@ -29,6 +29,7 @@ bool SoldierMob::Start()
     m_player = FindGO<GamePlayer>("Player");
 
     //コリジョン初期化。
+    collision.SetEnemyFlag(false);
     collision.Init(m_modelRender);
 
     return true;
@@ -38,25 +39,26 @@ void SoldierMob::Update()
 {
     time += GameTime().GetFrameDeltaTime();
 
-    //switch (m_currentState)
-    //{
-    //case En_Move://移動処理。
-    //    Move();
-    //    if (IsFindPlayer() && time > m_helloTime) {
-    //        //プレイヤーいたのでけいれーい！！
-    //        m_modelRender->PlayAnimation(2, 0.5f);
-    //        m_currentState = En_Hello;
-    //        time = 0;
-    //    }
-    //    break;
-    //case En_Hello://敬礼。
-    //    if (m_modelRender->isPlayAnim() == false) {
-    //        //アニメーション終わったので移動に戻す。
-    //        m_currentState = En_Move;
-    //    }
-    //    break;
-    //}
-    m_modelRender->PlayAnimation(1, 0.5f);
+    switch (m_currentState)
+    {
+    case En_Move://移動処理。
+        Move();
+        if (IsFindPlayer() && time > m_helloTime) {
+            //プレイヤーいたのでけいれーい！！
+            printf("敬礼");
+            m_modelRender->PlayAnimation(En_Hello, 0.5f);
+            m_currentState = En_Hello;
+            time = 0;
+        }
+        break;
+    case En_Hello://敬礼。
+        //printf("EnHello");
+        if (m_modelRender->isPlayAnim() == false) {
+            //アニメーション終わったので移動に戻す。
+            m_currentState = En_Move;
+        }
+        break;
+    }
     //コリジョン更新。
     collision.Update();
 }
@@ -91,11 +93,11 @@ void SoldierMob::Move()
             m_nodeList.erase(m_nodeList.begin());
         }
         //動いてる。
-        m_modelRender->PlayAnimation(0, 0.5f);
+        m_modelRender->PlayAnimation(En_Move, 0.5f);
     }
     else {
         //動いてない。
-        m_modelRender->PlayAnimation(1, 0.5f);
+        m_modelRender->PlayAnimation(En_Idle, 0.5f);
         //更新。
         m_targetPos = m_nextTarget;
         m_dirty = false;

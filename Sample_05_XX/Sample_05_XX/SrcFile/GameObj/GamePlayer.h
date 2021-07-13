@@ -4,6 +4,8 @@ class GameCamera;
 class Rifle;
 class Bullet;
 
+#include "SrcFile/RayTestCallBack.h"
+
 /// <summary>
 /// プレイヤークラス。
 /// </summary>
@@ -62,6 +64,15 @@ public:
 		m_cCon.SetPosition(m_pos);
 	}
 private:
+	/// <summary>
+	/// SkinModelRenderのアニメーション進行が終わったタイミングで呼ばれる処理。
+	/// </summary>
+	/// <remarks>
+	/// アニメーションを進行して、骨のローカル行列を更新したあとで、
+	/// 腰の骨をプログラム的に動かす必要があったので、本関数を追加。
+	/// </remarks>
+	void OnPostAnimationProgress();
+private:
 	enum EnPlayerState {
 		EnPlayerState_Idle,		//何もない。
 		EnPlayerState_Walk,		//歩く。
@@ -86,8 +97,8 @@ private:
 	Quaternion m_rHandBoneRot = g_quatIdentity;	
 	Vector3 m_move = g_vec3Zero;				//移動。
 	float m_speed = 100.0f;						//移動速度。
-	float const m_JUMPFORSE = 800.0f;			//ジャンプ。
-	float const m_GRAVITY = 30.0f;				//重力。
+	float const m_JUMPFORSE = 520.0f;			//ジャンプ。
+	float const m_GRAVITY = 20.0f;				//重力。
 	const float fixYToEyePos = 110.0f;			//視点座標に変えるY軸修正。
 	int m_flame = 0;
 };

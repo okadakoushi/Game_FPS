@@ -122,12 +122,17 @@ public:
 		btCollisionObject* colObj,
 		std::function<void(const btCollisionObject& contactCollisionObject)> cb
 	);
+	/// <summary>
+	/// レイテストを行う。
+	/// </summary>
+	/// <param name="rayFrom">レイの開始地点。</param>
+	/// <param name="rayTo">レイの終了地点。</param>
+	/// <param name="callBuck">コールバック関数。</param>
+	void RayTest(const Vector3& rayFrom, const Vector3& rayTo, btCollisionWorld::RayResultCallback& callBuck);
 
 	void SetPhysicsDebgug(int DebugMode)
 	{
 		m_debugDraw.setDebugMode(DebugMode);
 	}
-
-	void RayTest(const Vector3& rayFrom, const Vector3& rayTo);
 };
 
