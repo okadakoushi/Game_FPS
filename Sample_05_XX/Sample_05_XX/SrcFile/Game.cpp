@@ -32,7 +32,7 @@ bool Game::Start()
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
 	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
 #ifdef MASTER
-	m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
+	//m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
 #endif
 
 	//スタンバイステージを作成。

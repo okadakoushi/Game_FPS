@@ -138,8 +138,8 @@ void GamePlayer::Shot()
 			bullet->SetPos(m_wepon->GetPos());
 			bullet->SetRot(m_rot);
 			m_flame = 0;
-			printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
-			printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
+			//printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
+			//printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
 			if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist > rayCallBack.CharacterObjectDist) {
 				//敵にレイが命中。
 				//生ポインタから敵に強制キャスト。
@@ -196,7 +196,7 @@ void GamePlayer::Move()
 	else {
 		//重力。
 #ifdef MASTER
-		acc += {0, -m_GRAVITY, 0};
+		//acc += {0, -m_GRAVITY, 0};
 #endif
 	}
 

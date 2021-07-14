@@ -11,12 +11,16 @@ bool RifleEnemy::Start()
 	const char* tkaFile[]{
 		"Assets/animData/Enemy/Rifle/Walk.tka",
 		"Assets/animData/Enemy/Rifle/Damage.tka",
-        "Assets/animData/soldier/singleShot.tka"
+        "Assets/animData/Enemy/Rifle/Shoot.tka",
+        "Assets/animData/Enemy/Rifle/Death.tka"
 	};
 	m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
-    //ワンショット再生として登録。
+    //ワンショット再生として登録。ここtodo:
+    m_modelRender->SetAnimLoop(0, true);
     m_modelRender->SetAnimLoop(1, false);
-	m_modelRender->Init("Assets/modelData/Chara/soldierMob.tkm", tkaFile);
+    m_modelRender->SetAnimLoop(2, true);
+    m_modelRender->SetAnimLoop(3, false);
+	m_modelRender->Init("Assets/modelData/Chara/Enemy.tkm", tkaFile);
 	m_modelRender->SetMulColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 	
     //銃インスタンス化。
@@ -45,8 +49,9 @@ void RifleEnemy::Update()
 	{
 	case EnEnemyState_Wandering:
         Move();
-        if (Search()) {
-            m_modelRender->PlayAnimation(2, 0.1f);
+        if (IsFindPlayer()) {
+            m_enemyState = EnEnemyState_Attack;
+            //m_enemyState = EnEnemyState_Tracking;
         }
 		//警戒状態。
 		break;
@@ -54,9 +59,10 @@ void RifleEnemy::Update()
 		//トラッキング状態。
 		break;
 	case EnEnemyState_AttackWait:
-		//攻撃待ちだぁ。
+		//リロードとかの予定だが...
 		break;
 	case EnEnemyState_Attack:
+        Attack();
 		//攻撃！
 		break;
     case EnEnemyState_Damage:
@@ -65,6 +71,7 @@ void RifleEnemy::Update()
         break;
 	case EnEnemyState_Death:
 		//死亡。
+        Death();
 		break;
 	}
 	m_modelRender->SetPosition(m_pos);
@@ -107,8 +114,6 @@ void RifleEnemy::Move()
         if (dist < 5) {
             m_nodeList.erase(m_nodeList.begin());
         }
-        //動いてる。
-        //m_modelRender->PlayAnimation(0, 0.5f);
     }
     else {
         //動いてない。
@@ -123,48 +128,94 @@ void RifleEnemy::Move()
     }
 }
 
-bool RifleEnemy::Search()
+void RifleEnemy::Attack()
 {
+    //printf("AttackMode\n");
+
     //まずはEnemyの頭のボーンと回転を取得。
     Vector3 headPos;
     Quaternion headRot;
     m_head->CalcWorldTRS(headPos, headRot);
-    //Enemyの注視点も設定する。
-    Vector3 target = m_toNextCell;
-    //m_rot.Apply(target);
+
+    //プレイヤーへ伸びる方位ベクトル。
+    Vector3 toPlayerDir = m_player->GetPos() - m_pos;
+    toPlayerDir.Normalize();
+    //今回のターゲットはプレイヤーに伸びるベクトル。
+    Vector3 target = toPlayerDir;
     target *= m_VISION;
     target += headPos;
-
+    
     //コールバック関数。
     RayTestCallBack::EnemyRayTestResult rayTestCB;
     //レイテスト。
     PhysicObj().RayTest(headPos, target, rayTestCB);
     if (rayTestCB.hasHit() && rayTestCB.StaticObjectDist > rayTestCB.CharacterObjectDist) {
-        //手前に障害物なしであたってる。
-        return true;
+        //手前に障害物なし！あたってる。
+        if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
+            //アニメーションを切り替え。
+            m_modelRender->PlayAnimation(2, 0.1f);
+            //プレイヤーの方向に向ける。
+            m_rot.SetRotation(Vector3::AxisY, atan2f(toPlayerDir.x * 1.0f, toPlayerDir.z * 1.0f));
+        }
+
     }
-    return false;
+    else {
+        //手前にオブジェクトがある or 何にもあたっていない。
+        m_enemyState = EnEnemyState_Wandering;
+        m_modelRender->PlayAnimation(0, 0.5f);
+    }
 }
-
-
 
 void RifleEnemy::Tracking()
 {
+    //まずはEnemyの頭のボーンと回転を取得。
+    Vector3 headPos;
+    Quaternion headRot;
+    m_head->CalcWorldTRS(headPos, headRot);
+    //Enemyの注視点も計算する。
+    Vector3 target = m_toNextCell;
+    //m_rot.Apply(target);
+    target *= m_VISION;
+    target += headPos;
 
+    ////コールバック関数。
+    //RayTestCallBack::EnemyRayTestResult rayTestCB;
+    ////レイテスト。
+    //PhysicObj().RayTest(headPos, target, rayTestCB);
+    //if (rayTestCB.hasHit() && rayTestCB.StaticObjectDist > rayTestCB.CharacterObjectDist) {
+    //    //手前に障害物なしであたってる。
+    //    return true;
+    //}
 }
 
 void RifleEnemy::Damage()
 {
-    m_modelRender->PlayAnimation(1, 0.1f);
-    m_enemyState = EnEnemyState_Wandering;
+    //printf("hp = %d", m_hp);
+    if (m_hp <= 0 && this->IsActive()) {
+        printf("死亡！！\n");
+        m_enemyState = EnEnemyState_Death;
+    }
+    else {
+        m_modelRender->PlayAnimation(1, 0.1f);
+        m_enemyState = EnEnemyState_Attack;
+        //とりあえず固定値25。
+        m_hp -= 25;
+    }
+}
+
+void RifleEnemy::Death()
+{
+    printf("シニマース。\n");
+    m_modelRender->PlayAnimation(3, 1.0f);
+    if (!m_modelRender->isPlayAnim()) {
+        //更新止め、コリジョン解放。
+        this->SetActive(false);
+        m_collision.Release();
+    }
 }
 
 bool RifleEnemy::IsFindPlayer()
 {
-    //最初はZ軸が前。
-    Vector3 enemyForward = Vector3::Back;
-    //回転分前方向を回す。
-    m_rot.Apply(enemyForward);
     //プレイヤーとの距離測る。
     Vector3 toPlayerDir = m_player->GetPos() - m_pos;
     //距離。
@@ -172,13 +223,12 @@ bool RifleEnemy::IsFindPlayer()
     //方位ベクトル。
     toPlayerDir.Normalize();
     //前方向とプレイヤーに向かうベクトルの内積。
-    float dot = enemyForward.Dot(toPlayerDir);
+    float dot = m_toNextCell.Dot(toPlayerDir);
     //なす角を計算。
     float angle = acos(dot);
     //視野角内に存在するかの判定。
     if (fabsf(angle) < Math::DegToRad(m_FOV) && toPlayerLen < m_VISION) {
         //視野角の範囲内（-+)で視野内。
-        //見つけた。
         return true;
     }
     //見つけてない。

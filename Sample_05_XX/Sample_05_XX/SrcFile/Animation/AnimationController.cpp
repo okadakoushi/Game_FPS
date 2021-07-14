@@ -135,6 +135,7 @@ void AnimationController::ProgressKeyFrameNo(float deltaTime)
 				//ワンショット再生。
 				m_currentKeyFrameNo--;
 				m_isPlaying = false;	//再生終了。
+				m_isFinishOneShot = true;
 			}
 			//すべてのキーフレームを流した。
 			break;

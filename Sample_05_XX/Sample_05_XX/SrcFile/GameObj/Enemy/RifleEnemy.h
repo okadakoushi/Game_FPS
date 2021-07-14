@@ -21,9 +21,10 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Move();
-	bool Search();
+	void Attack();
 	void Tracking();
 	void Damage();
+	void Death();
 	/// <summary>
 	/// プレイヤーを発見しているか。
 	/// </summary>
@@ -60,8 +61,9 @@ private:
 	std::vector<Vector3> m_paths;	//探索パス。todo:配列。
 	int m_pathIndex = 0;
 	const float m_FOV = 20.0f;
-	const float m_VISION = 500.0f;
+	const float m_VISION = 1500.0f;
 	Bone* m_head;
 	Vector3 m_toNextCell;			//次のセルに向かう方位ベクトル。
+	int m_hp = 100;		//HP。
 };
 

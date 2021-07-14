@@ -4,7 +4,7 @@
 #define GAME
 
 #ifndef MASTER
-//	#define NAV_DEBUG
+	#define NAV_DEBUG
 	#define PHYSICS_DEBUG
 #endif
 

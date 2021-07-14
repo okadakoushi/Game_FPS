@@ -92,6 +92,22 @@ public:
 		return m_isPlaying;
 	}
 	/// <summary>
+	/// ワンショット再生終わった？
+	/// </summary>
+	/// <returns></returns>
+	bool IsFinishOneShot() const
+	{
+		return m_isFinishOneShot;
+	}
+	/// <summary>
+	/// ワンショット再生フラグを設定。
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetIsFinishOneShot(const bool& flag)
+	{
+		m_isFinishOneShot = flag;
+	}
+	/// <summary>
 	/// Update関数を呼び出した時の、footStepボーンの移動量を取得。
 	/// </summary>
 	/// <returns></returns>
@@ -141,6 +157,7 @@ private:
 	float				m_interpolateTime;					//補間時間。
 	float				m_interpolateEndTime;				//補間終了時間。
 	bool				m_isPlaying = false;				//再生中かどうか。
+	bool				m_isFinishOneShot = true;			//ワンショット再生終わった？ワンショット再生にするまではtrue
 	Skeleton*			m_skelton = nullptr;				//スケルトン。
 	Vector3				m_footstepDeltaValue = g_vec3Zero;	//フットステップの移動ベクトル。
 	Vector3				m_footstepPos = g_vec3Zero;			//フットステップボーンの座標。

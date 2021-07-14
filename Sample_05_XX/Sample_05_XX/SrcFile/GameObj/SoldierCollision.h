@@ -10,6 +10,10 @@ class SoldierCollision
 public:
 	~SoldierCollision();
 	/// <summary>
+	/// –¾¦“I‰ğ•úB
+	/// </summary>
+	void Release();
+	/// <summary>
 	/// ‰Šú‰»B
 	/// </summary>
 	/// <param name="render"></param>

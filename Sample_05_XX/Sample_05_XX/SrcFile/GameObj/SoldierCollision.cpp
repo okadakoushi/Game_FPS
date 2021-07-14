@@ -4,6 +4,11 @@
 
 SoldierCollision::~SoldierCollision()
 {
+    Release();
+}
+
+void SoldierCollision::Release()
+{
     //‰ğ•ú‚©‚à[B
     for (auto& col : m_collision) {
         col.Release();

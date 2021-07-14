@@ -39,6 +39,7 @@ public:
 		//todo : 複数pushBuck
 		for (auto i = 0; i < NUM_TKA_FILE; i++) {
 			m_tkaFilePaths.push_back(tkaFilePaths[i]);
+			//m_loopMap[i] = true;
 		}
 		//モデルの読み込み終了。
 		m_initStep = enInitStep_LoadSkelton;
@@ -87,6 +88,7 @@ public:
 	void PlayAnimation(int clipNo, float interpolateTime)
 	{
 		m_animation.Play(clipNo, interpolateTime);
+		m_currentPlayAnimNo = clipNo;
 	}
 	/// <summary>
 	/// アニメーションフラグ。
@@ -96,6 +98,11 @@ public:
 	{
 		return m_animation.IsPlaying();
 	}
+
+	const bool& isFinishOneShot() const
+	{
+		return m_animation.IsFinishOneShot();
+	}
 	/// <summary>
 	/// ループフラグを設定。
 	/// </summary>
@@ -104,6 +111,11 @@ public:
 	void SetAnimLoop(const int& animNo, const bool& flag)
 	{
 		m_loopMap[animNo] = flag;
+	}
+
+	bool GetAnimLoop()
+	{	
+		return m_loopMap[m_currentPlayAnimNo];
 	}
 	/// <summary>
 	/// 座標を設定。
@@ -253,6 +265,7 @@ private:
 	};
 	Model m_model;						//モデル。
 	Skeleton m_skeleton;				//スケルトン。
+	int m_currentPlayAnimNo = 0;		//現在再生中のアニメーション番号。
 	std::map<int, bool>	m_loopMap;		//ループフラグ管理マップ。
 	std::vector<std::string>		m_tkaFilePaths;		//tkaファイルのファイルパスリスト。
 	std::vector<AnimationClipPtr>	m_animationClips;	//アニメーションクリップ。

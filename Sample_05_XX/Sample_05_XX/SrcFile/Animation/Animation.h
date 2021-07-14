@@ -66,6 +66,18 @@ public:
 		return m_animationController[lastIndex].IsPlaying();
 	}
 
+	bool IsFinishOneShot() const 
+	{
+		int lastIndex = GetLastAnimatitonControllerIndex();
+		return m_animationController[lastIndex].IsFinishOneShot();
+	}
+
+	void SetIsFinishOneShot(const bool& flag)
+	{
+		int lastIndex = GetLastAnimatitonControllerIndex();
+		m_animationController[lastIndex].SetIsFinishOneShot(flag);
+	}
+
 	/// <summary>
 	/// アニメーションを進める。
 	/// <para>インターフェイス側処理。</para>

@@ -39,7 +39,7 @@ public:
 protected:
 	//基本Param。
 	SkinModelRender*				m_modelRender;							//モデルレンダー。
-	Vector3							m_pos = g_vec3Zero;						//位置。
+	Vector3							m_pos = {50.0f, 0.0f, 0.0f};			//位置。
 	Quaternion						m_rot = g_quatIdentity;					//回転。
 	Vector3							m_scale = { 1.5f, 1.5f, 1.5f };			//拡大。
 	const float						m_spped = 1.0f;							//スピード。
