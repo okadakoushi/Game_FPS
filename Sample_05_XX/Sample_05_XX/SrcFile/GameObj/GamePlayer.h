@@ -76,9 +76,9 @@ private:
 	enum EnPlayerState {
 		EnPlayerState_Idle,		//何もない。
 		EnPlayerState_Walk,		//歩く。
-		EnPlayerState_Run,		//走る。
-		EnPlayerState_Buck,		//後退。
 		EnPlayerState_Shot,		//射撃
+		EnPlayerState_Buck,		//後退。
+		EnPlayerState_Run,		//走る。
 		EnPlayerState_Reload,	//リロード。
 		EnPlayerState_Deth,		//死亡。
 		EnPlayerState_Num		//数。

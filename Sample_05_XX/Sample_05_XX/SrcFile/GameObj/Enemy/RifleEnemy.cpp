@@ -6,6 +6,13 @@
 #include "SrcFile/RayTestCallBack.h"
 #include "SrcFile/GameObj/Bullet.h"
 
+
+
+void RifleEnemy::OnDestroy()
+{
+    DeleteGO(m_modelRender);
+}
+
 bool RifleEnemy::Start()
 {
 	//エネミーモデル初期化。
@@ -49,11 +56,11 @@ void RifleEnemy::Update()
 	switch (m_enemyState)
 	{
 	case EnEnemyState_Wandering:
-        Move();
-        if (IsFindPlayer()) {
-            m_enemyState = EnEnemyState_Attack;
-            //m_enemyState = EnEnemyState_Tracking;
-        }
+        //Move();
+        //if (IsFindPlayer()) {
+        //    m_enemyState = EnEnemyState_Attack;
+        //    //m_enemyState = EnEnemyState_Tracking;
+        //}
 		//警戒状態。
 		break;
 	case EnEnemyState_Tracking:
@@ -149,7 +156,6 @@ void RifleEnemy::Attack()
     Vector3 target = toPlayerDir;
     target *= m_VISION;
 
-    
     //視野判定用コールバック関数。
     RayTestCallBack::EnemyRayTestResult visionCallBuck;
     //レイテスト。

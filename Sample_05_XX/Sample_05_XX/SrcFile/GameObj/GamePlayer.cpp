@@ -16,13 +16,11 @@ bool GamePlayer::Start()
 	//unitychan初期化。
 	m_unityChan = NewGO<SkinModelRender>(EnPriority_3DModel, "Unity");
 	const char* tkaFilePaths[] = {
-		"Assets/animData/soldier/idle.tka",
-		"Assets/animData/soldier/Walk_BattleMode.tka",
-		"Assets/animData/soldier/run.tka",
-		"Assets/animData/soldier/buck.tka",
-		"Assets/animData/soldier/singleShot.tka"
+		"Assets/animData/Enemy/Rifle/Idle.tka",
+		"Assets/animData/Enemy/Rifle/Walk.tka",
+		"Assets/animData/Enemy/Rifle/WalkShoot.tka"
 	};
-	m_unityChan->Init("Assets/modelData/Chara/soldier_green.tkm", tkaFilePaths);
+	m_unityChan->Init("Assets/modelData/Chara/Enemy.tkm", tkaFilePaths);
 	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
 	m_unityChan->SetShadwoCaster(true);
@@ -151,7 +149,7 @@ void GamePlayer::Shot()
 	PhysicObj().RayTest(m_headPos, toDir + m_headPos, rayCallBack);
 
 	m_flame++;
-	if (GetAsyncKeyState('F')) {
+	if (GetAsyncKeyState(MK_LBUTTON)) {
 		if (m_flame >= 20) {
 			Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
 			bullet->SetPos(m_wepon->GetPos());

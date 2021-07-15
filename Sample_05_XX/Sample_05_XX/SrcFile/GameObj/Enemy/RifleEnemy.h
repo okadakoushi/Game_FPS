@@ -18,6 +18,7 @@ enum EnEnemyState {
 class RifleEnemy : public Enemy
 {
 public:
+	void OnDestroy() override;
 	bool Start() override;
 	void Update() override;
 	void Move();
@@ -57,7 +58,7 @@ public:
 private:
 	Rifle* m_rifle = nullptr;				//銃。
 	float m_currentTime = 0.0f;				//タイマー。
-	float COOLDOWN = 0.19f;					//クールダウン。
+	float COOLDOWN = 0.22f;					//クールダウン。
 	SoldierCollision m_collision;	
 	EnEnemyState m_enemyState = EnEnemyState_Wandering;	//エネミーのステート。
 	std::vector<Vector3> m_paths;				//探索パス。todo:配列。
