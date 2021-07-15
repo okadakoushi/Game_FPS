@@ -47,10 +47,10 @@ public:
 	/// </summary>
 	void Release()
 	{
-		for (auto& it : m_resourceMap) {
-			//全部解放
-			it.second->Get()->Release();
-		}
+		//for (auto& it : m_resourceMap) {
+		//	//全部解放
+		//	it.second->Get()->Release();
+		//}
 	}
 private:
 	std::map<int, T*>	m_resourceMap;	//リソースマップ

@@ -27,22 +27,22 @@ namespace myEngine {
 	void Effect::Play(const wchar_t* filePath)
 	{
 		auto effect = EffectEngineObj().CreateEffect(filePath);
-		////ハッシュの作成
-		//int nameKey = Util::MakeHash(filePath);
-		////リソースにエフェクトが登録されているかの検索
-		//m_effect = EffectEngineObj().GetEffectResourceManager().GetResource(nameKey);
-		//if (m_effect == nullptr) {
-		//	//登録されていなかった
-		//	//エフェクトの作成
-		//	m_effect = &Effekseer::Effect::Create(EffectEngineObj().GetEffekseerManager(), (const EFK_CHAR*)filePath );
-		//	if (m_effect == nullptr) {
-		//		//ロード失敗！！
-		//		//？？ファイルパス間違えてない？？
-		//		throw;
-		//	}
-		//	//エフェクトをリソースに登録
-		//	EffectEngineObj().GetEffectResourceManager().RegistResource(nameKey, m_effect);
-		//}
+		//ハッシュの作成
+		int nameKey = Util::MakeHash(filePath);
+		//リソースにエフェクトが登録されているかの検索
+		m_effect = EffectEngineObj().GetEffectResourceManager().GetResource(nameKey);
+		if (m_effect == nullptr) {
+			//登録されていなかった
+			//エフェクトの作成
+			m_effect = &Effekseer::Effect::Create(EffectEngineObj().GetEffekseerManager(), (const EFK_CHAR*)filePath );
+			if (m_effect == nullptr) {
+				//ロード失敗！！
+				//？？ファイルパス間違えてない？？
+				throw;
+			}
+			//エフェクトをリソースに登録
+			EffectEngineObj().GetEffectResourceManager().RegistResource(nameKey, m_effect);
+		}
 		m_handle = EffectEngineObj().GetEffekseerManager()->Play(effect, 0, 0, 0);
 	}
 

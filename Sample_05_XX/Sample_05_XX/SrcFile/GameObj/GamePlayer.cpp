@@ -132,7 +132,6 @@ void GamePlayer::Rotation()
 
 void GamePlayer::Shot()
 {
-	m_playerState = EnPlayerState_Shot;
 	//ポストにしないとアニメーションの更新終わってないのでガタブルする。
 	Quaternion a;
 	m_headBone->CalcWorldTRS(m_headPos, a);
@@ -149,6 +148,7 @@ void GamePlayer::Shot()
 
 	m_flame++;
 	if (GetAsyncKeyState(MK_LBUTTON)) {
+		m_playerState = EnPlayerState_Shot;
 		if (m_flame >= 20) {
 			if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_None) {
 				m_wepon->ReduseAmo();
