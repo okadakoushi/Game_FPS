@@ -68,6 +68,7 @@ private:
 	Bone* m_head;								//頭ボーン。
 	Vector3 m_toNextCell;						//次のセルに向かう方位ベクトル。
 	int m_hp = 100;								//HP。
+	const int ATTACK = 10;						//攻撃力。
 	const int MAX_RANDOM_AIM = 120;				//エネミーのAIMの最大乱れ値。
 	int m_currentRondomAIM = MAX_RANDOM_AIM;	//エネミーの現在のAIMの乱れ値。
 };

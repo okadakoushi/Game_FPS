@@ -186,7 +186,11 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="BulletManeger.cpp" />
+    <ClCompile Include="SrcFile\GameObj\PlayerUIs.cpp" />
+    <ClCompile Include="SrcFile\2D\FontEngine.cpp" />
     <ClCompile Include="MouseInput.cpp" />
+    <ClCompile Include="SrcFile\2D\Font.cpp" />
+    <ClCompile Include="SrcFile\2D\FontRender.cpp" />
     <ClCompile Include="SrcFile\RayTestCallBack.cpp" />
     <ClCompile Include="SrcFile\GameObj\SoldierCollision.cpp" />
     <ClCompile Include="SrcFile\GameObj\Enemy\Enemy_MeleeSoldier.cpp" />
@@ -282,7 +286,11 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="BulletManeger.h" />
+    <ClInclude Include="SrcFile\GameObj\PlayerUIs.h" />
+    <ClInclude Include="SrcFile\2D\FontEngine.h" />
     <ClInclude Include="MouseInput.h" />
+    <ClInclude Include="SrcFile\2D\Font.h" />
+    <ClInclude Include="SrcFile\2D\FontRender.h" />
     <ClInclude Include="SrcFile\RayTestCallBack.h" />
     <ClInclude Include="SrcFile\GameObj\SoldierCollision.h" />
     <ClInclude Include="SrcFile\GameObj\Enemy\Enemy_MeleeSoldier.h" />

@@ -21,6 +21,7 @@ public:
 	
 	bool Start() override;
 	void Update() override;
+	void RenderHUD() override;
 
 private:
 	StageGenerator* m_stageGenerator = nullptr;	//ステージ生成オブジェクト。
@@ -33,5 +34,6 @@ private:
 	UIs* m_UIs = nullptr;				//UI。
 	Map* m_map;							//ミニマップ。
 	SkyBox* m_sky = nullptr;			//空。
-	myEngine::Effect* m_effect = nullptr;	//エフェクト。
+	myEngine::Effect* m_effect = nullptr;			//エフェクト。
+	myEngine::CFont m_font;
 };

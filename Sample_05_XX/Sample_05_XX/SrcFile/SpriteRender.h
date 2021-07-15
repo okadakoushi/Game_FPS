@@ -43,6 +43,14 @@ public:
 		m_pos = v;
 	}
 	/// <summary>
+	/// 回転を設定。
+	/// </summary>
+	/// <param name="qRot"></param>
+	void SetRotation(const Quaternion& qRot)
+	{
+		m_rot = qRot;
+	}
+	/// <summary>
 	/// スケール調整。
 	/// </summary>
 	/// <param name="scale">スケール。</param>

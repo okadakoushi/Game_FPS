@@ -18,6 +18,7 @@
 #include "SrcFile/Debug/LineDraw.h"
 #include "SrcFile/Map.h"
 #include "Sprite.h"
+#include "SrcFile/2D/FontEngine.h"
 
 class Light;
 
@@ -153,6 +154,14 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentFrameBufferDSV() const
 	{
 		return m_currentFrameBufferDSVHandle;
+	}
+	/// <summary>
+	/// フォントエンジン。
+	/// </summary>
+	/// <returns></returns>
+	FontEngine& GetFontEngine()
+	{
+		return m_fontEngine;
 	}
 	/// <summary>
 	/// GBufferを取得。
@@ -335,25 +344,15 @@ private:
 	GBufferRender m_GBuffer;			//GBuffer。
 	Sprite m_defferdSpr;				//ディファード描画用スプライト。
 	LineDraw m_lineDraw;				//線分描画。
-	
 	SpriteInitData m_spriteData;
 	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。
+	FontEngine m_fontEngine;
+	/*
+	グラフィックメモリヘルパーはシングルトンです。スワップチェーンのセットアップ時に提供されるデバイスとバックバッファーカウントが必要なため、
+	明示的な初期化が必要です。
+	*/
+	std::unique_ptr<DirectX::GraphicsMemory> m_directXTKGfxMemroy;	//DirectXTKのグラフィックスメモリ。
 #ifdef MODE_DEBUG
-	ID3D12Debug* m_d3dDebug = NULL;		//DX12デバッグレイヤー。
-	/// <summary>
-	/// デバッグレイヤー作成。
-	/// </summary>
-	bool CreateDebug()
-	{
-		auto hr = m_d3dDevice->QueryInterface(__uuidof(ID3D12Debug), reinterpret_cast<void**>(&m_d3dDebug));
-		if (FAILED(hr))
-		{
-			//失敗。
-			return false;
-		}
-		//成功。
-		return true;
-	};
 #endif
 };
 extern Light g_light;						//ライト。

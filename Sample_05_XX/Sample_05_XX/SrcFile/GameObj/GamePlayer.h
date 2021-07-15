@@ -5,13 +5,14 @@ class Rifle;
 class Bullet;
 
 #include "SrcFile/RayTestCallBack.h"
+#include "PlayerUIs.h"
 
 /// <summary>
 /// プレイヤークラス。
 /// </summary>
 class GamePlayer : public IGameObject
 {
-public:
+private:
 	void OnDestroy() override;
 	/// <summary>
 	/// スタート。
@@ -22,6 +23,10 @@ public:
 	/// 更新。
 	/// </summary>
 	void PostUpdate() override;
+	/// <summary>
+	/// ポスト描画。
+	/// </summary>
+	void RenderHUD() override;
 	/// <summary>
 	/// 移動。
 	/// <para>移動はカメラを基準に行われる。</para>
@@ -36,6 +41,9 @@ public:
 	/// 発射！！
 	/// </summary>
 	void Shot();
+
+	void Reload();
+public:
 	/// <summary>
 	/// 位置を取得。
 	/// </summary>
@@ -43,12 +51,6 @@ public:
 	const Vector3& GetPos()const
 	{
 		return m_pos;
-	}
-
-	void GetRHandPos(Vector3& vec, Quaternion& qRot) const
-	{
-		vec = m_rHandBonePos;
-		qRot = m_rHandBoneRot;
 	}
 	/// <summary>
 	/// レンダー取得。
@@ -58,10 +60,38 @@ public:
 	{
 		return m_unityChan;
 	}
+	/// <summary>
+	/// 位置を設定。
+	/// </summary>
+	/// <param name="pos"></param>
 	void SetPos(Vector3& pos)
 	{
 		m_pos = pos;
 		m_cCon.SetPosition(m_pos);
+	}
+	/// <summary>
+	/// 体力を取得。
+	/// </summary>
+	/// <returns></returns>
+	const int& GetHP() const
+	{
+		return m_hp;
+	}
+	/// <summary>
+	/// プレイヤーにダメージを与える。
+	/// </summary>
+	/// <param name="damage"></param>
+	void DamageToPlayer(const int& damage)
+	{
+		m_hp -= damage;
+	}
+	/// <summary>
+	/// 武器取得。
+	/// </summary>
+	/// <returns></returns>
+	const Rifle* GetWepon() const
+	{
+		return m_wepon;
 	}
 private:
 	/// <summary>
@@ -106,5 +136,6 @@ private:
 	myEngine::Effect* m_effect = nullptr;		//エフェクト。
 	const float RAY_RANGE = 2000.0f;
 	int m_hp = 150;								//HP。
+	PlayerUIs* m_playerUIs;						//UI。
 };
 

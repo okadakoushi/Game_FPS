@@ -45,6 +45,7 @@ static enum Priority {
 
 #include "Skeleton.h"
 
+#include "SrcFile/2D/FontEngine.h"
 //#include "SrcFile/util/Util.h"
 #include "SrcFile/util/TNameKey.h"
 #include "SrcFile/Timer/tkStopwatch.h"
@@ -55,6 +56,8 @@ static enum Priority {
 //レンダー。
 #include "SrcFile/SkinModelRender.h"
 #include "SrcFile/SpriteRender.h"
+#include "SrcFile/2D/Font.h"
+#include "SrcFile/2D/FontRender.h"
 
 //シャドウマップ。
 #include "SrcFile/Shadow/DirectionalShadowMap.h"

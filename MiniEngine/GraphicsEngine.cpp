@@ -155,7 +155,6 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//CBR_SVRのディスクリプタのサイズを取得。
 	m_cbrSrvDescriptorSize = m_d3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-
 	//初期化が終わったのでDXGIを破棄。
 	dxgiFactory->Release();
 
@@ -189,6 +188,12 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	g_light.specPow = 5.0f;
+
+	//DirectXTK用のグラフィックメモリ管理クラスのインスタンスを作成する。
+	m_directXTKGfxMemroy = std::make_unique<DirectX::GraphicsMemory>(m_d3dDevice);
+
+	//フォントエンジン初期化。
+	m_fontEngine.Init(m_renderContext);
 
 	//GBufferを初期化。
 	//todo:preRenderClass

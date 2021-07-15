@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "Rifle.h"
 #include "Enemy/RifleEnemy.h"
+#include "Rifle.h"
 
 void GamePlayer::OnDestroy()
 {
@@ -46,16 +47,8 @@ bool GamePlayer::Start()
 	//カメラFind。
 	m_camera = FindGO<GameCamera>("GameCamera");
 
-	//レティクル初期化。
-	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
-	SpriteInitData testInitData;
-	//ddsファイル初期化。
-	testInitData.m_ddsFilePath[0] = "Assets/sprite/reticle.dds";
-	testInitData.m_width = 50.0f;
-	testInitData.m_height = 50.0f;
-	testInitData.m_fxFilePath = "Assets/shader/sprite.fx";
-	m_reticle->Init(testInitData);
-	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
+	//UIs。
+	m_playerUIs = NewGO<PlayerUIs>(EnPriority_UI);
 
 	//エフェクト生成。
 	m_effect = NewGO<myEngine::Effect>(EnPriority_3DModel);
@@ -82,7 +75,7 @@ void GamePlayer::PostUpdate()
 	switch (m_playerState)
 	{
 	case EnPlayerState_Idle:
-		m_unityChan->PlayAnimation(EnPlayerState_Idle, 0.5f);
+		m_unityChan->PlayAnimation(EnPlayerState_Idle, 0.3f);
 		break;
 	case EnPlayerState_Walk:
 		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
@@ -94,9 +87,10 @@ void GamePlayer::PostUpdate()
 		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Shot:
-		m_unityChan->PlayAnimation(EnPlayerState_Shot, 0.2f);
+		m_unityChan->PlayAnimation(EnPlayerState_Shot, 0.3f);
 		break;
 	case EnPlayerState_Reload:
+		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Deth:
 		break;
@@ -104,6 +98,10 @@ void GamePlayer::PostUpdate()
 		break;
 	}
 	m_unityChan->SetPosition(m_pos);
+}
+
+void GamePlayer::RenderHUD()
+{
 }
 
 
@@ -134,6 +132,7 @@ void GamePlayer::Rotation()
 
 void GamePlayer::Shot()
 {
+	m_playerState = EnPlayerState_Shot;
 	//ポストにしないとアニメーションの更新終わってないのでガタブルする。
 	Quaternion a;
 	m_headBone->CalcWorldTRS(m_headPos, a);
@@ -151,40 +150,53 @@ void GamePlayer::Shot()
 	m_flame++;
 	if (GetAsyncKeyState(MK_LBUTTON)) {
 		if (m_flame >= 20) {
-			Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
-			bullet->SetPos(m_wepon->GetPos());
-			bullet->SetRot(m_rot);
-			bullet->SetToTarget(toDir);
-			m_flame = 0;
-			//printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
-			//printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
-			if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist > rayCallBack.CharacterObjectDist) {
-				//敵にレイが命中。
-				//生ポインタから敵に強制キャスト。
-				RifleEnemy* enemy = reinterpret_cast<RifleEnemy*>(rayCallBack.m_collisionObject->getUserPointer());
-				if (enemy != nullptr) {
-					enemy->SetState(EnEnemyState_Damage);
+			if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_None) {
+				m_wepon->ReduseAmo();
+				Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
+				bullet->SetPos(m_wepon->GetPos());
+				bullet->SetRot(m_rot);
+				bullet->SetToTarget(toDir);
+				m_flame = 0;
+				//printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
+				//printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
+				if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist > rayCallBack.CharacterObjectDist) {
+					//敵にレイが命中。
+					//生ポインタから敵に強制キャスト。
+					RifleEnemy* enemy = reinterpret_cast<RifleEnemy*>(rayCallBack.m_collisionObject->getUserPointer());
+					if (enemy != nullptr) {
+						enemy->SetState(EnEnemyState_Damage);
+					}
+				}
+				else if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist < rayCallBack.CharacterObjectDist) {
+					//なんかのメッシュに命中。
+					//命中した地点からエフェクトを再生。
+					Vector3 effectPos = m_headPos + toDir * rayCallBack.StaticObjectDist;
+					Quaternion effectRot;
+					effectRot.SetRotation(g_vec3AxisY, atan2f(g_vec3Front.z, toDir.x));
+					m_effect->SetPosition(effectPos);
+					m_effect->SetRotation(effectRot);
+					//Y成分はいらない。
+					printf("%f\n", rayCallBack.StaticObjectDist);
+					printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
+					m_effect->Play(L"Assets/effect/aaaa.efk");
+				}
+				else if (!rayCallBack.hasHit()) {
+					printf("%f\n", rayCallBack.StaticObjectDist);
 				}
 			}
-			else if(rayCallBack.hasHit() && rayCallBack.StaticObjectDist < rayCallBack.CharacterObjectDist){
-				//なんかのメッシュに命中。
-				//命中した地点からエフェクトを再生。
-				Vector3 effectPos = m_headPos + toDir * rayCallBack.StaticObjectDist;
-				Quaternion effectRot;
-				effectRot.SetRotation(g_vec3AxisY ,atan2f(g_vec3Front.z, toDir.x));
-				m_effect->SetPosition(effectPos);
-				m_effect->SetRotation(effectRot);
-				//Y成分はいらない。
-				printf("%f\n", rayCallBack.StaticObjectDist);
-				printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
-				m_effect->Play(L"Assets/effect/aaaa.efk");
-			}
-			else if (!rayCallBack.hasHit()) {
-				printf("%f\n", rayCallBack.StaticObjectDist);
+			else {
+				m_playerState = EnPlayerState_Reload;
 			}
 		}
-		m_playerState = EnPlayerState_Shot;
 	}
+}
+
+void GamePlayer::Reload()
+{
+	if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_Reloading) {
+		m_wepon->AddReloadTime();
+	}
+
 }
 
 void GamePlayer::Move()
@@ -218,6 +230,9 @@ void GamePlayer::Move()
 	if (GetAsyncKeyState('A')) {
 		m_playerState = EnPlayerState_Walk;
 		acc -= camRight * m_speed;
+	}
+	if (GetAsyncKeyState('R')) {
+		m_playerState = EnPlayerState_Reload;
 	}
 	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
 		//ダッシュ。

@@ -32,7 +32,7 @@ bool RifleEnemy::Start()
 	m_modelRender->SetMulColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 	
     //銃インスタンス化。
-	m_rifle = NewGO<Rifle>(EnPriority_3DModel);
+	m_rifle = NewGO<Rifle>(EnPriority_3DModel, "Rifle");
 	m_rifle->SetRefBoneRender(m_modelRender);
     
     //経路探査の目的地を設定。
@@ -184,6 +184,7 @@ void RifleEnemy::Attack()
                 PhysicObj().RayTest(headPos, target + headPos, bulletRayCallBuck);
                 if (bulletRayCallBuck.hasHit() && bulletRayCallBuck.StaticObjectDist > bulletRayCallBuck.CharacterObjectDist) {
                     //プレイヤーに命中。
+                    m_player->DamageToPlayer(ATTACK);
                     printf("命中。");
                     //命中したので再びAIMの質を低品質なものに。
                     m_currentRondomAIM = MAX_RANDOM_AIM;

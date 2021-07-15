@@ -18,10 +18,17 @@
 #include <Xinput.h>
 #include <array>
 
+#include "dxgi.h"
 #include "d3dx12.h"
 #include "math/Math.h"
 #include "math/Vector.h"
 #include "math/Matrix.h"
+
+#include "DirectXTK/Inc/Model.h"
+#include "DirectXTK/Inc/Effects.h"	
+#include "DirectXTK/Inc/CommonStates.h"
+#include "DirectXTK/Inc/SpriteFont.h"
+#include "DirectXTK/Inc/DDSTextureLoader.h"
 
 #include "tkEngine.h"
 #include "VertexBuffer.h"
@@ -46,5 +53,5 @@
 #include "Model.h"
 #include "HID/GamePad.h"
 
-const UINT FRAME_BUFFER_W = 1280;				//フレームバッファの幅。
-const UINT FRAME_BUFFER_H = 720;				//フレームバッファの高さ。
+static const UINT FRAME_BUFFER_W = 1280;				//フレームバッファの幅。
+static const UINT FRAME_BUFFER_H = 720;				//フレームバッファの高さ。
