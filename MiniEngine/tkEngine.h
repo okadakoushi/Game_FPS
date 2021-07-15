@@ -6,6 +6,7 @@
 #include "SrcFile/Timer/tkStopwatch.h"
 #include "SrcFile/Physics/PhysicsWorld.h"
 #include "SrcFile/InputKeyCode.h"
+#include "MouseInput.h"
 
 class GraphicsEngine;
 class Camera;
@@ -72,6 +73,14 @@ public:
 		return m_inputKeyCode;
 	}
 	/// <summary>
+	/// マウス入力管理オブジェ取得。
+	/// </summary>
+	/// <returns></returns>
+	MouseInput& GetMouseInput()
+	{
+		return m_mouseInput;
+	}
+	/// <summary>
 	/// モデルデーターマネージャーを取得。
 	/// </summary>
 	/// <returns></returns>
@@ -95,6 +104,7 @@ private:
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 	InputKeyCode m_inputKeyCode;					//キーボード入力。
+	MouseInput m_mouseInput;						//マウス系入力。
 };
 
 /// <summary>
@@ -128,6 +138,14 @@ static inline CEffectEngine& EffectEngineObj()
 static inline InputKeyCode& KeyCodeObj()
 {
 	return EngineObj().GetInputKeyCode();
+}
+/// <summary>
+/// マウス取得。
+/// </summary>
+/// <returns></returns>
+static inline MouseInput& MouseInputObj()
+{
+	return EngineObj().GetMouseInput();
 }
 /// <summary>
 /// 物理ワールド取得。

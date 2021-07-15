@@ -65,7 +65,7 @@ namespace myEngine {
 		/// <summary>
 		/// 更新
 		/// </summary>
-		void Update(); //override;
+		void Update() override;
 	private:
 		Effekseer::EffectRef			m_effect = nullptr;			//エフェクト
 		Effekseer::Handle				m_handle = -1;				//ハンドル

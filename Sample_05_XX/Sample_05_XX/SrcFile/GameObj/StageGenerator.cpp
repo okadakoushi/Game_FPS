@@ -35,6 +35,7 @@ void StageGenerator::CreateStage(const StageNumber& stageNum)
 
 	}
 	else {
+		printf("StageNum = %d", stageNum);
 		//エラー。
 		MessageBoxA(
 			nullptr, 
@@ -68,6 +69,13 @@ void StageGenerator::DeleteCurrentStage()
 			MB_OK
 		);
 	}
+
+	if (m_currentStageNum != EnStageNumber_StanbyStage) {
+		//スタンバイステージじゃない場合。
+		printf("スタンバイステージ生成開始。\n");
+		CreateStage(EnStageNumber_StanbyStage);
+		return;
+	}
 	//番号初期化。
-	m_currentStageNum = EnstageNumber_None;
+	//m_currentStageNum = EnstageNumber_None;
 }

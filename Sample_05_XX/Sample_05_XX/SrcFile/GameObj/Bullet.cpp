@@ -15,13 +15,14 @@ bool Bullet::Start()
     m_render->Init("Assets/modelData/chara/bullet_7mm.tkm");
     m_render->SetShadwoCaster(true);
     //ベクトルを取得。
-    m_toTarget = GraphicsEngineObj()->GetCamera3D().GetCameraToTaget();
-    m_toTarget.Normalize();
+    //m_toTarget = GraphicsEngineObj()->GetCamera3D().GetCameraToTaget();
+    //m_toTarget.Normalize();
     return true;
 }
 
 void Bullet::Update()
 {
+    m_toTarget.Normalize();
     m_pos += m_toTarget * m_speed;
 
     m_render->SetPosition({m_pos.x, m_pos.y, m_pos.z});

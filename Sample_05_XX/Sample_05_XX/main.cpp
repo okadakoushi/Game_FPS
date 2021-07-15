@@ -7,10 +7,11 @@
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
 ///////////////////////////////////////////////////////////////////
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)	
 {
 #ifdef NAV_DEBUG
 #endif // DEBUG
+	ShowCursor(FALSE);
 	AllocConsole();
 	freopen("CON", "r", stdin);
 	freopen("CON", "w", stdout);

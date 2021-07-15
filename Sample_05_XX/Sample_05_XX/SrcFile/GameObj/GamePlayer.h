@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// 更新。
 	/// </summary>
-	void Update() override;
+	void PostUpdate() override;
 	/// <summary>
 	/// 移動。
 	/// <para>移動はカメラを基準に行われる。</para>
@@ -88,11 +88,12 @@ private:
 	CharacterController m_cCon;					//キャラコン。
 	SpriteRender* m_reticle = nullptr;			//レティクル。
 	Vector3 m_pos = g_vec3Zero;					//位置。
-	Vector3 m_cameraPos = g_vec3Zero;			//カメラの位置。
 	Quaternion m_rot = g_quatIdentity;			//回転。
 	Rifle* m_wepon = nullptr;					//武器。
 	Bone* m_spineBone = nullptr;				//腰のボーン。
 	Bone* m_rHandBone = nullptr;				//右手のボーン。
+	Bone* m_headBone = nullptr;					//頭ボーン。
+	Vector3 m_headPos = g_vec3Zero;				//頭の位置。
 	Vector3 m_rHandBonePos = g_vec3Zero;
 	Quaternion m_rHandBoneRot = g_quatIdentity;	
 	Vector3 m_move = g_vec3Zero;				//移動。
@@ -101,5 +102,9 @@ private:
 	float const m_GRAVITY = 20.0f;				//重力。
 	const float fixYToEyePos = 110.0f;			//視点座標に変えるY軸修正。
 	int m_flame = 0;
+	GameCamera* m_camera = nullptr;				//カメラ。
+	myEngine::Effect* m_effect = nullptr;		//エフェクト。
+	const float RAY_RANGE = 2000.0f;
+	int m_hp = 150;								//HP。
 };
 

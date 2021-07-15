@@ -2,6 +2,8 @@
 #include "BattleStage1.h"
 #include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/GameObj/Enemy/RifleEnemy.h"
+#include "SrcFile/GameObj/Stages/Stage.h"
+#include "SrcFile/GameObj/StageGenerator.h"
 
 BattleStage1::BattleStage1()
 {
@@ -105,11 +107,40 @@ bool BattleStage1::Start()
 		return false;
 		});
 
+	//何体エネミーいるか調べておく。
+	for (auto* sol : m_rifleEnemy) {
+		if (sol != nullptr) {
+			m_enemyCount++;
+		}
+	}
+
 	return true;
 }
 
 void BattleStage1::Update()
 {
+	//今の削除予定兵士の数。
+	int currentSoldierCount = 0;
+	for (auto* sol : m_rifleEnemy) {
+		if (sol != nullptr) {
+			if (!sol->IsActive()) {
+				//アクテイブじゃないからインクリ。
+				currentSoldierCount++;
+			}
+		}
+	}
+	if (currentSoldierCount >= m_enemyCount) {
+		for (auto* sol : m_rifleEnemy) {
+			if (sol != nullptr) {
+				//全兵士アクティブじゃないから削除おおおおお。
+				DeleteGO(sol);
+			}
+		}
+		//これ以上更新は行わない。
+		m_stageGenerator = FindGO<StageGenerator>("StageGenerator");
+		m_stageGenerator->DeleteCurrentStage();
+		this->SetActive(false);
+	}
 }
 
 void BattleStage1::ForwardRender()

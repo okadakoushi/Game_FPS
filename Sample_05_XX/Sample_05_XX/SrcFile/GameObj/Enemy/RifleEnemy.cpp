@@ -4,6 +4,7 @@
 #include "SrcFile/GameObj/Rifle.h"
 #include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/RayTestCallBack.h"
+#include "SrcFile/GameObj/Bullet.h"
 
 bool RifleEnemy::Start()
 {
@@ -78,6 +79,7 @@ void RifleEnemy::Update()
     m_modelRender->SetRotation(m_rot);
 	m_modelRender->SetScale(m_scale);
     m_collision.Update();
+    m_currentTime += GameTime().GetFrameDeltaTime();
 }
 void RifleEnemy::Move()
 {
@@ -139,25 +141,53 @@ void RifleEnemy::Attack()
 
     //プレイヤーへ伸びる方位ベクトル。
     Vector3 toPlayerDir = m_player->GetPos() - m_pos;
+    //プレイヤーに向かうエネミーのエイム。
+    //Vector3 EnemyAIM_to_Player = { toPlayerDir.x + rand() % m_currentRondomAIM, toPlayerDir.y + rand() % m_currentRondomAIM, toPlayerDir.z };
     toPlayerDir.Normalize();
+    //EnemyAIM_to_Player.Normalize();
     //今回のターゲットはプレイヤーに伸びるベクトル。
     Vector3 target = toPlayerDir;
     target *= m_VISION;
-    target += headPos;
+
     
-    //コールバック関数。
-    RayTestCallBack::EnemyRayTestResult rayTestCB;
+    //視野判定用コールバック関数。
+    RayTestCallBack::EnemyRayTestResult visionCallBuck;
     //レイテスト。
-    PhysicObj().RayTest(headPos, target, rayTestCB);
-    if (rayTestCB.hasHit() && rayTestCB.StaticObjectDist > rayTestCB.CharacterObjectDist) {
+    PhysicObj().RayTest(headPos, target + headPos, visionCallBuck);
+    if (visionCallBuck.hasHit() && visionCallBuck.StaticObjectDist > visionCallBuck.CharacterObjectDist) {
         //手前に障害物なし！あたってる。
         if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
             //アニメーションを切り替え。
             m_modelRender->PlayAnimation(2, 0.1f);
             //プレイヤーの方向に向ける。
             m_rot.SetRotation(Vector3::AxisY, atan2f(toPlayerDir.x * 1.0f, toPlayerDir.z * 1.0f));
+            if (COOLDOWN < m_currentTime) {
+                //エネミーのエイムの精度を調整。
+                target = { target.x + rand() % m_currentRondomAIM, target.y + rand() % m_currentRondomAIM, target.z };
+                //弾丸発射。
+                Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
+                bullet->SetPos(headPos);
+                bullet->SetRot(m_rot);
+                bullet->SetSpeed(110.0f);
+                //発砲するたびにEnemyのAIMのランダム値を下げる。
+                m_currentRondomAIM--;
+                //乱れ値を追加したベクトルに向かう。
+                bullet->SetToTarget(target);
+                //弾道がPlayerに当たるかレイテスト。
+                RayTestCallBack::EnemyRayTestResult bulletRayCallBuck;
+                PhysicObj().RayTest(headPos, target + headPos, bulletRayCallBuck);
+                if (bulletRayCallBuck.hasHit() && bulletRayCallBuck.StaticObjectDist > bulletRayCallBuck.CharacterObjectDist) {
+                    //プレイヤーに命中。
+                    printf("命中。");
+                    //命中したので再びAIMの質を低品質なものに。
+                    m_currentRondomAIM = MAX_RANDOM_AIM;
+                }
+                else {
+                    printf("外した。");
+                }
+                m_currentTime = 0;
+            }
         }
-
     }
     else {
         //手前にオブジェクトがある or 何にもあたっていない。

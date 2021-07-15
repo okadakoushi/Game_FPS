@@ -161,6 +161,8 @@ public:
 	void Start();
 	//更新
 	void Update();
+	//遅延更新。
+	void PostUpdate();
 	/// <summary>
 	/// 描画
 	/// </summary>

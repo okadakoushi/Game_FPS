@@ -62,7 +62,7 @@ namespace myEngine {
 
 		if (IsPlay() == false) {
 			//Ä¶‚ªI—¹‚µ‚½‚çíœ
-			DeleteGO(this);
+			//DeleteGO(this);
 		}
 
 	}

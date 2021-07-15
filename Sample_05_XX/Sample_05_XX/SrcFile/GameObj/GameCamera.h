@@ -22,7 +22,7 @@ public:
 	/// <summary>
 	/// 更新。
 	/// </summary>
-	void Update() override;
+	void PostUpdate() override;
 	/// <summary>
 	/// 視点の位置を設定。
 	/// </summary>
@@ -63,12 +63,12 @@ public:
 		fixVal = val;
 	}
 	/// <summary>
-	/// カメラ水平方向のスピードを取得。
+	/// カメラの移動量を取得。
 	/// </summary>
 	/// <returns></returns>
-	const float& GetHorizonSpeed() const
+	const Vector2& GetCameraMove() const 
 	{
-		return HORIZON;
+		return m_cameraMove;
 	}
 private:
 	/// <summary>
@@ -83,13 +83,15 @@ private:
 private:
 	GamePlayer* m_player = nullptr;
 	Bone* m_headBone = nullptr;
-	Vector3 m_playerPos = g_vec3Zero;				//プレイヤーの位置。
+	Vector3 m_playerPos = {0.0f, 100.0f, 0.0f};				//プレイヤーの位置。
 	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//視点または、注視点に向かうベクトル。
 	Vector3 m_cameraRot = g_vec3Zero;				//カメラの回転。
-	float m_recoil = 0.0f;							//反動。
+	float m_recoil = 0.0f;					//反動。
 	bool m_isFPS = true;					//FPSモード。
 	float fixVal = 15.0f;				//修正値。
 	const float HORIZON = 1.0f;			//横のカメラ速度。
 	const float VERTICAL = 1.0f;		//縦のカメラ速度。
+	Vector2 m_beforeFramePoint = g_vec2Zero;			//前フレームのマウスポインタの位置。
+	Vector2 m_cameraMove = g_vec2Zero;
 };
 

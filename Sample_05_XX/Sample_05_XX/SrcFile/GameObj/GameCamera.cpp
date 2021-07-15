@@ -14,14 +14,10 @@ bool GameCamera::Start()
 	GraphicsEngineObj()->GetCamera3D().SetNear(2.0f);
 	GraphicsEngineObj()->GetCamera3D().SetViewAngle(70.0f);
 	m_player = FindGO<GamePlayer>("Player", false);
-	//頭のボーン取得。
-	Skeleton& skeleton = m_player->GetRender()->GetSkelton();
-	int headNo = skeleton.FindBoneID(L"mixamorig:Head");
-	m_headBone = skeleton.GetBone(headNo);
 	return true;
 }
 
-void GameCamera::Update()
+void GameCamera::PostUpdate()
 {
 	if (m_isFPS) {
 		MoveCameraOnFPS();
@@ -33,52 +29,48 @@ void GameCamera::Update()
 
 void GameCamera::MoveCameraOnFPS()
 {
-	Quaternion a;
-	Vector3 b;
-	m_headBone->CalcWorldTRS(m_playerPos, a, b);
-	m_playerPos.y += 4.0f;
+	MouseInputObj().Update();
 	//古い。
 	Vector3 totPosOld = m_toPos;
-	//入力に応じて回す。
-	//todo:マウスとかでとったりもしてみたいなぁ。
-	float x = g_pad[0]->GetRStickXF();
-	float y = g_pad[0]->GetRStickYF();
 
 	//Y軸周りの回転作成。
 	Quaternion qRot;
-	qRot.SetRotationDeg(g_vec3AxisY, HORIZON * x);
+	qRot.SetRotationDeg(g_vec3AxisY, HORIZON * MouseInputObj().GetVal_XY().x);
 	qRot.Apply(m_toPos);
 
 	//X軸周りの回転作成。
 	Vector3 axisX;
 	axisX.Cross(g_vec3AxisY, m_toPos);
 	axisX.Normalize();
-	qRot.SetRotationDeg(axisX * -1.0f, VERTICAL * y);
+	qRot.SetRotationDeg(axisX * 1.0f, VERTICAL * MouseInputObj().GetVal_XY().y);
 	qRot.Apply(m_toPos);
+	
+	MouseInputObj().End();
 
 	//回転上限のチェック。
 	Vector3 toTargetDir = m_toPos;
 	toTargetDir.Normalize();
 	if (toTargetDir.y < - 0.6f) {
 		//上向きすぎ。
-		m_toPos = totPosOld;
+		m_toPos = totPosOld; 
 	}
 	else if (toTargetDir.y > 0.9f) {
 		//下向きすぎ。
 		m_toPos = totPosOld;
 	}
-
-	//視点を計算。
-	Vector3 target = m_playerPos + m_toPos;
 	//視点の位置を補正。
 	Vector3 fix = toTargetDir * 13.0f;
+	m_playerPos += fix;
+	//視点を計算。
+	Vector3 target = m_playerPos + m_toPos;
 	//todo:反動
 
 
 	//メインカメラに設定。
 	GraphicsEngineObj()->GetCamera3D().SetTarget(target);
-	GraphicsEngineObj()->GetCamera3D().SetPosition(m_playerPos + fix);
-
+	GraphicsEngineObj()->GetCamera3D().SetPosition(m_playerPos);
+	//更新。
+	GraphicsEngineObj()->GetCamera3D().Update();
 }
 
 void GameCamera::MoveCameraOnTPS()

@@ -25,6 +25,15 @@ void GameObjectManager::Update()
 	}
 }
 
+void GameObjectManager::PostUpdate()
+{
+	for (GameObjectList objList : m_gameObjectListArray) {
+		for (IGameObject* obj : objList) {
+			obj->PostUpdateWrapper();
+		}
+	}
+}
+
 void GameObjectManager::ForwardRender()
 {
 	for (GameObjectList objList : m_gameObjectListArray) {
@@ -62,6 +71,8 @@ void GameObjectManager::UpdateManager()
 		PhysicObj().BeginDraw(GraphicsEngineObj()->GetRenderContext());
 		//更新。
 		Update();
+		//遅延更新。
+		PostUpdate();
 		//エフェクトエンジン更新。
 		EngineObj().GetEffectEngine().Update();
 	}

@@ -52,6 +52,10 @@ public:
 	/// </summary>
 	virtual void Update() {};
 	/// <summary>
+	/// 遅延更新。
+	/// </summary>
+	virtual void PostUpdate() {};
+	/// <summary>
 	/// オンデストロイ。
 	/// <para>DeleteGOすると呼び出し。</para>
 	/// </summary>
@@ -119,6 +123,13 @@ public:
 		if (m_isActive && m_isStart && m_isUpdate && !m_isDead)
 		{
 			Update();
+		}
+	}
+	void PostUpdateWrapper()
+	{
+		if (m_isActive && m_isStart && m_isUpdate && !m_isDead)
+		{
+			PostUpdate();
 		}
 	}
 	void ForwardRenderWrapper()

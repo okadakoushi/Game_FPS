@@ -28,6 +28,7 @@ bool GamePlayer::Start()
 	m_unityChan->SetShadwoCaster(true);
 	m_unityChan->SetShadowReciever(true);
 	m_unityChan->SetScale({ 1.5f, 1.5f, 1.5f });
+
 	//SkinModelRenderのアニメーション再生が終わったタイミングで呼ばれる処理を設定。
 	m_unityChan->SetPostAnimationProgressFunc([&] {	OnPostAnimationProgress(); });
 	//位置初期化。
@@ -37,9 +38,15 @@ bool GamePlayer::Start()
 	//腰のボーン取得。
 	int spineBoneNo = m_unityChan->GetSkelton().FindBoneID(L"mixamorig:Spine");
 	m_spineBone = m_unityChan->GetSkelton().GetBone(spineBoneNo);
+	//頭のボーン取得。
+	int headNo = m_unityChan->GetSkelton().FindBoneID(L"mixamorig:Head");;
+	m_headBone = m_unityChan->GetSkelton().GetBone(headNo);
 	//武器。
 	m_wepon = NewGO<Rifle>(EnPriority_3DModel, "Wepon");
 	m_wepon->SetRefBoneRender(m_unityChan);	
+
+	//カメラFind。
+	m_camera = FindGO<GameCamera>("GameCamera");
 
 	//レティクル初期化。
 	m_reticle = NewGO<SpriteRender>(EnPriority_UI);
@@ -52,13 +59,18 @@ bool GamePlayer::Start()
 	m_reticle->Init(testInitData);
 	m_reticle->SetPos({ 0.0f, m_pos.y, 0.0f });
 
+	//エフェクト生成。
+	m_effect = NewGO<myEngine::Effect>(EnPriority_3DModel);
+	m_effect->SetScale({ 3.0f, 3.0f, 3.0f });
+
 	m_pos = { 0.0f, 0.0f, 0.0f };
 
 	return true;
 }
 
-void GamePlayer::Update()
+void GamePlayer::PostUpdate()
 {
+
 	if (m_playerState != EnPlayerState_Deth) {
 		//死んでない。
 		//回転。
@@ -96,6 +108,7 @@ void GamePlayer::Update()
 	m_unityChan->SetPosition(m_pos);
 }
 
+
 void GamePlayer::OnPostAnimationProgress()
 {
 	Quaternion qRot;
@@ -114,22 +127,28 @@ void GamePlayer::OnPostAnimationProgress()
 }
 void GamePlayer::Rotation()
 {	
-	
-	//Y軸周りの回転作成。
-	float x = g_pad[0]->GetRStickXF();
-	Quaternion qRot;
-	qRot.SetRotationDeg(g_vec3AxisY, 1.0f * x);
-	m_rot.Multiply(qRot);
+	Vector3 toPos = GraphicsEngineObj()->GetCamera3D().GetTarget() - GraphicsEngineObj()->GetCamera3D().GetPosition();
+	toPos.Normalize();
+	float angle = atan2(toPos.x, toPos.z);
+	m_rot.SetRotation(g_vec3AxisY, angle);
 	m_unityChan->SetRotation(m_rot);
 }
 
 void GamePlayer::Shot()
 {
+	//ポストにしないとアニメーションの更新終わってないのでガタブルする。
+	Quaternion a;
+	m_headBone->CalcWorldTRS(m_headPos, a);
+	m_headPos.y += 4.0f;
+	m_camera->SetEyePos(m_headPos);
+
 	//レイのコールバック。
 	RayTestCallBack::PlayerRayTestResult rayCallBack;
 	//レイテストを行う。
-	Vector3 toDir = GraphicsEngineObj()->GetCamera3D().GetTarget() - GraphicsEngineObj()->GetCamera3D().GetPosition();
-	PhysicObj().RayTest(GraphicsEngineObj()->GetCamera3D().GetPosition(), toDir * 1000.0f, rayCallBack);
+	Vector3 toDir = GraphicsEngineObj()->GetCamera3D().GetTarget() - m_headPos;
+	toDir.Normalize();
+	toDir *= RAY_RANGE;
+	PhysicObj().RayTest(m_headPos, toDir + m_headPos, rayCallBack);
 
 	m_flame++;
 	if (GetAsyncKeyState('F')) {
@@ -137,6 +156,7 @@ void GamePlayer::Shot()
 			Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
 			bullet->SetPos(m_wepon->GetPos());
 			bullet->SetRot(m_rot);
+			bullet->SetToTarget(toDir);
 			m_flame = 0;
 			//printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
 			//printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
@@ -144,7 +164,25 @@ void GamePlayer::Shot()
 				//敵にレイが命中。
 				//生ポインタから敵に強制キャスト。
 				RifleEnemy* enemy = reinterpret_cast<RifleEnemy*>(rayCallBack.m_collisionObject->getUserPointer());
-				enemy->SetState(EnEnemyState_Damage);
+				if (enemy != nullptr) {
+					enemy->SetState(EnEnemyState_Damage);
+				}
+			}
+			else if(rayCallBack.hasHit() && rayCallBack.StaticObjectDist < rayCallBack.CharacterObjectDist){
+				//なんかのメッシュに命中。
+				//命中した地点からエフェクトを再生。
+				Vector3 effectPos = m_headPos + toDir * rayCallBack.StaticObjectDist;
+				Quaternion effectRot;
+				effectRot.SetRotation(g_vec3AxisY ,atan2f(g_vec3Front.z, toDir.x));
+				m_effect->SetPosition(effectPos);
+				m_effect->SetRotation(effectRot);
+				//Y成分はいらない。
+				printf("%f\n", rayCallBack.StaticObjectDist);
+				printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
+				m_effect->Play(L"Assets/effect/aaaa.efk");
+			}
+			else if (!rayCallBack.hasHit()) {
+				printf("%f\n", rayCallBack.StaticObjectDist);
 			}
 		}
 		m_playerState = EnPlayerState_Shot;
@@ -196,7 +234,7 @@ void GamePlayer::Move()
 	else {
 		//重力。
 #ifdef MASTER
-		//acc += {0, -m_GRAVITY, 0};
+		acc += {0, -m_GRAVITY, 0};
 #endif
 	}
 
@@ -215,7 +253,7 @@ void GamePlayer::Move()
 	}
 
 	if (m_move.Length() != 0) {
-		printf("%f, %f, %f \n", m_pos.x,m_pos.y, m_pos.z);
+		//printf("%f, %f, %f \n", m_pos.x,m_pos.y, m_pos.z);
 	}
 
 

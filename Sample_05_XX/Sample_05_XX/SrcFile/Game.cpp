@@ -26,13 +26,13 @@ Game::~Game()
 
 bool Game::Start()
 {
+	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
 	//全mapの共通要素をインスタンス化。
 	m_stageGenerator = NewGO<StageGenerator>(EnPriority_Generator, "StageGenerator");
 	m_map = NewGO<Map>(EnPriority_UI, "Map");
 	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
-	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
 #ifdef MASTER
-	//m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
+	m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
 #endif
 
 	//スタンバイステージを作成。
@@ -56,11 +56,6 @@ void Game::Update()
 		//解放テスト用。
 		DeleteGO(this);
 	}
-	//if (GetAsyncKeyState('F') && !m_effect->IsPlay()) {
-	//	//m_effect = NewGO<myEngine::Effect>(0);
-	//	//m_effect->SetScale({ 10.0f, 10.0f, 10.0f });
-	//	//m_effect->Play(L"Assets/effect/test.efk");
-	//}
 	m_map->SetTargetPos(m_player->GetPos());
 }
 

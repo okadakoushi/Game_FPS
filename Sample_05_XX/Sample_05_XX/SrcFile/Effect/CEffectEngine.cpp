@@ -27,11 +27,13 @@ void CEffectEngine::Init()
 		3,												//スワップバッファーカウント。
 		&format,										//フォーマットカラー。
 		1,												//RTの数。
-		DXGI_FORMAT_UNKNOWN,							//デプスフォーマット。
+		DXGI_FORMAT_D32_FLOAT,							//デプスフォーマット。
 		false,											//デプス反転？？
 		2000											//板ポリの最大数。
 	);
-
+	//auto tex = EffekseerRendererDX12::CreateTexture(m_effekseerRenderer, GraphicsEngineObj()->GetDepthTextrue()
+	////デプスを作成。
+	//m_effekseerRenderer->SetDepth();
 	// Create a memory pool
 	// メモリプールの作成
 	m_sfMemoryPoolEfk = EffekseerRendererDX12::CreateSingleFrameMemoryPool(m_effekseerRenderer);
