@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// デストロイ。
 	/// </summary>
-	void OnDestroy() override;
+	~Bullet();
 	/// <summary>
 	/// スタート。
 	/// </summary>

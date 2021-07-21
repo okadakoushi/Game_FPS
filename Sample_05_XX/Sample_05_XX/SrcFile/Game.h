@@ -12,6 +12,7 @@ class Map;
 class SkyBox;
 class Guide;
 class StageGenerator;
+class Fade;
 
 class Game : public IGameObject
 {

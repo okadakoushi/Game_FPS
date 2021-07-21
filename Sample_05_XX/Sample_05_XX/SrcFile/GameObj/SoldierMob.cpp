@@ -2,7 +2,7 @@
 #include "SoldierMob.h"
 #include "GamePlayer.h"
 
-void SoldierMob::OnDestroy()
+SoldierMob::~SoldierMob()
 {
     DeleteGO(m_modelRender);
 }
@@ -45,7 +45,7 @@ void SoldierMob::Update()
         Move();
         if (IsFindPlayer() && time > m_helloTime) {
             //プレイヤーいたのでけいれーい！！
-            printf("敬礼");
+            //printf("敬礼");
             m_modelRender->PlayAnimation(En_Hello, 0.5f);
             m_currentState = En_Hello;
             time = 0;

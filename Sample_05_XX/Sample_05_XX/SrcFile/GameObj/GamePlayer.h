@@ -13,7 +13,8 @@ class Bullet;
 class GamePlayer : public IGameObject
 {
 private:
-	void OnDestroy() override;
+
+	~GamePlayer() override;
 	/// <summary>
 	/// スタート。
 	/// </summary>
@@ -41,9 +42,12 @@ private:
 	/// 発射！！
 	/// </summary>
 	void Shot();
-
+	/// <summary>
+	/// リロード。
+	/// </summary>
 	void Reload();
 public:
+	void Init();
 	/// <summary>
 	/// 位置を取得。
 	/// </summary>
@@ -83,7 +87,9 @@ public:
 	/// <param name="damage"></param>
 	void DamageToPlayer(const int& damage)
 	{
-		m_hp -= damage;
+		if (m_hp > 0) {
+			m_hp -= damage;
+		}
 	}
 	/// <summary>
 	/// 武器取得。
@@ -107,10 +113,10 @@ private:
 		EnPlayerState_Idle,		//何もない。
 		EnPlayerState_Walk,		//歩く。
 		EnPlayerState_Shot,		//射撃
+		EnPlayerState_Deth,		//死亡。
 		EnPlayerState_Buck,		//後退。
 		EnPlayerState_Run,		//走る。
 		EnPlayerState_Reload,	//リロード。
-		EnPlayerState_Deth,		//死亡。
 		EnPlayerState_Num		//数。
 	};
 	EnPlayerState m_playerState = EnPlayerState_Idle;
@@ -135,7 +141,7 @@ private:
 	GameCamera* m_camera = nullptr;				//カメラ。
 	myEngine::Effect* m_effect = nullptr;		//エフェクト。
 	const float RAY_RANGE = 2000.0f;
-	int m_hp = 150;								//HP。
+	unsigned int m_hp = 150;								//HP。
 	PlayerUIs* m_playerUIs;						//UI。
 };
 

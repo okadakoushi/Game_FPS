@@ -5,12 +5,13 @@ class GamePlayer;
 class Rifle : public IGameObject
 {
 public:
-	//~Rifle();
+	~Rifle();
 	enum EnRifleEvent {
 		EnRifleEvent_None,
 		EnRifleEvent_NoAmo,
 		EnRifleEvent_Reloading
 	};
+	void Init();
 	/// <summary>
 	/// スタート。
 	/// </summary>

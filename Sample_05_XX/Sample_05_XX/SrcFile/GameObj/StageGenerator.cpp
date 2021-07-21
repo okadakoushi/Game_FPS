@@ -2,9 +2,16 @@
 #include "StageGenerator.h"
 #include "Stages/Stage.h"
 #include "Stages/BattleStage1.h"
+#include "SrcFile/Fade.h"
+#include "GamePlayer.h"
+
+StageGenerator::StageGenerator()
+{
+}
 
 void StageGenerator::OnDestroy()
 {
+	DeleteCurrentStage();
 }
 
 bool StageGenerator::Start()
@@ -14,6 +21,16 @@ bool StageGenerator::Start()
 
 void StageGenerator::Update()
 {
+	//if (m_currentStageNum == EnStageNumber_StanbyStage) {
+	//	if (m_stanbyStage->IsStart()) {
+	//		//始まったらフェードを開ける。
+	//	}
+	//}
+	//else if (m_currentStageNum == EnStageNumber_BattleStage) {
+	//	if (m_stanbyStage->IsStart()) {
+	//		//始まったらフェードを開ける。
+	//	}
+	//}
 }
 
 void StageGenerator::CreateStage(const StageNumber& stageNum)
@@ -35,7 +52,7 @@ void StageGenerator::CreateStage(const StageNumber& stageNum)
 
 	}
 	else {
-		printf("StageNum = %d", stageNum);
+		//printf("StageNum = %d", stageNum);
 		//エラー。
 		MessageBoxA(
 			nullptr, 
@@ -50,9 +67,11 @@ void StageGenerator::DeleteCurrentStage()
 {
 	if (m_currentStageNum == EnStageNumber_StanbyStage) {
 		DeleteGO(m_stanbyStage);
+		m_player->Init();
 	}
 	else if (m_currentStageNum == EnStageNumber_BattleStage) {
 		DeleteGO(m_battleStage);
+		m_player->Init();
 	}
 	else if (m_currentStageNum == EnStageNumber_BattleStage2) {
 
@@ -72,7 +91,7 @@ void StageGenerator::DeleteCurrentStage()
 
 	if (m_currentStageNum != EnStageNumber_StanbyStage) {
 		//スタンバイステージじゃない場合。
-		printf("スタンバイステージ生成開始。\n");
+		//printf("スタンバイステージ生成開始。\n");
 		CreateStage(EnStageNumber_StanbyStage);
 		return;
 	}

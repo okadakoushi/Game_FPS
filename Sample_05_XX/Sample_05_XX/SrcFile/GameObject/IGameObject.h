@@ -153,7 +153,7 @@ protected:
 	bool			m_isDead;		//死亡フラグ
 	bool			m_isUpdate;		//更新フラグ
 	bool			m_isActive;		//Activeフラグ
-	unsigned int	m_tags = 0;		//タグ
+	const char*		m_tags = 0;		//タグ
 	unsigned int	m_nameKey = 0;	//名前キー
 };
 

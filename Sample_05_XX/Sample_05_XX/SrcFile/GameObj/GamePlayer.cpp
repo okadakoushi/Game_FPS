@@ -6,10 +6,18 @@
 #include "Enemy/RifleEnemy.h"
 #include "Rifle.h"
 
-void GamePlayer::OnDestroy()
+GamePlayer::~GamePlayer()
 {
 	DeleteGO(m_reticle);
 	DeleteGO(m_unityChan);
+}
+
+void GamePlayer::Init()
+{
+	m_playerState = EnPlayerState_Idle;
+	m_hp = 150;
+	m_wepon->Init();
+	//m_camera->SetActive(true);
 }
 
 bool GamePlayer::Start()
@@ -19,8 +27,10 @@ bool GamePlayer::Start()
 	const char* tkaFilePaths[] = {
 		"Assets/animData/Enemy/Rifle/Idle.tka",
 		"Assets/animData/Enemy/Rifle/Walk.tka",
-		"Assets/animData/Enemy/Rifle/WalkShoot.tka"
+		"Assets/animData/Enemy/Rifle/WalkShoot.tka",
+		"Assets/animData/Enemy/Rifle/Death.tka"
 	};
+	m_unityChan->SetAnimLoop(EnPlayerState_Deth, false);
 	m_unityChan->Init("Assets/modelData/Chara/Enemy.tkm", tkaFilePaths);
 	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
@@ -70,6 +80,7 @@ void GamePlayer::PostUpdate()
 		Move();
 		//射撃。
 		Shot();
+		m_unityChan->SetPosition(m_pos);
 	}
 
 	switch (m_playerState)
@@ -93,11 +104,16 @@ void GamePlayer::PostUpdate()
 		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
 		break;
 	case EnPlayerState_Deth:
+		m_unityChan->PlayAnimation(EnPlayerState_Deth, 0.5f);
+		//m_camera->SetActive(false);
 		break;
 	case EnPlayerState_Num:
 		break;
 	}
-	m_unityChan->SetPosition(m_pos);
+	
+	if (m_hp <= 0) {
+		m_playerState = EnPlayerState_Deth;
+	}
 }
 
 void GamePlayer::RenderHUD()
@@ -152,7 +168,7 @@ void GamePlayer::Shot()
 		if (m_flame >= 20) {
 			if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_None) {
 				m_wepon->ReduseAmo();
-				Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
+				Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel, "Bullet");
 				bullet->SetPos(m_wepon->GetPos());
 				bullet->SetRot(m_rot);
 				bullet->SetToTarget(toDir);
@@ -176,12 +192,12 @@ void GamePlayer::Shot()
 					m_effect->SetPosition(effectPos);
 					m_effect->SetRotation(effectRot);
 					//Y成分はいらない。
-					printf("%f\n", rayCallBack.StaticObjectDist);
-					printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
+					//printf("%f\n", rayCallBack.StaticObjectDist);
+					//printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
 					m_effect->Play(L"Assets/effect/aaaa.efk");
 				}
 				else if (!rayCallBack.hasHit()) {
-					printf("%f\n", rayCallBack.StaticObjectDist);
+					//printf("%f\n", rayCallBack.StaticObjectDist);
 				}
 			}
 			else {
@@ -233,6 +249,7 @@ void GamePlayer::Move()
 	}
 	if (GetAsyncKeyState('R')) {
 		m_playerState = EnPlayerState_Reload;
+		m_wepon->SetRifleEvent(Rifle::EnRifleEvent_Reloading);
 	}
 	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
 		//ダッシュ。

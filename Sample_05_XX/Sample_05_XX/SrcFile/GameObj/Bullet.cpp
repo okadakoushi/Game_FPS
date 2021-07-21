@@ -2,7 +2,7 @@
 #include "Bullet.h"
 #include "GamePlayer.h"
 
-void Bullet::OnDestroy()
+Bullet::~Bullet()
 {
     DeleteGO(m_render);
 }

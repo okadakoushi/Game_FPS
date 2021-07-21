@@ -11,6 +11,7 @@
 #include "SrcFile/nature/SkyBox.h"
 #include "GameObj/StageGenerator.h"
 #include "GameObj/guide.h"
+#include "Fade.h"
 
 Game::Game()
 {
@@ -18,7 +19,11 @@ Game::Game()
 
 Game::~Game()
 {
-	//DeleteGO(m_stage);
+	DeleteGO(m_stageGenerator);
+	DeleteGO(m_sky);
+	DeleteGO(m_camera);
+	DeleteGO(m_map);
+	DeleteGO(m_player);
 	//DeleteGO(m_UIs);
 	//最後に消すこと。
 	//DeleteGO(m_player);
@@ -54,7 +59,7 @@ void Game::Update()
 {
 	if(GetAsyncKeyState('R')) {
 		//解放テスト用。
-		DeleteGO(this);
+		//DeleteGO(this);
 	}
 	m_map->SetTargetPos(m_player->GetPos());
 }

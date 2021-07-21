@@ -4,6 +4,7 @@ class GamePlayer;
 class NaviMesh;
 class RifleEnemy;
 class StageGenerator;
+class Fade;
 
 class BattleStage1 : public IGameObject
 {

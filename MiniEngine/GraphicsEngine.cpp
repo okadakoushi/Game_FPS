@@ -209,6 +209,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//ディファード用のスプライトを設定。
 	m_spriteData.m_fxFilePath = "Assets/shader/Defeardsprite.fx";
 	//ライトの定数バッファ。
+	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	m_spriteData.m_expandConstantBuffer = &g_light;
 	m_spriteData.m_expandConstantBufferSize = sizeof(g_light);
 	//ディファード用のスプライトを初期化。
@@ -501,6 +502,9 @@ void GraphicsEngine::EndRender(bool ChangeTarget)
 {
 	// レンダリングターゲットへの描き込み完了待ち
 	m_renderContext.WaitUntilFinishDrawingToRenderTarget(m_renderTargets[m_frameIndex]);
+
+	//グラフィックスメモリーにコミット。
+	m_directXTKGfxMemroy->Commit(m_commandQueue);
 
 	//レンダリングコンテキストを閉じる。
 	m_renderContext.Close();

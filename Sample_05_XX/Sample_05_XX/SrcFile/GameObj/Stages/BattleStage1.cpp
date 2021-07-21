@@ -4,6 +4,7 @@
 #include "SrcFile/GameObj/Enemy/RifleEnemy.h"
 #include "SrcFile/GameObj/Stages/Stage.h"
 #include "SrcFile/GameObj/StageGenerator.h"
+#include "SrcFile/Fade.h"
 
 BattleStage1::BattleStage1()
 {
@@ -12,6 +13,7 @@ BattleStage1::BattleStage1()
 
 bool BattleStage1::Start()
 {
+
 	//ナビメッシュ作成。
 	m_naviMesh = new NaviMesh;
 	m_naviMesh->Load("Assets/nvm/GameStage_BattleMap1.nvm");
@@ -129,7 +131,7 @@ void BattleStage1::Update()
 			}
 		}
 	}
-	if (currentSoldierCount >= m_enemyCount) {
+	if (currentSoldierCount >= m_enemyCount || m_player->GetHP() <= 0) {
 		for (auto* sol : m_rifleEnemy) {
 			if (sol != nullptr) {
 				//全兵士アクティブじゃないから削除おおおおお。
@@ -139,7 +141,7 @@ void BattleStage1::Update()
 		//これ以上更新は行わない。
 		m_stageGenerator = FindGO<StageGenerator>("StageGenerator");
 		m_stageGenerator->DeleteCurrentStage();
-		this->SetActive(false);
+
 	}
 }
 

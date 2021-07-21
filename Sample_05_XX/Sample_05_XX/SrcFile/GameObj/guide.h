@@ -12,7 +12,7 @@ class StageGenerator;
 class Guide : public IGameObject
 {
 public:
-	void OnDestroy() override;
+	~Guide();
 	bool Start() override;
 	void Update() override;
 	/// <summary>

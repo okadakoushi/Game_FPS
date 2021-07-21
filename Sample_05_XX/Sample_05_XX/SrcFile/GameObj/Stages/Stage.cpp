@@ -20,10 +20,6 @@ Stage::Stage()
 Stage::~Stage()
 {
 	//DeleteGO(m_bg);
-}
-
-void Stage::OnDestroy()
-{
 	DeleteGO(m_guide);
 	//レンダー全消し。
 	for (auto* render : m_modelRender) {
@@ -37,6 +33,10 @@ void Stage::OnDestroy()
 			DeleteGO(soldier);
 		}
 	}
+}
+
+void Stage::OnDestroy()
+{
 }
 
 bool Stage::Start()

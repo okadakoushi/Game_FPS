@@ -8,9 +8,10 @@
 
 
 
-void RifleEnemy::OnDestroy()
+RifleEnemy::~RifleEnemy()
 {
     DeleteGO(m_modelRender);
+    DeleteGO(m_rifle);
 }
 
 bool RifleEnemy::Start()
@@ -56,11 +57,11 @@ void RifleEnemy::Update()
 	switch (m_enemyState)
 	{
 	case EnEnemyState_Wandering:
-        //Move();
-        //if (IsFindPlayer()) {
-        //    m_enemyState = EnEnemyState_Attack;
-        //    //m_enemyState = EnEnemyState_Tracking;
-        //}
+        Move();
+        if (IsFindPlayer()) {
+            m_enemyState = EnEnemyState_Attack;
+            //m_enemyState = EnEnemyState_Tracking;
+        }
 		//警戒状態。
 		break;
 	case EnEnemyState_Tracking:
@@ -185,12 +186,12 @@ void RifleEnemy::Attack()
                 if (bulletRayCallBuck.hasHit() && bulletRayCallBuck.StaticObjectDist > bulletRayCallBuck.CharacterObjectDist) {
                     //プレイヤーに命中。
                     m_player->DamageToPlayer(ATTACK);
-                    printf("命中。");
+                    //printf("命中。");
                     //命中したので再びAIMの質を低品質なものに。
                     m_currentRondomAIM = MAX_RANDOM_AIM;
                 }
                 else {
-                    printf("外した。");
+                    //printf("外した。");
                 }
                 m_currentTime = 0;
             }
@@ -229,7 +230,7 @@ void RifleEnemy::Damage()
 {
     //printf("hp = %d", m_hp);
     if (m_hp <= 0 && this->IsActive()) {
-        printf("死亡！！\n");
+        //printf("死亡！！\n");
         m_enemyState = EnEnemyState_Death;
     }
     else {
@@ -242,7 +243,7 @@ void RifleEnemy::Damage()
 
 void RifleEnemy::Death()
 {
-    printf("シニマース。\n");
+    //printf("シニマース。\n");
     m_modelRender->PlayAnimation(3, 1.0f);
     if (!m_modelRender->isPlayAnim()) {
         //更新止め、コリジョン解放。

@@ -64,10 +64,10 @@ void PlayerUIs::RenderHUD()
 	wchar_t hpTex[16];
 	swprintf_s(hpTex, L" HP = %d", m_player->GetHP());
 	m_hpUIText.Draw(hpTex, { FRAME_BUFFER_W * -0.52f, FRAME_BUFFER_H * -0.41f }, { 0.0f, 1.0f, 0.0f, 1.0f }, 0.0f, 1.5f, { 0.0f, 0.0f });
-	m_hpUIText.End();
+	//m_hpUIText.End();
 
 	//
-	m_LeftAmoText.Begin();
+	//m_LeftAmoText.Begin();
 	wchar_t leftAmoTex[16];
 	swprintf_s(leftAmoTex, L"%d/%d", m_player->GetWepon()->GetCurrentAmo(), m_player->GetWepon()->GetMAX_AMO());
 	m_LeftAmoText.Draw(leftAmoTex, { FRAME_BUFFER_W * 0.34f, FRAME_BUFFER_H * -0.34f }, Vector4::White, 0.0f, 1.0f, { 0.0f, 0.0f });

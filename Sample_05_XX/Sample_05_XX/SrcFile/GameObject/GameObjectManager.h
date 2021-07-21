@@ -76,6 +76,8 @@ public:
 		newObject->m_priority = prio;
 		//上と同じ感じでハッシュを代入
 		newObject->m_nameKey = hash;
+		//ハッシュとは別にオブジェクトの名前。
+		newObject->m_tags = objectName;
 		return newObject;
 	}
 	/// <summary>
@@ -83,6 +85,12 @@ public:
 	/// </summary>
 	void DeleteGameObject(IGameObject* gameObject)
 	{
+		if (gameObject->m_nameKey == 1460041493) {
+			int a = 0;
+		}
+		if (gameObject->m_nameKey == 3617970110) {
+			int a = 0;
+		}
 		if (gameObject != nullptr)
 		{
 			//リストに追加

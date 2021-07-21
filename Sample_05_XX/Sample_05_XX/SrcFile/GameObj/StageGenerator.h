@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SrcFile/Fade.h"
+
 class Stage;
 class BattleStage1;
 class GamePlayer;
@@ -10,7 +12,7 @@ class GamePlayer;
 class StageGenerator : public IGameObject
 {
 public:
-	StageGenerator() {}
+	StageGenerator();
 	~StageGenerator() {}
 public:
 	enum StageNumber {
@@ -54,5 +56,6 @@ private:
 	Stage* m_stanbyStage = nullptr;				//スタンバイステージ。
 	BattleStage1* m_battleStage = nullptr;		//バトルステージ。
 	GamePlayer* m_player = nullptr;
+	Fade* m_fade;
 };
 

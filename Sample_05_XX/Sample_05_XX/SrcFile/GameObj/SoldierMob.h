@@ -10,7 +10,7 @@ class SoldierMob : public IGameObject
 {
 public:
 
-	void OnDestroy();
+	~SoldierMob();
 	/// <summary>
 	/// ‰Šú‰»B
 	/// </summary>

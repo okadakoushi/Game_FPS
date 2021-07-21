@@ -3,7 +3,7 @@
 #include "GamePlayer.h"
 #include "StageGenerator.h"
 
-void Guide::OnDestroy()
+Guide::~Guide()
 {
 	DeleteGO(m_skinModelRender);
 }

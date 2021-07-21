@@ -18,7 +18,7 @@ enum EnEnemyState {
 class RifleEnemy : public Enemy
 {
 public:
-	void OnDestroy() override;
+	~RifleEnemy();
 	bool Start() override;
 	void Update() override;
 	void Move();
@@ -63,8 +63,8 @@ private:
 	EnEnemyState m_enemyState = EnEnemyState_Wandering;	//エネミーのステート。
 	std::vector<Vector3> m_paths;				//探索パス。todo:配列。
 	int m_pathIndex = 0;						//
-	const float m_FOV = 20.0f;					//視野角。
-	const float m_VISION = 1500.0f;				//エネミーの視野範囲。
+	const float m_FOV = 40.0f;					//視野角。
+	const float m_VISION = 2500.0f;				//エネミーの視野範囲。
 	Bone* m_head;								//頭ボーン。
 	Vector3 m_toNextCell;						//次のセルに向かう方位ベクトル。
 	int m_hp = 100;								//HP。

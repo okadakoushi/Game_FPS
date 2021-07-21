@@ -19,7 +19,7 @@ void MouseInput::Update()
 	m_xyVal.x = (mauseX - DEFAULT_POSITION.x) * m_Kando;
 	m_xyVal.y = (mauseY - DEFAULT_POSITION.y) * m_Kando * 0.5f;
 	if (m_xyVal.x != 0.0f && m_xyVal.y != 0.0f) {
-		printf("%d, %d\n", mauseX, mauseY);
+		//printf("%d, %d\n", mauseX, mauseY);
 	}
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SrcFile/Fade.h"
+
 class GamePlayer;
 class Guide;
 class SoldierMob;
@@ -44,5 +46,6 @@ private:
 	GamePlayer* m_player = nullptr;				//プレイヤー。
 	Guide* m_guide = nullptr;					//ガイド。
 	NaviMesh* m_naviMesh = nullptr;				//ナビゲーションメッシュ。
+	Fade m_fade;								//フェード。
 };
 

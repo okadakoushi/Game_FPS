@@ -2,6 +2,18 @@
 #include "Rifle.h"
 #include "GamePlayer.h"
 
+Rifle::~Rifle()
+{
+	DeleteGO(m_render);
+}
+
+void Rifle::Init()
+{
+	m_currentAmo = MAX_AMO;
+	m_currentReloadTime = 0;
+	m_currentRifleEvent = EnRifleEvent_None;
+}
+
 bool Rifle::Start()
 {
 	//ƒŒƒ“ƒ_[‰Šú‰»B

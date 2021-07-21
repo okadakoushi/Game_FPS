@@ -2,6 +2,7 @@
 #include "system/system.h"
 #include "SrcFile/Game.h"
 #include "SrcFile/TestGame.h"
+#include "SrcFile/Fade.h"
 
 
 ///////////////////////////////////////////////////////////////////
