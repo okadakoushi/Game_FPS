@@ -8,12 +8,24 @@
 
 BattleStage1::BattleStage1()
 {
+	for (auto* soldier : m_rifleEnemy) {
+		soldier = nullptr;
+	}
+}
+
+BattleStage1::~BattleStage1()
+{
+	for (auto* soldier : m_rifleEnemy) {
+		if (soldier != nullptr) {
+			DeleteGO(soldier);
+		}
+	}
 	delete m_naviMesh;
 }
 
 bool BattleStage1::Start()
 {
-
+	m_stageGenerator = FindGO<StageGenerator>("StageGenerator");
 	//ナビメッシュ作成。
 	m_naviMesh = new NaviMesh;
 	m_naviMesh->Load("Assets/nvm/GameStage_BattleMap1.nvm");
@@ -122,26 +134,28 @@ bool BattleStage1::Start()
 void BattleStage1::Update()
 {
 	//今の削除予定兵士の数。
-	int currentSoldierCount = 0;
+	int currentSoldierCount = STAGE_ENEMY_XOUNT;
 	for (auto* sol : m_rifleEnemy) {
 		if (sol != nullptr) {
 			if (!sol->IsActive()) {
 				//アクテイブじゃないからインクリ。
-				currentSoldierCount++;
+				currentSoldierCount--;
 			}
 		}
 	}
-	if (currentSoldierCount >= m_enemyCount || m_player->GetHP() <= 0) {
-		for (auto* sol : m_rifleEnemy) {
-			if (sol != nullptr) {
-				//全兵士アクティブじゃないから削除おおおおお。
-				DeleteGO(sol);
-			}
-		}
-		//これ以上更新は行わない。
-		m_stageGenerator = FindGO<StageGenerator>("StageGenerator");
-		m_stageGenerator->DeleteCurrentStage();
 
+	if (currentSoldierCount <= 0) {
+		//敵を全部倒した。
+		//NextStage?Title?
+		m_stageGenerator->DeleteCurrentStage();
+		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+	}
+
+	if (m_player->GetHP() <= 0) {
+		//プレイヤー死亡。
+		//Retry?Title?
+		m_stageGenerator->DeleteCurrentStage();
+		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
 	}
 }
 

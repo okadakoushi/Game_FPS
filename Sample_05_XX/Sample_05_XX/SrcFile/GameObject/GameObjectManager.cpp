@@ -120,6 +120,7 @@ void GameObjectManager::ExcuteDeleteGameObject()
 			auto it = std::find(goExecList.begin(), goExecList.end(), go);
 			//みつけたら
 			if (it != goExecList.end()) {
+				//多重解放バグデバッグ用。
 				//printf("DeleteObjectHash = %s\n", go->m_tags);
 				//削除リストから除外された。
 				delete (*it);

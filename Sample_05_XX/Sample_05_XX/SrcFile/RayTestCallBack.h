@@ -27,7 +27,7 @@ public:
 				m_collisionObject = rayResult.m_collisionObject;
 				StaticObjectDist = rayResult.m_hitFraction;
 				Normal.Set(rayResult.m_hitNormalLocal);
-				//return rayResult.m_hitFraction;
+				return rayResult.m_hitFraction;
 			}
 			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_Enemy) {
 				//エネミーにヒット。

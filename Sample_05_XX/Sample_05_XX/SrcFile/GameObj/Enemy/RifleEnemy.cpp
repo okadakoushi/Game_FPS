@@ -172,14 +172,14 @@ void RifleEnemy::Attack()
                 //エネミーのエイムの精度を調整。
                 target = { target.x + rand() % m_currentRondomAIM, target.y + rand() % m_currentRondomAIM, target.z };
                 //弾丸発射。
-                Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
-                bullet->SetPos(headPos);
-                bullet->SetRot(m_rot);
-                bullet->SetSpeed(110.0f);
+                //Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
+                //bullet->SetPos(headPos);
+                //bullet->SetRot(m_rot);
+                //bullet->SetSpeed(110.0f);
                 //発砲するたびにEnemyのAIMのランダム値を下げる。
                 m_currentRondomAIM--;
                 //乱れ値を追加したベクトルに向かう。
-                bullet->SetToTarget(target);
+                //bullet->SetToTarget(target);
                 //弾道がPlayerに当たるかレイテスト。
                 RayTestCallBack::EnemyRayTestResult bulletRayCallBuck;
                 PhysicObj().RayTest(headPos, target + headPos, bulletRayCallBuck);

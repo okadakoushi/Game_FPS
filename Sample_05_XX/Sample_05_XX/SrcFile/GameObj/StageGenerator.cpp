@@ -35,20 +35,20 @@ void StageGenerator::Update()
 
 void StageGenerator::CreateStage(const StageNumber& stageNum)
 {
-	if (stageNum == EnStageNumber_StanbyStage) {
+	if (stageNum == EnStageNumber_BattleStage1) {
 		m_stanbyStage = NewGO<Stage>(EnPriority_3DModel);
 		m_stanbyStage->SetPlayer(m_player);
-		m_currentStageNum = EnStageNumber_StanbyStage;
-	}
-	else if (stageNum == EnStageNumber_BattleStage) {
-		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
-		m_battleStage->SetPlayer(m_player);
-		m_currentStageNum = EnStageNumber_BattleStage;
+		m_currentStageNum = EnStageNumber_BattleStage1;
 	}
 	else if (stageNum == EnStageNumber_BattleStage2) {
-
+		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
+		m_battleStage->SetPlayer(m_player);
+		m_currentStageNum = EnStageNumber_BattleStage2;
 	}
 	else if (stageNum == EnStageNumber_BattleStage3) {
+
+	}
+	else if (stageNum == EnStageNumber_BattleStage4) {
 
 	}
 	else {
@@ -65,18 +65,18 @@ void StageGenerator::CreateStage(const StageNumber& stageNum)
 
 void StageGenerator::DeleteCurrentStage()
 {
-	if (m_currentStageNum == EnStageNumber_StanbyStage) {
+	if (m_currentStageNum == EnStageNumber_BattleStage1) {
 		DeleteGO(m_stanbyStage);
 		m_player->Init();
 	}
-	else if (m_currentStageNum == EnStageNumber_BattleStage) {
+	else if (m_currentStageNum == EnStageNumber_BattleStage2) {
 		DeleteGO(m_battleStage);
 		m_player->Init();
 	}
-	else if (m_currentStageNum == EnStageNumber_BattleStage2) {
+	else if (m_currentStageNum == EnStageNumber_BattleStage3) {
 
 	}
-	else if (m_currentStageNum == EnStageNumber_BattleStage3) {
+	else if (m_currentStageNum == EnStageNumber_BattleStage4) {
 
 	}
 	else {
@@ -88,13 +88,7 @@ void StageGenerator::DeleteCurrentStage()
 			MB_OK
 		);
 	}
-
-	if (m_currentStageNum != EnStageNumber_StanbyStage) {
-		//スタンバイステージじゃない場合。
-		//printf("スタンバイステージ生成開始。\n");
-		CreateStage(EnStageNumber_StanbyStage);
-		return;
-	}
+	return;
 	//番号初期化。
 	//m_currentStageNum = EnstageNumber_None;
 }

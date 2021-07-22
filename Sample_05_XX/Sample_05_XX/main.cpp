@@ -13,9 +13,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 #ifdef NAV_DEBUG
 #endif // DEBUG
 	ShowCursor(FALSE);
+#ifdef MASTER
 	AllocConsole();
 	freopen("CON", "r", stdin);
 	freopen("CON", "w", stdout);
+#endif
 	//ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 	//エンジンの初期化。

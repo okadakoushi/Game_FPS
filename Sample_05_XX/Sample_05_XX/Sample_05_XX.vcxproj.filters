@@ -562,9 +562,6 @@
     <ClInclude Include="SrcFile\GameObj\Stages\BattleStage1.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SrcFile\GameObj\StageGenerator.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="SrcFile\GameObj\Stages\Stage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -596,6 +593,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\Fade.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\StageGenerator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

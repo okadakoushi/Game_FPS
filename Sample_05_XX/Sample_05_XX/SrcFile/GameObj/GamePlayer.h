@@ -23,21 +23,12 @@ private:
 	/// <summary>
 	/// 更新。
 	/// </summary>
-	void PostUpdate() override;
-	/// <summary>
-	/// ポスト描画。
-	/// </summary>
-	void RenderHUD() override;
+	void Update() override;
 	/// <summary>
 	/// 移動。
 	/// <para>移動はカメラを基準に行われる。</para>
 	/// </summary>
 	void Move();
-	/// <summary>
-	/// 回転。
-	/// <para>都合によりGameCameraより呼び出し。</para>
-	/// </summary>
-	void Rotation();
 	/// <summary>
 	/// 発射！！
 	/// </summary>
@@ -48,6 +39,11 @@ private:
 	void Reload();
 public:
 	void Init();
+	/// <summary>
+	/// 回転。
+	/// <para>1フレームずれるため、カメラ側から呼び出し。</para>
+	/// </summary>
+	void Rotation();
 	/// <summary>
 	/// 位置を取得。
 	/// </summary>
@@ -99,6 +95,11 @@ public:
 	{
 		return m_wepon;
 	}
+	/// <summary>
+	/// 頭の位置を計算。
+	/// </summary>
+	/// <returns></returns>
+	Vector3& CalcHeadPos();
 private:
 	/// <summary>
 	/// SkinModelRenderのアニメーション進行が終わったタイミングで呼ばれる処理。
@@ -140,8 +141,8 @@ private:
 	int m_flame = 0;
 	GameCamera* m_camera = nullptr;				//カメラ。
 	myEngine::Effect* m_effect = nullptr;		//エフェクト。
-	const float RAY_RANGE = 2000.0f;
-	unsigned int m_hp = 150;								//HP。
+	const float RAY_RANGE = 8000.0f;			
+	unsigned int m_hp = 150;					//HP。
 	PlayerUIs* m_playerUIs;						//UI。
 };
 

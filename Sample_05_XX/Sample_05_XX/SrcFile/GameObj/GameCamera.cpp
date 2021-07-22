@@ -10,14 +10,13 @@ GameCamera::~GameCamera()
 bool GameCamera::Start()
 {
 	//キャラ映らないように近平面を設定。
-	//todo:なんかいい方法あるんだろうか。
 	GraphicsEngineObj()->GetCamera3D().SetNear(2.0f);
 	GraphicsEngineObj()->GetCamera3D().SetViewAngle(70.0f);
-	m_player = FindGO<GamePlayer>("Player", false);
+	m_player = FindGO<GamePlayer>("Player");
 	return true;
 }
 
-void GameCamera::PostUpdate()
+void GameCamera::Update()
 {
 	if (m_isFPS) {
 		MoveCameraOnFPS();
@@ -60,11 +59,12 @@ void GameCamera::MoveCameraOnFPS()
 	}
 	//視点の位置を補正。
 	Vector3 fix = toTargetDir * 13.0f;
-	m_playerPos += fix;
+	m_playerPos = m_player->CalcHeadPos() + fix;
 	//視点を計算。
 	Vector3 target = m_playerPos + m_toPos;
 	//todo:反動
-
+	//プレイヤーの向きをカメラの向きに設定。
+	m_player->Rotation();
 
 	//メインカメラに設定。
 	GraphicsEngineObj()->GetCamera3D().SetTarget(target);

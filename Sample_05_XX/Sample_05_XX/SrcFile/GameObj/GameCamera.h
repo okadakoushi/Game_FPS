@@ -22,7 +22,7 @@ public:
 	/// <summary>
 	/// 更新。
 	/// </summary>
-	void PostUpdate() override;
+	void Update() override;
 	/// <summary>
 	/// 視点の位置を設定。
 	/// </summary>
@@ -81,7 +81,6 @@ private:
 	/// </summary>
 	void MoveCameraOnTPS();
 private:
-	GamePlayer* m_player = nullptr;
 	Bone* m_headBone = nullptr;
 	Vector3 m_playerPos = {0.0f, 100.0f, 0.0f};				//プレイヤーの位置。
 	Vector3 m_toPos = { 0.0f, 0.0f, 100.0f };		//視点または、注視点に向かうベクトル。
@@ -92,6 +91,7 @@ private:
 	const float HORIZON = 1.0f;			//横のカメラ速度。
 	const float VERTICAL = 1.0f;		//縦のカメラ速度。
 	Vector2 m_beforeFramePoint = g_vec2Zero;			//前フレームのマウスポインタの位置。
+	GamePlayer* m_player = nullptr;
 	Vector2 m_cameraMove = g_vec2Zero;
 };
 

@@ -56,7 +56,7 @@ void PhysicsWorld::BeginDraw(RenderContext& rc)
 
 void PhysicsWorld::PhysicsDraw()
 {
-	m_dynamicWorld->debugDrawWorld();
+	//m_dynamicWorld->debugDrawWorld();
 	m_debugDraw.EndDraw();
 }
 

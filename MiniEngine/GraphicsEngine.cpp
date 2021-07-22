@@ -503,7 +503,8 @@ void GraphicsEngine::EndRender(bool ChangeTarget)
 	// レンダリングターゲットへの描き込み完了待ち
 	m_renderContext.WaitUntilFinishDrawingToRenderTarget(m_renderTargets[m_frameIndex]);
 
-	//グラフィックスメモリーにコミット。
+	//GPUにメモリを送信。GPUが使用を完了した場合API側でリサイクルされる。
+	//イメージ的にはガベージコレクションで大丈夫なはず。
 	m_directXTKGfxMemroy->Commit(m_commandQueue);
 
 	//レンダリングコンテキストを閉じる。

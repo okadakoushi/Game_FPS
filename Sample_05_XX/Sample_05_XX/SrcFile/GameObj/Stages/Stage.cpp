@@ -3,17 +3,19 @@
 #include "SrcFile/GameObj/SoldierMob.h"
 #include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/GameObj/guide.h"
+#include "SrcFile/GameObj/Enemy/RifleEnemy.h"
+#include "SrcFile/GameObj/StageGenerator.h"
 
 Stage::Stage()
 {
+	m_stageGenerator = FindGO<StageGenerator>("StageGenerator");
 	//初期化。
 	for (auto* render : m_modelRender) {
 		render = nullptr;
 	}
-	for (auto* soldier : m_soldierMob) {
+	for (auto* soldier : m_rifleEnemys) {
 		soldier = nullptr;
 	}
-	delete m_naviMesh;
 }
 
 
@@ -28,11 +30,12 @@ Stage::~Stage()
 		}
 	}
 	//兵士全消し。
-	for (auto* soldier : m_soldierMob) {
+	for (auto* soldier : m_rifleEnemys) {
 		if (soldier != nullptr) {
 			DeleteGO(soldier);
 		}
 	}
+	delete m_naviMesh;
 }
 
 void Stage::OnDestroy()
@@ -43,7 +46,7 @@ bool Stage::Start()
 {
 	//ナビメッシュ作成。
 	m_naviMesh = new NaviMesh;
-	m_naviMesh->Load("Assets/nvm/StanbyStage.nvm");
+	m_naviMesh->Load("Assets/nvm/StageLevel.nvm");
 	m_naviMesh->InitRender();
 
 	int spawnPointIndex = 0;	//Mobソルジャー用添字。
@@ -74,36 +77,36 @@ bool Stage::Start()
 			return true;
 		}
 		if (objData.EqualObjectName(L"GuideRespawn") == true) {
-			m_guide = NewGO<Guide>(EnPriority_3DModel, "Guide");
-			m_guide->SetPos(objData.position);
+			//m_guide = NewGO<Guide>(EnPriority_3DModel, "Guide");
+			//m_guide->SetPos(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"soldierDoc") == true) {
-			//医者オブジェ。
-			m_modelRender[m_mobCount] = NewGO<SkinModelRender>(EnPriority_3DModel);
-			const char* tkaFilePaths[]{
-				"Assets/animData/soldierMob/talk.tka"
-			};
-			m_modelRender[m_mobCount]->Init("Assets/modelData/Chara/soldierDoc.tkm" ,tkaFilePaths);
-			m_modelRender[m_mobCount]->SetRenderMode(enRenderMode_Skin);
-			m_modelRender[m_mobCount]->SetPosition(objData.position);
-			m_modelRender[m_mobCount]->SetScale(objData.scale);
-			m_modelRender[m_mobCount]->SetRotation(objData.rotatatin);
-			m_modelRender[m_mobCount]->SetShadwoCaster(true);
-			m_modelRender[m_mobCount]->SetShadowReciever(true);
-			//ちょっとアニメーションずらす。
-			m_modelRender[m_mobCount]->SetWaitTimeForAnim(m_mobCount * 61);
-			m_mobCount++;
-			return true;
+			////医者オブジェ。
+			//m_modelRender[m_mobCount] = NewGO<SkinModelRender>(EnPriority_3DModel);
+			//const char* tkaFilePaths[]{
+			//	"Assets/animData/soldierMob/talk.tka"
+			//};
+			//m_modelRender[m_mobCount]->Init("Assets/modelData/Chara/soldierDoc.tkm" ,tkaFilePaths);
+			//m_modelRender[m_mobCount]->SetRenderMode(enRenderMode_Skin);
+			//m_modelRender[m_mobCount]->SetPosition(objData.position);
+			//m_modelRender[m_mobCount]->SetScale(objData.scale);
+			//m_modelRender[m_mobCount]->SetRotation(objData.rotatatin);
+			//m_modelRender[m_mobCount]->SetShadwoCaster(true);
+			//m_modelRender[m_mobCount]->SetShadowReciever(true);
+			////ちょっとアニメーションずらす。
+			//m_modelRender[m_mobCount]->SetWaitTimeForAnim(m_mobCount * 61);
+			//m_mobCount++;
+			//return true;
 		}
 		if (wcsstr(objData.name, L"Area\0") != nullptr) {
 			//エリアオブジェクトが見つかった。
 			//モブキャラを作成。
-			m_soldierMob[spawnPointIndex] = NewGO<SoldierMob>(EnPriority_3DModel);
-			m_soldierMob[spawnPointIndex]->SetPosition(objData.position);
+			m_rifleEnemys[spawnPointIndex] = NewGO<RifleEnemy>(EnPriority_3DModel);
+			m_rifleEnemys[spawnPointIndex]->SetPosition(objData.position);
 			//モブキャラ増やしたら、spawnPointも増やしてね。
-			m_soldierMob[spawnPointIndex]->SetTarget(spawnPos[spawnPointIndex]);
-			m_soldierMob[spawnPointIndex]->SetNaviMesh(m_naviMesh);
+			m_rifleEnemys[spawnPointIndex]->RegistPath(spawnPos[spawnPointIndex]);
+			m_rifleEnemys[spawnPointIndex]->SetNaviMesh(m_naviMesh);
 			spawnPointIndex++;
 			return true;
 		}
@@ -114,7 +117,32 @@ bool Stage::Start()
 
 void Stage::Update()
 {
+	int currentEnemyCount = m_enemyCount;
+	
+	for (auto* sol : m_rifleEnemys) {
+		if (sol != nullptr) {
+			if (!sol->IsActive()) {
+				//アクティブじゃない。
+				currentEnemyCount--;
+			}
+		}
+	}
 
+	if (currentEnemyCount <= 0) {
+		//敵を全部倒した。
+		//NextStage?Title?
+		printf("すべての敵を倒した\n");
+		m_stageGenerator->DeleteCurrentStage();
+		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
+	}
+
+	if (m_player->GetHP() <= 0) {
+		//プレイヤー死亡。
+		//Retry?Title?
+		printf("プレイヤー死亡。\n");
+		m_stageGenerator->DeleteCurrentStage();
+		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+	}
 }
 
 void Stage::ForwardRender()

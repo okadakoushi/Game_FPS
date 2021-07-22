@@ -6,6 +6,8 @@ class GamePlayer;
 class Guide;
 class SoldierMob;
 class NaviMesh;
+class RifleEnemy;
+class StageGenerator;
 
 /// <summary>
 /// スタンバイステージクラス。
@@ -38,8 +40,9 @@ public:
 		m_player = player;
 	}
 private:
+	static const int m_enemyCount = 5;			//現在のエネミーの数。			
 	SkinModelRender* m_modelRender[20];			//レンダー。
-	SoldierMob* m_soldierMob[20];				//兵士Mob。
+	RifleEnemy* m_rifleEnemys[m_enemyCount];	//ライフルエネミー。
 	Level m_level;								//レベル。
 	int m_mobCount = 0;							//モブカウント。
 	PhysicsStaticObject m_physicsStaticObject;	//静的オブジェクト。
@@ -47,5 +50,6 @@ private:
 	Guide* m_guide = nullptr;					//ガイド。
 	NaviMesh* m_naviMesh = nullptr;				//ナビゲーションメッシュ。
 	Fade m_fade;								//フェード。
+	StageGenerator* m_stageGenerator = nullptr;	//ステージジェネレーター。
 };
 

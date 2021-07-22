@@ -43,7 +43,7 @@ bool Game::Start()
 	//スタンバイステージを作成。
 	m_stageGenerator->SetPlayer(m_player);
 #if 1
-	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_StanbyStage);
+	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
 #else
 	//Test
 	m_effect = NewGO<myEngine::Effect>(0);

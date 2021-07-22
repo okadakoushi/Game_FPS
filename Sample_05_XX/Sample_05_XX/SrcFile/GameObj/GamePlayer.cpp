@@ -17,7 +17,6 @@ void GamePlayer::Init()
 	m_playerState = EnPlayerState_Idle;
 	m_hp = 150;
 	m_wepon->Init();
-	//m_camera->SetActive(true);
 }
 
 bool GamePlayer::Start()
@@ -69,15 +68,14 @@ bool GamePlayer::Start()
 	return true;
 }
 
-void GamePlayer::PostUpdate()
+void GamePlayer::Update()
 {
-
 	if (m_playerState != EnPlayerState_Deth) {
-		//死んでない。
-		//回転。
-		Rotation();
 		//移動。
 		Move();
+		//死んでない。
+		//回転。
+		//Rotation();
 		//射撃。
 		Shot();
 		m_unityChan->SetPosition(m_pos);
@@ -116,10 +114,14 @@ void GamePlayer::PostUpdate()
 	}
 }
 
-void GamePlayer::RenderHUD()
+Vector3& GamePlayer::CalcHeadPos()
 {
+	Quaternion a;
+	m_headBone->CalcWorldTRS(m_headPos, a);
+	m_headPos.y += 4.0f;
+	m_camera->SetEyePos(m_headPos);
+	return m_headPos;
 }
-
 
 void GamePlayer::OnPostAnimationProgress()
 {
@@ -148,11 +150,6 @@ void GamePlayer::Rotation()
 
 void GamePlayer::Shot()
 {
-	//ポストにしないとアニメーションの更新終わってないのでガタブルする。
-	Quaternion a;
-	m_headBone->CalcWorldTRS(m_headPos, a);
-	m_headPos.y += 4.0f;
-	m_camera->SetEyePos(m_headPos);
 
 	//レイのコールバック。
 	RayTestCallBack::PlayerRayTestResult rayCallBack;
@@ -168,10 +165,10 @@ void GamePlayer::Shot()
 		if (m_flame >= 20) {
 			if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_None) {
 				m_wepon->ReduseAmo();
-				Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel, "Bullet");
-				bullet->SetPos(m_wepon->GetPos());
-				bullet->SetRot(m_rot);
-				bullet->SetToTarget(toDir);
+				//Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel, "Bullet");
+				//bullet->SetPos(m_wepon->GetPos());
+				//bullet->SetRot(m_rot);
+				//bullet->SetToTarget(toDir);
 				m_flame = 0;
 				//printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
 				//printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);

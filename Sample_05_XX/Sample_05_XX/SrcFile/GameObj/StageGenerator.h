@@ -17,10 +17,10 @@ public:
 public:
 	enum StageNumber {
 		EnstageNumber_None,			//なにもなし
-		EnStageNumber_StanbyStage,	//スタンバイ
-		EnStageNumber_BattleStage,	//バトル1
-		EnStageNumber_BattleStage2,	//バトル2
-		EnStageNumber_BattleStage3,	//バトル3
+		EnStageNumber_BattleStage1,	//スタンバイ
+		EnStageNumber_BattleStage2,	//バトル1
+		EnStageNumber_BattleStage3,	//バトル2
+		EnStageNumber_BattleStage4,	//バトル3
 		EnstageNumber_StageCount	//ステージ数
 	};
 public:
