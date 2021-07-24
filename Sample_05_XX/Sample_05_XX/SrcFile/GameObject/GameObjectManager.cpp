@@ -83,9 +83,9 @@ void GameObjectManager::UpdateManager()
 		//Shadowの描画。 todo:PreRender
 		GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
 		//GBufferレンダリング。todo:PreRender
-		GraphicsEngineObj()->GetGBuffer().Render(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix());
+		GraphicsEngineObj()->GetDefferd().Render(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera3D().GetViewMatrix(), GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix());
 		//GBufferを基にディファードレンダリング。
-		GraphicsEngineObj()->DeffardRender(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera2D().GetViewMatrix(), GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix());
+		GraphicsEngineObj()->GetDefferd().DeffardRender(GraphicsEngineObj()->GetRenderContext(), GraphicsEngineObj()->GetCamera2D().GetViewMatrix(), GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix());
 #ifdef PHYSICS_DEBUG
 		//フィジックスデバッグ描画。
 		PhysicObj().PhysicsDraw();
@@ -93,9 +93,13 @@ void GameObjectManager::UpdateManager()
 		//フォワードレンダリング。
 		ForwardRender();
 		//エフェクト描画処理。todo:PostRender?
-		EngineObj().GetEffectEngine().Render();
+		EngineObj().GetEffectEngine().Render();		
+		//フォントの描画を開始。
+		//GraphicsEngineObj()->GetFontEngine().BeginDraw();
 		//HUDに描画。
 		DrawHUD();
+		//フォントの描画終了。
+		//GraphicsEngineObj()->GetFontEngine().EndDraw();
 	}
 	//削除
 	ExcuteDeleteGameObject();

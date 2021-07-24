@@ -127,11 +127,6 @@ public:
 	/// <param name="rc"></param>
 	void ChangeRenderTargetToFrameBuffer(RenderContext& rc);
 	/// <summary>
-	/// ディファードレンダリング。
-	/// </summary>
-	/// <param name="rc">rc</param>
-	void DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj);
-	/// <summary>
 	/// 現在描画中のレンダーターゲットを取得。
 	/// </summary>
 	/// <returns></returns>
@@ -167,9 +162,9 @@ public:
 	/// GBufferを取得。
 	/// </summary>
 	/// <returns>GBuffer</returns>
-	GBufferRender& GetGBuffer()
+	DefferdRender& GetDefferd()
 	{
-		return m_GBuffer;
+		return m_defferd;
 	}
 	/// <summary>
 	/// シャドウマップの取得。
@@ -222,14 +217,6 @@ public:
 	const std::vector<SkinModelRender*>& GetRenderList() const 
 	{
 		return m_renders;
-	}
-	/// <summary>
-	/// ミニマップのスプライトを取得。
-	/// </summary>
-	/// <returns></returns>
-	Sprite& GetDefferdSprite()
-	{
-		return m_defferdSpr;
 	}
 
 	LineDraw& GetLineDraw()
@@ -341,8 +328,7 @@ private:
 	Camera m_camera2D;					//2Dカメラ。
 	Camera m_camera3D;					//3Dカメラ。
 	DirectionalShadowMap* m_shadow = nullptr;	//シャドウ。
-	GBufferRender m_GBuffer;			//GBuffer。
-	Sprite m_defferdSpr;				//ディファード描画用スプライト。
+	DefferdRender m_defferd;			//ディファード。
 	LineDraw m_lineDraw;				//線分描画。
 	SpriteInitData m_spriteData;
 	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。

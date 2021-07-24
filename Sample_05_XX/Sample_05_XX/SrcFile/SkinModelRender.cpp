@@ -10,7 +10,7 @@ SkinModelRender::SkinModelRender()
 void SkinModelRender::OnDestroy()
 {
 	//モデルレンダー消えたからGbufferのリストから削除する。
-	GraphicsEngineObj()->GetGBuffer().RemoveModel(this);
+	GraphicsEngineObj()->GetDefferd().RemoveModel(this);
 	GraphicsEngineObj()->RemoveRender(this);
 }
 
@@ -123,7 +123,7 @@ void SkinModelRender::Update()
 
 	if (!m_isForwardRender) {
 		//フォワードレンダーしないのでGBuffer描画。
-		GraphicsEngineObj()->GetGBuffer().AddModel(this);
+		GraphicsEngineObj()->GetDefferd().AddModel(this);
 	}
 
 	if (m_skeleton.IsInited()) {

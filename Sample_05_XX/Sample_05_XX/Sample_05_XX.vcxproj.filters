@@ -605,5 +605,8 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\map.png" />
+    <ImageContentTask Include="Assets\sprite\blood.png" />
+    <ImageContentTask Include="Assets\sprite\blood.dds" />
+    <ImageContentTask Include="Assets\sprite\Damage.png" />
   </ItemGroup>
 </Project>

@@ -6,16 +6,35 @@
 #include "Enemy/RifleEnemy.h"
 #include "Rifle.h"
 
+const float	GamePlayer::BASE_PARAM::PLAYER_MAX_HP = 150.0f;
+const int	GamePlayer::BASE_PARAM::REGENE_VALUE_SECOND = 50;
+const float GamePlayer::BASE_PARAM::REGENE_COOL_TIME = 5.0f;
+const float GamePlayer::BASE_PARAM::JUMPFORSE = 520.0f;
+const float GamePlayer::BASE_PARAM::GRAVITY = 20.0f;
+
+
 GamePlayer::~GamePlayer()
 {
 	DeleteGO(m_reticle);
 	DeleteGO(m_unityChan);
 }
 
+void GamePlayer::Regene()
+{
+	if (m_hp < BASE_PARAM::PLAYER_MAX_HP) {
+		//現在HPがマックスでない。
+		m_currentRegeneTime += GameTime().GetFrameDeltaTime();
+		if (m_currentRegeneTime >= BASE_PARAM::REGENE_COOL_TIME) {
+			//回復開始。
+			m_hp += BASE_PARAM::REGENE_VALUE_SECOND * GameTime().GetFrameDeltaTime();
+		}
+	}
+}
+
 void GamePlayer::Init()
 {
 	m_playerState = EnPlayerState_Idle;
-	m_hp = 150;
+	m_hp = BASE_PARAM::PLAYER_MAX_HP;
 	m_wepon->Init();
 }
 
@@ -71,13 +90,15 @@ bool GamePlayer::Start()
 void GamePlayer::Update()
 {
 	if (m_playerState != EnPlayerState_Deth) {
+		//死んでない。
 		//移動。
 		Move();
-		//死んでない。
 		//回転。
 		//Rotation();
 		//射撃。
 		Shot();
+		//リジェネ。
+		Regene();
 		m_unityChan->SetPosition(m_pos);
 	}
 
@@ -255,13 +276,13 @@ void GamePlayer::Move()
 	if (m_cCon.IsOnGround()) {
 		if (GetAsyncKeyState(VK_SPACE)) {
 			//ジャンプ。
-			acc += {0, m_JUMPFORSE, 0};
+			acc += {0, BASE_PARAM::JUMPFORSE, 0};
 		}
 	}
 	else {
 		//重力。
 #ifdef MASTER
-		acc += {0, -m_GRAVITY, 0};
+		acc += {0, -BASE_PARAM::GRAVITY, 0};
 #endif
 	}
 

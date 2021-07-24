@@ -55,6 +55,14 @@ public:
 	{
 		m_paths.push_back(path);
 	}
+	/// <summary>
+	/// 位置を取得。
+	/// </summary>
+	/// <returns></returns>
+	Vector3& GetPosition()
+	{
+		return m_pos;
+	}
 private:
 	Rifle* m_rifle = nullptr;				//銃。
 	float m_currentTime = 0.0f;				//タイマー。
@@ -71,5 +79,6 @@ private:
 	const int ATTACK = 10;						//攻撃力。
 	const int MAX_RANDOM_AIM = 120;				//エネミーのAIMの最大乱れ値。
 	int m_currentRondomAIM = MAX_RANDOM_AIM;	//エネミーの現在のAIMの乱れ値。
+	bool m_isFindPlayer = false;				//一度でもプレイヤーを見つけていたか。
 };
 

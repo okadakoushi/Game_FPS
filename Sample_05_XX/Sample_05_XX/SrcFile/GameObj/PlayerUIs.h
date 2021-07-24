@@ -2,6 +2,7 @@
 
 class GamePlayer;
 class Rifle;
+class RifleEnemy;
 
 class PlayerUIs : public IGameObject
 {
@@ -11,15 +12,33 @@ public:
 	bool Start() override;
 	void Update() override;
 	void RenderHUD() override;
+public:
+	/// <summary>
+	/// プレイヤーを見つけているエネミーを追加。
+	/// </summary>
+	/// <param name="enemy">Enemy</param>
+	void AddFindList(RifleEnemy* enemy)
+	{
+		m_findPlayerEnemyList.push_back(enemy);
+	}
 private:
 	//Finds。
 	GamePlayer* m_player = nullptr;						//playerPtr。
 	//UIs。
-	SpriteRender*		m_reticule = nullptr;			//レティクル。
-	SpriteRender*		m_mainWeponImage = nullptr;		//メインウェポンUI。
-	myEngine::CFont		m_hpUIText;						//HPテキスト。
-	myEngine::CFont		m_LeftAmoText;					//残弾テキスト。
-	SpriteRender*		m_LeftAmoImage[2];				//3つのスプライトで残弾を表示。
-	myEngine::CFont		m_LeftEnemyCount;				//残り敵数。
+	SpriteRender*				m_reticule = nullptr;			//レティクル。
+	SpriteRender*				m_mainWeponImage = nullptr;		//メインウェポンUI。
+	SpriteRender*				m_damageEffectSprite = nullptr;	//ダメージエフェクトのスプライト。
+	SpriteRender*				m_LeftAmoImage[2];				//3つのスプライトで残弾を表示。
+	Sprite						m_enemyDirectionSprite[5];		//エネミーの方向スプライト。リストの削除を操作するためNotRender。
+	//texts。
+	myEngine::CFontRender*		m_hpUIText = nullptr;			//HPテキスト。
+	wchar_t						m_hpTex[16];					//HPテキスト格納用。
+	myEngine::CFontRender*		m_LeftAmoText = nullptr;		//残弾テキスト。
+	wchar_t						m_leftAmoTex[16];				//残弾テキスト格納用。
+	myEngine::CFontRender*		m_LeftEnemyCount = nullptr;		//残り敵数。
+	wchar_t						m_leftEnemyCountTex[16];		//残り敵数テキスト格納用。
+	//Param。
+	float						m_damageEffectArea = 0.0f;		//ダメージエフェクトエリア。
+	std::vector<RifleEnemy*>	m_findPlayerEnemyList;			//プレイヤーを発見しているエネミーのリスト。
 };
 

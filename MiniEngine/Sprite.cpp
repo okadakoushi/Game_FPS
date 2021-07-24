@@ -81,6 +81,9 @@
 			//ユーザー拡張の定数バッファはb1に関連付けする。
 			m_descriptorHeap.RegistConstantBuffer(1, m_userExpandConstantBufferGPU);
 		}
+		if (m_userSetConstantBufferCPU != nullptr) {
+			m_descriptorHeap.RegistConstantBuffer(EXPAND_SET_CONSTANT_BUFFER_START_NO, m_userSetConstantBufferGPU);
+		}
 		m_descriptorHeap.Commit();
 	}
 	void Sprite::InitVertexBufferAndIndexBuffer(const SpriteInitData& initData)
@@ -167,6 +170,10 @@
 				initData.m_expandConstantBuffer
 			);
 		}
+		//ユーザー設定の定数バッファがある。
+		if (m_userSetConstantBufferCPU != nullptr) {
+			m_userSetConstantBufferGPU.Init(sizeof(m_userSetConstantBufferCPU), m_userSetConstantBufferCPU);
+		}
 	}
 	void Sprite::Init(const SpriteInitData& initData)
 	{
@@ -230,15 +237,14 @@
 		//m_constantBufferCPU.mulColor.y = 1.0f;
 		//m_constantBufferCPU.mulColor.z = 1.0f;
 		//m_constantBufferCPU.mulColor.w = 1.0f;
-		m_constantBufferCPU.screenParam.x = GraphicsEngineObj()->GetCamera3D().GetNear();
-		m_constantBufferCPU.screenParam.y = GraphicsEngineObj()->GetCamera3D().GetFar();
-		m_constantBufferCPU.screenParam.z = FRAME_BUFFER_W;
-		m_constantBufferCPU.screenParam.w = FRAME_BUFFER_H;
 
 		//定数バッファを更新。
 		m_constantBufferGPU.CopyToVRAM(&m_constantBufferCPU);
 		if (m_userExpandConstantBufferCPU != nullptr) {
 			m_userExpandConstantBufferGPU.CopyToVRAM(m_userExpandConstantBufferCPU);
+		}
+		if (m_userSetConstantBufferCPU != nullptr) {
+			m_userSetConstantBufferGPU.CopyToVRAM(m_userSetConstantBufferCPU);
 		}
 		//ルートシグネチャを設定。
 		renderContext.SetRootSignature(m_rootSignature);

@@ -6,7 +6,6 @@ namespace myEngine {
 	{
 		//フォントの描画設定。
 		m_font.Begin();
-
 		const wchar_t* text = nullptr;
 		if (m_textUnsafe != nullptr) {
 			//アンセーフ版を使用している。

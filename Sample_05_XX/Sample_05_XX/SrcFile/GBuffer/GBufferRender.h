@@ -10,6 +10,8 @@ enum EnGBuffer {
 	Gbuffer_Num			//GBufferの数。	
 };
 
+#include "Sprite.h"
+
 /// <summary>
 /// GBufferRender。
 /// GBuffer書き込み用クラス。
@@ -17,20 +19,28 @@ enum EnGBuffer {
 /// <code>
 /// ModelRender Reff.
 /// </code>
-class GBufferRender : Noncopyable
+class DefferdRender : Noncopyable
 {
 public:
-	GBufferRender() {};
-	~GBufferRender();
+	DefferdRender() {};
+	~DefferdRender();
 
 	/// <summary>
 	/// 初期化。
 	/// </summary>
 	void Init();
 	/// <summary>
+	/// スプライトの初期化。
+	/// </summary>
+	void SpriteInit();
+	/// <summary>
 	/// 描画。
 	/// </summary>
 	void Render(RenderContext& rc, const Matrix& view, const Matrix& proj, bool Clear = true);
+	/// <summary>
+	/// 描画。
+	/// </summary>
+	void DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj);
 	/// <summary>
 	/// モデルを登録。
 	/// <para>Dont call from User.</para>
@@ -70,8 +80,34 @@ public:
 	{
 		return m_GBuffers[GBuffer_albed].GetDSVCpuDescriptorHandle();
 	}
+	/// <summary>
+	/// ディファードスプライトを取得。
+	/// </summary>
+	/// <returns></returns>
+	Sprite& GetDefferdSprite()
+	{
+		return m_defferdSprite;
+	}
+	/// <summary>
+	/// ダメージエリアを設定。
+	/// </summary>
+	/// <param name="area"></param>
+	void SetDamageArea(float& area)
+	{
+		m_postEffectEntity.DamageArea = area;
+	}
+private:
+	/// <summary>
+	/// ポストエフェクト的パラメーター。
+	/// </summary>
+	struct PostEffectEntity {
+		float DamageArea = 0.0f;
+	};
 private:
 	std::vector<SkinModelRender*> m_models;			//モデルのリスト。
 	RenderTarget m_GBuffers[Gbuffer_Num];			//GBuffer。
+	Sprite m_defferdSprite;
+	bool m_isInited = false;						//初期化フラグ。
+	PostEffectEntity m_postEffectEntity;			//ポストエフェクトエンティティ。
 };
 

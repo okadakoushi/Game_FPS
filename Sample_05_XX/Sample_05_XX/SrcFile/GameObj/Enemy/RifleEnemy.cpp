@@ -57,15 +57,21 @@ void RifleEnemy::Update()
 	switch (m_enemyState)
 	{
 	case EnEnemyState_Wandering:
-        Move();
+        if (m_isFindPlayer) {
+            m_enemyState = EnEnemyState_Tracking;
+        }
+        else {
+            Move();
+        }
         if (IsFindPlayer()) {
             m_enemyState = EnEnemyState_Attack;
-            //m_enemyState = EnEnemyState_Tracking;
         }
+
 		//警戒状態。
 		break;
 	case EnEnemyState_Tracking:
 		//トラッキング状態。
+        Tracking();
 		break;
 	case EnEnemyState_AttackWait:
 		//リロードとかの予定だが...
@@ -162,7 +168,13 @@ void RifleEnemy::Attack()
     //レイテスト。
     PhysicObj().RayTest(headPos, target + headPos, visionCallBuck);
     if (visionCallBuck.hasHit() && visionCallBuck.StaticObjectDist > visionCallBuck.CharacterObjectDist) {
-        //手前に障害物なし！あたってる。
+        //プレイヤーを見つけたので次の目的地はプレイヤーの位置に設定。
+        m_isFindPlayer = true;
+        m_nextTarget = m_player->GetPos();
+        //経路の更新が必要。
+        m_dirty = false;
+        //Playerを発見した。
+        m_player->GetPlayerUIs()->AddFindList(this);
         if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
             //アニメーションを切り替え。
             m_modelRender->PlayAnimation(2, 0.1f);
@@ -206,24 +218,17 @@ void RifleEnemy::Attack()
 
 void RifleEnemy::Tracking()
 {
-    //まずはEnemyの頭のボーンと回転を取得。
-    Vector3 headPos;
-    Quaternion headRot;
-    m_head->CalcWorldTRS(headPos, headRot);
-    //Enemyの注視点も計算する。
-    Vector3 target = m_toNextCell;
-    //m_rot.Apply(target);
-    target *= m_VISION;
-    target += headPos;
+    //経路を探査して移動。
+    //経路に沿って進行中。
+    Move();
+    if(m_dirty = true){
+        //指定地点に到着。
+        m_enemyState = EnEnemyState_Wandering;
+        m_isFindPlayer = false;
+        //もとの経路探査に戻る。
+        m_nextTarget = m_paths[m_pathIndex];
+    }
 
-    ////コールバック関数。
-    //RayTestCallBack::EnemyRayTestResult rayTestCB;
-    ////レイテスト。
-    //PhysicObj().RayTest(headPos, target, rayTestCB);
-    //if (rayTestCB.hasHit() && rayTestCB.StaticObjectDist > rayTestCB.CharacterObjectDist) {
-    //    //手前に障害物なしであたってる。
-    //    return true;
-    //}
 }
 
 void RifleEnemy::Damage()

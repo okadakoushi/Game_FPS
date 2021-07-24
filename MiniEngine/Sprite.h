@@ -11,6 +11,8 @@ class Texture;
 const int MAX_TEXTURE = 16;	
 //拡張SRVが設定されるレジスタの開始番号。
 const int EXPAND_SRV_REG__START_NO = 10;
+//ユーザー拡張コンスタントバッファー設定用のレジスタの開始番号。
+const int EXPAND_SET_CONSTANT_BUFFER_START_NO = 10;
 
 class IShaderResource;
 
@@ -62,7 +64,9 @@ public:
 	/// <summary>
 	/// 描画。
 	/// </summary>
-	/// <param name="renderContext">レンダリングコンテキスト/param>
+	/// <param name="renderContext"></param>
+	/// <param name="view"></param>
+	/// <param name="proj"></param>
 	void Draw(RenderContext& renderContext, const Matrix& view, const Matrix& proj);
 	/// <summary>
 	/// 乗算カラーを設定。
@@ -80,6 +84,14 @@ public:
 	Texture* GetTexture(int index)
 	{
 		return m_textureExternal[index];
+	}
+	/// <summary>
+	/// ユーザー設定型定数バッファを設定。
+	/// </summary>
+	/// <param name="entity"></param>
+	void SetUserSetConstantBufferEntity(void* entity)
+	{
+		m_userSetConstantBufferCPU = entity;
 	}
 private:
 	/// <summary>
@@ -125,12 +137,13 @@ private:
 	struct LocalConstantBuffer {
 		Matrix mvp;
 		Vector4 mulColor = Vector4::White;
-		Vector4 screenParam;
 	};
 	LocalConstantBuffer m_constantBufferCPU;	//CPU側の定数バッファ。
 	ConstantBuffer		m_constantBufferGPU;	//GPU側の定数バッファ。
 	ConstantBuffer		m_userExpandConstantBufferGPU;	//ユーザー拡張の定数バッファ(GPU側)
 	void* m_userExpandConstantBufferCPU = nullptr;		//ユーザー拡張の定数バッファ(CPU側)
+	ConstantBuffer		m_userSetConstantBufferGPU;		//ユーザー設定型定数バッファ。
+	void* m_userSetConstantBufferCPU = nullptr;			//ユーザー設定型定数Entity。
 	DescriptorHeap		m_descriptorHeap;		//ディスクリプタヒープ。
 	RootSignature		m_rootSignature;		//ルートシグネチャ。
 	PipelineState		m_pipelineState;		//パイプラインステート。

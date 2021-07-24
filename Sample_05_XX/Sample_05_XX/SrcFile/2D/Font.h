@@ -19,10 +19,14 @@ namespace myEngine {
 		~CFont();
 		/// <summary>
 		/// 描画開始処理。
+		/// <para>HUD描画でフォントを描画する際はユーザーはこの関数を呼び出す必要はありません。</para>
+		/// <para>HUD描画以外で呼び出す際はユーザーはこの関数を使用してください。</para>
 		/// </summary>
 		void Begin();
 		/// <summary>
 		/// 描画終了処理。
+		/// <para>HUD描画でフォントを描画する際はユーザーはこの関数を呼び出す必要はありません。</para>
+		/// <para>HUD描画以外で呼び出す際はユーザーはこの関数を使用してください。</para>
 		/// </summary>
 		void End();
 		/// <summary>

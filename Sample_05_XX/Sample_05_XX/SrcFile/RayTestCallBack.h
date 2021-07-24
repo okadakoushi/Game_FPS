@@ -24,9 +24,8 @@ public:
 			isHit = false;
 			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_StaticObject) {
 				//Ã“I•¨—‚¾‚Á‚½B
-				m_collisionObject = rayResult.m_collisionObject;
 				StaticObjectDist = rayResult.m_hitFraction;
-				Normal.Set(rayResult.m_hitNormalLocal);
+				m_collisionObject = rayResult.m_collisionObject;
 				return rayResult.m_hitFraction;
 			}
 			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_Enemy) {
@@ -34,7 +33,6 @@ public:
 				isHit = true;
 				m_collisionObject = rayResult.m_collisionObject;
 				CharacterObjectDist = rayResult.m_hitFraction;
-				Normal.Set(rayResult.m_hitNormalLocal);
 				return rayResult.m_hitFraction;
 			}
 			return rayResult.m_hitFraction;

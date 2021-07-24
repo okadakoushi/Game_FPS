@@ -12,8 +12,16 @@ class Bullet;
 /// </summary>
 class GamePlayer : public IGameObject
 {
+public:
+	//定数値はpublicでも許されるか
+	struct BASE_PARAM {
+		static const float	PLAYER_MAX_HP;				//プレイヤーの最大体力。
+		static const int	REGENE_VALUE_SECOND;		//秒間リジェネ量。
+		static const float	REGENE_COOL_TIME;		//リジェネのクールタイム。
+		static const float	JUMPFORSE;				//ジャンプ。
+		static const float	GRAVITY;					//重力。
+	};
 private:
-
 	~GamePlayer() override;
 	/// <summary>
 	/// スタート。
@@ -37,6 +45,10 @@ private:
 	/// リロード。
 	/// </summary>
 	void Reload();
+	/// <summary>
+	/// 自己回復。
+	/// </summary>
+	void Regene();
 public:
 	void Init();
 	/// <summary>
@@ -73,7 +85,7 @@ public:
 	/// 体力を取得。
 	/// </summary>
 	/// <returns></returns>
-	const int& GetHP() const
+	const float& GetHP() const
 	{
 		return m_hp;
 	}
@@ -83,6 +95,7 @@ public:
 	/// <param name="damage"></param>
 	void DamageToPlayer(const int& damage)
 	{
+		m_currentRegeneTime = 0.0f;
 		if (m_hp > 0) {
 			m_hp -= damage;
 		}
@@ -100,6 +113,14 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	Vector3& CalcHeadPos();
+	/// <summary>
+	/// プレイヤーUIを取得。
+	/// </summary>
+	/// <returns></returns>
+	PlayerUIs* GetPlayerUIs()
+	{
+		return m_playerUIs;
+	}
 private:
 	/// <summary>
 	/// SkinModelRenderのアニメーション進行が終わったタイミングで呼ばれる処理。
@@ -135,14 +156,12 @@ private:
 	Quaternion m_rHandBoneRot = g_quatIdentity;	
 	Vector3 m_move = g_vec3Zero;				//移動。
 	float m_speed = 100.0f;						//移動速度。
-	float const m_JUMPFORSE = 520.0f;			//ジャンプ。
-	float const m_GRAVITY = 20.0f;				//重力。
-	const float fixYToEyePos = 110.0f;			//視点座標に変えるY軸修正。
 	int m_flame = 0;
 	GameCamera* m_camera = nullptr;				//カメラ。
 	myEngine::Effect* m_effect = nullptr;		//エフェクト。
 	const float RAY_RANGE = 8000.0f;			
-	unsigned int m_hp = 150;					//HP。
+	float m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。
 	PlayerUIs* m_playerUIs;						//UI。
+	float m_currentRegeneTime = 0.0f;			//リジェネタイム。
 };
 

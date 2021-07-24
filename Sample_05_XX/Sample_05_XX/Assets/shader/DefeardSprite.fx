@@ -42,6 +42,10 @@ cbuffer ShadowCB : register(b2) {
 	float3 shadowAreaDepthInViewSpace;					//カメラ空間での影を落とすエリア。
 }
 
+cbuffer PostEffectCB : register(b10) {
+	float mDamageEffectArea;
+}
+
 //頂点入力構造体。
 struct VSInput{
 	float4 pos      : POSITION; //モデルの頂点座標。
@@ -110,7 +114,6 @@ float4 PSMain( PSInput In ) : SV_Target0
 
     //テクスチャカラーをサンプリング。
 	float4 texColor = g_texture.Sample(g_sampler, In.uv);
-	//return texColor;
 	//影を適用させる。
 	texColor.xyz *= lig; 
 	return float4(texColor.xyz, 1.0f);	

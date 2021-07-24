@@ -31,7 +31,6 @@ namespace myEngine {
 		}
 		/// <summary>
 		/// アンセーフ版、SetText。
-		/// <para>使う前に、とりあえず説明(remarks)みてね。</para>
 		/// </summary>
 		/// <remarks>
 		/// メンバ変数で引数に渡すの定義したら、まずバグらないはず。

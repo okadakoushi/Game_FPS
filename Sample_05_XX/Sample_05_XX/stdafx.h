@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 //#define GAME
-#define PHYSICS_DEBUG
+//#define PHYSICS_DEBUG
 
 
 #ifndef MASTER

@@ -197,23 +197,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	//GBufferを初期化。
 	//todo:preRenderClass
-	m_GBuffer.Init();
-
-	//全体レンダリング。
-	m_spriteData.m_width = FRAME_BUFFER_W;
-	m_spriteData.m_height = FRAME_BUFFER_H;
-	for (int i = 0; i < Gbuffer_Num; i++) {
-		//Gbufferの数だけ初期化。todo:static_cast
-		m_spriteData.m_textures[i] = &GraphicsEngineObj()->GetGBuffer().GetTexture((EnGBuffer)i);
-	}
-	//ディファード用のスプライトを設定。
-	m_spriteData.m_fxFilePath = "Assets/shader/Defeardsprite.fx";
-	//ライトの定数バッファ。
-	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
-	m_spriteData.m_expandConstantBuffer = &g_light;
-	m_spriteData.m_expandConstantBufferSize = sizeof(g_light);
-	//ディファード用のスプライトを初期化。
-	m_defferdSpr.Init(m_spriteData);
+	m_defferd.Init();
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
@@ -495,7 +479,7 @@ void GraphicsEngine::BeginRender(bool IsClear)
 
 void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
-	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_GBuffer.GetDSV());
+	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_defferd.GetDSV());
 	rc.SetViewport(m_viewport);
 }
 void GraphicsEngine::EndRender(bool ChangeTarget)
@@ -526,10 +510,4 @@ void GraphicsEngine::EndRender(bool ChangeTarget)
 #endif
 	//描画完了待ち。
 	WaitDraw();
-}
-
-void GraphicsEngine::DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj)
-{
-	//描画。
-	m_defferdSpr.Draw(rc, view, proj);
 }
