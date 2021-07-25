@@ -76,6 +76,7 @@ static enum Priority {
 //ÉiÉrÅB
 #include "SrcFile/NaviMesh/NaviMesh.h"
 #include "SrcFile/NaviMesh/Astar.h"
+#include "SrcFile/NaviMesh/NaviMeshAgent.h"
 #include "SrcFile/Physics/PhysicsDebugDraw.h"
 
 using namespace std;

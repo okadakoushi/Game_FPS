@@ -65,25 +65,21 @@ public:
 		int lastIndex = GetLastAnimatitonControllerIndex();
 		return m_animationController[lastIndex].IsPlaying();
 	}
-
-	bool IsFinishOneShot() const 
-	{
-		int lastIndex = GetLastAnimatitonControllerIndex();
-		return m_animationController[lastIndex].IsFinishOneShot();
-	}
-
-	void SetIsFinishOneShot(const bool& flag)
-	{
-		int lastIndex = GetLastAnimatitonControllerIndex();
-		m_animationController[lastIndex].SetIsFinishOneShot(flag);
-	}
-
 	/// <summary>
 	/// アニメーションを進める。
 	/// <para>インターフェイス側処理。</para>
 	/// </summary>
 	/// <param name="deltaTime"></param>
 	void Progress(float deltaTime, int& waitTime);
+	/// <summary>
+	/// 現在再生中のアニメーションのフレーム数を取得。
+	/// </summary>
+	/// <param name="animNo">アニメーション番号。</param>
+	/// <returns></returns>
+	const int GetCurrentPlayAnimationLength(const int& animNo) const
+	{
+		m_animationClips[animNo]->GetKeyFrameLength();
+	}
 
 	//Vector3 CalcFootstepDeltaValueInWorldSpace(Quaternion rot, Vector3 scale) const;
 
@@ -150,7 +146,7 @@ private:
 	}
 private:
 	static const int ANIMATION_PLAY_CONTROLLER_NUM = 32;	//アニメーションコントローラの数。
-	std::vector<AnimationClip*> m_animationClips;				//アニメーションクリップのリスト。
+	std::vector<AnimationClip*> m_animationClips;			//アニメーションクリップのリスト。
 	Skeleton* m_skelton = nullptr;							//アニメーションを適用するボーン。
 	AnimationController m_animationController[ANIMATION_PLAY_CONTROLLER_NUM];	//アニメーションコントローラー。
 	int m_numAnimationPlayController = 0;					//使用中のアニメーションコントローラー。

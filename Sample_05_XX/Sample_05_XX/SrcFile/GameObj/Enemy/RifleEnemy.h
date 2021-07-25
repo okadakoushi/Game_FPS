@@ -63,22 +63,32 @@ public:
 	{
 		return m_pos;
 	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	NaviMeshAgent& GetAgent()
+	{
+		return m_agent;
+	}
 private:
 	Rifle* m_rifle = nullptr;				//銃。
 	float m_currentTime = 0.0f;				//タイマー。
 	float COOLDOWN = 0.22f;					//クールダウン。
 	SoldierCollision m_collision;	
 	EnEnemyState m_enemyState = EnEnemyState_Wandering;	//エネミーのステート。
-	std::vector<Vector3> m_paths;				//探索パス。todo:配列。
 	int m_pathIndex = 0;						//
 	const float m_FOV = 40.0f;					//視野角。
 	const float m_VISION = 2500.0f;				//エネミーの視野範囲。
 	Bone* m_head;								//頭ボーン。
-	Vector3 m_toNextCell;						//次のセルに向かう方位ベクトル。
 	int m_hp = 100;								//HP。
 	const int ATTACK = 10;						//攻撃力。
 	const int MAX_RANDOM_AIM = 120;				//エネミーのAIMの最大乱れ値。
 	int m_currentRondomAIM = MAX_RANDOM_AIM;	//エネミーの現在のAIMの乱れ値。
 	bool m_isFindPlayer = false;				//一度でもプレイヤーを見つけていたか。
+	Vector3 m_toPlayerDir = g_vec3Zero;			//エネミーのヘッドからプレイヤーに伸びるベクトル。
+	Vector3 m_headPos = g_vec3Zero;				//ヘッドの位置。
+	NaviMeshAgent m_agent;						//経路探査AI。
+	std::vector<Vector3> m_paths;				//パス。
 };
 

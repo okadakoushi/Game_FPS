@@ -186,6 +186,8 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="BulletManeger.cpp" />
+    <ClCompile Include="SrcFile\NaviMesh\NaviMeshAgent.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\EnemyWanderingState.cpp" />
     <ClCompile Include="SrcFile\Fade.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerUIs.cpp" />
     <ClCompile Include="SrcFile\2D\FontEngine.cpp" />
@@ -287,6 +289,9 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="BulletManeger.h" />
+    <ClInclude Include="SrcFile\NaviMesh\NaviMeshAgent.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\EnemyWanderingState.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\IEnemyState.h" />
     <ClInclude Include="SrcFile\Fade.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerUIs.h" />
     <ClInclude Include="SrcFile\2D\FontEngine.h" />

@@ -2,9 +2,9 @@
 
 #include "SrcFile/GameObject/IGameObject.h"
 #include "SrcFile/SkinModelRender.h"
+#include "SrcFile/GameObj/GamePlayer.h"
 
 class NaviMesh;
-class GamePlayer;
 
 /// <summary>
 /// エネミーのインターフェイス。
@@ -41,16 +41,8 @@ protected:
 	SkinModelRender*				m_modelRender;							//モデルレンダー。
 	Vector3							m_pos = {50.0f, 0.0f, 0.0f};			//位置。
 	Quaternion						m_rot = g_quatIdentity;					//回転。
-	Vector3							m_scale = { 1.5f, 1.5f, 1.5f };			//拡大。
-	const float						m_spped = 1.0f;							//スピード。
-	//経路探査Param。
-	NaviMesh*						m_naviMesh = nullptr;					//ナビメッシュ。
-	AStar							m_astar;								//経路探査。
-	NaviMesh::Cell*					m_nodeCell = nullptr;					//ノードセル。
-	bool							m_dirty = false;						//更新必要？
-	std::vector<NaviMesh::Cell*>	m_nodeList;								//ノードリスト。		
-	Vector3							m_targetPos = g_vec3Zero;				//目的地点。
-	Vector3							m_nextTarget = g_vec3Zero;				//次の目的地。
+	Vector3							m_scale = { 1.5f, 1.5f, 1.5f };			//拡大。					
+	NaviMesh*						m_naviMesh = nullptr;
 	//
 	GamePlayer*						m_player = nullptr;						//プレイヤー。
 };

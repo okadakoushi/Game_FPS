@@ -98,10 +98,13 @@ public:
 	{
 		return m_animation.IsPlaying();
 	}
-
-	const bool& isFinishOneShot() const
+	/// <summary>
+	/// 現在再生中のアニメーションの長さを取得(Frame)。
+	/// </summary>
+	/// <returns></returns>
+	const int& GetCurrentAnimationLength() const 
 	{
-		return m_animation.IsFinishOneShot();
+		return m_animation.GetCurrentPlayAnimationLength(m_currentPlayAnimNo);
 	}
 	/// <summary>
 	/// ループフラグを設定。

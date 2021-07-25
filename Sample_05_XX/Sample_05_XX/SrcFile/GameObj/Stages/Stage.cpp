@@ -6,6 +6,10 @@
 #include "SrcFile/GameObj/Enemy/RifleEnemy.h"
 #include "SrcFile/GameObj/StageGenerator.h"
 
+namespace {
+	const int SpawnPointCount = 5;
+}
+
 Stage::Stage()
 {
 	m_stageGenerator = FindGO<StageGenerator>("StageGenerator");
@@ -52,7 +56,7 @@ bool Stage::Start()
 	int spawnPointIndex = 0;	//Mobソルジャー用添字。
 	int renderIndex = 0;		//レンダー用の添字。
 	//スポーン位置
-	Vector3 spawnPos[10] = {
+	Vector3 spawnPos[SpawnPointCount] = {
 		{ -1500.0f, 0.0f, -500.0f },
 		{ 800.0f, 0.0f, -1900.0f },
 		{ -1500.0f, 0.0f, -500.0f },
@@ -105,7 +109,9 @@ bool Stage::Start()
 			m_rifleEnemys[spawnPointIndex] = NewGO<RifleEnemy>(EnPriority_3DModel);
 			m_rifleEnemys[spawnPointIndex]->SetPosition(objData.position);
 			//モブキャラ増やしたら、spawnPointも増やしてね。
-			m_rifleEnemys[spawnPointIndex]->RegistPath(spawnPos[spawnPointIndex]);
+			for (int i = 0; i < SpawnPointCount; i++) {
+				m_rifleEnemys[spawnPointIndex]->GetAgent().RegistPath(spawnPos[i]);
+			}
 			m_rifleEnemys[spawnPointIndex]->SetNaviMesh(m_naviMesh);
 			spawnPointIndex++;
 			return true;

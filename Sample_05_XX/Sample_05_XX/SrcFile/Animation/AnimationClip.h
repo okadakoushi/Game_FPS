@@ -52,6 +52,14 @@ public:
 		m_isLoop = flag;
 	}
 	/// <summary>
+	/// キーフレームの長さを取得。
+	/// </summary>
+	/// <returns></returns>
+	const int GetKeyFrameLength() const 
+	{
+		m_keyFrames.size();
+	}
+	/// <summary>
 	/// 全骨のキーフレームリストの取得。
 	/// </summary>
 	/// <returns>キーフレームリスト。</returns>
