@@ -3,6 +3,7 @@
 #include "HID/GamePad.h"
 #include "SrcFile/ModelDataManager.h"
 #include "SrcFile/Effect/CEffectEngine.h";
+#include "SrcFile/Audio/SoundEngine.h"
 #include "SrcFile/Timer/tkStopwatch.h"
 #include "SrcFile/Physics/PhysicsWorld.h"
 #include "SrcFile/InputKeyCode.h"
@@ -65,6 +66,14 @@ public:
 		return m_effectEngine;
 	}
 	/// <summary>
+	/// サウンドエンジンを取得。
+	/// </summary>
+	/// <returns></returns>
+	SoundEngine& GetSoundEngine()
+	{
+		return m_soundEngine;
+	}
+	/// <summary>
 	/// キーコードの取得。
 	/// </summary>
 	/// <returns></returns>
@@ -101,6 +110,7 @@ private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	PhysicsWorld m_physicsWorld;					//フィジックスワールド。		
 	CEffectEngine m_effectEngine;					//エフェクトエンジン。
+	SoundEngine m_soundEngine;						//サウンドエンジン。
 	ModelDataManager m_modelDataManager;			//モデルデーターマネジャー。						
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 	InputKeyCode m_inputKeyCode;					//キーボード入力。
@@ -130,6 +140,11 @@ static inline GraphicsEngine* GraphicsEngineObj()
 static inline CEffectEngine& EffectEngineObj()
 {
 	return EngineObj().GetEffectEngine();
+}
+
+static inline SoundEngine& SoundEngineObj()
+{
+	return EngineObj().GetSoundEngine();
 }
 /// <summary>
 /// キーコード取得。

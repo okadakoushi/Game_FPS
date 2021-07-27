@@ -82,6 +82,10 @@ bool GamePlayer::Start()
 	m_effect = NewGO<myEngine::Effect>(EnPriority_3DModel);
 	m_effect->SetScale({ 3.0f, 3.0f, 3.0f });
 
+	//サウンド初期化。
+	m_shootSE.Init(L"Assets/Audio/AK47Shoot.wav");
+	m_footStepSE.Init(L"Assets/Audio/footstep.wav");
+
 	m_pos = { 0.0f, 0.0f, 0.0f };
 
 	return true;
@@ -171,7 +175,6 @@ void GamePlayer::Rotation()
 
 void GamePlayer::Shot()
 {
-
 	//レイのコールバック。
 	RayTestCallBack::PlayerRayTestResult rayCallBack;
 	//レイテストを行う。
@@ -185,6 +188,8 @@ void GamePlayer::Shot()
 		m_playerState = EnPlayerState_Shot;
 		if (m_flame >= 20) {
 			if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_None) {
+				m_shootSE.Stop();
+				m_shootSE.Play(false);
 				m_wepon->ReduseAmo();
 				//Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel, "Bullet");
 				//bullet->SetPos(m_wepon->GetPos());
@@ -198,7 +203,7 @@ void GamePlayer::Shot()
 					//生ポインタから敵に強制キャスト。
 					RifleEnemy* enemy = reinterpret_cast<RifleEnemy*>(rayCallBack.m_collisionObject->getUserPointer());
 					if (enemy != nullptr) {
-						enemy->SetState(EnEnemyState_Damage);
+						enemy->GetDamage();
 					}
 				}
 				else if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist < rayCallBack.CharacterObjectDist) {

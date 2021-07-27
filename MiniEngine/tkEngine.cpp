@@ -19,6 +19,8 @@ void TkEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	m_physicsWorld.Init();
 	//エフェクトエンジン初期化。
 	m_effectEngine.Init();
+	//サウンドエンジン初期化。
+	m_soundEngine.Init();
 	//ゲームパッドの初期化。
 	for (int i = 0; i < GamePad::CONNECT_PAD_MAX; i++) {
 		g_pad[i] = &m_pad[i];
@@ -43,6 +45,8 @@ void TkEngine::Update()
 	m_physicsWorld.Update();
 	//キーコードの更新。
 	m_inputKeyCode.Update();
+	//サウンドエンジン
+	m_soundEngine.Update();
 	//GOMの初期化。
 	gameObjectManager().Start();
 	//GOMの更新。

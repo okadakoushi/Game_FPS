@@ -3,6 +3,7 @@
 class GameCamera;
 class Rifle;
 class Bullet;
+class SoundSource;
 
 #include "SrcFile/RayTestCallBack.h"
 #include "PlayerUIs.h"
@@ -157,8 +158,11 @@ private:
 	Vector3 m_move = g_vec3Zero;				//移動。
 	float m_speed = 100.0f;						//移動速度。
 	int m_flame = 0;
+	SoundSource m_shootSE;						//銃の発射音。
+	SoundSource m_footStepSE;						//足音。
 	GameCamera* m_camera = nullptr;				//カメラ。
 	myEngine::Effect* m_effect = nullptr;		//エフェクト。
+	
 	const float RAY_RANGE = 8000.0f;			
 	float m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。
 	PlayerUIs* m_playerUIs;						//UI。

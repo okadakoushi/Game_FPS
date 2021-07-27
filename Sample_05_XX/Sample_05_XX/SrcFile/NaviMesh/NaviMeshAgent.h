@@ -71,7 +71,7 @@ public:
 private:
 	SkinModelRender*				m_modelRender = nullptr;	//参照モデル。
 	NaviMesh*						m_naviMesh = nullptr;		//ナビメッシュ。
-	float							m_speed = 10.0f;				//エージェントの移動速度。
+	float							m_speed = 1.0f;				//エージェントの移動速度。
 	AStar							m_astar;					//経路探査。
 	NaviMesh::Cell*					m_nodeCell = nullptr;		//ノードセル。
 	bool							m_dirty = false;			//更新必要。

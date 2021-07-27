@@ -6,6 +6,13 @@
 #include "SrcFile/RayTestCallBack.h"
 #include "SrcFile/GameObj/Bullet.h"
 
+#include "EnemyState/IEnemyState.h"
+#include "EnemyState/EnemyAttackState.h"
+#include "EnemyState/EnemyDamageState.h"
+#include "EnemyState/EnemyDethState.h"
+#include "EnemyState/EnemyTrackingState.h"
+#include "EnemyState/EnemyWanderingState.h"
+
 RifleEnemy::~RifleEnemy()
 {
     DeleteGO(m_modelRender);
@@ -46,167 +53,60 @@ bool RifleEnemy::Start()
     //頭のボーンを取得。
     int headID = m_modelRender->GetSkelton().FindBoneID(L"mixamorig:Head");
     m_head = m_modelRender->GetSkelton().GetBone(headID);
+
+    //ステートを生成。
+    m_attackState = new EnemyAttackState(this);
+    m_damageState = new EnemyDamageState(this);
+    m_deathState = new EnemyDethState(this);
+    m_trackingState = new EnemyTrackingState(this);
+    m_wanderingState = new EnemyWanderingState(this);
+
 	return true;
 }
 
 void RifleEnemy::Update()
 {
+    if (m_enemyState == m_deathState) {
+        //もう死んでるので更新は行わない。
+        return;
+    }
+
     //後々使うのでヘッドのいちを計算しておく。
     Quaternion headRot;
     m_head->CalcWorldTRS(m_headPos, headRot);
 
-	//応急処置でswich-case。処理多くなったらステートパターン実装で隠蔽しよう。
-	switch (m_enemyState)
-	{
-	case EnEnemyState_Wandering:
-        //if (m_isFindPlayer) {
-        //    printf("トラッキング状態に遷移\n");
-        //    m_enemyState = EnEnemyState_Tracking;
-        //}
-        //else {
-        Move();
-        //}
-        //if (IsFindPlayer()) {
-        //    printf("敵を発見。\n");
-        //    m_enemyState = EnEnemyState_Attack;
-        //}
-        //else {
-        //    if (m_isFindPlayer) {
-        //        m_enemyState = EnEnemyState_Tracking;
-        //        //トラッキングアニメーション。
-        //    }
-        //    else {
-        //        //普通に戻す。
-        //        m_enemyState = EnEnemyState_Wandering;
-        //        m_modelRender->PlayAnimation(0, 0.5f);
-        //    }
+    ChangeState(m_wanderingState);
+    if (IsFindPlayer()) {
+        //攻撃。
+        ChangeState(m_attackState);
+        //プレイヤーを見失った。
+        m_isMissingPlayer = true;
+    }
+    else if (m_isMissingPlayer) {
+        //見失ったので、プレイヤーがいたであろう地点まで追跡する。
+        ChangeState(m_trackingState);
+    }
 
-        //}
-		//警戒状態。
-		break;
-	case EnEnemyState_Tracking:
-		//トラッキング状態。
-        Tracking();
-		break;
-	case EnEnemyState_AttackWait:
-		//リロードとかの予定だが...
-		break;
-	case EnEnemyState_Attack:
-        Attack();
-		//攻撃！
-		break;
-    case EnEnemyState_Damage:
-        Damage();
-        //ダメージ。
-        break;
-	case EnEnemyState_Death:
-		//死亡。
-        Death();
-		break;
-	}
+    if (m_hp <= 0) {
+        //死んでる。
+        ChangeState(m_deathState);
+    }
+
+    m_enemyState->Update();
+
 	m_modelRender->SetPosition(m_pos);
     m_modelRender->SetRotation(m_rot);
 	m_modelRender->SetScale(m_scale);
     m_collision.Update();
     m_currentTime += GameTime().GetFrameDeltaTime();
 }
+
 void RifleEnemy::Move()
 {
     m_modelRender->SetPosition(m_pos);
     m_agent.Move();
     m_pos = m_agent.GetAgentPos();
     m_rot = m_agent.GetAgentRot();
-}
-
-void RifleEnemy::Attack()
-{
-    //printf("AttackMode\n");
-
-    //プレイヤーを見つけたので次の目的地はプレイヤーの位置に設定。
-    m_isFindPlayer = true;
-    //m_nextTarget = m_player->GetPos();
-    //経路の更新が必要。
-    //m_dirty = false;
-    //Playerを発見した。
-    m_player->GetPlayerUIs()->AddFindList(this);
-    if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
-        //アニメーションがループするものまたは、ループしないものでアニメーションが流れていない。
-        //アニメーションを切り替え。
-        m_modelRender->PlayAnimation(2, 0.1f);
-        //プレイヤーの方向に向ける。
-        m_rot.SetRotation(Vector3::AxisY, atan2f(m_toPlayerDir.x * 1.0f, m_toPlayerDir.z * 1.0f));
-        if (COOLDOWN < m_currentTime) {
-            //レイの長さを調整。
-            Vector3 target = m_toPlayerDir;
-            target *= m_VISION;
-            //エネミーのエイムの精度を調整。
-            target = { target.x + rand() % m_currentRondomAIM, target.y + rand() % m_currentRondomAIM, target.z };
-            //弾丸発射。
-            //Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel);
-            //bullet->SetPos(headPos);
-            //bullet->SetRot(m_rot);
-            //bullet->SetSpeed(110.0f);
-            //発砲するたびにEnemyのAIMのランダム値を下げる。
-            m_currentRondomAIM--;
-            //乱れ値を追加したベクトルに向かう。
-            //bullet->SetToTarget(target);
-            //弾道がPlayerに当たるかレイテスト。
-            RayTestCallBack::EnemyRayTestResult bulletRayCallBuck;
-            PhysicObj().RayTest(m_headPos, target + m_headPos, bulletRayCallBuck);
-            if (bulletRayCallBuck.hasHit() && bulletRayCallBuck.StaticObjectDist > bulletRayCallBuck.CharacterObjectDist) {
-                //プレイヤーに命中。
-                m_player->DamageToPlayer(ATTACK);
-                //printf("命中。");
-                //命中したので再びAIMの質を低品質なものに。
-                m_currentRondomAIM = MAX_RANDOM_AIM;
-            }
-            else {
-                //printf("外した。");
-            }
-            m_currentTime = 0;
-        }
-    }
-}
-
-void RifleEnemy::Tracking()
-{
-    printf("トラッキング中！！\n");
-    //経路を探査して移動。
-    //経路に沿って進行中。
-    Move();
-    //if(m_dirty == true){
-    //    //指定地点に到着。
-    //    m_enemyState = EnEnemyState_Wandering;
-    //    m_isFindPlayer = false;
-    //    //もとの経路探査に戻る。
-    //    m_nextTarget = m_paths[m_pathIndex];
-    //}
-
-}
-
-void RifleEnemy::Damage()
-{
-    if (m_hp <= 0 && this->IsActive()) {
-        //printf("死亡！！\n");
-        m_enemyState = EnEnemyState_Death;
-    }
-    else {
-        m_modelRender->PlayAnimation(1, 0.1f);
-        m_enemyState = EnEnemyState_Attack;
-        //とりあえず固定値25。
-        m_hp -= 25;
-    }
-}
-
-void RifleEnemy::Death()
-{
-    //printf("シニマース。\n");
-    m_modelRender->PlayAnimation(3, 1.0f);
-    if (!m_modelRender->isPlayAnim()) {
-        //更新止め、コリジョン解放。
-        this->SetActive(false);
-        m_collision.Release();
-    }
 }
 
 bool RifleEnemy::IsFindPlayer()
@@ -247,12 +147,34 @@ bool RifleEnemy::IsFindPlayer()
     PhysicObj().RayTest(m_headPos, target + m_headPos, visionCallBuck);
     if (visionCallBuck.hasHit() && visionCallBuck.StaticObjectDist > visionCallBuck.CharacterObjectDist) {
         //あたっている。
-        printf("FindPlayer!\n");
+        //printf("FindPlayer!\n");
         return true;
     }
     //見つけてない。
-    printf("CantFindPlayer\n");
+    //printf("CantFindPlayer\n");
     return false;
+}
+
+void RifleEnemy::ChangeState(IEnemyState* state)
+{
+    if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
+        //ループしないアニメーションはしっかり流してから変えさせる。
+        if (m_enemyState != nullptr) {
+            m_enemyState->Leave();
+        }
+        m_enemyState = state;
+        m_enemyState->Enter();
+    }
+}
+
+void RifleEnemy::GetDamage()
+{
+    ChangeState(m_damageState);
+}
+
+GamePlayer* RifleEnemy::GetPlayerForUseFind() const
+{
+    return FindGO<GamePlayer>("Player");
 }
 
 

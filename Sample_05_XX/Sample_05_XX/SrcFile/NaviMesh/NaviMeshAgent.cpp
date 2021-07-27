@@ -39,6 +39,7 @@ void NaviMeshAgent::Move()
         }
         //更新必要。
         m_nodeList = m_astar.Search(m_modelRender->GetPosition(), m_targetPos, m_naviMesh->GetCellList());
+        m_isPathMove = true;
         m_dirty = true;
     }
 

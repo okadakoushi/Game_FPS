@@ -25,6 +25,11 @@ static enum Priority {
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };
 
+//オーディオのインクルード
+#include <xaudio2.h>
+#include <x3daudio.h>
+#include <xaudio2fx.h>
+
 //physics
 #include "btBulletDynamicsCommon.h"
 #include "BulletCollision\CollisionDispatch\btGhostObject.h"
@@ -53,6 +58,8 @@ static enum Priority {
 #include "SrcFile/Timer/GameTime.h"
 
 #include "SrcFile/GameObject/GameObjectManager.h"
+
+#include "SrcFile/Audio/SoundSource.h"
 
 //レンダー。
 #include "SrcFile/SkinModelRender.h"

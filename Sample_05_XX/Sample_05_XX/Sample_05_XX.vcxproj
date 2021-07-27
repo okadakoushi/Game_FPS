@@ -157,7 +157,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;XAudio2.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -186,6 +186,13 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="BulletManeger.cpp" />
+    <ClCompile Include="SrcFile\Audio\SoundEngine.cpp" />
+    <ClCompile Include="SrcFile\Audio\SoundSource.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\EnemyDethState.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\EnemyDamageState.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\EnemyAttackState.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\EnemyTrackingState.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\IEnemyState.cpp" />
     <ClCompile Include="SrcFile\NaviMesh\NaviMeshAgent.cpp" />
     <ClCompile Include="SrcFile\GameObj\Enemy\EnemyState\EnemyWanderingState.cpp" />
     <ClCompile Include="SrcFile\Fade.cpp" />
@@ -257,6 +264,8 @@
     <ClCompile Include="SrcFile\Level\TklFile.cpp" />
     <ClCompile Include="SrcFile\GameObj\UIs.cpp" />
     <ClCompile Include="SrcFile\TestGame.cpp" />
+    <ClCompile Include="SrcFile\Audio\WaveFile.cpp" />
+    <ClCompile Include="SrcFile\Audio\WaveFileBank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -289,6 +298,12 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="BulletManeger.h" />
+    <ClInclude Include="SrcFile\Audio\SoundEngine.h" />
+    <ClInclude Include="SrcFile\Audio\SoundSource.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\EnemyDethState.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\EnemyDamageState.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\EnemyAttackState.h" />
+    <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\EnemyTrackingState.h" />
     <ClInclude Include="SrcFile\NaviMesh\NaviMeshAgent.h" />
     <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\EnemyWanderingState.h" />
     <ClInclude Include="SrcFile\GameObj\Enemy\EnemyState\IEnemyState.h" />
@@ -362,6 +377,8 @@
     <ClInclude Include="SrcFile\Level\TklFile.h" />
     <ClInclude Include="SrcFile\GameObj\UIs.h" />
     <ClInclude Include="SrcFile\TestGame.h" />
+    <ClInclude Include="SrcFile\Audio\WaveFile.h" />
+    <ClInclude Include="SrcFile\Audio\WaveFileBank.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />

@@ -2,10 +2,10 @@
 
 #include "IEnemyState.h"
 
-class EnemyWanderingState : public IEnemyState
+class EnemyAttackState : public IEnemyState
 {
 public:
-	EnemyWanderingState(RifleEnemy* enemy) :
+	EnemyAttackState(RifleEnemy* enemy) :
 		IEnemyState::IEnemyState(enemy) {
 	}
 	void Enter() override;
