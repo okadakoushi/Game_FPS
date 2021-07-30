@@ -20,7 +20,16 @@ public:
 	virtual void Enter() = 0;
 	virtual void Leave() = 0;
 	virtual void Update() = 0;
+	/// <summary>
+	/// 前フレームでアップデートされたステートを取得。
+	/// </summary>
+	/// <returns></returns>
+	IEnemyState* GetLasetUpdateState()
+	{
+		return m_lastUpdateState;
+	}
 protected:
 	RifleEnemy* m_enemy = nullptr;
+	IEnemyState* m_lastUpdateState = nullptr;	//前フレームのステート。
 };
 

@@ -16,11 +16,13 @@ void StageGenerator::OnDestroy()
 
 bool StageGenerator::Start()
 {
+	m_windSE.Init(L"Assets/Audio/wind.wav");
 	return true;
 }
 
 void StageGenerator::Update()
 {
+	m_windSE.Play(true);
 	//if (m_currentStageNum == EnStageNumber_StanbyStage) {
 	//	if (m_stanbyStage->IsStart()) {
 	//		//始まったらフェードを開ける。

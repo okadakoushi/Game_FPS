@@ -11,6 +11,7 @@ void EnemyDamageState::Enter()
 
     printf("¡‚ÌHP‚Í%d\n", m_enemy->m_hp);
     m_enemy->m_modelRender->PlayAnimation(EnEnemyAnimation_Damage, 0.3f);
+    m_lastUpdateState = this;
 }
 
 void EnemyDamageState::Leave()

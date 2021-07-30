@@ -85,24 +85,6 @@ bool Stage::Start()
 			//m_guide->SetPos(objData.position);
 			return true;
 		}
-		if (objData.EqualObjectName(L"soldierDoc") == true) {
-			////医者オブジェ。
-			//m_modelRender[m_mobCount] = NewGO<SkinModelRender>(EnPriority_3DModel);
-			//const char* tkaFilePaths[]{
-			//	"Assets/animData/soldierMob/talk.tka"
-			//};
-			//m_modelRender[m_mobCount]->Init("Assets/modelData/Chara/soldierDoc.tkm" ,tkaFilePaths);
-			//m_modelRender[m_mobCount]->SetRenderMode(enRenderMode_Skin);
-			//m_modelRender[m_mobCount]->SetPosition(objData.position);
-			//m_modelRender[m_mobCount]->SetScale(objData.scale);
-			//m_modelRender[m_mobCount]->SetRotation(objData.rotatatin);
-			//m_modelRender[m_mobCount]->SetShadwoCaster(true);
-			//m_modelRender[m_mobCount]->SetShadowReciever(true);
-			////ちょっとアニメーションずらす。
-			//m_modelRender[m_mobCount]->SetWaitTimeForAnim(m_mobCount * 61);
-			//m_mobCount++;
-			//return true;
-		}
 		if (wcsstr(objData.name, L"Area\0") != nullptr) {
 			//エリアオブジェクトが見つかった。
 			//モブキャラを作成。

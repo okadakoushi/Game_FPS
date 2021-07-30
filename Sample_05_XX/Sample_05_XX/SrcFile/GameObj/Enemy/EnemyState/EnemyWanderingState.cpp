@@ -6,6 +6,7 @@
 void EnemyWanderingState::Enter()
 {
 	m_enemy->m_modelRender->PlayAnimation(EnEnemyAnimation_Walk, 0.3f);
+	m_lastUpdateState = this;
 }
 
 void EnemyWanderingState::Leave()

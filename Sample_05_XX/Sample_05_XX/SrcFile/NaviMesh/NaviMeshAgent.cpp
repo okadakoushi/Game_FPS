@@ -10,7 +10,8 @@ void NaviMeshAgent::Init(SkinModelRender* m_render, NaviMesh* mesh, const bool& 
 
 void NaviMeshAgent::Move()
 {
-    if (m_dirty == false) {
+    if (m_isArrive == true) {
+        //目的地に到着しているためA*を更新する。
         if (m_isPathMove) {
             //パス移動を行う。
             if (m_isPathMoveRandom && m_paths.size() > 2) {
@@ -40,7 +41,7 @@ void NaviMeshAgent::Move()
         //更新必要。
         m_nodeList = m_astar.Search(m_modelRender->GetPosition(), m_targetPos, m_naviMesh->GetCellList());
         m_isPathMove = true;
-        m_dirty = true;
+        m_isArrive = false;
     }
 
     printf("");
@@ -64,11 +65,8 @@ void NaviMeshAgent::Move()
         }
     }
     else {
-        //動いてない。
-        //m_modelRender->PlayAnimation(1, 0.5f);
-        //更新。
-        //m_targetPos = m_nextTarget;
-        m_dirty = false;
+        //到着。
+        m_isArrive = true;
     }
 
     //if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {

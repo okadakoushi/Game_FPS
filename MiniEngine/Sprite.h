@@ -54,13 +54,14 @@ public:
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
 	/// <param name="pivot">
+	/// <param name="isDraw3D">3D描画？</param>
 	/// ピボット
 	/// 0.5, 0.5で画像の中心が基点。
 	/// 0.0, 0.0で画像の左下。
 	/// 1.0, 1.0で画像の右上。
 	/// UnityのuGUIに準拠。
 	/// </param>
-	void Update(const Vector3& pos, const Quaternion& rot, const Vector3& scale, const Vector2& pivot = DEFAULT_PIVOT);
+	void Update(const Vector3& pos, const Quaternion& rot, const Vector3& scale, const Vector2& pivot = DEFAULT_PIVOT, const bool& isDraw3D = false);
 	/// <summary>
 	/// 描画。
 	/// </summary>

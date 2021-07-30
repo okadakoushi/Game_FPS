@@ -23,7 +23,7 @@ public:
 	/// エージェントの移動速度を設定。
 	/// </summary>
 	/// <param name="speed"></param>
-	void SetAgentSpeed(float& speed)
+	void SetAgentSpeed(const float& speed)
 	{
 		m_speed = speed;
 	}
@@ -44,13 +44,13 @@ public:
 	{
 		m_targetPos = target;
 		m_isPathMove = false;
-		m_dirty = false;
+		m_isArrive = true;
 	}
 	/// <summary>
 	/// 移動方向を取得。
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& MoveDirection() const
+	const Vector3& GetMoveDirection() const
 	{
 		return m_toNextCell;
 	}
@@ -59,6 +59,14 @@ public:
 	/// <para>移動方向に応じて回転も計算している。</para>
 	/// </summary>
 	void Move();
+	/// <summary>
+	/// エージェントの移動速度を取得。
+	/// </summary>
+	/// <returns></returns>
+	float& GetAgentSpeed()
+	{
+		return m_speed;
+	}
 
 	Vector3& GetAgentPos()
 	{
@@ -68,13 +76,21 @@ public:
 	{
 		return m_agentRot;
 	}
+	/// <summary>
+	/// ターゲットセルまで到着してる？
+	/// </summary>
+	/// <returns></returns>
+	bool& IsArriveTarget()
+	{
+		return m_isArrive;
+	}
 private:
 	SkinModelRender*				m_modelRender = nullptr;	//参照モデル。
 	NaviMesh*						m_naviMesh = nullptr;		//ナビメッシュ。
 	float							m_speed = 1.0f;				//エージェントの移動速度。
 	AStar							m_astar;					//経路探査。
 	NaviMesh::Cell*					m_nodeCell = nullptr;		//ノードセル。
-	bool							m_dirty = false;			//更新必要。
+	bool							m_isArrive = true;			//更新必要。
 	std::vector<NaviMesh::Cell*>	m_nodeList;					//ノードリスト。		
 	Vector3							m_targetPos = g_vec3Zero;	//目的地点。
 	Vector3							m_toNextCell;				//次のセルに向かう方位ベクトル。

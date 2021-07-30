@@ -86,7 +86,6 @@ void SoundSource::Play(bool isLoop)
 	}
 	if (m_isPlaying) {
 		//再生中のものを再開する。
-		printf("再開。\n");
 		m_sourceVoice->Start(0);
 	}
 	else {
@@ -97,7 +96,6 @@ void SoundSource::Play(bool isLoop)
 			m_sourceVoice->Start(0, 0);
 		}
 		else {
-			printf("スタート。\n");
 			m_sourceVoice->FlushSourceBuffers();
 			m_sourceVoice->Start(0);
 			Play(m_waveFile->GetReadBuffer(), m_waveFile->GetSize());

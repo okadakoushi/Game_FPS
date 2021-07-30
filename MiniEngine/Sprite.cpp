@@ -201,7 +201,7 @@
 		//ディスクリプタヒープを初期化。
 		InitDescriptorHeap(initData);
 	}
-	void Sprite::Update(const Vector3& pos, const Quaternion& rot, const Vector3& scale, const Vector2& pivot)
+	void Sprite::Update(const Vector3& pos, const Quaternion& rot, const Vector3& scale, const Vector2& pivot, const bool& isDraw3D)
 	{
 		//ピボットを考慮に入れた平行移動行列を作成。
 		//ピボットは真ん中が0.0, 0.0、左上が-1.0f, -1.0、右下が1.0、1.0になるようにする。
@@ -219,7 +219,18 @@
 		mPivotTrans.MakeTranslation(
 			{ halfSize.x * localPivot.x, halfSize.y * localPivot.y, 0.0f }
 		);
+
+		Matrix mCameraRot = g_matIdentity;
+		//if (isDraw3D) {
+		//	//isDraw3Dの場合はカメラに向ける。
+		//	Matrix mCamera = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
+		//	mCameraRot.Inverse(mCamera);
+		//	mCameraRot.m[3][0] = 0.0f;
+		//	mCameraRot.m[3][1] = 0.0f;
+		//	mCameraRot.m[3][2] = 0.0f;
+		//}
 		Matrix mTrans, mRot, mScale;
+		mRot *= mCameraRot;
 		mTrans.MakeTranslation(pos);
 		mRot.MakeRotationFromQuaternion(rot);
 		mScale.MakeScaling(scale);

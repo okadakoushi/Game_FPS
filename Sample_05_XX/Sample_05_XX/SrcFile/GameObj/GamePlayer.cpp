@@ -6,6 +6,14 @@
 #include "Enemy/RifleEnemy.h"
 #include "Rifle.h"
 
+#include "PlayerState/IPlayerState.h"
+#include "PlayerState/PlayerIdleState.h"
+#include "PlayerState/PlayerAttackState.h"
+#include "PlayerState/PlayerDeathState.h"
+#include "PlayerState/PlayerWalkState.h"
+#include "PlayerState/PlayerDashState.h"
+#include "PlayerState/PlayerReloadState.h"
+
 const float	GamePlayer::BASE_PARAM::PLAYER_MAX_HP = 150.0f;
 const int	GamePlayer::BASE_PARAM::REGENE_VALUE_SECOND = 50;
 const float GamePlayer::BASE_PARAM::REGENE_COOL_TIME = 5.0f;
@@ -31,9 +39,21 @@ void GamePlayer::Regene()
 	}
 }
 
+void GamePlayer::ChangeState(IPlayerState* state)
+{
+	if (m_currentState != nullptr) {
+		m_currentState->Leave();
+	}
+	m_currentState = state;
+
+	if (state != nullptr) {
+		m_currentState->Enter();
+	}
+}
+
 void GamePlayer::Init()
 {
-	m_playerState = EnPlayerState_Idle;
+	ChangeState(m_playerIdleState);
 	m_hp = BASE_PARAM::PLAYER_MAX_HP;
 	m_wepon->Init();
 }
@@ -48,7 +68,7 @@ bool GamePlayer::Start()
 		"Assets/animData/Enemy/Rifle/WalkShoot.tka",
 		"Assets/animData/Enemy/Rifle/Death.tka"
 	};
-	m_unityChan->SetAnimLoop(EnPlayerState_Deth, false);
+	m_unityChan->SetAnimLoop(EnPlayerAnimation_Death, false);
 	m_unityChan->Init("Assets/modelData/Chara/Enemy.tkm", tkaFilePaths);
 	//m_unityChan->Init("Assets/modeldata/unityChan.tkm", "Assets/animData/unityChan/test.tka");
 	//シャドウキャスター。
@@ -78,13 +98,15 @@ bool GamePlayer::Start()
 	//UIs。
 	m_playerUIs = NewGO<PlayerUIs>(EnPriority_UI);
 
-	//エフェクト生成。
-	m_effect = NewGO<myEngine::Effect>(EnPriority_3DModel);
-	m_effect->SetScale({ 3.0f, 3.0f, 3.0f });
-
 	//サウンド初期化。
-	m_shootSE.Init(L"Assets/Audio/AK47Shoot.wav");
 	m_footStepSE.Init(L"Assets/Audio/footstep.wav");
+	m_beHitSE.Init(L"Assets/Audio/shootBlood.wav");
+
+	//ステート初期化。
+	m_playerIdleState = new PlayerIdleState(this);
+	m_attackState = new PlayerAttackState(this);
+	m_deathState = new PlayerDeathState(this);
+	m_reloadState = new PlayerReloadState(this);
 
 	m_pos = { 0.0f, 0.0f, 0.0f };
 
@@ -93,50 +115,73 @@ bool GamePlayer::Start()
 
 void GamePlayer::Update()
 {
-	if (m_playerState != EnPlayerState_Deth) {
-		//死んでない。
-		//移動。
-		Move();
-		//回転。
-		//Rotation();
-		//射撃。
-		Shot();
-		//リジェネ。
-		Regene();
-		m_unityChan->SetPosition(m_pos);
+	if (m_currentState == m_deathState) {
+		//死んでる場合は更新を行わない。
+		return;
 	}
 
-	switch (m_playerState)
-	{
-	case EnPlayerState_Idle:
-		m_unityChan->PlayAnimation(EnPlayerState_Idle, 0.3f);
-		break;
-	case EnPlayerState_Walk:
-		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
-		break;
-	case EnPlayerState_Run:
-		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
-		break;
-	case EnPlayerState_Buck:
-		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
-		break;
-	case EnPlayerState_Shot:
-		m_unityChan->PlayAnimation(EnPlayerState_Shot, 0.3f);
-		break;
-	case EnPlayerState_Reload:
-		m_unityChan->PlayAnimation(EnPlayerState_Walk, 0.5f);
-		break;
-	case EnPlayerState_Deth:
-		m_unityChan->PlayAnimation(EnPlayerState_Deth, 0.5f);
-		//m_camera->SetActive(false);
-		break;
-	case EnPlayerState_Num:
-		break;
+	//タイマーを加算。
+	m_weponRaitTime += GameTime().GetFrameDeltaTime();
+
+	m_damageReactionTime += GameTime().GetFrameDeltaTime();
+	if (m_damageReactionTime >= 1.5f || m_damageEffectValue <= 1.0f) {
+		m_damageEffectValue += GameTime().GetFrameDeltaTime() * 0.6f;
 	}
-	
+	else if (m_damageEffectValue >= 1.0f) {
+		m_damageReactionTime = 0.0f;
+	}
+	GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetMulColor({ 1.0f, m_damageEffectValue, m_damageEffectValue, 1.0f });
+
+	//リジェネ。
+	Regene();
+	//ステートをなにもない状態に初期化。
+	ChangeState(nullptr);
+
+	Move();
+
+	if (GetWepon()->GetRifleEvent() == Rifle::EnRifleEvent_None) {
+		if (GetAsyncKeyState(MK_LBUTTON)) {
+			if (m_weponRaitTime >= m_wepon->GetWeponRaito()) {
+				//リロード、レイトともにOK。発砲する。
+				ChangeState(m_attackState);
+				//発射したのでタイマーリセット。
+				m_weponRaitTime = 0;
+			}
+		}
+	}
+	else {
+		//残弾なし、またはリロード中。
+		ChangeState(m_reloadState);
+	}
+
+	if (GetAsyncKeyState('R')) {
+		//リロード。
+		ChangeState(m_reloadState);
+	}
+
 	if (m_hp <= 0) {
-		m_playerState = EnPlayerState_Deth;
+		//死亡。
+		ChangeState(m_deathState);
 	}
+
+	//現在のステートを更新。
+	if (m_currentState != nullptr) {
+		m_currentState->Update();
+	}
+
+	m_unityChan->SetPosition(m_pos);
+}
+
+void GamePlayer::DamageToPlayer(const int& damage)
+{
+	m_currentRegeneTime = 0.0f;
+	if (m_hp > 0) {
+		m_hp -= damage;
+	}
+	m_damageEffectValue = 0.7f;
+	m_damageReactionTime = 0.0f;
+	m_beHitSE.Stop();
+	m_beHitSE.Play(false);
 }
 
 Vector3& GamePlayer::CalcHeadPos()
@@ -173,70 +218,6 @@ void GamePlayer::Rotation()
 	m_unityChan->SetRotation(m_rot);
 }
 
-void GamePlayer::Shot()
-{
-	//レイのコールバック。
-	RayTestCallBack::PlayerRayTestResult rayCallBack;
-	//レイテストを行う。
-	Vector3 toDir = GraphicsEngineObj()->GetCamera3D().GetTarget() - m_headPos;
-	toDir.Normalize();
-	toDir *= RAY_RANGE;
-	PhysicObj().RayTest(m_headPos, toDir + m_headPos, rayCallBack);
-
-	m_flame++;
-	if (GetAsyncKeyState(MK_LBUTTON)) {
-		m_playerState = EnPlayerState_Shot;
-		if (m_flame >= 20) {
-			if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_None) {
-				m_shootSE.Stop();
-				m_shootSE.Play(false);
-				m_wepon->ReduseAmo();
-				//Bullet* bullet = NewGO<Bullet>(EnPriority_3DModel, "Bullet");
-				//bullet->SetPos(m_wepon->GetPos());
-				//bullet->SetRot(m_rot);
-				//bullet->SetToTarget(toDir);
-				m_flame = 0;
-				//printf("StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
-				//printf("CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
-				if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist > rayCallBack.CharacterObjectDist) {
-					//敵にレイが命中。
-					//生ポインタから敵に強制キャスト。
-					RifleEnemy* enemy = reinterpret_cast<RifleEnemy*>(rayCallBack.m_collisionObject->getUserPointer());
-					if (enemy != nullptr) {
-						enemy->GetDamage();
-					}
-				}
-				else if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist < rayCallBack.CharacterObjectDist) {
-					//なんかのメッシュに命中。
-					//命中した地点からエフェクトを再生。
-					Vector3 effectPos = m_headPos + toDir * rayCallBack.StaticObjectDist;
-					Quaternion effectRot;
-					effectRot.SetRotation(g_vec3AxisY, atan2f(g_vec3Front.z, toDir.x));
-					m_effect->SetPosition(effectPos);
-					m_effect->SetRotation(effectRot);
-					//Y成分はいらない。
-					//printf("%f\n", rayCallBack.StaticObjectDist);
-					//printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
-					m_effect->Play(L"Assets/effect/aaaa.efk");
-				}
-				else if (!rayCallBack.hasHit()) {
-					//printf("%f\n", rayCallBack.StaticObjectDist);
-				}
-			}
-			else {
-				m_playerState = EnPlayerState_Reload;
-			}
-		}
-	}
-}
-
-void GamePlayer::Reload()
-{
-	if (m_wepon->GetRifleEvent() == Rifle::EnRifleEvent_Reloading) {
-		m_wepon->AddReloadTime();
-	}
-
-}
 
 void GamePlayer::Move()
 {
@@ -248,36 +229,27 @@ void GamePlayer::Move()
 	camForward.Normalize();
 	camRight.y = 0.0f;
 	camRight.Normalize();
-	
+
 	//加速度。
 	Vector3 acc;
 
-	//移動処理。
-	//todo:Pad対応？キャラコン対応？慣性？
 	if (GetAsyncKeyState('W')) {
-		m_playerState = EnPlayerState_Walk;
 		acc += camForward * m_speed;
 	}
 	if (GetAsyncKeyState('S')) {
-		m_playerState = EnPlayerState_Buck;
 		acc -= camForward * m_speed;
 	}
 	if (GetAsyncKeyState('D')) {
-		m_playerState = EnPlayerState_Walk;
 		acc += camRight * m_speed;
 	}
 	if (GetAsyncKeyState('A')) {
-		m_playerState = EnPlayerState_Walk;
 		acc -= camRight * m_speed;
 	}
-	if (GetAsyncKeyState('R')) {
-		m_playerState = EnPlayerState_Reload;
-		m_wepon->SetRifleEvent(Rifle::EnRifleEvent_Reloading);
-	}
-	if (GetAsyncKeyState(VK_SHIFT) && m_playerState != EnPlayerState_Shot && m_playerState != EnPlayerState_Buck) {
-		//ダッシュ。
+	if (GetAsyncKeyState(VK_SHIFT) && m_currentState == nullptr) {
+		//プレイヤーの状態に何か入ってる場合は走れない。
 		acc *= 3.0f;
 	}
+
 	if (m_cCon.IsOnGround()) {
 		if (GetAsyncKeyState(VK_SPACE)) {
 			//ジャンプ。
@@ -291,24 +263,23 @@ void GamePlayer::Move()
 #endif
 	}
 
-
-
 	m_move += acc * 2.0;
 
-	if (m_move.Length() >= 300.0f && m_playerState != EnPlayerState_Buck) {
-		m_playerState = EnPlayerState_Walk;
+	if (m_move.Length() >= 300.0f) {
+		m_footStepSE.Play(true);
+		m_unityChan->PlayAnimation(EnPlayerAnimation_Walk, 0.5f);
 	}
 	if (m_move.Length() >= 700.0f) {
-		m_playerState = EnPlayerState_Run;
+		m_footStepSE.Play(true);
+		m_unityChan->PlayAnimation(EnPlayerAnimation_Walk, 0.5f);
 	}
-	if(m_move.Length() == 0.0f){
-		m_playerState = EnPlayerState_Idle;
+	if (m_move.Length() <= 0.99999f) {
+		ChangeState(m_playerIdleState);
+		m_footStepSE.Stop();
 	}
-
 	if (m_move.Length() != 0) {
-		//printf("%f, %f, %f \n", m_pos.x,m_pos.y, m_pos.z);
+		//printf("%f, %f, %f \n", m_move.x, m_move.y, m_move.z);
 	}
-
 
 	//摩擦。
 	m_move.x += m_move.x * -0.5f;

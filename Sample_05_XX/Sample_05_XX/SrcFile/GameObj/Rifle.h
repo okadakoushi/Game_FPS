@@ -91,6 +91,14 @@ public:
 	{
 		return MAX_AMO;
 	}
+	/// <summary>
+	/// 武器の発射レートを取得。
+	/// </summary>
+	/// <returns></returns>
+	const float& GetWeponRaito() const
+	{
+		return RAITO;
+	}
 private:
 	//モデル基礎パラメーター。
 	SkinModelRender* m_render = nullptr;
@@ -105,6 +113,7 @@ private:
 	int m_currentAmo = MAX_AMO;					//現在の弾数。todo
 	const float RELOADTIME = 0.5f;				//リロード時間。todo
 	float m_currentReloadTime;					//現在のリロード時間。
+	const float RAITO = 0.1f;					//発射レイト。
 	EnRifleEvent m_currentRifleEvent = EnRifleEvent_None;			//ライフルイベント。
 };
 

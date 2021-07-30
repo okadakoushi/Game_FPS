@@ -17,6 +17,13 @@ RifleEnemy::~RifleEnemy()
 {
     DeleteGO(m_modelRender);
     DeleteGO(m_rifle);
+    DeleteGO(m_findMark); 
+    
+    delete m_attackState;
+    delete m_damageState;
+    delete m_deathState;
+    delete m_trackingState;
+    delete m_wanderingState;
 }
 
 bool RifleEnemy::Start()
@@ -24,16 +31,18 @@ bool RifleEnemy::Start()
 	//エネミーモデル初期化。
 	const char* tkaFile[]{
 		"Assets/animData/Enemy/Rifle/Walk.tka",
+        "Assets/animData/Enemy/Rifle/Run.tka",
 		"Assets/animData/Enemy/Rifle/Damage.tka",
         "Assets/animData/Enemy/Rifle/Shoot.tka",
         "Assets/animData/Enemy/Rifle/Death.tka"
 	};
 	m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
     //ワンショット再生として登録。ここtodo:
-    m_modelRender->SetAnimLoop(0, true);
-    m_modelRender->SetAnimLoop(1, false);
-    m_modelRender->SetAnimLoop(2, true);
-    m_modelRender->SetAnimLoop(3, false);
+    m_modelRender->SetAnimLoop(EnEnemyAnimation_Walk, true);
+    m_modelRender->SetAnimLoop(EnEnemyAnimation_Run, true);
+    m_modelRender->SetAnimLoop(EnEnemyAnimation_Damage, false);
+    m_modelRender->SetAnimLoop(EnEnemyAnimation_Shoot, true);
+    m_modelRender->SetAnimLoop(EnEnemyAnimation_Death, false);
 	m_modelRender->Init("Assets/modelData/Chara/Enemy.tkm", tkaFile);
 	m_modelRender->SetMulColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 	
@@ -54,6 +63,21 @@ bool RifleEnemy::Start()
     int headID = m_modelRender->GetSkelton().FindBoneID(L"mixamorig:Head");
     m_head = m_modelRender->GetSkelton().GetBone(headID);
 
+    //SE初期化。
+    m_findSE.Init(L"Assets/Audio/find.wav");
+
+    //マーク初期化。
+    SpriteInitData initData;
+    initData.m_ddsFilePath[0] = "Assets/sprite/findSprite.dds";
+    initData.m_fxFilePath = "Assets/shader/sprite.fx";
+    initData.m_width = 50.0f;
+    initData.m_height = 50.0f;
+
+    m_findMark = NewGO<SpriteRender>(EnPriority_UI);
+    m_findMark->Init(initData, true);
+    m_findMark->SetPos({ 0, 100, 0 });
+    m_findMark->SetMulColor(Vector4::Transparent);
+
     //ステートを生成。
     m_attackState = new EnemyAttackState(this);
     m_damageState = new EnemyDamageState(this);
@@ -64,9 +88,14 @@ bool RifleEnemy::Start()
 	return true;
 }
 
+static float rot = 0;
+
 void RifleEnemy::Update()
 {
     if (m_enemyState == m_deathState) {
+        //更新止め、コリジョン解放。
+        this->SetActive(false);
+        m_findMark->SetMulColor(Vector4::Transparent);
         //もう死んでるので更新は行わない。
         return;
     }
@@ -75,16 +104,28 @@ void RifleEnemy::Update()
     Quaternion headRot;
     m_head->CalcWorldTRS(m_headPos, headRot);
 
-    ChangeState(m_wanderingState);
     if (IsFindPlayer()) {
         //攻撃。
         ChangeState(m_attackState);
-        //プレイヤーを見失った。
-        m_isMissingPlayer = true;
+        if (!m_isMissingPlayer) {
+            //初めてプレイヤーを見つけた。
+            m_findSE.Play(false);
+            m_findMark->SetMulColor(Vector4::White);
+            m_isMissingPlayer = true;
+        }
+
     }
     else if (m_isMissingPlayer) {
         //見失ったので、プレイヤーがいたであろう地点まで追跡する。
         ChangeState(m_trackingState);
+        m_FOV = 60.0f;
+        m_vision = 1100.0f;
+        m_findMark->SetMulColor(Vector4::Transparent);
+    }
+    else {
+        m_FOV = 40.0f;
+        m_vision = 1000.0f;
+        ChangeState(m_wanderingState);
     }
 
     if (m_hp <= 0) {
@@ -94,9 +135,25 @@ void RifleEnemy::Update()
 
     m_enemyState->Update();
 
+    //レンダーに適用。
 	m_modelRender->SetPosition(m_pos);
     m_modelRender->SetRotation(m_rot);
 	m_modelRender->SetScale(m_scale);
+
+    //マークのtransform設定。
+    m_findMark->SetPos({ m_pos.x, m_pos.y + 120.0f, m_pos.z });
+    //回転。
+    Quaternion markRot;
+    Vector3 cameraPos = GraphicsEngineObj()->GetCamera3D().GetPosition();
+    cameraPos.y = 0.0f;
+    Vector3 markPos = m_pos;
+    markPos.y = 0.0f;
+    Vector3 ToCamera = markPos - cameraPos;
+    ToCamera.Normalize();
+    ToCamera *= -1.0f;
+    markRot.SetRotation(g_vec3Front, ToCamera);
+    m_findMark->SetRotation(markRot);
+
     m_collision.Update();
     m_currentTime += GameTime().GetFrameDeltaTime();
 }
@@ -118,11 +175,11 @@ bool RifleEnemy::IsFindPlayer()
     //方位ベクトル。
     m_toPlayerDir.Normalize();
     //前方向とプレイヤーに向かうベクトルの内積。
-    float dot = m_agent.MoveDirection().Dot(m_toPlayerDir);
+    float dot = m_agent.GetMoveDirection().Dot(m_toPlayerDir);
     //なす角を計算。
     float angle = acos(dot);
     //視野角内に存在するかの判定。
-    if (fabsf(angle) < Math::DegToRad(m_FOV) && toPlayerLen < m_VISION) {
+    if (fabsf(angle) < Math::DegToRad(m_FOV) && toPlayerLen < m_vision) {
         //視野角の範囲内（-+)で視野内。
     }
     else {
@@ -142,7 +199,7 @@ bool RifleEnemy::IsFindPlayer()
     //EnemyAIM_to_Player.Normalize();
     //今回のターゲットはプレイヤーに伸びるベクトル。
     Vector3 target = m_toPlayerDir;
-    target *= m_VISION;
+    target *= m_vision;
     //レイテスト。
     PhysicObj().RayTest(m_headPos, target + m_headPos, visionCallBuck);
     if (visionCallBuck.hasHit() && visionCallBuck.StaticObjectDist > visionCallBuck.CharacterObjectDist) {
@@ -157,14 +214,14 @@ bool RifleEnemy::IsFindPlayer()
 
 void RifleEnemy::ChangeState(IEnemyState* state)
 {
-    if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
+    //if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
         //ループしないアニメーションはしっかり流してから変えさせる。
         if (m_enemyState != nullptr) {
             m_enemyState->Leave();
         }
         m_enemyState = state;
         m_enemyState->Enter();
-    }
+    //}
 }
 
 void RifleEnemy::GetDamage()

@@ -23,6 +23,7 @@ class EnemyWanderingState;
 
 enum EnEnemyAnimation {
 	EnEnemyAnimation_Walk,
+	EnEnemyAnimation_Run,
 	EnEnemyAnimation_Damage,
 	EnEnemyAnimation_Shoot,
 	EnEnemyAnimation_Death,
@@ -74,6 +75,14 @@ public:
 		return m_pos;
 	}
 	/// <summary>
+	/// モデルレンダーを取得。
+	/// </summary>
+	/// <returns></returns>
+	SkinModelRender* GetRender()
+	{
+		return m_modelRender;
+	}
+	/// <summary>
 	/// 
 	/// </summary>
 	/// <returns></returns>
@@ -88,6 +97,14 @@ public:
 	void SetNaviMesh(NaviMesh* mesh)
 	{
 		m_naviMesh = mesh;
+	}
+	/// <summary>
+	/// プレイヤー見つけているかのフラグを設定。
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetFindPlayerFlag(const bool& flag)
+	{
+		m_isMissingPlayer = flag;
 	}
 	/// <summary>
 	/// プレイヤーをFindして取得。
@@ -106,8 +123,8 @@ protected:
 	float COOLDOWN = 0.22f;					//クールダウン。
 	SoldierCollision m_collision;	
 	int m_pathIndex = 0;						//
-	const float m_FOV = 40.0f;					//視野角。
-	const float m_VISION = 2500.0f;				//エネミーの視野範囲。
+	float m_FOV = 40.0f;						//視野角。
+	float m_vision = 700.0f;					//エネミーの視野範囲。
 	Bone* m_head;								//頭ボーン。
 	int m_hp = 100;								//HP。
 	const int ATTACK = 10;						//攻撃力。
@@ -124,8 +141,10 @@ protected:
 	Quaternion						m_rot = g_quatIdentity;					//回転。
 	Vector3							m_scale = { 1.5f, 1.5f, 1.5f };			//拡大。					
 	NaviMesh* m_naviMesh = nullptr;
+	SoundSource m_findSE;
 	//
 	GamePlayer* m_player = nullptr;						//プレイヤー。
+	SpriteRender* m_findMark = nullptr;			//！マーク。
 private:
 	IEnemyState*		m_enemyState;			//ステート。
 	EnemyAttackState*	m_attackState;			//攻撃

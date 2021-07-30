@@ -329,6 +329,24 @@
     <ClCompile Include="SrcFile\Audio\SoundEngine.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerAttackState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerDashState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerDeathState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerReloadState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerWalkState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerIdleState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -664,6 +682,27 @@
     <ClInclude Include="SrcFile\Audio\SoundEngine.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\IPlayerState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerAttackState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerDashState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerDeathState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerReloadState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerWalkState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerIdleState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\sprite\white_hip.png" />
@@ -674,5 +713,7 @@
     <ImageContentTask Include="Assets\sprite\blood.png" />
     <ImageContentTask Include="Assets\sprite\blood.dds" />
     <ImageContentTask Include="Assets\sprite\Damage.png" />
+    <ImageContentTask Include="Assets\sprite\findSprite.png" />
+    <ImageContentTask Include="Assets\sprite\missing.png" />
   </ItemGroup>
 </Project>

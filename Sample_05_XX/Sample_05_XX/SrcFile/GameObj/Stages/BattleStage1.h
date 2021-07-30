@@ -22,7 +22,7 @@ public:
 		m_player = pl;
 	}
 private:
-	const int STAGE_ENEMY_XOUNT = 6;
+	const int STAGE_ENEMY_XOUNT = 5;
 	Level m_level;
 	GamePlayer* m_player = nullptr;
 	RifleEnemy* m_rifleEnemy[8];	//エネミー。

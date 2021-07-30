@@ -29,7 +29,11 @@ bool SpriteRender::Start()
 
 void SpriteRender::Update()
 {
-	m_sprite.Update(m_pos, m_rot, m_scale, m_pivot);
+	if (m_isDraw3D) {
+		m_view = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
+		m_proj = GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix();
+	}
+	m_sprite.Update(m_pos, m_rot, m_scale, m_pivot, true);
 }
 
 

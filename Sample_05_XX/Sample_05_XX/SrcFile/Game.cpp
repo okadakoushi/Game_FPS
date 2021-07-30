@@ -46,10 +46,10 @@ bool Game::Start()
 	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
 #else
 	//Test
-	m_effect = NewGO<myEngine::Effect>(0);
+	//m_effect = NewGO<myEngine::Effect>(0);
 	//NewGO<SoldierMob>(0);
 	//NewGO<Guide>(0);
-	//NewGO<RifleEnemy>(0);
+	NewGO<RifleEnemy>(0);
 #endif
 	return true;
 

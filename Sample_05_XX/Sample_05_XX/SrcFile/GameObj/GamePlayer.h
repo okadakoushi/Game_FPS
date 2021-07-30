@@ -5,6 +5,14 @@ class Rifle;
 class Bullet;
 class SoundSource;
 
+class IPlayerState;
+class PlayerIdleState;
+class PlayerAttackState;
+class PlayerDashState;
+class PlayerDeathState;
+class PlayerReloadState;
+class PlayerWalkState;
+
 #include "SrcFile/RayTestCallBack.h"
 #include "PlayerUIs.h"
 
@@ -17,10 +25,16 @@ public:
 	//定数値はpublicでも許されるか
 	struct BASE_PARAM {
 		static const float	PLAYER_MAX_HP;				//プレイヤーの最大体力。
-		static const int	REGENE_VALUE_SECOND;		//秒間リジェネ量。
-		static const float	REGENE_COOL_TIME;		//リジェネのクールタイム。
-		static const float	JUMPFORSE;				//ジャンプ。
-		static const float	GRAVITY;					//重力。
+		static const int	REGENE_VALUE_SECOND;				//秒間リジェネ量。
+		static const float	REGENE_COOL_TIME;					//リジェネのクールタイム。
+		static const float	JUMPFORSE;							//ジャンプ。
+		static const float	GRAVITY;							//重力。
+	};
+	enum EnPlayerAnimation {
+		EnPlayerAnimation_Idle,
+		EnPlayerAnimation_Walk,
+		EnPlayerAnimation_Shoot,
+		EnPlayerAnimation_Death,
 	};
 private:
 	~GamePlayer() override;
@@ -34,22 +48,11 @@ private:
 	/// </summary>
 	void Update() override;
 	/// <summary>
-	/// 移動。
-	/// <para>移動はカメラを基準に行われる。</para>
-	/// </summary>
-	void Move();
-	/// <summary>
-	/// 発射！！
-	/// </summary>
-	void Shot();
-	/// <summary>
-	/// リロード。
-	/// </summary>
-	void Reload();
-	/// <summary>
 	/// 自己回復。
 	/// </summary>
 	void Regene();
+
+	void ChangeState(IPlayerState* state);
 public:
 	void Init();
 	/// <summary>
@@ -58,12 +61,25 @@ public:
 	/// </summary>
 	void Rotation();
 	/// <summary>
+	/// 移動。
+	/// <para>移動はカメラを基準に行われる。</para>
+	/// </summary>
+	void Move();
+	/// <summary>
 	/// 位置を取得。
 	/// </summary>
 	/// <returns></returns>
 	const Vector3& GetPos()const
 	{
 		return m_pos;
+	}
+	/// <summary>
+	/// 頭の位置を取得。
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetHeadPos() const
+	{
+		return m_headPos;
 	}
 	/// <summary>
 	/// レンダー取得。
@@ -83,6 +99,14 @@ public:
 		m_cCon.SetPosition(m_pos);
 	}
 	/// <summary>
+	/// 移動速度を取得。
+	/// </summary>
+	/// <returns></returns>
+	const float& GetSpeed() const 
+	{
+		return m_speed;
+	}
+	/// <summary>
 	/// 体力を取得。
 	/// </summary>
 	/// <returns></returns>
@@ -94,18 +118,12 @@ public:
 	/// プレイヤーにダメージを与える。
 	/// </summary>
 	/// <param name="damage"></param>
-	void DamageToPlayer(const int& damage)
-	{
-		m_currentRegeneTime = 0.0f;
-		if (m_hp > 0) {
-			m_hp -= damage;
-		}
-	}
+	void DamageToPlayer(const int& damage);
 	/// <summary>
 	/// 武器取得。
 	/// </summary>
 	/// <returns></returns>
-	const Rifle* GetWepon() const
+	Rifle* GetWepon() 
 	{
 		return m_wepon;
 	}
@@ -132,17 +150,6 @@ private:
 	/// </remarks>
 	void OnPostAnimationProgress();
 private:
-	enum EnPlayerState {
-		EnPlayerState_Idle,		//何もない。
-		EnPlayerState_Walk,		//歩く。
-		EnPlayerState_Shot,		//射撃
-		EnPlayerState_Deth,		//死亡。
-		EnPlayerState_Buck,		//後退。
-		EnPlayerState_Run,		//走る。
-		EnPlayerState_Reload,	//リロード。
-		EnPlayerState_Num		//数。
-	};
-	EnPlayerState m_playerState = EnPlayerState_Idle;
 	SkinModelRender* m_unityChan = nullptr;		//ユニティーちゃん。
 	CharacterController m_cCon;					//キャラコン。
 	SpriteRender* m_reticle = nullptr;			//レティクル。
@@ -156,16 +163,23 @@ private:
 	Vector3 m_rHandBonePos = g_vec3Zero;
 	Quaternion m_rHandBoneRot = g_quatIdentity;	
 	Vector3 m_move = g_vec3Zero;				//移動。
-	float m_speed = 100.0f;						//移動速度。
-	int m_flame = 0;
-	SoundSource m_shootSE;						//銃の発射音。
-	SoundSource m_footStepSE;						//足音。
+	float m_speed = 100.0f;						//移動速度
 	GameCamera* m_camera = nullptr;				//カメラ。
-	myEngine::Effect* m_effect = nullptr;		//エフェクト。
-	
-	const float RAY_RANGE = 8000.0f;			
+	float m_weponRaitTime = 0.0f;					
+	float m_damageReactionTime = 0.0f;
+	float m_damageEffectValue = 1.0f;
+
+	SoundSource m_footStepSE;					//足音。
+	SoundSource m_beHitSE;						//被弾。
+
 	float m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。
 	PlayerUIs* m_playerUIs;						//UI。
 	float m_currentRegeneTime = 0.0f;			//リジェネタイム。
+
+	IPlayerState* m_currentState = nullptr;			//現在のステート。
+	PlayerIdleState* m_playerIdleState = nullptr;	//アイドル。
+	PlayerAttackState* m_attackState = nullptr;		//攻撃。
+	PlayerDeathState* m_deathState = nullptr;		//死亡。
+	PlayerReloadState* m_reloadState = nullptr;		//攻撃。
 };
 

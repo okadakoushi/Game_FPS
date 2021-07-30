@@ -14,26 +14,31 @@ public:
 	struct PlayerRayTestResult : public btCollisionWorld::RayResultCallback
 	{
 		bool isHit = false;
-		float StaticObjectDist = 10000.0f;
-		float CharacterObjectDist = 10000.0f;
+		float StaticObjectDist = 100.0f;
+		float CharacterObjectDist = 100.0f;
+		void* characterHit = nullptr;
 		Vector3 Normal = g_vec3Zero;
 
 		//衝突時呼ばれるコールバック。
 		virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace)
 		{
 			isHit = false;
-			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_StaticObject) {
-				//静的物理だった。
-				StaticObjectDist = rayResult.m_hitFraction;
-				m_collisionObject = rayResult.m_collisionObject;
-				return rayResult.m_hitFraction;
-			}
 			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_Enemy) {
 				//エネミーにヒット。
 				isHit = true;
-				m_collisionObject = rayResult.m_collisionObject;
 				CharacterObjectDist = rayResult.m_hitFraction;
-				return rayResult.m_hitFraction;
+				m_collisionObject = rayResult.m_collisionObject;
+				//return rayResult.m_hitFraction;
+			}
+			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_StaticObject) {
+				//静的物理だった。
+				StaticObjectDist = rayResult.m_hitFraction;
+				if (StaticObjectDist < CharacterObjectDist) {
+					//静的物理が手前。
+					m_collisionObject = rayResult.m_collisionObject;
+				}
+
+				//return rayResult.m_hitFraction;
 			}
 			return rayResult.m_hitFraction;
 		}
@@ -55,7 +60,7 @@ public:
 				//静的物理だった。
 				StaticObjectDist = rayResult.m_hitFraction;
 				m_collisionObject = rayResult.m_collisionObject;
-				return rayResult.m_hitFraction;
+				//return rayResult.m_hitFraction;
 			}
 			else if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_Character) {
 				//プレイヤーにヒット。
@@ -63,7 +68,7 @@ public:
 					isHit = true;
 					m_collisionObject = rayResult.m_collisionObject;
 					CharacterObjectDist = rayResult.m_hitFraction;
-					return rayResult.m_hitFraction;
+					//return rayResult.m_hitFraction;
 				}
 			}
 			return rayResult.m_hitFraction;

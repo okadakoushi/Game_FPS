@@ -7,6 +7,7 @@
 void EnemyAttackState::Enter()
 {
     m_enemy->m_modelRender->PlayAnimation(EnEnemyAnimation_Shoot, 0.3f);
+    m_lastUpdateState = this;
 }
 
 void EnemyAttackState::Leave()
@@ -28,7 +29,7 @@ void EnemyAttackState::Update()
         if (m_enemy->COOLDOWN < m_enemy->m_currentTime) {
             //レイの長さを調整。
             Vector3 target = m_enemy->m_toPlayerDir;
-            target *= m_enemy->m_VISION;
+            target *= m_enemy->m_vision;
             //エネミーのエイムの精度を調整。
             target = { target.x + rand() % m_enemy->m_currentRondomAIM, target.y + rand() % m_enemy->m_currentRondomAIM, target.z };
             //弾丸発射。

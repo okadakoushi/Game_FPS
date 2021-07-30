@@ -116,5 +116,6 @@ float4 PSMain( PSInput In ) : SV_Target0
 	float4 texColor = g_texture.Sample(g_sampler, In.uv);
 	//影を適用させる。
 	texColor.xyz *= lig; 
+	texColor *= mulColor;
 	return float4(texColor.xyz, 1.0f);	
 }
