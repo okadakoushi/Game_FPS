@@ -98,6 +98,7 @@ private:
 	DWORD m_channelMask = 0;								//オーディオチャンネル
 	DWORD m_nChannels = 0;									//チャンネル数
 	bool m_isInited = false;								//初期化したか
+	//3dサウンド。
 	std::list<SoundSource*>		m_soundSources;				//サウンドソース
 	WaveFileBank m_waveFileBank;
 };

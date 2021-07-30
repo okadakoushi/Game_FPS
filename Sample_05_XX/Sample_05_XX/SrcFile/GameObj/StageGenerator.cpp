@@ -12,17 +12,19 @@ StageGenerator::StageGenerator()
 void StageGenerator::OnDestroy()
 {
 	DeleteCurrentStage();
+	DeleteGO(m_windSE);
 }
 
 bool StageGenerator::Start()
 {
-	m_windSE.Init(L"Assets/Audio/wind.wav");
+	m_windSE = NewGO<SoundSource>(0);
+	m_windSE->Init(L"Assets/Audio/wind.wav");
 	return true;
 }
 
 void StageGenerator::Update()
 {
-	m_windSE.Play(true);
+	m_windSE->Play(true);
 	//if (m_currentStageNum == EnStageNumber_StanbyStage) {
 	//	if (m_stanbyStage->IsStart()) {
 	//		//始まったらフェードを開ける。

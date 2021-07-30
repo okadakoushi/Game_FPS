@@ -169,8 +169,8 @@ private:
 	float m_damageReactionTime = 0.0f;
 	float m_damageEffectValue = 1.0f;
 
-	SoundSource m_footStepSE;					//足音。
-	SoundSource m_beHitSE;						//被弾。
+	SoundSource* m_footStepSE = nullptr;		//足音。
+	SoundSource* m_beHitSE = nullptr;			//被弾。
 
 	float m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。
 	PlayerUIs* m_playerUIs;						//UI。

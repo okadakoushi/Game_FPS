@@ -4,10 +4,8 @@
 
 /// <summary>
 /// 音源クラス。
-/// <para>このクラスをインスタンス化すると、自動で</para>
-/// <para>サウンドエンジンに登録されます。</para>
 /// </summary>
-class SoundSource
+class SoundSource : public IGameObject
 {
 public:
 	SoundSource();

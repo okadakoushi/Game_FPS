@@ -163,17 +163,20 @@ IXAudio2SourceVoice* SoundEngine::CreateXAudio2SourceVoice(WaveFile* waveFile, b
 
 void SoundEngine::Update()
 {
-	auto it = m_soundSources.begin();
-	//“o˜^‚³‚ê‚Ä‚¢‚éÅŒã‚Ì‰¹Œ¹‚Ü‚ÅXV
-	while (it != m_soundSources.end()) {
-		auto soundSource = *it;
-		soundSource->Update();
-		if (soundSource->IsPlaying() == false) {
-			//‰ð•ú
-			it = RemoveSoundSource(*it);
-		}
-		else {
-			it++;
-		}
+	if (!m_isInited) {
+		return;
 	}
+	//auto it = m_soundSources.begin();
+	////“o˜^‚³‚ê‚Ä‚¢‚éÅŒã‚Ì‰¹Œ¹‚Ü‚ÅXV
+	//while (it != m_soundSources.end()) {
+	//	auto soundSource = *it;
+	//	soundSource->Update();
+	//	if (soundSource->IsPlaying() == false) {
+	//		//‰ð•ú
+	//		it = RemoveSoundSource(*it);
+	//	}
+	//	else {
+	//		it++;
+	//	}
+	//}
 }

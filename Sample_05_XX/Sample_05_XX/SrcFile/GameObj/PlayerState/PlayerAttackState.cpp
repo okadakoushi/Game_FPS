@@ -23,8 +23,8 @@ void PlayerAttackState::Update()
 	PhysicObj().RayTest(headPos, toDir + headPos, rayCallBack);
 
 	//”­–C‰¹B
-	m_shootSE.Stop();
-	m_shootSE.Play(false);
+	m_shootSE->Stop();
+	m_shootSE->Play(false);
 	//’e‚ðŒ¸‚ç‚·B
 	m_player->GetWepon()->ReduseAmo();
 

@@ -25,6 +25,8 @@ GamePlayer::~GamePlayer()
 {
 	DeleteGO(m_reticle);
 	DeleteGO(m_unityChan);
+	DeleteGO(m_footStepSE);
+	DeleteGO(m_beHitSE);
 }
 
 void GamePlayer::Regene()
@@ -99,8 +101,10 @@ bool GamePlayer::Start()
 	m_playerUIs = NewGO<PlayerUIs>(EnPriority_UI);
 
 	//サウンド初期化。
-	m_footStepSE.Init(L"Assets/Audio/footstep.wav");
-	m_beHitSE.Init(L"Assets/Audio/shootBlood.wav");
+	m_footStepSE = NewGO<SoundSource>(0);
+	m_footStepSE->Init(L"Assets/Audio/footstep.wav");
+	m_beHitSE = NewGO<SoundSource>(0);
+	m_beHitSE->Init(L"Assets/Audio/shootBlood.wav");
 
 	//ステート初期化。
 	m_playerIdleState = new PlayerIdleState(this);
@@ -180,8 +184,8 @@ void GamePlayer::DamageToPlayer(const int& damage)
 	}
 	m_damageEffectValue = 0.7f;
 	m_damageReactionTime = 0.0f;
-	m_beHitSE.Stop();
-	m_beHitSE.Play(false);
+	m_beHitSE->Stop();
+	m_beHitSE->Play(false);
 }
 
 Vector3& GamePlayer::CalcHeadPos()
@@ -266,16 +270,16 @@ void GamePlayer::Move()
 	m_move += acc * 2.0;
 
 	if (m_move.Length() >= 300.0f) {
-		m_footStepSE.Play(true);
+		m_footStepSE->Play(true);
 		m_unityChan->PlayAnimation(EnPlayerAnimation_Walk, 0.5f);
 	}
 	if (m_move.Length() >= 700.0f) {
-		m_footStepSE.Play(true);
+		m_footStepSE->Play(true);
 		m_unityChan->PlayAnimation(EnPlayerAnimation_Walk, 0.5f);
 	}
 	if (m_move.Length() <= 0.99999f) {
 		ChangeState(m_playerIdleState);
-		m_footStepSE.Stop();
+		m_footStepSE->Stop();
 	}
 	if (m_move.Length() != 0) {
 		//printf("%f, %f, %f \n", m_move.x, m_move.y, m_move.z);

@@ -57,6 +57,6 @@ private:
 	BattleStage1* m_battleStage = nullptr;		//バトルステージ。
 	GamePlayer* m_player = nullptr;
 	Fade* m_fade;
-	SoundSource m_windSE;						//風の音。
+	SoundSource* m_windSE = nullptr;						//風の音。
 };
 
