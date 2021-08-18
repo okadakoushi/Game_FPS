@@ -62,7 +62,7 @@ namespace {
 
 SoundEngine::SoundEngine()
 {
-
+	memset(m_hx3DAudio, 0, sizeof(m_hx3DAudio));
 }
 
 SoundEngine::~SoundEngine()
@@ -117,7 +117,12 @@ void SoundEngine::Init()
 	XAUDIO2FX_REVERB_PARAMETERS native;
 	ReverbConvertI3DL2ToNative(&PRESET_PARAMS[0], &native);
 	m_submixVoice->SetEffectParameters(0, &native, sizeof(native));
-
+	//3Dオーディオの初期化。
+	const float SPEEDOFSOUND = X3DAUDIO_SPEED_OF_SOUND;
+	X3DAudioInitialize(m_channelMask, SPEEDOFSOUND, m_hx3DAudio);
+	m_listener.Position = { 0.0f, 0.0f, 0.0f };
+	m_listener.OrientFront = { 0.0f, 0.0f, 1.0f };
+	m_listener.OrientTop = { 0.0f, 1.0f, 0.0f };
 
 	//初期化完了。
 	m_isInited = true;
@@ -153,11 +158,27 @@ IXAudio2SourceVoice* SoundEngine::CreateXAudio2SourceVoice(WaveFile* waveFile, b
 {
 	IXAudio2SourceVoice* pSourceVoice;
 
-	//ソースボイスの濁世。
-	if (FAILED(m_xAudio2->CreateSourceVoice(&pSourceVoice, waveFile->GetFormat())))
-	{
-		return nullptr;
+	if (!is3DSound) {
+		//ソースボイスの作成。
+		if (FAILED(m_xAudio2->CreateSourceVoice(&pSourceVoice, waveFile->GetFormat())))
+		{
+			return nullptr;
+		}
 	}
+	else {
+		//3Dサウンド。
+		XAUDIO2_SEND_DESCRIPTOR sendDescriptors[2];
+		sendDescriptors[0].Flags = XAUDIO2_SEND_USEFILTER; // LPF direct-path
+		sendDescriptors[0].pOutputVoice = m_masteringVoice;
+		sendDescriptors[1].Flags = XAUDIO2_SEND_USEFILTER; // LPF reverb-path -- omit for better performance at the cost of less realistic occlusion
+		sendDescriptors[1].pOutputVoice = m_submixVoice;
+		const XAUDIO2_VOICE_SENDS sendList = { 2, sendDescriptors };
+		if (FAILED(m_xAudio2->CreateSourceVoice(&pSourceVoice, waveFile->GetFormat(), 0, 2.0f, NULL, &sendList)))
+		{
+			return nullptr;
+		}
+	}
+
 	return pSourceVoice;
 }
 
@@ -166,17 +187,123 @@ void SoundEngine::Update()
 	if (!m_isInited) {
 		return;
 	}
-	//auto it = m_soundSources.begin();
-	////登録されている最後の音源まで更新
-	//while (it != m_soundSources.end()) {
-	//	auto soundSource = *it;
-	//	soundSource->Update();
-	//	if (soundSource->IsPlaying() == false) {
-	//		//解放
-	//		it = RemoveSoundSource(*it);
-	//	}
-	//	else {
-	//		it++;
-	//	}
-	//}
+
+	const Vector3& cameraForward = GraphicsEngineObj()->GetCamera3D().GetForward();
+	const Vector3& cameraUp = GraphicsEngineObj()->GetCamera3D().GetUp();
+	cameraForward.CopyTo(m_listener.OrientFront);
+	cameraUp.CopyTo(m_listener.OrientTop);
+	//m_flistenerAngle = float(atan2(m_listener.OrientFront.x, m_listener.OrientFront.z));
+
+	if (m_listener.Position.x != m_listenerPosition.x
+		|| m_listener.Position.z != m_listenerPosition.z)
+	{
+		
+		//リスナーが動いている。
+		Vector3 listenerPos;
+		listenerPos.Set(m_listener.Position);
+		//動いた分。
+		Vector3 vDelta;
+		vDelta.Subtract(m_listenerPosition, listenerPos);
+		m_flistenerAngle = float(atan2(m_listener.OrientFront.x, m_listener.OrientFront.z));
+
+		m_listener.pCone = NULL;
+		//todoUserParam
+		//m_listener.pCone
+	}
+
+	float deltaTime = GameTime().GetFrameDeltaTime();
+	if (deltaTime > 0.0f) {
+		//リスナー移動速度を計算。
+		Vector3 vel;
+		vel.Set(m_listener.Position);
+		vel.Subtract(m_listenerPosition, vel);
+		vel.Div(deltaTime);
+		m_listenerPosition.CopyTo(m_listener.Position);
+		vel.CopyTo(m_listener.Velocity);
+	}
+
+	DWORD dwCalcFlags = X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER
+		| X3DAUDIO_CALCULATE_LPF_DIRECT | X3DAUDIO_CALCULATE_LPF_REVERB
+		| X3DAUDIO_CALCULATE_REVERB;
+
+	//3dサウンドの計算。
+	for (auto& soundSource : m_3dSoundSources) {
+		//dsp
+		X3DAUDIO_EMITTER emitter;
+		
+		emitter.pCone = &m_emitterCone;
+		emitter.pCone->InnerAngle = 0.0f;
+		// Setting the inner cone angles to X3DAUDIO_2PI and
+		// outer cone other than 0 causes
+		// the emitter to act like a point emitter using the
+		// INNER cone settings only.
+		emitter.pCone->OuterAngle = 0.0f;
+		// Setting the outer cone angles to zero causes
+		// the emitter to act like a point emitter using the
+		// OUTER cone settings only.
+		emitter.pCone->InnerVolume = 0.0f;
+		emitter.pCone->OuterVolume = 1.0f;
+		emitter.pCone->InnerLPF = 0.0f;
+		emitter.pCone->OuterLPF = 1.0f;
+		emitter.pCone->InnerReverb = 0.0f;
+		emitter.pCone->OuterReverb = 1.0f;
+
+		emitter.OrientFront = { 0, 0, 1 };
+		emitter.OrientTop = { 0, 1, 0 };
+		emitter.ChannelCount = INPUTCHANNELS;
+		emitter.ChannelRadius = 1.0f;
+		emitter.pChannelAzimuths = soundSource->GetEmitterAzimuths();
+
+		// Use of Inner radius allows for smoother transitions as
+		// a sound travels directly through, above, or below the listener.
+		// It also may be used to give elevation cues.
+		emitter.InnerRadius = 2.0f;
+		emitter.InnerRadiusAngle = X3DAUDIO_PI / 4.0f;
+
+		emitter.pVolumeCurve = (X3DAUDIO_DISTANCE_CURVE*)&X3DAudioDefault_LinearCurve;
+		emitter.pLFECurve = (X3DAUDIO_DISTANCE_CURVE*)&Emitter_LFE_Curve;
+		emitter.pLPFDirectCurve = NULL; // use default curve
+		emitter.pLPFReverbCurve = NULL; // use default curve
+		emitter.pReverbCurve = (X3DAUDIO_DISTANCE_CURVE*)&Emitter_Reverb_Curve;
+		emitter.CurveDistanceScaler = 20.0f;
+		emitter.DopplerScaler = 1.0f;
+
+		soundSource->GetPosition().CopyTo(emitter.Position);
+		soundSource->GetVelocity().CopyTo(emitter.Velocity);
+		emitter.Position.x *= 0.01f;
+		emitter.Position.y *= 0.01f;
+		emitter.Position.z *= 0.01f;
+		emitter.Velocity.x *= 0.01f;
+		emitter.Velocity.y *= 0.01f;
+		emitter.Velocity.z *= 0.01f;
+
+		//todoUserRadius。
+		emitter.InnerRadius = 0.0f;
+		emitter.InnerRadiusAngle = 0.0f;
+
+		X3DAUDIO_DSP_SETTINGS* dspSettings = soundSource->GetDspSettings();
+		X3DAudioCalculate(m_hx3DAudio, &m_listener, &emitter, dwCalcFlags, dspSettings);
+
+		IXAudio2SourceVoice* voice;
+		voice = soundSource->GetXAudio2SourceVoice();
+
+		if (voice != nullptr) {
+			voice->SetFrequencyRatio(dspSettings->DopplerFactor);
+			voice->SetOutputMatrix(m_masteringVoice, soundSource->GetNumInputChannel(), m_nChannels,
+				soundSource->GetMatrixCoefficients());
+
+			voice->SetOutputMatrix(m_submixVoice, soundSource->GetNumInputChannel(), 1, &dspSettings->ReverbLevel);
+
+			XAUDIO2_FILTER_PARAMETERS FilterParametersDirect = { LowPassFilter, 2.0f * sinf(X3DAUDIO_PI / 6.0f * dspSettings->LPFDirectCoefficient), 1.0f }; // see XAudio2CutoffFrequencyToRadians() in XAudio2.h for more information on the formula used here
+			voice->SetOutputFilterParameters(m_masteringVoice, &FilterParametersDirect);
+			XAUDIO2_FILTER_PARAMETERS FilterParametersReverb = { LowPassFilter, 2.0f * sinf(X3DAUDIO_PI / 6.0f * dspSettings->LPFReverbCoefficient), 1.0f }; // see XAudio2CutoffFrequencyToRadians() in XAudio2.h for more information on the formula used here
+			voice->SetOutputFilterParameters(m_submixVoice, &FilterParametersReverb);
+		}
+
+		//Vector3 listenerToSound = m_listenerPosition - soundSource->GetPosition();
+		//float ListenerToSoundLen = listenerToSound.Length();
+		//if (fabsf(ListenerToSoundLen) >= 5000.0f) {
+		//	soundSource->Stop();
+		//}
+	}
 }

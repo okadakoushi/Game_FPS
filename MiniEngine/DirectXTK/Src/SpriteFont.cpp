@@ -440,6 +440,21 @@ void XM_CALLCONV SpriteFont::DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wc
             baseOffset);
     }
 
+    //?????????????
+    float strWidth = 0.0f;
+    float strHeight = 0.0f;
+    pImpl->ForEachGlyph(text, [&](Glyph const* glyph, float x, float, float advance)
+        {
+            strWidth = x + advance;
+            strHeight = std::max<float>(strHeight, glyph->Subrect.bottom - glyph->Subrect.top);
+        });
+    //?????????baseOffset??????
+    XMFLOAT2 _origin;
+    XMStoreFloat2(&_origin, origin);
+    _origin.x = strWidth * _origin.x;
+    _origin.y = strHeight * _origin.y;
+    baseOffset = XMLoadFloat2(&_origin);
+
     // Draw each character in turn.
     pImpl->ForEachGlyph(text, [&](Glyph const* glyph, float x, float y, float advance)
     {

@@ -54,8 +54,8 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 			//パラメーター。
 			objData.name = bone->GetName();
 			objData.No = i;
-			//objData.isShadowCaster = Params.at(i).isShadowCaster;
-			//objData.isShadowReceiver = Params.at(i).isShadowReceiver;
+			objData.isShadowCaster = true;
+			objData.isShadowReceiver = true;
 
 			//フック。
 			bool isHook = false;

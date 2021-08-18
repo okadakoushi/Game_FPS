@@ -31,30 +31,24 @@ public:
 	/// </summary>
 	void Update();
 	/// <summary>
-	/// サウンドソースの追加。
+	/// 3dサウンドソースの追加。
 	/// </summary>
 	/// <param name="s">サウンドソース</param>
-	void AddSoundSource(SoundSource* s)
+	void Add3DSoundSource(SoundSource* s)
 	{
-		auto it = std::find(m_soundSources.begin(), m_soundSources.end(), s);
-		if (it == m_soundSources.end()) {
-			//未登録なら登録する。
-			m_soundSources.push_back(s);
-		}
+		m_3dSoundSources.push_back(s);
 	}
 	/// <summary>
-	/// サウンドソースを削除。
+	/// 3dサウンドソースを削除。
 	/// </summary>
 	/// <param name="s"></param>
 	/// <returns>削除した要素の次を指すイテレーター</returns>
-	auto RemoveSoundSource(SoundSource* s)
+	auto Remove3DSoundSource(SoundSource* s)
 	{
-		auto it = std::find(m_soundSources.begin(), m_soundSources.end(), s);
-		if (it != m_soundSources.end()) {
-			it = m_soundSources.erase(it);
+		auto it = std::find(m_3dSoundSources.begin(), m_3dSoundSources.end(), s);
+		if (it != m_3dSoundSources.end()) {
+			m_3dSoundSources.erase(it);
 		}
-		return it;
-
 	}
 	/// <summary>
 	/// XAudio2のソースボイスの作成。
@@ -71,7 +65,25 @@ public:
 	{
 		return m_submixVoice;
 	}
-
+	/// <summary>
+	/// リスナーの位置を設定。
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetListnerPosition(const Vector3& pos)
+	{
+		// XAUDIOの座標の単位をmにする。
+		m_listenerPosition = pos * 0.01f;
+	}
+	/// <summary>
+	/// リスナーの前方向を設定。
+	/// </summary>
+	/// <param name="front"></param>
+	void SetListenerFront(const Vector3& front)
+	{
+		m_listener.OrientFront.x = front.x;
+		m_listener.OrientFront.y = front.y;
+		m_listener.OrientFront.z = front.z;
+	}
 	/// <summary>
 	/// 出力チャンネルの数を取得。
 	/// </summary>
@@ -80,7 +92,6 @@ public:
 	{
 		return m_nChannels;
 	}
-
 	/// <summary>
 	/// 波形データバンクを取得。
 	/// </summary>
@@ -88,7 +99,14 @@ public:
 	{
 		return m_waveFileBank;
 	}
-
+	/// <summary>
+	/// 初期化済みか。
+	/// </summary>
+	/// <returns></returns>
+	const bool& IsInited() const 
+	{
+		return m_isInited;
+	}
 
 private:
 	IXAudio2* m_xAudio2 = nullptr;
@@ -98,7 +116,12 @@ private:
 	DWORD m_channelMask = 0;								//オーディオチャンネル
 	DWORD m_nChannels = 0;									//チャンネル数
 	bool m_isInited = false;								//初期化したか
-	//3dサウンド。
-	std::list<SoundSource*>		m_soundSources;				//サウンドソース
+	//3d
+	X3DAUDIO_HANDLE m_hx3DAudio;							//3dAudio。
+	X3DAUDIO_LISTENER m_listener;							//サウンドリスナー。
+	std::list<SoundSource*>		m_3dSoundSources;			//3dサウンドソース
+	Vector3 m_listenerPosition = g_vec3Zero;				//リスナーの位置。
+	float m_flistenerAngle = 0.0f;							//リスナーアングル(float)。
+	X3DAUDIO_CONE m_emitterCone;							//コーン(dspを計算する際のParam）
 	WaveFileBank m_waveFileBank;
 };

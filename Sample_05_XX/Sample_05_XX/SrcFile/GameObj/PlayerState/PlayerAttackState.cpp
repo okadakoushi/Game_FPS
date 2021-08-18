@@ -25,14 +25,9 @@ void PlayerAttackState::Update()
 	//発砲音。
 	m_shootSE->Stop();
 	m_shootSE->Play(false);
+	m_shootSE->SetPosition(m_player->GetPos());
 	//弾を減らす。
 	m_player->GetWepon()->ReduseAmo();
-
-	printf("エネミーにヒット！！ CharacterObjectDist = %f\n", rayCallBack.CharacterObjectDist);
-	printf("障害物にヒット！！ StaticObjectDist = %f\n", rayCallBack.StaticObjectDist);
-	if (rayCallBack.hasHit()) {
-		printf("ヒット！！\n");
-	}
 
 	if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist * RAY_RANGE > rayCallBack.CharacterObjectDist * RAY_RANGE) {
 		//敵にレイが命中。

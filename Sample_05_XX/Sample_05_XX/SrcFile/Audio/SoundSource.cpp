@@ -5,7 +5,6 @@ SoundSource::SoundSource()
 {
 	memset(m_emitterAzimuths, 0, sizeof(m_emitterAzimuths));
 	memset(m_matrixCoefficients, 0, sizeof(m_matrixCoefficients));
-	SoundEngineObj().AddSoundSource(this);
 }
 
 SoundSource::~SoundSource()
@@ -22,16 +21,19 @@ void SoundSource::Release()
 		m_sourceVoice->DestroyVoice();
 		m_sourceVoice = nullptr;
 	}
-	//サウンドソースの削除
-	SoundEngineObj().RemoveSoundSource(this);
 }
 
-void SoundSource::Init(const wchar_t* filePath)
+void SoundSource::Init(const wchar_t* filePath, bool is3dSound)
 {
+	if (!SoundEngineObj().IsInited()) {
+		//利用不可。
+		return;
+	}
 	m_isAvailable = false;
 	//検索
 	m_waveFile = SoundEngineObj().GetWaveFileBank().FindWaveFile(0, filePath);
 	if (!m_waveFile) {
+		//見つからなかった。
 		m_waveFile.reset(new WaveFile);
 		bool result = m_waveFile->Open(filePath);
 		if (result == false) {
@@ -51,9 +53,16 @@ void SoundSource::Init(const wchar_t* filePath)
 	}
 
 	//サウンドボイスソースを作成。
-	m_sourceVoice = SoundEngineObj().CreateXAudio2SourceVoice(m_waveFile.get(), false);
+	m_sourceVoice = SoundEngineObj().CreateXAudio2SourceVoice(m_waveFile.get(), is3dSound);
+
+	if (is3dSound) {
+		//3dオーディオとして登録。
+		SoundEngineObj().Add3DSoundSource(this);
+	}
 
 	InitCommon();
+
+	m_is3dSound = is3dSound;
 	m_isAvailable = true;
 }
 
@@ -102,8 +111,6 @@ void SoundSource::Play(bool isLoop)
 		}
 		m_isPlaying = true;
 	}
-	//サウンドソースの追加
-	SoundEngineObj().AddSoundSource(this);
 	m_isLoop = isLoop;
 }
 
@@ -121,10 +128,27 @@ void SoundSource::Update()
 		//オンメモリ再生中の更新処理。
 		UpdateOnMemory();
 	}
+	if (m_is3dSound) {
+		m_velocity.Subtract(m_position, m_lastFramePosition);
+		m_velocity.Div(GameTime().GetFrameDeltaTime());
+		m_lastFramePosition = m_position;
+	}
 }
 
 void SoundSource::InitCommon()
 {
+	m_dspSettings.SrcChannelCount = INPUTCHANNELS;
+	m_dspSettings.DstChannelCount = SoundEngineObj().GetNumChannel();
+	m_dspSettings.pMatrixCoefficients = m_matrixCoefficients;
+	m_dspSettings.pDelayTimes = nullptr;
+	m_dspSettings.DopplerFactor = 1.0f;
+	m_dspSettings.LPFDirectCoefficient = 0.82142854f;
+	m_dspSettings.LPFReverbCoefficient = 0.75f;
+	m_dspSettings.ReverbLevel = 0.69114286f;
+	m_dspSettings.EmitterToListenerAngle = 0.0f;
+	m_dspSettings.EmitterToListenerDistance = 10.0f;
+	m_dspSettings.EmitterVelocityComponent = 0.0f;
+	m_dspSettings.ListenerVelocityComponent = 0.0f;
 }
 
 void SoundSource::UpdateStreaming()
@@ -212,4 +236,12 @@ void SoundSource::StartStreamingBuffring()
 	}
 	m_waveFile->ReadAsync(&readStartBuff[m_readStartPos], m_streamingBufferSize, &m_currentBufferingSize);
 	m_streamingState = enStreamingBuffering;
+}
+
+void SoundSource::Remove3DSound()
+{
+	if (m_is3dSound) {
+		SoundEngine().Remove3DSoundSource(this);
+		m_is3dSound = false;
+	}
 }

@@ -43,6 +43,7 @@ public:
 	void SetPlayer(GamePlayer* pl) {
 		m_player = pl;
 	}
+	void SetPlayerRespawnPos();
 	/// <summary>
 	/// 現在のステージ番号を取得。
 	/// </summary>
@@ -51,6 +52,14 @@ public:
 	{
 		return m_currentStageNum;
 	}
+	/// <summary>
+	/// バトルステージ1を取得「。
+	/// </summary>
+	/// <returns></returns>
+	Stage* GetBattleStage1()
+	{
+		return m_stanbyStage;
+	}
 private:
 	StageNumber m_currentStageNum = EnstageNumber_None;			//生成中ステージ番号。
 	Stage* m_stanbyStage = nullptr;				//スタンバイステージ。
@@ -58,5 +67,6 @@ private:
 	GamePlayer* m_player = nullptr;
 	Fade* m_fade;
 	SoundSource* m_windSE = nullptr;						//風の音。
+	Vector3 m_playerPos;
 };
 

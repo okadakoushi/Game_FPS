@@ -17,14 +17,15 @@ void StageGenerator::OnDestroy()
 
 bool StageGenerator::Start()
 {
-	m_windSE = NewGO<SoundSource>(0);
-	m_windSE->Init(L"Assets/Audio/wind.wav");
+	//m_windSE = NewGO<SoundSource>(0);
+	//m_windSE->Init(L"Assets/Audio/wind.wav");
+	//m_windSE->SetVolume(0.1f);
 	return true;
 }
 
 void StageGenerator::Update()
 {
-	m_windSE->Play(true);
+	//m_windSE->Play(true);
 	//if (m_currentStageNum == EnStageNumber_StanbyStage) {
 	//	if (m_stanbyStage->IsStart()) {
 	//		//始まったらフェードを開ける。
@@ -95,4 +96,9 @@ void StageGenerator::DeleteCurrentStage()
 	return;
 	//番号初期化。
 	//m_currentStageNum = EnstageNumber_None;
+}
+
+void StageGenerator::SetPlayerRespawnPos()
+{
+	m_player->SetPos(m_stanbyStage->GetPlayerPos());
 }

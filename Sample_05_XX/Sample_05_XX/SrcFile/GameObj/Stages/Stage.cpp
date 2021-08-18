@@ -77,7 +77,10 @@ bool Stage::Start()
 		}
 #endif
 		if (objData.EqualObjectName(L"PlayerRespawn") == true) {
-			m_player->SetPos(objData.position);
+			m_playerPos = objData.position;
+			if (m_player != nullptr) {
+				m_player->SetPos(m_playerPos);
+			}
 			return true;
 		}
 		if (objData.EqualObjectName(L"GuideRespawn") == true) {
@@ -97,6 +100,16 @@ bool Stage::Start()
 			m_rifleEnemys[spawnPointIndex]->SetNaviMesh(m_naviMesh);
 			spawnPointIndex++;
 			return true;
+		}
+		if (wcsstr(objData.name, L"securityCameraPos") != nullptr) {
+			//セキュリティーカメラ。
+			m_securityCameraPosList.push_back(objData.position);
+			m_securityCameraRotList.push_back(objData.rotatatin);
+			return true;
+		}
+		if (wcsstr(objData.name, L"mountain") != nullptr) {
+			objData.isShadowReceiver = false;
+			return false;
 		}
 		return false;
 	});

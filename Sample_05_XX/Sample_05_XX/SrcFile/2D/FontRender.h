@@ -95,6 +95,16 @@ namespace myEngine {
 		{
 			m_pivot = pivot;
 		}
+		/// <summary>
+		/// シャドウのパラメーターを設定。
+		/// </summary>
+		/// <param name="isDrawShadow">シャドウを描画するか</param>
+		/// <param name="shadowOffset">シャドウオフセット。</param>
+		/// <param name="shadowColor">シャドウカラー。</param>
+		void SetShadowParam(const bool& isDrawShadow, const float& shadowOffset, const Vector4& shadowColor)
+		{
+			m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
+		}
 	private:
 		void RenderHUD() override;
 	private:

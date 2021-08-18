@@ -323,7 +323,8 @@ TextureCube<float4> skyCubeMap : register(t0);
 */
 float4 PSMain_SkyCube(SPSIn In) : SV_Target0
 {
-	float4 color = skyCubeMap.Sample( g_sampler, In.normal);
+	float4 color = skyCubeMap.Sample( g_sampler, In.normal*-1.0f);
+
 	//todo:ここに自己発光処理。
 	return color;
 }

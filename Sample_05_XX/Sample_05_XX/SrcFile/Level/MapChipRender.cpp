@@ -54,14 +54,14 @@ void MapChipRender::InitRenderObject()
 	m_modelRender->SetPosition(m_renderObjDatas[0].position);
 	m_modelRender->SetRotation(m_renderObjDatas[0].rotatatin);
 	m_modelRender->SetScale(m_renderObjDatas[0].scale);
-	//if (m_renderObjDatas[0].isShadowCaster) {
+	if (!m_renderObjDatas[0].isShadowCaster) {
 		//シャドウキャスターじゃ！
-	m_modelRender->SetShadwoCaster(true);
-	//}
-	//if (m_renderObjDatas[0].isShadowReceiver) {
+		m_modelRender->SetShadwoCaster(false);
+	}
+	if (!m_renderObjDatas[0].isShadowReceiver) {
 		//シャドウレシーバーじゃ！
-	m_modelRender->SetShadowReciever(true);
-	//}
+		m_modelRender->SetShadowReciever(false);
+	}
 	//当たり判定追加。
 	m_physicsStaticObject.CreateMesh(m_modelRender->GetPosition(), m_modelRender->GetRotation(), m_modelRender->GetScale(), m_modelRender);
 	m_physicsStaticObject.GetRigidBody().GetBody()->setUserIndex(enCollisionAttr_StaticObject);

@@ -21,6 +21,8 @@ public:
 	{
 		m_findPlayerEnemyList.push_back(enemy);
 	}
+
+	void ActiveProcess(bool flag);
 private:
 	//FindsB
 	GamePlayer* m_player = nullptr;						//playerPtrB

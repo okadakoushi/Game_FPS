@@ -141,10 +141,12 @@ protected:
 	Quaternion						m_rot = g_quatIdentity;					//回転。
 	Vector3							m_scale = { 1.5f, 1.5f, 1.5f };			//拡大。					
 	NaviMesh* m_naviMesh = nullptr;
-	SoundSource m_findSE;
+	SoundSource* m_findSE;						//見つけた
+	SoundSource* m_footStep = nullptr;			//足音。
 	//
 	GamePlayer* m_player = nullptr;						//プレイヤー。
 	SpriteRender* m_findMark = nullptr;			//！マーク。
+
 private:
 	IEnemyState*		m_enemyState;			//ステート。
 	EnemyAttackState*	m_attackState;			//攻撃

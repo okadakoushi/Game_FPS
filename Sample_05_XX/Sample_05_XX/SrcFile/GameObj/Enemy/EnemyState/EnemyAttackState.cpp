@@ -27,6 +27,9 @@ void EnemyAttackState::Update()
         //プレイヤーの方向に向ける。
         m_enemy->m_rot.SetRotation(Vector3::AxisY, atan2f(m_enemy->m_toPlayerDir.x * 1.0f, m_enemy->m_toPlayerDir.z * 1.0f));
         if (m_enemy->COOLDOWN < m_enemy->m_currentTime) {
+            m_shootSE->SetPosition(m_enemy->GetPosition());
+            m_shootSE->Stop();
+            m_shootSE->Play();
             //レイの長さを調整。
             Vector3 target = m_enemy->m_toPlayerDir;
             target *= m_enemy->m_vision;

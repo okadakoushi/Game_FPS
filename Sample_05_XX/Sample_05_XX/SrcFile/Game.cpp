@@ -19,38 +19,23 @@ Game::Game()
 
 Game::~Game()
 {
-	DeleteGO(m_stageGenerator);
-	DeleteGO(m_sky);
 	DeleteGO(m_camera);
 	DeleteGO(m_map);
 	DeleteGO(m_player);
-	//DeleteGO(m_UIs);
-	//最後に消すこと。
-	//DeleteGO(m_player);
 }
 
 bool Game::Start()
 {
-	m_camera = NewGO<GameCamera>(Enpriority_Camera, "GameCamera");
+	m_camera = FindGO<GameCamera>("GameCamera");
+	m_player = FindGO<GamePlayer>("Player");
 	//全mapの共通要素をインスタンス化。
-	m_stageGenerator = NewGO<StageGenerator>(EnPriority_Generator, "StageGenerator");
-	m_map = NewGO<Map>(EnPriority_UI, "Map");
-	m_player = NewGO<GamePlayer>(EnPriority_3DModel, "Player");
-#ifdef MASTER
-	m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
-#endif
+	//m_map = NewGO<Map>(EnPriority_UI, "Map");
 
-	//スタンバイステージを作成。
-	m_stageGenerator->SetPlayer(m_player);
-#if 1
-	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
-#else
 	//Test
 	//m_effect = NewGO<myEngine::Effect>(0);
 	//NewGO<SoldierMob>(0);
 	//NewGO<Guide>(0);
-	NewGO<RifleEnemy>(0);
-#endif
+	//NewGO<RifleEnemy>(0);
 	return true;
 
 }
@@ -61,7 +46,7 @@ void Game::Update()
 		//解放テスト用。
 		//DeleteGO(this);
 	}
-	m_map->SetTargetPos(m_player->GetPos());
+	//m_map->SetTargetPos(m_player->GetPos());
 }
 
 void Game::RenderHUD()

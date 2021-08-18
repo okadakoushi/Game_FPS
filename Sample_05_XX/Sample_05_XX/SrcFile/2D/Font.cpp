@@ -48,6 +48,36 @@ namespace myEngine {
 		position.x += frameBufferHalfWidth;
 		position.y = -pos.y + frameBufferHalfHeight;
 
+		//‰e•`‰æB
+		if (m_isDrawShadow) {
+
+			Vector2 offsetTbl[] = {
+				{ m_shadowOffset , 0.0f},
+				{ -m_shadowOffset , 0.0f },
+				{ 0.0f , m_shadowOffset },
+				{ 0.0f , -m_shadowOffset },
+
+				{ m_shadowOffset ,  m_shadowOffset },
+				{ m_shadowOffset ,  -m_shadowOffset },
+				{ -m_shadowOffset , m_shadowOffset },
+				{ -m_shadowOffset , -m_shadowOffset },
+			};
+
+			for (auto offset : offsetTbl) {
+				Vector2 sPos = position;
+				sPos.x += offset.x;
+				sPos.y += offset.y;
+				m_fe->Draw(
+					text,
+					sPos,
+					m_shadowColor,
+					rotation,
+					scale,
+					pivot
+				);
+			}
+		}
+
 		m_fe->Draw(
 			text,
 			position,

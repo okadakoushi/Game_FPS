@@ -13,6 +13,7 @@ class SkyBox;
 class Guide;
 class StageGenerator;
 class Fade;
+class PlayerUIs;
 
 class Game : public IGameObject
 {
@@ -34,7 +35,6 @@ private:
 	Level m_level;						//レベル。
 	UIs* m_UIs = nullptr;				//UI。
 	Map* m_map;							//ミニマップ。
-	SkyBox* m_sky = nullptr;			//空。
 	myEngine::Effect* m_effect = nullptr;			//エフェクト。
 	myEngine::CFont m_font;
 };

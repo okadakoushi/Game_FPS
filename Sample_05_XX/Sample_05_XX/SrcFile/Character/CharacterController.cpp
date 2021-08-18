@@ -174,8 +174,9 @@ const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime)
 			callBack.me = m_rigidBody.GetBody();
 			callBack.startPos = posTmp;
 			//callBack関数を使用して、衝突検出。
-			PhysicObj().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callBack);
-
+			if (fabsf(addPos.x) > 0.01f || fabsf(addPos.z) > 0.01f) {
+				PhysicObj().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callBack);
+			}
 			if (callBack.isHit) {
 				//衝突した。
 				//壁。

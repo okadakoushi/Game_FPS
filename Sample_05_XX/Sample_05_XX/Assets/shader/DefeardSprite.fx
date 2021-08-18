@@ -7,6 +7,10 @@
 static const int NUM_DIRECTIONAL_LIGHT = 4;       //ディレクションライト。
 static const int NUM_SHADOW_MAP = 3;            //シャドウマップの数。
 
+static const float ENABLE_FOG_RANGE = 3000.0f;				//フォグが有効になり始める距離。
+static const float FOG_RANGE_END = 5500.0f;					//フォグが最大になる距離。
+static const float4 FOG_COLOR = { 0.5803921, 0.7333333f, 0.807843f, 1.0f };	//フォグの色。
+
 //転送されたGBuffer。
 Texture2D<float4> g_texture : register(t0);	    //テクスチャ。
 Texture2D<float4> g_normalMap : register(t1);   //法線。
@@ -111,11 +115,19 @@ float4 PSMain( PSInput In ) : SV_Target0
 	//光が法線方向から入射していると考えて鏡面反射を計算する。
 	lig += BRDF(normal, toEye, normal, metaric) * ambinentLight* metaric ;
 
-
     //テクスチャカラーをサンプリング。
 	float4 texColor = g_texture.Sample(g_sampler, In.uv);
 	//影を適用させる。
 	texColor.xyz *= lig; 
 	texColor *= mulColor;
+
+	//fog
+	float3 worldToEye = eyePos - posInWorld;
+	float worldToEyeLength = length(worldToEye);
+	if (worldToEyeLength >= ENABLE_FOG_RANGE) {
+		float f = lerp(0.0f, 1.0f, (worldToEyeLength - ENABLE_FOG_RANGE) / (FOG_RANGE_END - ENABLE_FOG_RANGE));
+		f = pow( clamp(f, 0.0f, 1.0f), 2.0f);
+		texColor = texColor* (1.0f - f) + texColor * FOG_COLOR * f;
+	}
 	return float4(texColor.xyz, 1.0f);	
 }

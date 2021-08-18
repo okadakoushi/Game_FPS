@@ -272,6 +272,7 @@
     <ClCompile Include="SrcFile\TestGame.cpp" />
     <ClCompile Include="SrcFile\Audio\WaveFile.cpp" />
     <ClCompile Include="SrcFile\Audio\WaveFileBank.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -392,6 +393,7 @@
     <ClInclude Include="SrcFile\TestGame.h" />
     <ClInclude Include="SrcFile\Audio\WaveFile.h" />
     <ClInclude Include="SrcFile\Audio\WaveFileBank.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
@@ -407,6 +409,12 @@
       <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
     </ImageContentTask>
     <ImageContentTask Include="Assets\sprite\missing.png">
+      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\sprite\Title.png">
+      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\sprite\Press.png">
       <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
     </ImageContentTask>
     <Image Include="Assets\sprite\white_hip.png" />

@@ -93,7 +93,7 @@ public:
 	/// ˆÊ’u‚ğİ’èB
 	/// </summary>
 	/// <param name="pos"></param>
-	void SetPos(Vector3& pos)
+	void SetPos(const Vector3& pos)
 	{
 		m_pos = pos;
 		m_cCon.SetPosition(m_pos);

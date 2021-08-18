@@ -46,8 +46,23 @@ namespace myEngine {
 			float scale = 1.0f,
 			Vector2 pivot = {0.5f, 0.5f}
 		);
+		/// <summary>
+		/// 影を描画する設定。
+		/// </summary>
+		/// <param name="isDrawShadow">影を描画するか。</param>
+		/// <param name="shadowOffset">シャドウオフセット。</param>
+		/// <param name="shadowColor">シャドウカラー。</param>
+		void SetShadowParam(const bool& isDrawShadow, const float& shadowOffset, const Vector4& shadowColor)
+		{
+			m_isDrawShadow = isDrawShadow;
+			m_shadowOffset = shadowOffset;
+			m_shadowColor = shadowColor;
+		}
 	private:
 		FontEngine* m_fe;
+		bool			m_isDrawShadow = false;				//影を描画するか。
+		float			m_shadowOffset = 0.0f;				//影を描くときのピクセルのオフセット量。
+		Vector4			m_shadowColor = Vector4::Black;		//影の色。
 	};
 }
 

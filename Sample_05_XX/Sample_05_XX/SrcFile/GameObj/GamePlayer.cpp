@@ -80,8 +80,6 @@ bool GamePlayer::Start()
 
 	//SkinModelRenderのアニメーション再生が終わったタイミングで呼ばれる処理を設定。
 	m_unityChan->SetPostAnimationProgressFunc([&] {	OnPostAnimationProgress(); });
-	//位置初期化。
-	m_pos = m_unityChan->GetPosition();
 	//キャラコン初期化。
 	m_cCon.Init(25.0f, 60.0f, m_pos);
 	//腰のボーン取得。
@@ -112,7 +110,7 @@ bool GamePlayer::Start()
 	m_deathState = new PlayerDeathState(this);
 	m_reloadState = new PlayerReloadState(this);
 
-	m_pos = { 0.0f, 0.0f, 0.0f };
+	m_unityChan->SetPosition(m_pos);
 
 	return true;
 }
@@ -173,7 +171,14 @@ void GamePlayer::Update()
 		m_currentState->Update();
 	}
 
+	if (GetAsyncKeyState(VK_BACK)) {
+		m_pos = g_vec3Zero;
+	}
+
 	m_unityChan->SetPosition(m_pos);
+	printf("%f", m_pos.y);
+	//リスナーの設定。
+	SoundEngineObj().SetListnerPosition(m_pos);
 }
 
 void GamePlayer::DamageToPlayer(const int& damage)

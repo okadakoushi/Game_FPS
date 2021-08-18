@@ -3,6 +3,7 @@
 #include "SrcFile/Game.h"
 #include "SrcFile/TestGame.h"
 #include "SrcFile/Fade.h"
+#include "Title.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -30,7 +31,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 #endif //PHYSICS_DEBUG
 
 	//ゲームのインスタンス作成。
-	NewGO<Game>(EnPriority_Game);
+	NewGO<Title>(EnPriority_Game);
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

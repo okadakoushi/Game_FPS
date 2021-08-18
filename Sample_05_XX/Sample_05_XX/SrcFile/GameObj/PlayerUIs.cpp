@@ -153,3 +153,22 @@ void PlayerUIs::RenderHUD()
 	//描画終了したのでリストは削除。
 	m_findPlayerEnemyList.clear();
 }
+
+void PlayerUIs::ActiveProcess(bool flag)
+{
+	//m_reticule->SetActive(flag);
+	//m_mainWeponImage->SetActive(flag);
+	//m_LeftAmoImage[0]->SetActive(flag);
+	//m_LeftAmoImage[1]->SetActive(flag);
+	//m_LeftAmoImage[2]->SetActive(flag);
+	//m_damageEffectSprite->SetActive(flag);
+	//if (flag) {
+	//	m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	//	m_LeftAmoText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	//}
+	//else {
+	//	m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+	//	m_LeftAmoText->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+	//}
+
+}

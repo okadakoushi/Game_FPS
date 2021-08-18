@@ -64,7 +64,12 @@ bool RifleEnemy::Start()
     m_head = m_modelRender->GetSkelton().GetBone(headID);
 
     //SE初期化。
-    m_findSE.Init(L"Assets/Audio/find.wav");
+    m_findSE = NewGO<SoundSource>(0);
+    m_findSE->Init(L"Assets/Audio/find.wav");
+    m_footStep = NewGO<SoundSource>(0);
+    m_footStep->Init(L"Assets/Audio/footstep.wav", true);
+    m_footStep->SetPosition(m_pos);
+    m_footStep->Play(true);
 
     //マーク初期化。
     SpriteInitData initData;
@@ -88,14 +93,13 @@ bool RifleEnemy::Start()
 	return true;
 }
 
-static float rot = 0;
-
 void RifleEnemy::Update()
 {
     if (m_enemyState == m_deathState) {
         //更新止め、コリジョン解放。
         this->SetActive(false);
         m_findMark->SetMulColor(Vector4::Transparent);
+        m_footStep->Stop();
         //もう死んでるので更新は行わない。
         return;
     }
@@ -106,10 +110,11 @@ void RifleEnemy::Update()
 
     if (IsFindPlayer()) {
         //攻撃。
+        m_footStep->Stop();
         ChangeState(m_attackState);
         if (!m_isMissingPlayer) {
             //初めてプレイヤーを見つけた。
-            m_findSE.Play(false);
+            m_findSE->Play(false);
             m_findMark->SetMulColor(Vector4::White);
             m_isMissingPlayer = true;
         }
@@ -164,6 +169,7 @@ void RifleEnemy::Move()
     m_agent.Move();
     m_pos = m_agent.GetAgentPos();
     m_rot = m_agent.GetAgentRot();
+    m_footStep->SetPosition(m_pos);
 }
 
 bool RifleEnemy::IsFindPlayer()
