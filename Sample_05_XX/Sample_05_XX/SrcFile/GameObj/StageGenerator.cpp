@@ -17,25 +17,59 @@ void StageGenerator::OnDestroy()
 
 bool StageGenerator::Start()
 {
-	//m_windSE = NewGO<SoundSource>(0);
-	//m_windSE->Init(L"Assets/Audio/wind.wav");
-	//m_windSE->SetVolume(0.1f);
+	//風のSE。
+	m_windSE = NewGO<SoundSource>(0);
+	m_windSE->Init(L"Assets/Audio/wind.wav");
+	m_windSE->SetVolume(0.1f);
+
+	//フェード。
+	m_fade = NewGO<Fade>(EnPriority_UI);
+
+	m_currentStageNum = EnStageNumber_BattleStage1;
+
 	return true;
 }
 
 void StageGenerator::Update()
 {
-	//m_windSE->Play(true);
-	//if (m_currentStageNum == EnStageNumber_StanbyStage) {
-	//	if (m_stanbyStage->IsStart()) {
-	//		//始まったらフェードを開ける。
-	//	}
-	//}
-	//else if (m_currentStageNum == EnStageNumber_BattleStage) {
-	//	if (m_stanbyStage->IsStart()) {
-	//		//始まったらフェードを開ける。
-	//	}
-	//}
+	m_windSE->Play(true);
+
+	if (!m_isStageDeleteCall) {
+		//ステージ削除した後でない。
+		return;
+	}
+	if (m_currentStageNum == EnStageNumber_BattleStage1) {
+		if (m_stanbyStage->IsStart()) {
+			//レベルの初期化が終了。
+			FadeProcess(false);
+			m_isStageDeleteCall = false;
+		}
+	}
+	else if (m_currentStageNum == EnStageNumber_BattleStage2) {
+		if (m_battleStage->IsStart()) {
+			//レベルの初期化が終了。
+			FadeProcess(false);
+			m_isStageDeleteCall = false;
+		}
+	}
+}
+
+bool StageGenerator::FadeProcess(const bool& fadeIn)
+{
+	if (m_firstFadeCall) {
+		m_fade->StartFade(fadeIn);
+		m_firstFadeCall = false;
+	}
+
+	if (m_fade->IsFinishFade()) {
+		printf("Fadeが終了した\n");
+		//フェード終了
+		m_firstFadeCall = true;
+		return true;
+	}
+
+	printf("false\n");
+	return false;
 }
 
 void StageGenerator::CreateStage(const StageNumber& stageNum)
@@ -93,6 +127,8 @@ void StageGenerator::DeleteCurrentStage()
 			MB_OK
 		);
 	}
+
+	m_isStageDeleteCall = true;
 	return;
 	//番号初期化。
 	//m_currentStageNum = EnstageNumber_None;

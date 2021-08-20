@@ -132,17 +132,23 @@ void Stage::Update()
 	if (currentEnemyCount <= 0) {
 		//敵を全部倒した。
 		//NextStage?Title?
-		printf("すべての敵を倒した\n");
-		m_stageGenerator->DeleteCurrentStage();
-		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
+		if (m_stageGenerator->FadeProcess(true)) {
+			//フェード開始。
+			printf("すべての敵を倒した\n");
+			m_stageGenerator->DeleteCurrentStage();
+			m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
+		}
 	}
 
 	if (m_player->GetHP() <= 0) {
 		//プレイヤー死亡。
 		//Retry?Title?
-		printf("プレイヤー死亡。\n");
-		m_stageGenerator->DeleteCurrentStage();
-		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+		if (m_stageGenerator->FadeProcess(true)) {
+			//フェード開始。
+			printf("プレイヤー死亡。\n");
+			m_stageGenerator->DeleteCurrentStage();
+			m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+		}
 	}
 }
 

@@ -31,6 +31,8 @@ private:
 	SpriteRender*				m_mainWeponImage = nullptr;		//メインウェポンUI。
 	SpriteRender*				m_damageEffectSprite = nullptr;	//ダメージエフェクトのスプライト。
 	SpriteRender*				m_LeftAmoImage[2];				//3つのスプライトで残弾を表示。
+	SpriteRender*				m_uiBoxForHP = nullptr;			//HP用UIBOX。
+	SpriteRender*				m_uiBoxForAmo = nullptr;		//Amo用UIBOX。
 	Sprite						m_enemyDirectionSprite[5];		//エネミーの方向スプライト。リストの削除を操作するためNotRender。
 	//texts。
 	myEngine::CFontRender*		m_hpUIText = nullptr;			//HPテキスト。
@@ -42,5 +44,6 @@ private:
 	//Param。
 	float						m_damageEffectArea = 0.0f;		//ダメージエフェクトエリア。
 	std::vector<RifleEnemy*>	m_findPlayerEnemyList;			//プレイヤーを発見しているエネミーのリスト。
+	const Vector2				m_saveFrame = { 30.0f, 30.0f };	//セーブフレーム。
 };
 

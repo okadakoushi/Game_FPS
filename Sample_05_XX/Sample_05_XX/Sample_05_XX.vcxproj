@@ -417,6 +417,9 @@
     <ImageContentTask Include="Assets\sprite\Press.png">
       <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
     </ImageContentTask>
+    <ImageContentTask Include="Assets\sprite\UIBox.png">
+      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
+    </ImageContentTask>
     <Image Include="Assets\sprite\white_hip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

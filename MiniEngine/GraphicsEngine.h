@@ -21,6 +21,7 @@
 #include "SrcFile/2D/FontEngine.h"
 
 class Light;
+class SkyBox;
 
 /// <summary>
 /// DirectX12に依存するグラフィックスエンジン
@@ -223,6 +224,22 @@ public:
 	{
 		return m_lineDraw;
 	}
+	/// <summary>
+	/// スカイボックスを設定。
+	/// </summary>
+	/// <param name="sky"></param>
+	void SetSkyBox(SkyBox* sky)
+	{
+		m_skyBox = sky;
+	}
+	/// <summary>
+	/// スカイボックスを取得。
+	/// </summary>
+	/// <returns></returns>
+	SkyBox* GetSkyBox() const 
+	{
+		return m_skyBox;
+	}
 private:
 	/// <summary>
 	/// D3Dデバイスの作成。
@@ -333,6 +350,7 @@ private:
 	SpriteInitData m_spriteData;
 	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。
 	FontEngine m_fontEngine;
+	SkyBox* m_skyBox = nullptr;
 	/*
 	グラフィックメモリヘルパーはシングルトンです。スワップチェーンのセットアップ時に提供されるデバイスとバックバッファーカウントが必要なため、
 	明示的な初期化が必要です。

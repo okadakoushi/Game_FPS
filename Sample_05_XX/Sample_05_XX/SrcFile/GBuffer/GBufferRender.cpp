@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GBufferRender.h"
+#include "SrcFile/nature/SkyBox.h"
 
 DefferdRender::~DefferdRender()
 {
@@ -20,7 +21,7 @@ void DefferdRender::Init()
 	m_GBuffers[GBuffer_normal].Create(
 		FRAME_BUFFER_W, FRAME_BUFFER_H,
 		1, 1,
-		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_R8G8B8A8_SNORM,
 		DXGI_FORMAT_UNKNOWN,
 		CLEARCOLOR
 	);
@@ -60,6 +61,12 @@ void DefferdRender::SpriteInit()
 		//Gbufferの数だけ初期化。todo:static_cast
 		initData.m_textures[i] = &GraphicsEngineObj()->GetDefferd().GetTexture((EnGBuffer)i);
 	}
+
+	//スカイボックスを生成。
+	m_skyBox = NewGO<SkyBox>(0);
+	m_skyBox->Init();
+	initData.m_textures[Gbuffer_Num] = &m_skyBox->GetSkyCubeTexture();
+
 	//ディファード用のスプライトを設定。
 	initData.m_fxFilePath = "Assets/shader/Defeardsprite.fx";
 	//ライトの定数バッファ。

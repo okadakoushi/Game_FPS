@@ -27,6 +27,8 @@ public:
 	void OnDestroy() override;
 	bool Start() override;
 	void Update() override;
+	bool FadeProcess(const bool& fadeIn);
+	void ChangeStageProcess(const StageNumber& m_nextStageNum);
 	/// <summary>
 	/// 指定されたステージを作成。
 	/// </summary>
@@ -60,6 +62,14 @@ public:
 	{
 		return m_stanbyStage;
 	}
+	/// <summary>
+	/// フェードを取得。
+	/// </summary>
+	/// <returns></returns>
+	Fade* GetFade()
+	{
+		return m_fade;
+	}
 private:
 	StageNumber m_currentStageNum = EnstageNumber_None;			//生成中ステージ番号。
 	Stage* m_stanbyStage = nullptr;				//スタンバイステージ。
@@ -68,5 +78,8 @@ private:
 	Fade* m_fade;
 	SoundSource* m_windSE = nullptr;						//風の音。
 	Vector3 m_playerPos;
+	bool m_firstFadeCall = true;					//一回目のフェードのコール。
+	bool m_isChangeStage = false;					//ステージを変えるか。
+	bool m_isStageDeleteCall = false;				//ステージのデリートコールが呼ばれた
 };
 

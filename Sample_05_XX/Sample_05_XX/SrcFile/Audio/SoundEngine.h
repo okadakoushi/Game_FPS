@@ -121,6 +121,7 @@ private:
 	X3DAUDIO_LISTENER m_listener;							//サウンドリスナー。
 	std::list<SoundSource*>		m_3dSoundSources;			//3dサウンドソース
 	Vector3 m_listenerPosition = g_vec3Zero;				//リスナーの位置。
+	float m_buckVolume = 1.0f;								//保存用音の大きさ。
 	float m_flistenerAngle = 0.0f;							//リスナーアングル(float)。
 	X3DAUDIO_CONE m_emitterCone;							//コーン(dspを計算する際のParam）
 	WaveFileBank m_waveFileBank;

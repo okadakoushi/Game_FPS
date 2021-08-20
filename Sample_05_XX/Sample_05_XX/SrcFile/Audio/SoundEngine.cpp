@@ -265,7 +265,7 @@ void SoundEngine::Update()
 		emitter.pLPFDirectCurve = NULL; // use default curve
 		emitter.pLPFReverbCurve = NULL; // use default curve
 		emitter.pReverbCurve = (X3DAUDIO_DISTANCE_CURVE*)&Emitter_Reverb_Curve;
-		emitter.CurveDistanceScaler = 20.0f;
+		emitter.CurveDistanceScaler = 4.0f;
 		emitter.DopplerScaler = 1.0f;
 
 		soundSource->GetPosition().CopyTo(emitter.Position);
@@ -300,10 +300,14 @@ void SoundEngine::Update()
 			voice->SetOutputFilterParameters(m_submixVoice, &FilterParametersReverb);
 		}
 
-		//Vector3 listenerToSound = m_listenerPosition - soundSource->GetPosition();
-		//float ListenerToSoundLen = listenerToSound.Length();
-		//if (fabsf(ListenerToSoundLen) >= 5000.0f) {
-		//	soundSource->Stop();
-		//}
+		Vector3 listenerToSound = m_listenerPosition - soundSource->GetPosition();
+		float ListenerToSoundLen = listenerToSound.Length();
+		if (fabsf(ListenerToSoundLen) >= emitter.CurveDistanceScaler * 2.5f) {
+		}
+		else {
+			//printf("‚È‚é\n");
+		}
+		//printf("%f\n", ListenerToSoundLen);
+		//printf("%f, %f, %f\n", soundSource->GetPosition().x, soundSource->GetPosition().y, soundSource->GetPosition().z);
 	}
 }

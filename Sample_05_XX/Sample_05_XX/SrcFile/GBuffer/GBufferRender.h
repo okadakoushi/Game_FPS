@@ -12,6 +12,8 @@ enum EnGBuffer {
 
 #include "Sprite.h"
 
+class SkyBox;
+
 /// <summary>
 /// GBufferRender。
 /// GBuffer書き込み用クラス。
@@ -107,6 +109,7 @@ private:
 	std::vector<SkinModelRender*> m_models;			//モデルのリスト。
 	RenderTarget m_GBuffers[Gbuffer_Num];			//GBuffer。
 	Sprite m_defferdSprite;
+	SkyBox* m_skyBox = nullptr;
 	bool m_isInited = false;						//初期化フラグ。
 	PostEffectEntity m_postEffectEntity;			//ポストエフェクトエンティティ。
 };

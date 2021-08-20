@@ -80,6 +80,8 @@ void Level::Init(const char* filePath, std::function<bool(LevelObjectData& obj)>
 			m_mapChipPtrs.push_back(std::move(mapChip));
 		});
 	}
+
+	//m_isInited = true;
 }
 
 MapChipRender* Level::CteateMapChipRenderOrAddRenderObject(const LevelObjectData& objData)

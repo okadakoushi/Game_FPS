@@ -23,6 +23,17 @@ bool PlayerUIs::Start()
 
 	//--レイヤー順番に注意--。
 
+	//BoxUI。
+	m_uiBoxForHP = NewGO<SpriteRender>(EnPriority_UI);
+	m_uiBoxForAmo = NewGO<SpriteRender>(EnPriority_UI);
+	InitData.m_ddsFilePath[0] = "Assets/sprite/UIBox.dds";
+	InitData.m_width = 420.0f;
+	InitData.m_height = 240.0f;
+	m_uiBoxForHP->Init(InitData);
+	InitData.m_width = 300.0f;
+	InitData.m_height = 500.0f;
+	m_uiBoxForAmo->Init(InitData);
+
 	//ダメージエフェクト。
 	m_damageEffectSprite = NewGO<SpriteRender>(EnPriority_UI, "DamageEffectSprite");
 	InitData.m_ddsFilePath[0] = "Assets/sprite/blood.dds";
@@ -44,7 +55,10 @@ bool PlayerUIs::Start()
 	InitData.m_width = 200.0f;
 	InitData.m_height = 100.0f;
 	m_mainWeponImage->Init(InitData);
-	m_mainWeponImage->SetPos({ FRAME_BUFFER_W * -0.42f, FRAME_BUFFER_H * -0.45f , 0.0f});
+	m_mainWeponImage->SetPos({ FRAME_BUFFER_W * -0.42f + m_saveFrame.x, FRAME_BUFFER_H * -0.45f + m_saveFrame.y, 0.0f});
+
+	m_uiBoxForHP->SetPos({ FRAME_BUFFER_W * 0.32f + m_saveFrame.x, FRAME_BUFFER_H * -0.428f , 0.0f});
+	m_uiBoxForAmo->SetPos({ FRAME_BUFFER_W * -0.415f + m_saveFrame.x, FRAME_BUFFER_H * -0.37f, 0.0f });
 
 	//弾丸のUI。
 	InitData.m_width = 10.0f;
@@ -56,7 +70,7 @@ bool PlayerUIs::Start()
 		//回転。
 		qRot.SetRotationDegZ(90.0f);
 		m_LeftAmoImage[i]->SetRotation(qRot);
-		m_LeftAmoImage[i]->SetPos({ FRAME_BUFFER_W * -0.47f, FRAME_BUFFER_H * -0.39f + i * 15 , 0.0f });
+		m_LeftAmoImage[i]->SetPos({ FRAME_BUFFER_W * -0.46f + m_saveFrame.x, FRAME_BUFFER_H * -0.39f + i * 15 + m_saveFrame.y , 0.0f });
 	}
 
 	InitData.m_ddsFilePath[0] = "Assets/sprite/Damage.dds";
@@ -69,19 +83,21 @@ bool PlayerUIs::Start()
 
 	//HPテキスト。
 	m_hpUIText = NewGO<myEngine::CFontRender>(EnPriority_2DRender, "HPText");
-	m_hpUIText->SetPosition({ FRAME_BUFFER_W * -0.52f, FRAME_BUFFER_H * -0.41f });
+	m_hpUIText->SetPosition({ FRAME_BUFFER_W * -0.48f + m_saveFrame.x, FRAME_BUFFER_H * -0.43f + m_saveFrame.y });
 	m_hpUIText->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
 	m_hpUIText->SetRotation(0.0f);
 	m_hpUIText->SetScale(1.5f);
-	m_hpUIText->SetPivot({ 0.0f, 0.0f });
+	m_hpUIText->SetPivot({ 0.0f, 1.0f });
+	m_hpUIText->SetShadowParam(true, 3.0f, { Vector4::Black });
 
 	//残弾テキスト。
 	m_LeftAmoText = NewGO<myEngine::CFontRender>(EnPriority_2DRender, "LeftAmoText");
-	m_LeftAmoText->SetPosition({ FRAME_BUFFER_W * 0.34f, FRAME_BUFFER_H * -0.34f });
+	m_LeftAmoText->SetPosition({ FRAME_BUFFER_W * 0.36f - m_saveFrame.x, FRAME_BUFFER_H * -0.34f + m_saveFrame.y });
 	m_LeftAmoText->SetColor(Vector4::White);
 	m_LeftAmoText->SetRotation(0.0f);
 	m_LeftAmoText->SetScale(1.0f);
-	m_LeftAmoText->SetPivot({ 0.0f, 0.0f });
+	m_LeftAmoText->SetPivot({ 0.0f, 1.0f });
+	m_LeftAmoText->SetShadowParam(true, 3.0f, { Vector4::Black });
 
 	return true;
 }
@@ -156,15 +172,18 @@ void PlayerUIs::RenderHUD()
 
 void PlayerUIs::ActiveProcess(bool flag)
 {
-	//m_reticule->SetActive(flag);
-	//m_mainWeponImage->SetActive(flag);
-	//m_LeftAmoImage[0]->SetActive(flag);
-	//m_LeftAmoImage[1]->SetActive(flag);
-	//m_LeftAmoImage[2]->SetActive(flag);
-	//m_damageEffectSprite->SetActive(flag);
+	m_reticule->SetActive(flag);
+	m_mainWeponImage->SetActive(flag);
+	m_LeftAmoImage[0]->SetActive(flag);
+	m_LeftAmoImage[1]->SetActive(flag);
+	m_LeftAmoImage[2]->SetActive(flag);
+	m_damageEffectSprite->SetActive(flag);
+	m_hpUIText->SetActive(flag);
+	m_LeftAmoText->SetActive(flag);
 	//if (flag) {
-	//	m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-	//	m_LeftAmoText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	//	//m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	//	//m_LeftAmoText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
 	//}
 	//else {
 	//	m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });

@@ -12,11 +12,12 @@ static const float FOG_RANGE_END = 5500.0f;					//フォグが最大になる距
 static const float4 FOG_COLOR = { 0.5803921, 0.7333333f, 0.807843f, 1.0f };	//フォグの色。
 
 //転送されたGBuffer。
-Texture2D<float4> g_texture : register(t0);	    //テクスチャ。
-Texture2D<float4> g_normalMap : register(t1);   //法線。
-Texture2D<float>  g_specularMap : register(t2); //スペキュラ。
-Texture2D<float4> g_worldPos : register(t3);    //ワールド座標。
-Texture2D<float4> g_shadow : register(t4);		//シャドウ。
+Texture2D<float4> g_texture : register(t0);	    	//テクスチャ。
+Texture2D<float4> g_normalMap : register(t1);   	//法線。
+Texture2D<float4>  g_specularMap : register(t2); 	//スペキュラ。
+Texture2D<float4> g_worldPos : register(t3);    	//ワールド座標。
+Texture2D<float4> g_shadow : register(t4);			//シャドウ。
+TextureCube<float4> skyCubeMap : register(t5);
 //todo:shadowMap
 
 sampler g_sampler : register(s0);               //サンプラステート。
@@ -81,8 +82,10 @@ float4 PSMain( PSInput In ) : SV_Target0
 	float3 lig = 0;
 	//ワールド座標から視点に向かうベクトル。
 	float3 toEye = normalize(eyePos - posInWorld);
-	//反射の度合。
-	float metaric = g_specularMap.Sample(g_sampler, In.uv);
+	//金属度。
+	float metaric = g_specularMap.Sample(g_sampler, In.uv).r;
+	//滑らかさ
+	float smooth = g_specularMap.Sample(g_sampler, In.uv).a;
 
 	float shadow = g_shadow.Sample(g_sampler, In.uv);
 
@@ -109,8 +112,21 @@ float4 PSMain( PSInput In ) : SV_Target0
 			lig += lerp(diffuse, spec, metaric);
 		}
 	}
+
+	//IBL用のベクトルを求める。
+	//入射光
+	float3 eye2WroldPos = posInWorld - eyePos;
+	normalize(eye2WroldPos);
+	//反射ベクトルを求める。
+	float3 refVec = reflect(eye2WroldPos, normal);
+
+
+
 	//環境光。
-	lig += ambinentLight; //足し算するだけ
+	//lig += ambinentLight; //足し算するだけ
+	int mipLevel = 12 * (1.0f - smooth);
+	lig += skyCubeMap.SampleLevel(g_sampler, refVec, mipLevel) * 4.0f;
+
 	//環境光による鏡面反射を計算する。
 	//光が法線方向から入射していると考えて鏡面反射を計算する。
 	lig += BRDF(normal, toEye, normal, metaric) * ambinentLight* metaric ;

@@ -176,7 +176,6 @@ void GamePlayer::Update()
 	}
 
 	m_unityChan->SetPosition(m_pos);
-	printf("%f", m_pos.y);
 	//リスナーの設定。
 	SoundEngineObj().SetListnerPosition(m_pos);
 }

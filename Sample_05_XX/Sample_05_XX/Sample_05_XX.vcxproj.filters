@@ -723,5 +723,6 @@
     <ImageContentTask Include="Assets\sprite\missing.png" />
     <ImageContentTask Include="Assets\sprite\Title.png" />
     <ImageContentTask Include="Assets\sprite\Press.png" />
+    <ImageContentTask Include="Assets\sprite\UIBox.png" />
   </ItemGroup>
 </Project>

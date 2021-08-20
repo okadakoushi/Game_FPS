@@ -10,6 +10,12 @@ SkyBox::~SkyBox()
 {
 }
 
+void SkyBox::Init()
+{
+	//空のテクスチャ初期化。todo:確認。
+	m_skyCube.InitFromDDSFile(m_skyCubeMapFilePath.c_str());
+}
+
 bool SkyBox::Start()
 {
 	m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
@@ -17,8 +23,6 @@ bool SkyBox::Start()
 	m_modelRender->SetForwardRender();
 	m_modelRender->GetModel().SetPSEntry("PSMain_SkyCube");
 	m_modelRender->Init(m_skyModelFilePath);
-	//空のテクスチャ初期化。todo:確認。
-	m_skyCube.InitFromDDSFile(m_skyCubeMapFilePath.c_str());
 	//空用シェーダーロード。
 	//m_psShader.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_SkyCube");
 
@@ -29,6 +33,7 @@ bool SkyBox::Start()
 			mat->SetAlbedoMap(m_skyCube);
 		}
 	}
+
 	m_isDirty = true;
 	return true;
 }

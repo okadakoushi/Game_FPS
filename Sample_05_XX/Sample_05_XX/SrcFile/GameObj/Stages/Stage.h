@@ -71,7 +71,6 @@ private:
 	Vector3 m_playerPos = g_vec3Zero;					//
 	Guide* m_guide = nullptr;						//ガイド。
 	NaviMesh* m_naviMesh = nullptr;					//ナビゲーションメッシュ。
-	Fade m_fade;									//フェード。
 	StageGenerator* m_stageGenerator = nullptr;		//ステージジェネレーター。
 	std::vector<Vector3> m_securityCameraPosList;	//監視カメラの位置リスト。
 	std::vector<Quaternion> m_securityCameraRotList;//監視カメラの向きリスト。

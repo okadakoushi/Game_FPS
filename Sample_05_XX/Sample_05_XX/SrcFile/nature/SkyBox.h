@@ -4,6 +4,8 @@ class SkyBox : public IGameObject
 public:
 	SkyBox();
 	~SkyBox();
+
+	void Init();
 	/// <summary>
 	/// 初期化。
 	/// </summary>
@@ -30,6 +32,14 @@ public:
 		m_position = pos;
 		m_isDirty = true;
 	}
+	/// <summary>
+	/// スカイキューブテクスチャを取得。
+	/// </summary>
+	/// <returns></returns>
+	Texture& GetSkyCubeTexture()
+	{
+		return m_skyCube;
+	}
 private:
 	SkinModelRender* m_modelRender = nullptr;			//モデルレンダー。
 	Texture m_skyCube;									//スカイキューブ。
@@ -38,7 +48,7 @@ private:
 	Vector3 m_position = Vector3::Zero;					//位置。
 	Vector3 m_emissionColor = Vector3::Zero;			//自己発光。
 	bool m_isDirty = false;								//ダーティフラグ。
-	std::wstring m_skyCubeMapFilePath = L"Assets/modelData/nature/skyCubeMap.dds";		//空マップのファイルパス。
+	std::wstring m_skyCubeMapFilePath = L"Assets/modelData/nature/skyCubeMapNight_Toon_02.dds";		//空マップのファイルパス。
 	const char* m_skyModelFilePath = "Assets/modelData/nature/skyBox.tkm";				//空モデルのファイルパス
 };
 

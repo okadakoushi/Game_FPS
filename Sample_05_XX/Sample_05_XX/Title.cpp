@@ -42,7 +42,8 @@ bool Title::Start()
 	//ステージ1を生成。
 	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
 #ifdef MASTER
-	m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
+	//m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
+	//GraphicsEngineObj()->SetSkyBox(m_sky);
 #endif
 
 	//タイトル初期化。
@@ -59,7 +60,7 @@ bool Title::Start()
 	m_pressFont = NewGO<myEngine::CFontRender>(EnPriority_2DRender);
 	m_pressFont->SetTextUnsafe(m_pressButtonChar);
 	m_pressFont->SetPivot({ 0.5f, 0.5f });
-	m_pressFont->SetPosition({ 0.0f, -300.0f });
+	m_pressFont->SetPosition({ 0.0f, -250.0f });
 	m_pressFont->SetShadowParam(true, 3.0f, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 	return true;
@@ -77,7 +78,7 @@ void Title::Update()
 		//アクティブじゃなくする。
 		m_player->SetActive(false);
 		m_camera->SetActive(false);
-		//m_player->GetPlayerUIs()->ActiveProcess(false);
+		m_player->GetPlayerUIs()->ActiveProcess(false);
 		m_isonce = false;;
 	}
 
@@ -123,7 +124,7 @@ void Title::Update()
 	if (GetAsyncKeyState(MK_LBUTTON)) {
 		m_player->SetActive(true);
 		m_camera->SetActive(true);
-		//m_player->GetPlayerUIs()->ActiveProcess(true);
+		m_player->GetPlayerUIs()->ActiveProcess(true);
 		m_stageGenerator->SetPlayerRespawnPos();
 		DeleteGO(this);
 		NewGO<Game>(EnPriority_Game);

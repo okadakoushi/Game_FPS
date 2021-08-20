@@ -47,7 +47,7 @@ void GameObjectManager::DrawHUD()
 {
 	for (GameObjectList objList : m_gameObjectListArray) {
 		for (IGameObject* obj : objList) {
-			obj->RenderHUD();
+			obj->RenderHUDWrapper();
 		}
 	}
 }
