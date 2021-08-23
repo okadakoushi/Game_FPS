@@ -24,8 +24,9 @@ sampler g_sampler : register(s0);               //サンプラステート。
 
 //スプライト用定数バッファ。
 cbuffer cb : register(b0){
-	float4x4 mvp;		//ビュープロジェ。
-	float4 mulColor;	//乗算カラー。
+	float4x4 mvp;			//ビュープロジェ。
+	float4 mulColor;		//乗算カラー。
+	float lightIdensity;	//IBL用ライトの強さ。
 };
 
 //ディレクションライト。
@@ -125,7 +126,7 @@ float4 PSMain( PSInput In ) : SV_Target0
 	//環境光。
 	//lig += ambinentLight; //足し算するだけ
 	int mipLevel = 12 * (1.0f - smooth);
-	lig += skyCubeMap.SampleLevel(g_sampler, refVec, mipLevel) * 4.0f;
+	lig += skyCubeMap.SampleLevel(g_sampler, refVec, mipLevel) * lightIdensity;
 
 	//環境光による鏡面反射を計算する。
 	//光が法線方向から入射していると考えて鏡面反射を計算する。

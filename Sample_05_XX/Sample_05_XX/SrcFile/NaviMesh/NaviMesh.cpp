@@ -100,7 +100,7 @@ void NaviMesh::Load(const char* filePath)
 		}
 	}
 	//•`‰æ—p‰Šú‰»B
-	InitRender();
+	//InitRender();
 }
 
 void NaviMesh::AgentNodeRender(std::vector<NaviMesh::Cell*>& rootList)

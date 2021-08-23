@@ -27,13 +27,15 @@ bool Fade::Start()
 void Fade::Update()
 {
 	if (!m_isFinishFade) {
-
+		//フェード中。
 		m_currentTime += GameTime().GetFrameDeltaTime();
 
 		if (m_isFadeIn) {
+			//fedeIn
 			Entry(m_currentTime);
 		}
 		else {
+			//fadeOut
 			Leave(m_currentTime);
 		}
 
@@ -51,6 +53,7 @@ void Fade::Update()
 void Fade::StartFade(const bool& FadeIn)
 {
 	if (m_isFadeIn == FadeIn) {
+		//同じなので特にフェードを行わない。
 		return;
 	}
 

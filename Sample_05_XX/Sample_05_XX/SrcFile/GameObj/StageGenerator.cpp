@@ -4,6 +4,7 @@
 #include "Stages/BattleStage1.h"
 #include "SrcFile/Fade.h"
 #include "GamePlayer.h"
+#include "SrcFile/nature/SkyBox.h"
 
 StageGenerator::StageGenerator()
 {
@@ -68,6 +69,11 @@ bool StageGenerator::FadeProcess(const bool& fadeIn)
 		return true;
 	}
 
+	if (!fadeIn) {
+		//フェードアウトの場合は即初期化。
+		m_firstFadeCall = true;
+	}
+
 	printf("false\n");
 	return false;
 }
@@ -75,12 +81,25 @@ bool StageGenerator::FadeProcess(const bool& fadeIn)
 void StageGenerator::CreateStage(const StageNumber& stageNum)
 {
 	if (stageNum == EnStageNumber_BattleStage1) {
+		if (m_sky != nullptr) {
+			DeleteGO(m_sky);
+		}
 		m_stanbyStage = NewGO<Stage>(EnPriority_3DModel);
+		//skyも変更。
+		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
+		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapNight_Toon_02.dds");
+		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(4.0f);
 		m_stanbyStage->SetPlayer(m_player);
 		m_currentStageNum = EnStageNumber_BattleStage1;
 	}
 	else if (stageNum == EnStageNumber_BattleStage2) {
+		DeleteGO(m_sky);
 		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
+		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
+		//skyも変更。
+		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMap.dds");
+		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(1.0f);
+		//GraphicsEngineObj()->GetSkyBox()->ChangeSkyTexture(L"Assets/modelData/nature/skyCubeMap.dds");
 		m_battleStage->SetPlayer(m_player);
 		m_currentStageNum = EnStageNumber_BattleStage2;
 	}
@@ -127,7 +146,6 @@ void StageGenerator::DeleteCurrentStage()
 			MB_OK
 		);
 	}
-
 	m_isStageDeleteCall = true;
 	return;
 	//番号初期化。

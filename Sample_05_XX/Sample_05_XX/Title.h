@@ -20,7 +20,6 @@ private:
 	StageGenerator* m_stageGenerator = nullptr;		//stageGeneratorÅB
 	GamePlayer* m_player = nullptr;
 	GameCamera* m_camera = nullptr;
-	SkyBox* m_sky = nullptr;			//ãÛÅB
 	int m_securityCameraCount = 0;
 	int m_currentCameraCount = 0;
 	const float CHANGE_CAMERAPOS_TIMER = 3.0f;

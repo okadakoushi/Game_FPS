@@ -180,14 +180,6 @@ void PlayerUIs::ActiveProcess(bool flag)
 	m_damageEffectSprite->SetActive(flag);
 	m_hpUIText->SetActive(flag);
 	m_LeftAmoText->SetActive(flag);
-	//if (flag) {
-	//	//m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-	//	//m_LeftAmoText->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-
-	//}
-	//else {
-	//	m_hpUIText->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
-	//	m_LeftAmoText->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
-	//}
-
+	m_uiBoxForHP->SetActive(flag);
+	m_uiBoxForAmo->SetActive(flag);
 }

@@ -169,9 +169,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_camera3D.SetTarget({ 0.0f, 0.0f, 0.0f });
 
 	//ライトの設定。
-	g_light.directionalLight[0].color = { 0.9f, 0.9f, 0.9f, 0.9f };
-	g_light.directionalLight[0].direction = { -1.0f, -1.0f, -1.0f};
-	g_light.directionalLight[0].direction.Normalize();
+	g_light.directionalLight[3].color = { 0.2f, 0.2f, 0.2f, 1.0f };
+	g_light.directionalLight[3].direction = { -1.0f, -1.0f, -1.0f};
+	g_light.directionalLight[3].direction.Normalize();
 
 	g_light.directionalLight[1].color = { 0.5f, 0.5f, 0.5f, 1.0f };
 	g_light.directionalLight[1].direction = { 1.0f, 1.0f, -1.0f };
@@ -180,9 +180,9 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	g_light.directionalLight[2].color = { 0.4, 0.4, 0.4, 1.0f };
 	g_light.directionalLight[2].direction = { 0.0f, 0.0f, -1.0f };
 	
-	g_light.directionalLight[3].color = { 0.2, 0.2, 0.2, 1.0f };
-	g_light.directionalLight[3].direction = { 1.0f, -1.0f, 1.0f };
-	g_light.directionalLight[3].direction.Normalize();
+	g_light.directionalLight[0].color = { 0.9f, 0.9f, 0.9f, 1.0f };
+	g_light.directionalLight[0].direction = { 1.0f, -1.0f, 0.3f };
+	g_light.directionalLight[0].direction.Normalize();
 	//環境光。
 	g_light.ambinetLight = { 0.5f, 0.5f, 0.5f };
 
@@ -201,7 +201,7 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
-	m_shadow->Init(5000, 5000, 2000.0f);
+	m_shadow->Init(5000, 5000, 3000.0f);
 
 	m_lineDraw.Init();
 

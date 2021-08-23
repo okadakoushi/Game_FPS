@@ -49,6 +49,9 @@ void DefferdRender::Init()
 		DXGI_FORMAT_UNKNOWN,
 		CLEARCOLOR
 	);
+
+	//ユーザー設定用定数バッファが登録されてから初期化する。
+	GraphicsEngineObj()->GetDefferd().SpriteInit();
 }
 
 void DefferdRender::SpriteInit()
@@ -62,10 +65,7 @@ void DefferdRender::SpriteInit()
 		initData.m_textures[i] = &GraphicsEngineObj()->GetDefferd().GetTexture((EnGBuffer)i);
 	}
 
-	//スカイボックスを生成。
-	m_skyBox = NewGO<SkyBox>(0);
-	m_skyBox->Init();
-	initData.m_textures[Gbuffer_Num] = &m_skyBox->GetSkyCubeTexture();
+	//initData.m_textures[Gbuffer_Num] = &GraphicsEngineObj()->GetSkyBox()->GetSkyCubeTexture();
 
 	//ディファード用のスプライトを設定。
 	initData.m_fxFilePath = "Assets/shader/Defeardsprite.fx";
@@ -116,8 +116,6 @@ void DefferdRender::Render(RenderContext& rc, const Matrix& view, const Matrix& 
 void DefferdRender::DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj)
 {
 	if (!m_isInited) {
-		//ユーザー設定用定数バッファが登録されてから初期化する。
-		GraphicsEngineObj()->GetDefferd().SpriteInit();
 		m_isInited = true;
 	}
 	//描画。

@@ -26,7 +26,6 @@ Stage::Stage()
 Stage::~Stage()
 {
 	//DeleteGO(m_bg);
-	DeleteGO(m_guide);
 	//レンダー全消し。
 	for (auto* render : m_modelRender) {
 		if (render != nullptr) {
@@ -51,7 +50,9 @@ bool Stage::Start()
 	//ナビメッシュ作成。
 	m_naviMesh = new NaviMesh;
 	m_naviMesh->Load("Assets/nvm/StageLevel.nvm");
+#ifndef MASTER
 	m_naviMesh->InitRender();
+#endif
 
 	int spawnPointIndex = 0;	//Mobソルジャー用添字。
 	int renderIndex = 0;		//レンダー用の添字。

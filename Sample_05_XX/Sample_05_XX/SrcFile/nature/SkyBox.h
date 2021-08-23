@@ -5,6 +5,7 @@ public:
 	SkyBox();
 	~SkyBox();
 
+	void OnDestroy() override;
 	void Init();
 	/// <summary>
 	/// 初期化。
@@ -33,12 +34,12 @@ public:
 		m_isDirty = true;
 	}
 	/// <summary>
-	/// スカイキューブテクスチャを取得。
+	/// スカイキューブのテクスチャパスを設定。
 	/// </summary>
-	/// <returns></returns>
-	Texture& GetSkyCubeTexture()
+	/// <param name="path"></param>
+	void SetSkyCubeTexturePath(const std::wstring& path) 
 	{
-		return m_skyCube;
+		m_skyCubeMapFilePath = path;
 	}
 private:
 	SkinModelRender* m_modelRender = nullptr;			//モデルレンダー。

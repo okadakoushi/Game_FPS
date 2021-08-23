@@ -356,7 +356,5 @@ private:
 	明示的な初期化が必要です。
 	*/
 	std::unique_ptr<DirectX::GraphicsMemory> m_directXTKGfxMemroy;	//DirectXTKのグラフィックスメモリ。
-#ifdef MODE_DEBUG
-#endif
 };
 extern Light g_light;						//ライト。

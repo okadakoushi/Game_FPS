@@ -94,6 +94,36 @@ public:
 	{
 		m_userSetConstantBufferCPU = entity;
 	}
+	/// <summary>
+	/// 外部テクスチャを設定。FromUser。
+	/// </summary>
+	/// <param name="tex">テクスチャ</param>
+	/// <param name="registNumber">登録レジスタ。</param>
+	void SetExternalTexture(Texture& tex, int registNumber)
+	{
+		//外部登録されるテクスチャを設定。
+		m_descriptorHeap.RegistShaderResource(registNumber, tex);
+		//変更を確定。
+		m_descriptorHeap.Commit();
+	}
+	/// <summary>
+	/// シェーダーリソースの登録を解除。
+	/// </summary>
+	/// <param name="registNumber"></param>
+	void UnRegistSRV(int registNumber)
+	{
+		//レジストを外す。
+		m_descriptorHeap.UnRegistShaderResource(registNumber);
+		//変更を確定。
+		m_descriptorHeap.Commit();
+	}
+	/// <summary>
+	/// IBLの輝度を設定。
+	/// </summary>
+	void SetIBLItensity(const float& itensity)
+	{
+		m_constantBufferCPU.lightIntensity = itensity;
+	}
 private:
 	/// <summary>
 	/// テクスチャを初期化。
@@ -132,12 +162,14 @@ private:
 	Texture* m_textureExternal[MAX_TEXTURE] = {nullptr};	//外部から指定されたテクスチャ
 	Vector3 m_position ;				//座標。
 	Vector2 m_size;						//サイズ。
-	Quaternion m_rotation ;			//回転。
-	Matrix m_world;					//ワールド行列。
+	Quaternion m_rotation ;				//回転。
+	Matrix m_world;						//ワールド行列。
+	SpriteInitData m_initData;
 
 	struct LocalConstantBuffer {
 		Matrix mvp;
 		Vector4 mulColor = Vector4::White;
+		float lightIntensity = 4.0f;
 	};
 	LocalConstantBuffer m_constantBufferCPU;	//CPU側の定数バッファ。
 	ConstantBuffer		m_constantBufferGPU;	//GPU側の定数バッファ。

@@ -100,7 +100,7 @@ void DirectionalShadowMap::Update()
 	//視錐台を分割するようにライトビュープロジェクション行列を計算
 	for (int i = 0; i < NUM_SHADOW_MAP; i++) {
 		//遠平面を計算
-		farPlaneZ = nearPlaneZ + m_shadowAreas[i];
+		farPlaneZ = nearPlaneZ + m_shadowAreas[i] + 1000.0f;
 		//ライトビュー
 		Matrix mLightView = Matrix::Identity;
 		//視錐台の片方ずつ(上、下)計算していくのでアングルは半分

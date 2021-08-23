@@ -5,6 +5,7 @@
 class Stage;
 class BattleStage1;
 class GamePlayer;
+class SkyBox;
 
 /// <summary>
 /// レベル管理オブジェクト。
@@ -28,7 +29,6 @@ public:
 	bool Start() override;
 	void Update() override;
 	bool FadeProcess(const bool& fadeIn);
-	void ChangeStageProcess(const StageNumber& m_nextStageNum);
 	/// <summary>
 	/// 指定されたステージを作成。
 	/// </summary>
@@ -62,14 +62,6 @@ public:
 	{
 		return m_stanbyStage;
 	}
-	/// <summary>
-	/// フェードを取得。
-	/// </summary>
-	/// <returns></returns>
-	Fade* GetFade()
-	{
-		return m_fade;
-	}
 private:
 	StageNumber m_currentStageNum = EnstageNumber_None;			//生成中ステージ番号。
 	Stage* m_stanbyStage = nullptr;				//スタンバイステージ。
@@ -81,5 +73,6 @@ private:
 	bool m_firstFadeCall = true;					//一回目のフェードのコール。
 	bool m_isChangeStage = false;					//ステージを変えるか。
 	bool m_isStageDeleteCall = false;				//ステージのデリートコールが呼ばれた
+	SkyBox* m_sky = nullptr;			//空。
 };
 

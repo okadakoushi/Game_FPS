@@ -84,7 +84,6 @@
 		if (m_userSetConstantBufferCPU != nullptr) {
 			m_descriptorHeap.RegistConstantBuffer(EXPAND_SET_CONSTANT_BUFFER_START_NO, m_userSetConstantBufferGPU);
 		}
-		m_descriptorHeap.Commit();
 	}
 	void Sprite::InitVertexBufferAndIndexBuffer(const SpriteInitData& initData)
 	{
@@ -200,6 +199,10 @@
 		InitPipelineState();
 		//ディスクリプタヒープを初期化。
 		InitDescriptorHeap(initData);
+		//変更を確定。
+		m_descriptorHeap.Commit();
+
+		m_initData = initData;
 	}
 	void Sprite::Update(const Vector3& pos, const Quaternion& rot, const Vector3& scale, const Vector2& pivot, const bool& isDraw3D)
 	{

@@ -42,8 +42,6 @@ bool Title::Start()
 	//ステージ1を生成。
 	m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
 #ifdef MASTER
-	//m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
-	//GraphicsEngineObj()->SetSkyBox(m_sky);
 #endif
 
 	//タイトル初期化。

@@ -10,14 +10,21 @@ SkyBox::~SkyBox()
 {
 }
 
+void SkyBox::OnDestroy()
+{
+	DeleteGO(m_modelRender);
+	GraphicsEngineObj()->GetDefferd().GetDefferdSprite().UnRegistSRV(Gbuffer_Num);
+}
+
 void SkyBox::Init()
 {
-	//空のテクスチャ初期化。todo:確認。
-	m_skyCube.InitFromDDSFile(m_skyCubeMapFilePath.c_str());
 }
 
 bool SkyBox::Start()
 {
+	//空のテクスチャ初期化。todo:確認。
+	m_skyCube.InitFromDDSFile(m_skyCubeMapFilePath.c_str());
+
 	m_modelRender = NewGO<SkinModelRender>(EnPriority_3DModel);
 	//空は特殊なレンダリングなのでForwardレンダリング描画。
 	m_modelRender->SetForwardRender();
@@ -33,6 +40,8 @@ bool SkyBox::Start()
 			mat->SetAlbedoMap(m_skyCube);
 		}
 	}
+
+	GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetExternalTexture(m_skyCube, Gbuffer_Num);
 
 	m_isDirty = true;
 	return true;

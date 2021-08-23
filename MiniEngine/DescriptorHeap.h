@@ -35,6 +35,14 @@ public:
 		}
 	}
 	/// <summary>
+	/// 登録を解除。
+	/// </summary>
+	/// <param name="registNo">レジスタ番号。</param>
+	void UnRegistShaderResource(int registNo)
+	{
+		m_shaderResources[registNo] = nullptr;
+	}
+	/// <summary>
 	/// アンオーダーアクセスリソースを登録。
 	/// </summary>
 	/// <param name="registerNo">レジスタ番号</param>
