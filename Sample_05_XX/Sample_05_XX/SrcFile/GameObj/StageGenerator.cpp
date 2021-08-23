@@ -97,9 +97,8 @@ void StageGenerator::CreateStage(const StageNumber& stageNum)
 		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
 		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
 		//sky‚à•ÏXB
-		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMap.dds");
+		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapSpace_Toon_2.dds");
 		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(1.0f);
-		//GraphicsEngineObj()->GetSkyBox()->ChangeSkyTexture(L"Assets/modelData/nature/skyCubeMap.dds");
 		m_battleStage->SetPlayer(m_player);
 		m_currentStageNum = EnStageNumber_BattleStage2;
 	}

@@ -100,7 +100,7 @@ void DirectionalShadowMap::Update()
 	//視錐台を分割するようにライトビュープロジェクション行列を計算
 	for (int i = 0; i < NUM_SHADOW_MAP; i++) {
 		//遠平面を計算
-		farPlaneZ = nearPlaneZ + m_shadowAreas[i] + 1000.0f;
+		farPlaneZ = nearPlaneZ + m_shadowAreas[i];
 		//ライトビュー
 		Matrix mLightView = Matrix::Identity;
 		//視錐台の片方ずつ(上、下)計算していくのでアングルは半分
@@ -118,7 +118,7 @@ void DirectionalShadowMap::Update()
 			//対辺を求める。カスケードシャドウのtoUpper.png参照。
 			//nearPlaneZが隣返
 			toUpperNear = cameraUp * t * nearPlaneZ;
-			toUpperFar = cameraUp * t * farPlaneZ;
+			toUpperFar = cameraUp * t * (farPlaneZ * 2);
 			//アスペクト比を乗算
 			//いままではまっすぐ前の視錐台の線のみ計算だったのが
 			//ここからは縦横の情報がはいるため　詳細はaspect.pngを参照。
