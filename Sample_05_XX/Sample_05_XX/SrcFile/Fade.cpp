@@ -18,7 +18,7 @@ bool Fade::Start()
 	initData.m_fxFilePath = "Assets/shader/sprite.fx";
 	initData.m_ddsFilePath[0] = "Assets/sprite/fade.dds";
 	//‰Šú‰»B
-	m_fade = NewGO<SpriteRender>(EnPriority_UI);
+	m_fade = NewGO<SpriteRender>(EnPriority_Fade);
 	m_fade->Init(initData);
 	m_fade->SetMulColor({ 1.0f, 1.0f, 1.0f, m_fadeColorAlpha });
 	return true;

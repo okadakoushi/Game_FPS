@@ -6,8 +6,8 @@
 #include "SrcFile/Audio/SoundEngine.h"
 #include "SrcFile/Timer/tkStopwatch.h"
 #include "SrcFile/Physics/PhysicsWorld.h"
-#include "SrcFile/InputKeyCode.h"
-#include "MouseInput.h"
+#include "SrcFile/Input/InputKeyCode.h"
+#include "SrcFile/Input/MouseInput.h"
 
 class GraphicsEngine;
 class Camera;

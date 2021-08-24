@@ -3,7 +3,7 @@
 #include "SrcFile/Game.h"
 #include "SrcFile/TestGame.h"
 #include "SrcFile/Fade.h"
-#include "Title.h"
+#include "SrcFile/GameObj/Title.h"
 
 
 ///////////////////////////////////////////////////////////////////

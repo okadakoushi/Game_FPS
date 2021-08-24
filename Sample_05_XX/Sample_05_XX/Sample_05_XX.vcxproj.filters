@@ -224,9 +224,6 @@
     <ClCompile Include="SrcFile\Primitive.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SrcFile\InputKeyCode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="SrcFile\GameObj\PlayerPoint.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -273,9 +270,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SrcFile\RayTestCallBack.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MouseInput.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SrcFile\2D\Font.cpp">
@@ -347,7 +341,13 @@
     <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerIdleState.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
+    <ClCompile Include="SrcFile\Input\MouseInput.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\Input\InputKeyCode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\Title.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -443,9 +443,6 @@
       <Filter>MiniEngine</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\Animation\AnimationClip.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SrcFile\Game.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\Resource\IResource.h">
@@ -574,9 +571,6 @@
     <ClInclude Include="SrcFile\Primitive.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SrcFile\InputKeyCode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="SrcFile\GameObj\PlayerPoint.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -623,9 +617,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\RayTestCallBack.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseInput.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\2D\Font.h">
@@ -706,23 +697,23 @@
     <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerIdleState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h">
+    <ClInclude Include="SrcFile\Game.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\Input\MouseInput.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\Input\InputKeyCode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\Title.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\sprite\white_hip.png" />
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
   </ItemGroup>
   <ItemGroup>
-    <ImageContentTask Include="Assets\sprite\map.png" />
-    <ImageContentTask Include="Assets\sprite\blood.png" />
     <ImageContentTask Include="Assets\sprite\blood.dds" />
-    <ImageContentTask Include="Assets\sprite\Damage.png" />
-    <ImageContentTask Include="Assets\sprite\findSprite.png" />
-    <ImageContentTask Include="Assets\sprite\missing.png" />
-    <ImageContentTask Include="Assets\sprite\Title.png" />
-    <ImageContentTask Include="Assets\sprite\Press.png" />
-    <ImageContentTask Include="Assets\sprite\UIBox.png" />
   </ItemGroup>
 </Project>

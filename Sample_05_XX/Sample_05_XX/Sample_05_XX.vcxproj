@@ -204,7 +204,7 @@
     <ClCompile Include="SrcFile\Fade.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerUIs.cpp" />
     <ClCompile Include="SrcFile\2D\FontEngine.cpp" />
-    <ClCompile Include="MouseInput.cpp" />
+    <ClCompile Include="SrcFile\Input\MouseInput.cpp" />
     <ClCompile Include="SrcFile\2D\Font.cpp" />
     <ClCompile Include="SrcFile\2D\FontRender.cpp" />
     <ClCompile Include="SrcFile\RayTestCallBack.cpp" />
@@ -219,7 +219,7 @@
     <ClCompile Include="SrcFile\GameObj\SoldierMob.cpp" />
     <ClCompile Include="SrcFile\Culling\ObjectFrustumCulling.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerPoint.cpp" />
-    <ClCompile Include="SrcFile\InputKeyCode.cpp" />
+    <ClCompile Include="SrcFile\Input\InputKeyCode.cpp" />
     <ClCompile Include="SrcFile\Map.cpp" />
     <ClCompile Include="SrcFile\Primitive.cpp" />
     <ClCompile Include="SrcFile\Physics\PhysicsDebugDraw.cpp" />
@@ -272,7 +272,7 @@
     <ClCompile Include="SrcFile\TestGame.cpp" />
     <ClCompile Include="SrcFile\Audio\WaveFile.cpp" />
     <ClCompile Include="SrcFile\Audio\WaveFileBank.cpp" />
-    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="SrcFile\GameObj\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -324,7 +324,7 @@
     <ClInclude Include="SrcFile\Fade.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerUIs.h" />
     <ClInclude Include="SrcFile\2D\FontEngine.h" />
-    <ClInclude Include="MouseInput.h" />
+    <ClInclude Include="SrcFile\Input\MouseInput.h" />
     <ClInclude Include="SrcFile\2D\Font.h" />
     <ClInclude Include="SrcFile\2D\FontRender.h" />
     <ClInclude Include="SrcFile\RayTestCallBack.h" />
@@ -341,7 +341,7 @@
     <ClInclude Include="SrcFile\Culling\ObjectFrustumCulling.h" />
     <ClInclude Include="SrcFile\Culling\IObjectCulling.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerPoint.h" />
-    <ClInclude Include="SrcFile\InputKeyCode.h" />
+    <ClInclude Include="SrcFile\Input\InputKeyCode.h" />
     <ClInclude Include="SrcFile\Map.h" />
     <ClInclude Include="SrcFile\Primitive.h" />
     <ClInclude Include="SrcFile\Physics\PhysicsDebugDraw.h" />
@@ -393,34 +393,11 @@
     <ClInclude Include="SrcFile\TestGame.h" />
     <ClInclude Include="SrcFile\Audio\WaveFile.h" />
     <ClInclude Include="SrcFile\Audio\WaveFileBank.h" />
-    <ClInclude Include="Title.h" />
+    <ClInclude Include="SrcFile\GameObj\Title.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
-    <ImageContentTask Include="Assets\sprite\map.png" />
-    <ImageContentTask Include="Assets\sprite\blood.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
     <ImageContentTask Include="Assets\sprite\blood.dds" />
-    <ImageContentTask Include="Assets\sprite\Damage.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
-    <ImageContentTask Include="Assets\sprite\findSprite.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
-    <ImageContentTask Include="Assets\sprite\missing.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
-    <ImageContentTask Include="Assets\sprite\Title.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
-    <ImageContentTask Include="Assets\sprite\Press.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
-    <ImageContentTask Include="Assets\sprite\UIBox.png">
-      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
-    </ImageContentTask>
-    <Image Include="Assets\sprite\white_hip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -265,7 +265,7 @@ void SoundEngine::Update()
 		emitter.pLPFDirectCurve = NULL; // use default curve
 		emitter.pLPFReverbCurve = NULL; // use default curve
 		emitter.pReverbCurve = (X3DAUDIO_DISTANCE_CURVE*)&Emitter_Reverb_Curve;
-		emitter.CurveDistanceScaler = 4.0f;
+		emitter.CurveDistanceScaler = 14.0f;
 		emitter.DopplerScaler = 1.0f;
 
 		soundSource->GetPosition().CopyTo(emitter.Position);

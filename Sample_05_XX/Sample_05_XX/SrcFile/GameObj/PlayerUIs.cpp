@@ -10,6 +10,18 @@ PlayerUIs::PlayerUIs()
 
 PlayerUIs::~PlayerUIs()
 {
+	//Render解放。
+	DeleteGO(m_uiBoxForHP);
+	DeleteGO(m_uiBoxForAmo);
+	DeleteGO(m_reticule);
+	DeleteGO(m_mainWeponImage);
+	DeleteGO(m_damageEffectSprite);
+	DeleteGO(m_LeftAmoImage[0]);
+	DeleteGO(m_LeftAmoImage[1]);
+	DeleteGO(m_LeftAmoImage[2]);
+	DeleteGO(m_hpUIText);
+	DeleteGO(m_LeftAmoText);
+	DeleteGO(m_LeftEnemyCount);
 }
 
 bool PlayerUIs::Start()
@@ -78,8 +90,6 @@ bool PlayerUIs::Start()
 	InitData.m_height = 200.0f;
 	m_enemyDirectionSprite[0].Init(InitData);
 	m_enemyDirectionSprite[0].SetMulColor({ 1.0f, 1.0f, 1.0f, 0.5f });
-	//m_enemyDirectionSprite[0].SetPivot({ 0.5f, 0.0f });
-	//m_enemyDirectionSprite[0]->SetRotation(qRot);
 
 	//HPテキスト。
 	m_hpUIText = NewGO<myEngine::CFontRender>(EnPriority_2DRender, "HPText");
@@ -123,8 +133,6 @@ void PlayerUIs::Update()
 		Vector3 toTarget = GraphicsEngineObj()->GetCamera3D().GetCameraToTaget();
 		toTarget.Normalize();
 
-
-
 		//視点から敵に向かうベクトル。
 		Vector3 toEnemy = m_findPlayerEnemyList[i]->GetPosition() - GraphicsEngineObj()->GetCamera3D().GetPosition();
 		toEnemy.Normalize();
@@ -140,14 +148,6 @@ void PlayerUIs::Update()
 
 		m_enemyDirectionSprite[i].Update(g_vec3Zero, qRot, g_vec3One, { 0.5f, 0.0f });
 	}
-
-
-	//ダメージエフェクト（スクリーン端の黒枠）実装中。
-	//ダメージエフェクトの影響範囲。MIN::0.0f ~ MAX::1.0f 
-	if (hpRaito <= 0.3f) {
-		m_damageEffectArea = 0.2f;
-	}
-	GraphicsEngineObj()->GetDefferd().SetDamageArea(m_damageEffectArea);
 
 	//アンセーフ版を使用するため、文字列はメンバ。
 	swprintf_s(m_hpTex, L" HP = %.0f", m_player->GetHP());

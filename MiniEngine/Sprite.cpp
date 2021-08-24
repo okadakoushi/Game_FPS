@@ -12,8 +12,8 @@
 	const Vector2	Sprite::DEFAULT_PIVOT = { 0.5f, 0.5f };
 	Sprite::~Sprite()
 	{
-		GraphicsEngineObj()->EndRender(false);
-		GraphicsEngineObj()->BeginRender();
+		//GraphicsEngineObj()->EndRender(false);
+		//GraphicsEngineObj()->BeginRender();
 	}
 	void Sprite::InitTextures(const SpriteInitData& initData)
 	{

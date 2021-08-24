@@ -30,7 +30,7 @@ private:
 	SpriteRender*				m_reticule = nullptr;			//レティクル。
 	SpriteRender*				m_mainWeponImage = nullptr;		//メインウェポンUI。
 	SpriteRender*				m_damageEffectSprite = nullptr;	//ダメージエフェクトのスプライト。
-	SpriteRender*				m_LeftAmoImage[2];				//3つのスプライトで残弾を表示。
+	SpriteRender*				m_LeftAmoImage[3];				//3つのスプライトで残弾を表示。
 	SpriteRender*				m_uiBoxForHP = nullptr;			//HP用UIBOX。
 	SpriteRender*				m_uiBoxForAmo = nullptr;		//Amo用UIBOX。
 	Sprite						m_enemyDirectionSprite[5];		//エネミーの方向スプライト。リストの削除を操作するためNotRender。

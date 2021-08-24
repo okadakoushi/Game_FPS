@@ -1,0 +1,1 @@
+$(ProjectDir)Assets/sprite/%(Filename).dds

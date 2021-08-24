@@ -30,8 +30,8 @@ public:
 				m_collisionObject = rayResult.m_collisionObject;
 				//return rayResult.m_hitFraction;
 			}
-			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_StaticObject) {
-				//静的物理だった。
+			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_StaticObject && StaticObjectDist > rayResult.m_hitFraction) {
+				//静的物理だったかつ、この静的オブジェクトの方が手前にある。
 				StaticObjectDist = rayResult.m_hitFraction;
 				if (StaticObjectDist < CharacterObjectDist) {
 					//静的物理が手前。
@@ -59,17 +59,16 @@ public:
 			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_StaticObject) {
 				//静的物理だった。
 				StaticObjectDist = rayResult.m_hitFraction;
-				m_collisionObject = rayResult.m_collisionObject;
+				if (StaticObjectDist < CharacterObjectDist) {
+					//静的物理が手前。
+					m_collisionObject = rayResult.m_collisionObject;
+				}
 				//return rayResult.m_hitFraction;
 			}
-			else if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_Character) {
+			if (rayResult.m_collisionObject->getUserIndex() == enCollisionAttr_Character) {
 				//プレイヤーにヒット。
-				if (rayResult.m_hitFraction < StaticObjectDist) {
-					isHit = true;
-					m_collisionObject = rayResult.m_collisionObject;
-					CharacterObjectDist = rayResult.m_hitFraction;
-					//return rayResult.m_hitFraction;
-				}
+				CharacterObjectDist = rayResult.m_hitFraction;
+				m_collisionObject = rayResult.m_collisionObject;
 			}
 			return rayResult.m_hitFraction;
 		}

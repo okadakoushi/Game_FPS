@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SrcFile/InputKeyCode.h"
+#include "SrcFile/Input/InputKeyCode.h"
 
 class SpriteRender;
 

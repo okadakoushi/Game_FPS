@@ -21,6 +21,7 @@ static enum Priority {
 	EnPriority_3DModel,		//モデル。
 	EnPriority_UI,			//UI(HDD描画等)。
 	EnPriority_2DRender,
+	EnPriority_Fade,
 	Enpriority_Camera,
 	EnPriority_Num = 9		//todo:マジックナンバー。
 };
@@ -43,7 +44,7 @@ static enum Priority {
 
 #include "MiniEngine.h"
 
-#include "SrcFile/InputKeyCode.h"
+#include "SrcFile/Input/InputKeyCode.h"
 
 #include "SrcFile/Primitive.h"
 
