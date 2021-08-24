@@ -23,7 +23,7 @@ void EnemyAttackState::Update()
     if (m_enemy->m_modelRender->GetAnimLoop() || !m_enemy->m_modelRender->isPlayAnim()) {
         //アニメーションがループするものまたは、ループしないものでアニメーションが流れていない。
         //アニメーションを切り替え。
-        m_enemy->m_modelRender->PlayAnimation(2, 0.1f);
+        m_enemy->m_modelRender->PlayAnimation(EnEnemyAnimation_Shoot, 0.1f);
         //プレイヤーの方向に向ける。
         m_enemy->m_rot.SetRotation(Vector3::AxisY, atan2f(m_enemy->m_toPlayerDir.x * 1.0f, m_enemy->m_toPlayerDir.z * 1.0f));
         if (m_enemy->COOLDOWN < m_enemy->m_currentTime) {

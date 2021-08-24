@@ -121,15 +121,16 @@ void RifleEnemy::Update()
 
     }
     else if (m_isMissingPlayer) {
-        //見失ったので、プレイヤーがいたであろう地点まで追跡する。
+        //警戒状態。プレイヤーがいそうな地点に移動。
         ChangeState(m_trackingState);
-        m_FOV = 60.0f;
+        m_FOV = 90.0f;
         m_vision = 1100.0f;
         m_findMark->SetMulColor(Vector4::Transparent);
     }
     else {
+        //非警戒状態。
         m_FOV = 40.0f;
-        m_vision = 1000.0f;
+        m_vision = 700.0f;
         ChangeState(m_wanderingState);
     }
 

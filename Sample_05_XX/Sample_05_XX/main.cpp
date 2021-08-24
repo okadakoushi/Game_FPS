@@ -15,9 +15,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 #endif // DEBUG
 	ShowCursor(FALSE);
 #ifdef MASTER
-	AllocConsole();
-	freopen("CON", "r", stdin);
-	freopen("CON", "w", stdout);
+	//AllocConsole();
+	//freopen("CON", "r", stdin);
+	//freopen("CON", "w", stdout);
 #endif
 	//ÉQÅ[ÉÄÇÃèâä˙âªÅB
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));

@@ -147,7 +147,7 @@ protected:
 	GamePlayer* m_player = nullptr;						//プレイヤー。
 	SpriteRender* m_findMark = nullptr;			//！マーク。
 
-private:
+protected:
 	IEnemyState*		m_enemyState;			//ステート。
 	EnemyAttackState*	m_attackState;			//攻撃
 	EnemyDamageState*	m_damageState;			//ダメージ

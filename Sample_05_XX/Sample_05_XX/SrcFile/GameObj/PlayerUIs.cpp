@@ -93,7 +93,7 @@ bool PlayerUIs::Start()
 
 	//HPテキスト。
 	m_hpUIText = NewGO<myEngine::CFontRender>(EnPriority_2DRender, "HPText");
-	m_hpUIText->SetPosition({ FRAME_BUFFER_W * -0.48f + m_saveFrame.x, FRAME_BUFFER_H * -0.43f + m_saveFrame.y });
+	m_hpUIText->SetPosition({ FRAME_BUFFER_W * -0.46f + m_saveFrame.x, FRAME_BUFFER_H * -0.43f + m_saveFrame.y });
 	m_hpUIText->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
 	m_hpUIText->SetRotation(0.0f);
 	m_hpUIText->SetScale(1.5f);
@@ -150,7 +150,7 @@ void PlayerUIs::Update()
 	}
 
 	//アンセーフ版を使用するため、文字列はメンバ。
-	swprintf_s(m_hpTex, L" HP = %.0f", m_player->GetHP());
+	swprintf_s(m_hpTex, L" HP %.0f", m_player->GetHP());
 	m_hpUIText->SetTextUnsafe(m_hpTex);
 	swprintf_s(m_leftAmoTex, L" %d", m_player->GetWepon()->GetCurrentAmo());
 	m_LeftAmoText->SetTextUnsafe(m_leftAmoTex);
