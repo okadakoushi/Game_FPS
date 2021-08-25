@@ -36,6 +36,7 @@ public:
 				if (StaticObjectDist < CharacterObjectDist) {
 					//Ã“I•¨—‚ªŽè‘OB
 					m_collisionObject = rayResult.m_collisionObject;
+					Normal.Set(rayResult.m_hitNormalLocal);
 				}
 
 				//return rayResult.m_hitFraction;
