@@ -112,5 +112,6 @@ private:
 	SkyBox* m_skyBox = nullptr;
 	bool m_isInited = false;						//初期化フラグ。
 	PostEffectEntity m_postEffectEntity;			//ポストエフェクトエンティティ。
+
 };
 

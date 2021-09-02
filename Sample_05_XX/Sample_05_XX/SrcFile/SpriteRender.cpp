@@ -10,6 +10,7 @@ void SpriteRender::Init(const SpriteInitData& spriteData, bool isDraw3D)
 {
 	m_sprite.Init(spriteData);
 	m_isDraw3D = isDraw3D;
+	m_sprite.SetDraw3DFlag(isDraw3D);
 	if (isDraw3D) {
 		m_view = GraphicsEngineObj()->GetCamera3D().GetViewMatrix();
 		m_proj = GraphicsEngineObj()->GetCamera3D().GetProjectionMatrix();

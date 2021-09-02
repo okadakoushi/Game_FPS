@@ -19,6 +19,8 @@
 #include "SrcFile/Map.h"
 #include "Sprite.h"
 #include "SrcFile/2D/FontEngine.h"
+#include "SrcFile/ToneMap.h"
+#include "SrcFile/RenderingEngine.h"
 
 class Light;
 class SkyBox;
@@ -191,54 +193,17 @@ public:
 	{
 		return m_camera3D;
 	}
-	/// <summary>
-	/// レンダーを登録。
-	/// </summary>
-	/// <param name="render"></param>
-	void RegistRender(SkinModelRender* render)
-	{
-		m_renders.push_back(render);
-	}
-	/// <summary>
-	/// リストから除去。
-	/// </summary>
-	/// <param name="model"></param>
-	void RemoveRender(SkinModelRender* model)
-	{
-		auto it = std::find(m_renders.begin(), m_renders.end(), model);
-		if (it != m_renders.end()) {
-			//見つかった。
-			m_renders.erase(it);
-		}
-	}
-	/// <summary>
-	/// レンダーのリストを取得。
-	/// </summary>
-	/// <returns></returns>
-	const std::vector<SkinModelRender*>& GetRenderList() const 
-	{
-		return m_renders;
-	}
-
 	LineDraw& GetLineDraw()
 	{
 		return m_lineDraw;
 	}
 	/// <summary>
-	/// スカイボックスを設定。
-	/// </summary>
-	/// <param name="sky"></param>
-	void SetSkyBox(SkyBox* sky)
-	{
-		m_skyBox = sky;
-	}
-	/// <summary>
-	/// スカイボックスを取得。
+	/// レンダリングエンジンを取得。
 	/// </summary>
 	/// <returns></returns>
-	SkyBox* GetSkyBox() const 
+	RenderingEngine& GetRenderingEngine()
 	{
-		return m_skyBox;
+		return m_renderingEngine;
 	}
 private:
 	/// <summary>
@@ -348,9 +313,9 @@ private:
 	DefferdRender m_defferd;			//ディファード。
 	LineDraw m_lineDraw;				//線分描画。
 	SpriteInitData m_spriteData;
-	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。
 	FontEngine m_fontEngine;
-	SkyBox* m_skyBox = nullptr;
+	RenderingEngine m_renderingEngine;	//レンダリングエンジン。
+	ToneMap m_toneMap;					//トーンマップ。
 	/*
 	グラフィックメモリヘルパーはシングルトンです。スワップチェーンのセットアップ時に提供されるデバイスとバックバッファーカウントが必要なため、
 	明示的な初期化が必要です。

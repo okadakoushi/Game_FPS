@@ -266,7 +266,7 @@ void GamePlayer::Move()
 	}
 	else {
 		//èdóÕÅB
-#ifdef MASTER
+#ifdef GAME
 		acc += {0, -BASE_PARAM::GRAVITY, 0};
 #endif
 	}

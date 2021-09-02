@@ -67,10 +67,10 @@ bool PlayerUIs::Start()
 	InitData.m_width = 200.0f;
 	InitData.m_height = 100.0f;
 	m_mainWeponImage->Init(InitData);
-	m_mainWeponImage->SetPos({ FRAME_BUFFER_W * -0.42f + m_saveFrame.x, FRAME_BUFFER_H * -0.45f + m_saveFrame.y, 0.0f});
+	m_mainWeponImage->SetPos({ FRAME_BUFFER_W * -0.42f + m_saveFrame.x, FRAME_BUFFER_H * -0.44f + m_saveFrame.y, 0.0f});
 
-	m_uiBoxForHP->SetPos({ FRAME_BUFFER_W * 0.32f + m_saveFrame.x, FRAME_BUFFER_H * -0.428f , 0.0f});
-	m_uiBoxForAmo->SetPos({ FRAME_BUFFER_W * -0.415f + m_saveFrame.x, FRAME_BUFFER_H * -0.37f, 0.0f });
+	m_uiBoxForHP->SetPos({ FRAME_BUFFER_W * 0.32f + m_saveFrame.x, FRAME_BUFFER_H * -0.41f , 0.0f});
+	m_uiBoxForAmo->SetPos({ FRAME_BUFFER_W * -0.415f + m_saveFrame.x, FRAME_BUFFER_H * -0.4f + m_saveFrame.y, 0.0f });
 
 	//弾丸のUI。
 	InitData.m_width = 10.0f;
@@ -82,7 +82,7 @@ bool PlayerUIs::Start()
 		//回転。
 		qRot.SetRotationDegZ(90.0f);
 		m_LeftAmoImage[i]->SetRotation(qRot);
-		m_LeftAmoImage[i]->SetPos({ FRAME_BUFFER_W * -0.46f + m_saveFrame.x, FRAME_BUFFER_H * -0.39f + i * 15 + m_saveFrame.y , 0.0f });
+		m_LeftAmoImage[i]->SetPos({ FRAME_BUFFER_W * -0.46f + m_saveFrame.x, FRAME_BUFFER_H * -0.38f + i * 15 + m_saveFrame.y , 0.0f });
 	}
 
 	InitData.m_ddsFilePath[0] = "Assets/sprite/Damage.dds";
@@ -93,7 +93,7 @@ bool PlayerUIs::Start()
 
 	//HPテキスト。
 	m_hpUIText = NewGO<myEngine::CFontRender>(EnPriority_2DRender, "HPText");
-	m_hpUIText->SetPosition({ FRAME_BUFFER_W * -0.46f + m_saveFrame.x, FRAME_BUFFER_H * -0.43f + m_saveFrame.y });
+	m_hpUIText->SetPosition({ FRAME_BUFFER_W * -0.46f + m_saveFrame.x, FRAME_BUFFER_H * -0.41f + m_saveFrame.y });
 	m_hpUIText->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
 	m_hpUIText->SetRotation(0.0f);
 	m_hpUIText->SetScale(1.5f);
@@ -102,7 +102,7 @@ bool PlayerUIs::Start()
 
 	//残弾テキスト。
 	m_LeftAmoText = NewGO<myEngine::CFontRender>(EnPriority_2DRender, "LeftAmoText");
-	m_LeftAmoText->SetPosition({ FRAME_BUFFER_W * 0.36f - m_saveFrame.x, FRAME_BUFFER_H * -0.34f + m_saveFrame.y });
+	m_LeftAmoText->SetPosition({ FRAME_BUFFER_W * 0.36f - m_saveFrame.x, FRAME_BUFFER_H * -0.33f + m_saveFrame.y });
 	m_LeftAmoText->SetColor(Vector4::White);
 	m_LeftAmoText->SetRotation(0.0f);
 	m_LeftAmoText->SetScale(1.0f);

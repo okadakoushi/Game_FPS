@@ -81,23 +81,29 @@ bool StageGenerator::FadeProcess(const bool& fadeIn)
 void StageGenerator::CreateStage(const StageNumber& stageNum)
 {
 	if (stageNum == EnStageNumber_BattleStage1) {
+
+		m_stanbyStage = NewGO<Stage>(EnPriority_3DModel);
+
+#ifdef GAME
 		if (m_sky != nullptr) {
 			DeleteGO(m_sky);
 		}
-		m_stanbyStage = NewGO<Stage>(EnPriority_3DModel);
 		//skyも変更。
 		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
 		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapNight_Toon_02.dds");
+#endif
 		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(4.0f);
 		m_stanbyStage->SetPlayer(m_player);
 		m_currentStageNum = EnStageNumber_BattleStage1;
 	}
 	else if (stageNum == EnStageNumber_BattleStage2) {
-		DeleteGO(m_sky);
 		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
+#ifdef GAME
+		DeleteGO(m_sky);
 		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
 		//skyも変更。
 		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapSpace_Toon_2.dds");
+#endif
 		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(1.0f);
 		m_battleStage->SetPlayer(m_player);
 		m_currentStageNum = EnStageNumber_BattleStage2;

@@ -9,7 +9,7 @@ class Map : public IGameObject
 public:
 	~Map();
 	bool Start();
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// ミニマップ用のレンダーターゲットを取得。
 	/// </summary>
@@ -26,6 +26,11 @@ public:
 	{
 		m_targetPos = pos;
 	}
+	/// <summary>
+	/// 描画するか。
+	/// </summary>
+	/// <param name="draw"></param>
+	void SetDraw(const bool& isDraw);
 private:
 	/// <summary>
 	/// カメラ更新。
@@ -40,7 +45,7 @@ private:
 	/// </summary>
 	void SwichMiniMapSize();
 private:
-	const float m_CAMERA_HEIGHT = 300.0f;		//カメラの高さ。
+	const float m_CAMERA_HEIGHT = 1300.0f;		//カメラの高さ。
 	const float m_SHRINK_WITH_HEIGHT = 1500.0f;	//縮小時のマップの横縦。
 	const int m_WIDTH = 300.0f;					//スプライトの横。
 	const int m_HEIGHT = 300.0f;				//スプライトの縦。

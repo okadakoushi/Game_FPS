@@ -37,6 +37,12 @@ void Map::Update()
 	m_spriteRender->SetScale(m_scale);
 }
 
+void Map::SetDraw(const bool& isDraw)
+{
+	this->SetActive(isDraw);
+	m_spriteRender->SetActive(isDraw);
+}
+
 void Map::UpdateCamera()
 {
 	//視点の位置計算。
@@ -74,12 +80,11 @@ void Map::UpdateCamera()
 
 void Map::Draw()
 {
-	//ここから描画。
 	GraphicsEngineObj()->GetRenderContext().WaitUntilToPossibleSetRenderTarget(m_miniMap);
 	GraphicsEngineObj()->GetRenderContext().ClearRenderTargetView(m_miniMap.GetRTVCpuDescriptorHandle(), CLEARCOLOR);
 	GraphicsEngineObj()->GetRenderContext().SetRenderTarget(m_miniMap, m_miniMap.GetDSVCpuDescriptorHandle());
 	GraphicsEngineObj()->GetRenderContext().ClearDepthStencilView(m_miniMap.GetDSVCpuDescriptorHandle(), 1.0f);
-	for (auto render : GraphicsEngineObj()->GetRenderList()) {
+	for (auto render : GraphicsEngineObj()->GetRenderingEngine().GetRenderList()) {
 		if (render->isPlayAnim()) {
 			render->GetModel().Draw(GraphicsEngineObj()->GetRenderContext(), m_viewMatrix, m_projMatirx, enRenderMode_Skin);
 		}

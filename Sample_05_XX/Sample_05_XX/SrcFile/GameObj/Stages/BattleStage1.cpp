@@ -29,7 +29,9 @@ bool BattleStage1::Start()
 	//ナビメッシュ作成。
 	m_naviMesh = new NaviMesh;
 	m_naviMesh->Load("Assets/nvm/GameStage_BattleMap1.nvm");
+#ifdef NAV_DEBUG
 	m_naviMesh->InitRender();
+#endif
 
 	//レベルの初期化。
 	m_level.Init("Assets/level/GameStage_BattleMap1.tkl", [&](LevelObjectData& objData) {
@@ -161,7 +163,7 @@ void BattleStage1::Update()
 
 void BattleStage1::ForwardRender()
 {
-#ifndef MASTER
+#ifdef NAV_DEBUG
 	m_naviMesh->Render();
 #endif 
 }

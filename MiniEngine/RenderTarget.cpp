@@ -38,6 +38,9 @@ bool RenderTarget::Create(
 	}
 	//ビューポートの作成。
 	CreateViewPort(w, h);
+
+	m_width = w;
+	m_height = h;
 	return true;
 }
 bool RenderTarget::CreateDescriptorHeap(GraphicsEngine& ge, ID3D12Device*& d3dDevice)

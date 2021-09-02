@@ -80,6 +80,7 @@ void GameObjectManager::UpdateManager()
 	
 	/// 描画系処理
 	{
+		//GraphicsEngineObj()->GetRenderingEngine().ZPrePass(GraphicsEngineObj()->GetRenderContext());
 		//Shadowの描画。 todo:PreRender
 		GraphicsEngineObj()->GetShadowMap()->RenderToShadowMap();
 		//GBufferレンダリング。todo:PreRender
@@ -90,12 +91,21 @@ void GameObjectManager::UpdateManager()
 		//フィジックスデバッグ描画。
 		PhysicObj().PhysicsDraw();
 #endif
+		//デプス
+		GraphicsEngineObj()->GetRenderContext().SetRenderTarget(
+			GraphicsEngineObj()->GetRenderingEngine().GetMainRenderTarget(),
+			GraphicsEngineObj()->GetDefferd().GetDSV()
+		);
 		//フォワードレンダリング。
 		ForwardRender();
 		//エフェクト描画処理。todo:PostRender?
 		EngineObj().GetEffectEngine().Render();		
 		//フォントの描画を開始。
 		//GraphicsEngineObj()->GetFontEngine().BeginDraw();
+		//ポストを掛ける。
+		GraphicsEngineObj()->GetRenderingEngine().BloomRender();
+		//フレームバッファにコピー。
+		GraphicsEngineObj()->GetRenderingEngine().CopyMainRenderTargetToFrameBuffer(GraphicsEngineObj()->GetRenderContext());
 		//HUDに描画。
 		DrawHUD();
 		//フォントの描画終了。

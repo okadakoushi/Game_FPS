@@ -29,7 +29,7 @@ bool Game::Start()
 	m_camera = FindGO<GameCamera>("GameCamera");
 	m_player = FindGO<GamePlayer>("Player");
 	//全mapの共通要素をインスタンス化。
-	//m_map = NewGO<Map>(EnPriority_UI, "Map");
+	m_map = NewGO<Map>(EnPriority_UI, "Map");
 
 	//Test
 	//m_effect = NewGO<myEngine::Effect>(0);
@@ -42,11 +42,16 @@ bool Game::Start()
 
 void Game::Update()
 {
-	if(GetAsyncKeyState('R')) {
-		//解放テスト用。
-		//DeleteGO(this);
+	//表示・非表示。
+	if(EngineObj().GetInputKeyCode().IsTriggerKey('R')) {
+		if (m_map->IsActive()) {
+			m_map->SetDraw(false);
+		}
+		else {
+			m_map->SetDraw(true);
+		}
 	}
-	//m_map->SetTargetPos(m_player->GetPos());
+	m_map->SetTargetPos(m_player->GetPos());
 }
 
 void Game::RenderHUD()

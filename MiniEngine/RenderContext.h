@@ -141,6 +141,15 @@ public:
 		m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 	}
 	/// <summary>
+	/// レンダリングターゲットを設定。
+	/// <para>デプスなし。</para>
+	/// </summary>
+	/// <param name="rtvHandle"></param>
+	void SetRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle)
+	{
+		m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+	}
+	/// <summary>
 	/// レンダリングターゲットとビューポートを設定する。
 	/// </summary>
 	/// <param name="rt">RenderTarget</param>
@@ -149,6 +158,60 @@ public:
 	{
 		m_commandList->OMSetRenderTargets(1, &rt.GetRTVCpuDescriptorHandle(), FALSE, &dsvHandle);
 		m_commandList->RSSetViewports(1, &rt.GetViewport());
+		m_currentViewport = rt.GetViewport();
+	}
+	/// <summary>
+	/// RTとVPを同時に設定。
+	/// <para>Depthのありなしを関数内で判定。</para>
+	/// <para>ユーザーは基本こちらを使うことを推奨。</para>
+	/// </summary>
+	/// <param name="renderTarget"></param>
+	void SetRenderTargetAndViewport(RenderTarget& renderTarget)
+	{
+		D3D12_VIEWPORT viewport;
+		//viewport.TopLeftX = 0;
+		//viewport.TopLeftY = 0;
+		//viewport.Width = static_cast<float>(renderTarget.GetWidth());
+		//viewport.Height = static_cast<float>(renderTarget.GetHeight());
+		//viewport.MinDepth = D3D12_MIN_DEPTH;
+		//viewport.MaxDepth = D3D12_MAX_DEPTH;
+		m_commandList->RSSetViewports(1, &renderTarget.GetViewport());
+		m_currentViewport = renderTarget.GetViewport();
+
+		if (renderTarget.IsExsitDepthStencilBuffer()) {
+			//デプスが存在している。
+			SetRenderTarget(renderTarget.GetRTVCpuDescriptorHandle(), renderTarget.GetDSVCpuDescriptorHandle());
+		}
+		else {
+			//デプスが存在していない。
+			SetRenderTarget(renderTarget.GetRTVCpuDescriptorHandle());
+		}
+
+		//シザリング単形
+		D3D12_RECT srect;
+		srect.top = 0;
+		srect.left = 0;
+		srect.right = renderTarget.GetWidth();
+		srect.bottom = renderTarget.GetHeight();
+		SetScissorRect(srect);
+	}
+
+	/// <summary>
+	/// ビューポートとシザリング矩形をセットで設定
+	/// </summary>
+	/// <param name="viewport">ビューポート</param>
+	void SetViewportAndScissor(D3D12_VIEWPORT& viewport)
+	{
+		//シザリング矩形も設定する。
+		D3D12_RECT scissorRect;
+		scissorRect.bottom = static_cast<LONG>(viewport.Height);
+		scissorRect.top = 0;
+		scissorRect.left = 0;
+		scissorRect.right = static_cast<LONG>(viewport.Width);
+		SetScissorRect(scissorRect);
+
+		m_commandList->RSSetViewports(1, &viewport);
+		m_currentViewport = viewport;
 	}
 	/// <summary>
 	/// レンダリングターゲットとビューポートを同時に設定する。
@@ -294,6 +357,15 @@ public:
 	{
 		m_commandList->Dispatch(ThreadGroupCountX, ThreadGroupCountY, ThreadGroupCountZ);
 	}
+
+	/// <summary>
+	/// ビューポートを取得。
+	/// </summary>
+	/// <returns></returns>
+	D3D12_VIEWPORT GetViewport() const
+	{
+		return m_currentViewport;
+	}
 private:
 
 	/// <summary>
@@ -333,5 +405,6 @@ private:
 	ID3D12DescriptorHeap* m_descriptorHeaps[MAX_DESCRIPTOR_HEAP];			//ディスクリプタヒープの配列。
 	ConstantBuffer* m_constantBuffers[MAX_CONSTANT_BUFFER] = { nullptr };	//定数バッファの配列。
 	Texture* m_shaderResources[MAX_SHADER_RESOURCE] = { nullptr };			//シェーダーリソースの配列。
+	D3D12_VIEWPORT m_currentViewport;
 };
 

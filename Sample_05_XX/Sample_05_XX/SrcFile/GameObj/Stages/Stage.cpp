@@ -50,7 +50,7 @@ bool Stage::Start()
 	//ナビメッシュ作成。
 	m_naviMesh = new NaviMesh;
 	m_naviMesh->Load("Assets/nvm/StageLevel.nvm");
-#ifndef MASTER
+#ifdef NAV_DEBUG
 	m_naviMesh->InitRender();
 #endif
 
@@ -155,7 +155,7 @@ void Stage::Update()
 
 void Stage::ForwardRender()
 {
-#ifndef MASTER
+#ifdef NAV_DEBUG
 	m_naviMesh->Render();
 #endif
 }

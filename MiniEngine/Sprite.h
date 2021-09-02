@@ -16,6 +16,16 @@ const int EXPAND_SET_CONSTANT_BUFFER_START_NO = 10;
 
 class IShaderResource;
 
+/// <summary>
+/// アルファブレンディングモード
+/// </summary>
+enum AlphaBlendMode {
+	AlphaBlendMode_None,	//アルファブレンディングなし(上書き)。
+	AlphaBlendMode_Trans,	//半透明合成
+	AlphaBlendMode_Add,		//加算合成
+	AlphaBlendMode_Multiply	//乗算合成
+};
+
 template< class TExpandData > struct SpriteExpandDataInfo {
 	TExpandData* m_expandData = nullptr;
 	int m_expandDataSize = 0;
@@ -34,6 +44,18 @@ struct SpriteInitData {
 	void* m_expandConstantBuffer = nullptr;					//ユーザー拡張の定数バッファ
 	int m_expandConstantBufferSize = 0;						//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//ユーザー拡張のシェーダーリソース。
+	AlphaBlendMode m_alphaBlendMode = AlphaBlendMode_Trans;	//アルファブレンディングモード。
+	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_UNKNOWN,
+		DXGI_FORMAT_UNKNOWN,
+		DXGI_FORMAT_UNKNOWN,
+		DXGI_FORMAT_UNKNOWN,
+		DXGI_FORMAT_UNKNOWN,
+		DXGI_FORMAT_UNKNOWN,
+		DXGI_FORMAT_UNKNOWN,
+	};	//レンダリングするカラーバッファのフォーマット。
+	UINT8 renderTargetMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 };
 /// <summary>
 /// スプライトクラス。
@@ -124,6 +146,32 @@ public:
 	{
 		m_constantBufferCPU.lightIntensity = itensity;
 	}
+	/// <summary>
+	/// テクスチャの幅を取得。
+	/// </summary>
+	/// <param name="texNo"></param>
+	/// <returns></returns>
+	int GetTextureWidth(int texNo) const
+	{
+		return m_textures[texNo].GetWidth();
+	}
+	/// <summary>
+	/// テクスチャの幅を取得。
+	/// </summary>
+	/// <param name="texNo"></param>
+	/// <returns></returns>
+	int GetTextureHeight(int texNo) const
+	{
+		return m_textures[texNo].GetHeight();
+	}
+	/// <summary>
+	/// 3D描画するか。
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetDraw3DFlag(bool& flag)
+	{
+		m_isDraw3D = flag;
+	}
 private:
 	/// <summary>
 	/// テクスチャを初期化。
@@ -148,7 +196,7 @@ private:
 	/// <summary>
 	/// パイプラインステートを初期化する。
 	/// </summary>
-	void InitPipelineState();
+	void InitPipelineState(const SpriteInitData& initData);
 	/// <summary>
 	/// 定数バッファを初期化。
 	/// </summary>
@@ -182,4 +230,5 @@ private:
 	PipelineState		m_pipelineState;		//パイプラインステート。
 	Shader				m_vs;					//頂点シェーダー。
 	Shader				m_ps;					//ピクセルシェーダー。
+	bool m_isDraw3D = false;					//isDraw3D.viewProjの関係上ここに定義。
 };

@@ -1,12 +1,13 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-//#define GAME
+#define GAME
 //#define PHYSICS_DEBUG
+//#define NAV_DEBUG
 
 
 #ifndef MASTER
-	#define NAV_DEBUG
+
 #endif
 
 const float DELTA_TIME = 1.0f / 120.0f;	//更新時間。後でGameTimeクラス作ること。

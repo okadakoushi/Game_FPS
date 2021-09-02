@@ -118,7 +118,7 @@
 		m_indexBuffer.Init(sizeof(indices), sizeof(indices[0]));
 		m_indexBuffer.Copy(indices);
 	}
-	void Sprite::InitPipelineState()
+	void Sprite::InitPipelineState(const SpriteInitData& initData)
 	{
 		// 頂点レイアウトを定義する。
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -138,13 +138,31 @@
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		//αブレンドするように設定。
 		psoDesc.BlendState.IndependentBlendEnable = TRUE;
-		psoDesc.BlendState.RenderTarget[0].BlendEnable = TRUE;
-		psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-		psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		psoDesc.DepthStencilState.DepthEnable = FALSE;
+		//ブレンド設定に合わせてブレンドステートを作成する。
+		if (initData.m_alphaBlendMode == AlphaBlendMode_Trans) {
+			psoDesc.BlendState.RenderTarget[0].BlendEnable = TRUE;
+			psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+			psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+			psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+		}
+		else if (initData.m_alphaBlendMode == AlphaBlendMode_Add) {
+			//加算合成。
+			psoDesc.BlendState.RenderTarget[0].BlendEnable = true;
+			psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+			psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+			psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+		}
+		else if (initData.m_alphaBlendMode == AlphaBlendMode_Multiply) {
+			//乗算合成。
+			psoDesc.BlendState.RenderTarget[0].BlendEnable = true;
+			psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
+			psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_SRC_COLOR;
+			psoDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+		}
+
+		psoDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = initData.renderTargetMask;
+
 		psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 		psoDesc.DepthStencilState.StencilEnable = FALSE;
@@ -154,7 +172,13 @@
 		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 		psoDesc.SampleDesc.Count = 1;
-		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		for (auto& format : initData.m_colorBufferFormat) {
+			if (format == DXGI_FORMAT_UNKNOWN) {
+				break;
+			}
+			psoDesc.RTVFormats[psoDesc.NumRenderTargets] = format;
+			psoDesc.NumRenderTargets++;
+		}
 		m_pipelineState.Init(psoDesc);
 	}
 	void Sprite::InitConstantBuffer(const SpriteInitData& initData)
@@ -196,7 +220,7 @@
 		//シェーダーを初期化。
 		InitShader(initData);
 		//パイプラインステートの初期化。
-		InitPipelineState();
+		InitPipelineState(initData);
 		//ディスクリプタヒープを初期化。
 		InitDescriptorHeap(initData);
 		//変更を確定。
@@ -243,8 +267,19 @@
 	}
 	void Sprite::Draw(RenderContext& renderContext, const Matrix& view, const Matrix& proj)
 	{
-		Matrix viewMatrix = view;
-		Matrix projMatrix = proj;
+		//現在のビューポートから平行投影行列を計算する。
+		D3D12_VIEWPORT viewport = renderContext.GetViewport();
+		//todo カメラ行列は定数に使用。どうせ変えないし・・・。
+		Matrix viewMatrix;
+		Matrix projMatrix;
+		if (m_isDraw3D) {
+			viewMatrix = view;
+			projMatrix = proj;
+		}
+		else {
+			viewMatrix = GraphicsEngineObj()->GetCamera2D().GetViewMatrix();
+			projMatrix.MakeOrthoProjectionMatrix(viewport.Width, viewport.Height, 0.1f, 1.0f);
+		}
 
 		m_constantBufferCPU.mvp = m_world * viewMatrix * projMatrix;
 		//m_constantBufferCPU.mulColor.x = 1.0f;

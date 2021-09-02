@@ -68,7 +68,7 @@ void DefferdRender::SpriteInit()
 	//initData.m_textures[Gbuffer_Num] = &GraphicsEngineObj()->GetSkyBox()->GetSkyCubeTexture();
 
 	//ディファード用のスプライトを設定。
-	initData.m_fxFilePath = "Assets/shader/Defeardsprite.fx";
+	initData.m_fxFilePath = "Assets/shader/DefeardSprite.fx";
 	//ライトの定数バッファ。
 	g_light.eyePos = GraphicsEngineObj()->GetCamera3D().GetPosition();
 	initData.m_expandConstantBuffer = &g_light;
@@ -115,9 +115,12 @@ void DefferdRender::Render(RenderContext& rc, const Matrix& view, const Matrix& 
 
 void DefferdRender::DeffardRender(RenderContext& rc, const Matrix& view, const Matrix& proj)
 {
+	rc.WaitUntilToPossibleSetRenderTarget(GraphicsEngineObj()->GetRenderingEngine().GetMainRenderTarget());
+	rc.SetRenderTargetAndViewport(GraphicsEngineObj()->GetRenderingEngine().GetMainRenderTarget());
 	if (!m_isInited) {
 		m_isInited = true;
 	}
 	//描画。
 	m_defferdSprite.Draw(rc, view, proj);
+	rc.WaitUntilFinishDrawingToRenderTarget(GraphicsEngineObj()->GetRenderingEngine().GetMainRenderTarget());
 }

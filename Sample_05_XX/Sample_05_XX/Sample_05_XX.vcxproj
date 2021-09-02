@@ -185,7 +185,10 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SrcFile\Bloom.cpp" />
     <ClCompile Include="BulletManeger.cpp" />
+    <ClCompile Include="SrcFile\GaussianBlur.cpp" />
+    <ClCompile Include="SrcFile\RenderingEngine.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerIdleState.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerAttackState.cpp" />
     <ClCompile Include="SrcFile\GameObj\PlayerState\PlayerDashState.cpp" />
@@ -273,6 +276,7 @@
     <ClCompile Include="SrcFile\Audio\WaveFile.cpp" />
     <ClCompile Include="SrcFile\Audio\WaveFileBank.cpp" />
     <ClCompile Include="SrcFile\GameObj\Title.cpp" />
+    <ClCompile Include="SrcFile\ToneMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\Camera.h" />
@@ -304,7 +308,10 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="SrcFile\Bloom.h" />
     <ClInclude Include="BulletManeger.h" />
+    <ClInclude Include="SrcFile\GaussianBlur.h" />
+    <ClInclude Include="SrcFile\RenderingEngine.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerIdleState.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerAttackState.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerDashState.h" />
@@ -394,6 +401,7 @@
     <ClInclude Include="SrcFile\Audio\WaveFile.h" />
     <ClInclude Include="SrcFile\Audio\WaveFileBank.h" />
     <ClInclude Include="SrcFile\GameObj\Title.h" />
+    <ClInclude Include="SrcFile\ToneMap.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />

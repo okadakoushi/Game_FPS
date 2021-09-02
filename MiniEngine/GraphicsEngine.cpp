@@ -192,6 +192,8 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//DirectXTK用のグラフィックメモリ管理クラスのインスタンスを作成する。
 	m_directXTKGfxMemroy = std::make_unique<DirectX::GraphicsMemory>(m_d3dDevice);
 
+	m_renderingEngine.Init();
+
 	//フォントエンジン初期化。
 	m_fontEngine.Init(m_renderContext);
 
@@ -202,6 +204,8 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	//シャドウマップのインスタンス。
 	m_shadow = new DirectionalShadowMap;
 	m_shadow->Init(5000, 5000, 3000.0f);
+
+	//m_toneMap.Init(m_renderTargets[m_currentBackBufferIndex]);
 
 	m_lineDraw.Init();
 

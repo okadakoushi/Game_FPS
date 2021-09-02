@@ -13,6 +13,9 @@ public:
 		initData.m_fxFilePath = "Assets/shader/sprite.fx";
 		initData.m_width = 50.0f;
 		initData.m_height = 50.0f;
+		initData.renderTargetMask = D3D12_COLOR_WRITE_ENABLE_RED
+			| D3D12_COLOR_WRITE_ENABLE_GREEN
+			| D3D12_COLOR_WRITE_ENABLE_BLUE;
 		m_missingMark = NewGO<SpriteRender>(EnPriority_UI);
 		m_missingMark->Init(initData, true);
 		m_missingMark->SetPos({ 0, 100, 0 });

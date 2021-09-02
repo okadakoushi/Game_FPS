@@ -79,6 +79,10 @@ public:
 	{
 		return m_height;
 	}
+	DXGI_FORMAT GetColorBufferFormat() const
+	{
+		return m_renderTargetTexture.GetFormat();
+	}
 	const float* GetRTVClearColor() const
 	{
 		return m_rtvClearColor;
