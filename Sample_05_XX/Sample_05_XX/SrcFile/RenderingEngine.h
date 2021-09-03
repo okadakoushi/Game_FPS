@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bloom.h"
+#include "ToneMap.h"
 
 /// <summary>
 /// レンダリングエンジン。
@@ -17,9 +18,14 @@ public:
 	/// 初期化。
 	/// </summary>
 	void Init();
+	/// <summary>
+	/// メインRTをフレームバッファにコピーする。
+	/// </summary>
+	/// <param name="rc"></param>
+	void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 public:
 	void ZPrePass(RenderContext& rc);
-	void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
+	void ToneMapRender();
 	void BloomRender();
 public:
 	/// <summary>
@@ -45,6 +51,14 @@ public:
 	Bloom& GetBloom()
 	{
 		return m_bloom;
+	}
+	/// <summary>
+	/// トーンマップを取得。
+	/// </summary>
+	/// <returns></returns>
+	ToneMap& GetToneMap()
+	{
+		return m_toneMap;
 	}
 public:
 	/// <summary>
@@ -81,7 +95,8 @@ private:
 	Sprite m_copyMainRtToFrameBufferSprite;			//メインRTからフレームバッファにコピーするスプライト。
 
 	//postEffects//
-	Bloom m_bloom;									//bloom
+	ToneMap		m_toneMap;							//トーンマップ。
+	Bloom		m_bloom;							//ブルーム。
 	
 	std::vector<SkinModelRender*> m_renders;		//レンダーリスト。
 };

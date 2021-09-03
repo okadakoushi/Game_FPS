@@ -253,6 +253,15 @@ public:
 	{
 		return m_skeleton;
 	}
+	/// <summary>
+	/// 拡張定数バッファのパラメーターを設定。
+	/// </summary>
+	/// <param name="params">パラメーター。</param>
+	/// <param name="size">パラメーターサイズ。</param>
+	void SetExpandConstantBufferParam(void* params, int size)
+	{
+		m_model.SetExpandConstantBuffer(params, size);
+	}
 private:
 	/// <summary>
 	/// モデルの初期化ステップ。

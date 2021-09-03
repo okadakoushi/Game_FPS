@@ -91,6 +91,7 @@ void GaussianBlur::InitSprite(bool isBlurAlpha)
 		//ユーザー拡張の定数バッファにブラー用のパラメーターを設定する。
 		xBlurSpriteInitData.m_expandConstantBuffer = &m_weights;
 		xBlurSpriteInitData.m_expandConstantBufferSize = sizeof(m_weights);
+		xBlurSpriteInitData.m_texAddressMode = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//範囲外にフィルタを掛けると、おかしいブルームが生じるため引き伸ばし。
 
 		//初期化情報をもとに横ブラー用のスプライトを初期化する。
 		m_xBlurSprite.Init(xBlurSpriteInitData);
@@ -111,6 +112,7 @@ void GaussianBlur::InitSprite(bool isBlurAlpha)
 		//ユーザー拡張の定数バッファにブラー用のパラメーターを設定する。
 		yBlurSpriteInitData.m_expandConstantBuffer = &m_weights;
 		yBlurSpriteInitData.m_expandConstantBufferSize = sizeof(m_weights);
+		yBlurSpriteInitData.m_texAddressMode = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//範囲外にフィルタを掛けると、おかしいブルームが生じるため引き伸ばし。
 
 		//初期化情報をもとに縦ブラー用のスプライトを初期化する。
 		m_yBlurSprite.Init(yBlurSpriteInitData);

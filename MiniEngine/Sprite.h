@@ -55,7 +55,8 @@ struct SpriteInitData {
 		DXGI_FORMAT_UNKNOWN,
 		DXGI_FORMAT_UNKNOWN,
 	};	//レンダリングするカラーバッファのフォーマット。
-	UINT8 renderTargetMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+	UINT8 renderTargetMask = D3D12_COLOR_WRITE_ENABLE_ALL;	//レンダリングマスク。
+	D3D12_TEXTURE_ADDRESS_MODE m_texAddressMode = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//テクスチャのサンプリング方法。
 };
 /// <summary>
 /// スプライトクラス。

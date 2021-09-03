@@ -170,6 +170,17 @@ public:
 	{
 		m_psEntry = entry;
 	}
+	/// <summary>
+	/// 拡張定数バッファを設定。
+	/// <para>Init前に呼び出さないと、処理の都合上効果がないので注意。</para>
+	/// </summary>
+	/// <param name="exCB">拡張定数バッファ。</param>
+	/// <param name="size">定数バッファのサイズ。</param>
+	void SetExpandConstantBuffer(void* exCB, int& size)
+	{
+		m_expandConstantBuffer = exCB;
+		m_expandConstantBufferSize = size;
+	}
 private:
 	/// <summary>
 	/// aabbを初期化。

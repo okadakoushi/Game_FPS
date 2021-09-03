@@ -29,5 +29,8 @@ private:
 	int m_enemyCount;
 	NaviMesh* m_naviMesh = nullptr;	//使用するナビメッシュ。
 	StageGenerator* m_stageGenerator = nullptr;
+	
+	//CheatCode
+	bool m_deleteStageFlag = false;
 };
 

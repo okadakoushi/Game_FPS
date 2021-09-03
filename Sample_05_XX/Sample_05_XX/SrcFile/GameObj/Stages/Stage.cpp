@@ -130,6 +130,16 @@ void Stage::Update()
 		}
 	}
 
+	//cheatCode//
+	if (GetAsyncKeyState('L')) {
+		for (auto* sol : m_rifleEnemys) {
+			if (sol != nullptr) {
+				sol->SetActive(false);
+			}
+		}
+	}
+	//cheatCode//
+
 	if (currentEnemyCount <= 0) {
 		//敵を全部倒した。
 		//NextStage?Title?
@@ -137,7 +147,13 @@ void Stage::Update()
 			//フェード開始。
 			printf("すべての敵を倒した\n");
 			m_stageGenerator->DeleteCurrentStage();
-			m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
+			if (m_stageGenerator->GetCurrentStageNumber() == StageGenerator::EnStageNumber_BattleStage1) {
+				m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
+			}
+			else {
+				m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage4);
+			}
+
 		}
 	}
 
@@ -148,7 +164,7 @@ void Stage::Update()
 			//フェード開始。
 			printf("プレイヤー死亡。\n");
 			m_stageGenerator->DeleteCurrentStage();
-			m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+			m_stageGenerator->CreateStage(m_stageGenerator->GetCurrentStageNumber());
 		}
 	}
 }

@@ -103,6 +103,7 @@ void GameObjectManager::UpdateManager()
 		//フォントの描画を開始。
 		//GraphicsEngineObj()->GetFontEngine().BeginDraw();
 		//ポストを掛ける。
+		GraphicsEngineObj()->GetRenderingEngine().ToneMapRender();
 		GraphicsEngineObj()->GetRenderingEngine().BloomRender();
 		//フレームバッファにコピー。
 		GraphicsEngineObj()->GetRenderingEngine().CopyMainRenderTargetToFrameBuffer(GraphicsEngineObj()->GetRenderContext());

@@ -41,7 +41,18 @@ public:
 	{
 		m_skyCubeMapFilePath = path;
 	}
+	/// <summary>
+	/// スカイボックスの自己発光を設定。
+	/// </summary>
+	/// <param name="itensity"></param>
+	void SetSelfLuminous(const float& itensity)
+	{
+		m_skyParams.selfLuminous = itensity;
+	}
 private:
+	struct SkyBoxParams {
+		float selfLuminous = 1.0f;	//自己発光。
+	};
 	SkinModelRender* m_modelRender = nullptr;			//モデルレンダー。
 	Texture m_skyCube;									//スカイキューブ。
 	Shader m_psShader;									//スカイ用のシェーダー。
@@ -51,5 +62,6 @@ private:
 	bool m_isDirty = false;								//ダーティフラグ。
 	std::wstring m_skyCubeMapFilePath = L"Assets/modelData/nature/skyCubeMapNight_Toon_02.dds";		//空マップのファイルパス。
 	const char* m_skyModelFilePath = "Assets/modelData/nature/skyBox.tkm";				//空モデルのファイルパス
+	SkyBoxParams m_skyParams;
 };
 

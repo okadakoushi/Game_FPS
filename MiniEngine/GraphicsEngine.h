@@ -315,7 +315,6 @@ private:
 	SpriteInitData m_spriteData;
 	FontEngine m_fontEngine;
 	RenderingEngine m_renderingEngine;	//レンダリングエンジン。
-	ToneMap m_toneMap;					//トーンマップ。
 	/*
 	グラフィックメモリヘルパーはシングルトンです。スワップチェーンのセットアップ時に提供されるデバイスとバックバッファーカウントが必要なため、
 	明示的な初期化が必要です。

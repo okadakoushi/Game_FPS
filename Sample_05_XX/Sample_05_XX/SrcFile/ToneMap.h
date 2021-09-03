@@ -20,6 +20,13 @@ public:
 	/// <param name="rc">レンダ―コンテキスト。</param>
 	/// <param name="mainRenderTarget">メインレンダ―ターゲット。</param>
 	void OnRender(RenderContext& rc, RenderTarget& mainRT);
+	/// <summary>
+	/// ミドルグレイ（基準とする輝度）を設定。
+	/// </summary>
+	void SetMiddleGray(float itensity)
+	{
+		m_toneMapParam.midddleGray = itensity;
+	}
 private:
 	/// <summary>
 	/// 平均輝度を計算する。

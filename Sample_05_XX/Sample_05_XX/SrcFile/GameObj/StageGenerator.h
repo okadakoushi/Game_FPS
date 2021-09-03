@@ -9,6 +9,7 @@ class SkyBox;
 
 /// <summary>
 /// レベル管理オブジェクト。
+/// <para>全体的にリファクタリングが必要。コードの無駄が多すぎる。</para>
 /// </summary>
 class StageGenerator : public IGameObject
 {
@@ -28,6 +29,12 @@ public:
 	void OnDestroy() override;
 	bool Start() override;
 	void Update() override;
+	/// <summary>
+	/// フェードを行う。
+	/// <para>Update等の更新関数で呼び出すこと。</para>
+	/// </summary>
+	/// <param name="fadeIn">フェードイン？</param>
+	/// <returns>フェードが終了したか。</returns>
 	bool FadeProcess(const bool& fadeIn);
 	/// <summary>
 	/// 指定されたステージを作成。

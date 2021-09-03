@@ -146,18 +146,36 @@ void BattleStage1::Update()
 		}
 	}
 
+	//cheatCode//
+	if (GetAsyncKeyState('L')) {
+		for (auto* sol : m_rifleEnemy) {
+			if (sol != nullptr) {
+				sol->SetActive(false);
+			}
+		}
+	}
+	//cheatCode//
+
 	if (currentSoldierCount <= 0) {
 		//敵を全部倒した。
-		//NextStage?Title?
-		m_stageGenerator->DeleteCurrentStage();
-		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+		if (m_stageGenerator->FadeProcess(true)) {
+			//フェード終了？
+			//現在のステージは破棄。
+			m_stageGenerator->DeleteCurrentStage();
+			if (m_stageGenerator->GetCurrentStageNumber() == StageGenerator::EnStageNumber_BattleStage2) {
+				m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage3);
+			}
+			else {
+				m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage1);
+			}
+		}
 	}
 
 	if (m_player->GetHP() <= 0) {
 		//プレイヤー死亡。
 		//Retry?Title?
 		m_stageGenerator->DeleteCurrentStage();
-		m_stageGenerator->CreateStage(StageGenerator::EnStageNumber_BattleStage2);
+		m_stageGenerator->CreateStage(m_stageGenerator->GetCurrentStageNumber());
 	}
 }
 

@@ -24,12 +24,20 @@ public:
 	{
 		return m_luminanceRenderTarget.GetRenderTargetTexture();
 	}
-
+	/// <summary>
+	/// 重みを設定。
+	/// </summary>
+	/// <param name="weight"></param>
+	void SetWeight(int weight)
+	{
+		m_weight = weight;
+	}
 private:
 	RenderTarget m_luminanceRenderTarget;	//輝度抽出用RT。
 	Sprite m_luminanceSprite;				//輝度抽出用Sprite。
 	GaussianBlur m_gaussianBlur[4];			//ガウシアンブラー。
 	Sprite m_finalSprite;					//最終合成スプライト。
 	float m_clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	int m_weight = 10;						//ブルームの重み。
 };
 

@@ -33,6 +33,8 @@ void RenderingEngine::Init()
     //初期化。
     m_copyMainRtToFrameBufferSprite.Init(initData);
 
+    //トーンマップ初期化。
+    m_toneMap.Init(m_mainRenderTarget);
     //ブルーム初期化。
     m_bloom.Init(m_mainRenderTarget);
 }
@@ -74,6 +76,11 @@ void RenderingEngine::CopyMainRenderTargetToFrameBuffer(RenderContext& rc)
     rc.SetViewport(viewport);
 
     m_copyMainRtToFrameBufferSprite.Draw(rc, GraphicsEngineObj()->GetCamera2D().GetViewMatrix(), GraphicsEngineObj()->GetCamera2D().GetProjectionMatrix());
+}
+
+void RenderingEngine::ToneMapRender()
+{
+    m_toneMap.OnRender(GraphicsEngineObj()->GetRenderContext(), m_mainRenderTarget);
 }
 
 void RenderingEngine::BloomRender()

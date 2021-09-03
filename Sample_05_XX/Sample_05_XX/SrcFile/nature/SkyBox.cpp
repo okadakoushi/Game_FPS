@@ -29,6 +29,7 @@ bool SkyBox::Start()
 	//空は特殊なレンダリングなのでForwardレンダリング描画。
 	m_modelRender->SetForwardRender();
 	m_modelRender->GetModel().SetPSEntry("PSMain_SkyCube");
+	m_modelRender->SetExpandConstantBufferParam(&m_skyParams, sizeof(m_skyParams));
 	m_modelRender->Init(m_skyModelFilePath);
 	//空用シェーダーロード。
 	//m_psShader.LoadPS(L"Assets/shader/NoAnimModel_LambertSpecularAmbient.fx", "PSMain_SkyCube");
