@@ -47,8 +47,8 @@ private:
 private:
 	const float m_CAMERA_HEIGHT = 1300.0f;		//カメラの高さ。
 	const float m_SHRINK_WITH_HEIGHT = 1500.0f;	//縮小時のマップの横縦。
-	const int m_WIDTH = 300.0f;					//スプライトの横。
-	const int m_HEIGHT = 300.0f;				//スプライトの縦。
+	const int m_WIDTH = 250.0f;					//スプライトの横。
+	const int m_HEIGHT = 250.0f;				//スプライトの縦。
 	const Vector4 m_COLOR = Vector4::White;		//乗算カラー。
 	RenderTarget m_miniMap;						//miniマップ用RTV。
 	Matrix m_viewMatrix;						//ビュー。
@@ -62,5 +62,6 @@ private:
 	Vector3 m_scale = g_vec3One;
 	Vector2 m_pivot = g_vec2Zero;
 	SpriteRender* m_spriteRender = nullptr;
+	SpriteRender* m_uiBoxForMap = nullptr;		//Map用UIBOX。
 };
 

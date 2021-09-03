@@ -25,7 +25,7 @@ public:
 	void ActiveProcess(bool flag);
 private:
 	//Finds。
-	GamePlayer* m_player = nullptr;						//playerPtr。
+	GamePlayer* m_player = nullptr;								//playerPtr。
 	//UIs。
 	SpriteRender*				m_reticule = nullptr;			//レティクル。
 	SpriteRender*				m_mainWeponImage = nullptr;		//メインウェポンUI。

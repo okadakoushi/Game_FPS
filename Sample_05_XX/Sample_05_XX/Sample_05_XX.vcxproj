@@ -405,6 +405,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />
+    <ImageContentTask Include="Assets\sprite\MapUI_Box.png">
+      <ContentOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Assets/sprite/%(Filename).dds</ContentOutput>
+    </ImageContentTask>
     <ImageContentTask Include="Assets\sprite\blood.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

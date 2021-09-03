@@ -205,8 +205,6 @@ bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeig
 	m_shadow = new DirectionalShadowMap;
 	m_shadow->Init(5000, 5000, 3000.0f);
 
-	//m_toneMap.Init(m_renderTargets[m_currentBackBufferIndex]);
-
 	m_lineDraw.Init();
 
 	return true;

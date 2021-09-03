@@ -24,7 +24,16 @@ bool Map::Start()
 	initData.m_height = m_WIDTH;
 	initData.m_width = m_HEIGHT;
 	m_spriteRender->Init(initData, false);
-	m_pos = { -480.0f, 200.0f, 0.0f };
+
+	//BoxUI_MAP
+	m_uiBoxForMap = NewGO<SpriteRender>(EnPriority_UI);
+	initData.m_ddsFilePath[0] = "Assets/sprite/MapUI_Box.dds";
+	initData.m_width = 295.0f;
+	initData.m_height = 290.0f;
+	m_uiBoxForMap->Init(initData);
+	m_uiBoxForMap->SetPos({ FRAME_BUFFER_W * -0.387f, FRAME_BUFFER_H * 0.275f, 0.0f });
+
+	m_pos = { -495.0f, 200.0f, 0.0f };
 	return true;
 }
 
@@ -102,10 +111,12 @@ void Map::SwichMiniMapSize()
 	if (KeyCodeObj().IsTriggerKey('M')) {
 		if (m_isExpansion) {
 			//Šg‘åÏ‚Ý‚È‚Ì‚Åƒ}ƒbƒv‚ðk¬‚·‚éB
-			m_pos = { -480.0f, 200.0f, 0.0f };
+			m_pos = { -495.0f, 200.0f, 0.0f };
 			m_scale = g_vec3One;
 			m_currentWith_Height = m_SHRINK_WITH_HEIGHT;
 			m_spriteRender->SetMulColor(m_COLOR);
+			m_uiBoxForMap->SetPos({ FRAME_BUFFER_W * -0.39f, FRAME_BUFFER_H * 0.275f, 0.0f });
+			m_uiBoxForMap->SetScale(g_vec3One);
 			m_isExpansion = false;
 		}
 		else {
@@ -115,6 +126,8 @@ void Map::SwichMiniMapSize()
 			m_scale.y = GraphicsEngineObj()->GetFrameBufferHeight() / m_HEIGHT * 0.8f;
 			m_currentWith_Height = m_SHRINK_WITH_HEIGHT * 4;
 			m_spriteRender->SetMulColor({ m_COLOR.r, m_COLOR.g, m_COLOR.b, m_COLOR.w * 0.8f });
+			m_uiBoxForMap->SetScale({ 3.8f, 1.6f, 1.0f });
+			m_uiBoxForMap->SetPos(g_vec3Zero);
 			m_isExpansion = true;
 		}
 	}

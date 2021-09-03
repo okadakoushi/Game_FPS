@@ -739,5 +739,6 @@
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\blood.dds" />
+    <ImageContentTask Include="Assets\sprite\MapUI_Box.png" />
   </ItemGroup>
 </Project>

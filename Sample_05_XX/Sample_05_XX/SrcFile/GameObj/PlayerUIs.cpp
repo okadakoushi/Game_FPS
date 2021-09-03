@@ -42,9 +42,11 @@ bool PlayerUIs::Start()
 	InitData.m_width = 420.0f;
 	InitData.m_height = 240.0f;
 	m_uiBoxForHP->Init(InitData);
+	m_uiBoxForHP->SetPos({ FRAME_BUFFER_W * 0.32f + m_saveFrame.x, FRAME_BUFFER_H * -0.41f , 0.0f });
 	InitData.m_width = 300.0f;
 	InitData.m_height = 500.0f;
 	m_uiBoxForAmo->Init(InitData);
+	m_uiBoxForAmo->SetPos({ FRAME_BUFFER_W * -0.415f + m_saveFrame.x, FRAME_BUFFER_H * -0.4f + m_saveFrame.y, 0.0f });
 
 	//ダメージエフェクト。
 	m_damageEffectSprite = NewGO<SpriteRender>(EnPriority_UI, "DamageEffectSprite");
@@ -68,9 +70,6 @@ bool PlayerUIs::Start()
 	InitData.m_height = 100.0f;
 	m_mainWeponImage->Init(InitData);
 	m_mainWeponImage->SetPos({ FRAME_BUFFER_W * -0.42f + m_saveFrame.x, FRAME_BUFFER_H * -0.44f + m_saveFrame.y, 0.0f});
-
-	m_uiBoxForHP->SetPos({ FRAME_BUFFER_W * 0.32f + m_saveFrame.x, FRAME_BUFFER_H * -0.41f , 0.0f});
-	m_uiBoxForAmo->SetPos({ FRAME_BUFFER_W * -0.415f + m_saveFrame.x, FRAME_BUFFER_H * -0.4f + m_saveFrame.y, 0.0f });
 
 	//弾丸のUI。
 	InitData.m_width = 10.0f;
