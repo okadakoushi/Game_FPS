@@ -121,16 +121,20 @@ float4 PSMain( PSInput In ) : SV_Target0
 	//反射ベクトルを求める。
 	float3 refVec = reflect(eye2WroldPos, normal);
 
-
-
-	//環境光。
-	//lig += ambinentLight; //足し算するだけ
+	//物体の滑らかさにより、ミップマップの品質を変更することで疑似的な映り込みを表現。
+	//滑らかならば綺麗なMipLevelで返す、荒いならば平均カラーのMipMapを返す。
 	int mipLevel = 12 * (1.0f - smooth);
 	lig += skyCubeMap.SampleLevel(g_sampler, refVec, mipLevel) * lightIdensity;
+	//if (shadow == 1.0f) {
+	//	mipLevel = 12;
+	//}
 
 	//環境光による鏡面反射を計算する。
 	//光が法線方向から入射していると考えて鏡面反射を計算する。
 	lig += BRDF(normal, toEye, normal, metaric) * ambinentLight* metaric ;
+
+	//環境光。
+	//lig += ambinentLight; //足し算するだけ
 
     //テクスチャカラーをサンプリング。
 	float4 texColor = g_texture.Sample(g_sampler, In.uv);

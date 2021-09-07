@@ -212,7 +212,6 @@
     <ClCompile Include="SrcFile\2D\FontRender.cpp" />
     <ClCompile Include="SrcFile\RayTestCallBack.cpp" />
     <ClCompile Include="SrcFile\GameObj\SoldierCollision.cpp" />
-    <ClCompile Include="SrcFile\GameObj\Enemy\Enemy_MeleeSoldier.cpp" />
     <ClCompile Include="SrcFile\GameObj\Stages\BattleStage1.cpp" />
     <ClCompile Include="EnablePoint.cpp" />
     <ClCompile Include="SrcFile\GameObj\guide.cpp" />
@@ -336,7 +335,6 @@
     <ClInclude Include="SrcFile\2D\FontRender.h" />
     <ClInclude Include="SrcFile\RayTestCallBack.h" />
     <ClInclude Include="SrcFile\GameObj\SoldierCollision.h" />
-    <ClInclude Include="SrcFile\GameObj\Enemy\Enemy_MeleeSoldier.h" />
     <ClInclude Include="SrcFile\GameObj\Stages\BattleStage1.h" />
     <ClInclude Include="EnablePoint.h" />
     <ClInclude Include="SrcFile\GameObj\guide.h" />

@@ -14,7 +14,7 @@
 #include "PlayerState/PlayerDashState.h"
 #include "PlayerState/PlayerReloadState.h"
 
-const float	GamePlayer::BASE_PARAM::PLAYER_MAX_HP = 100.0f;
+const int	GamePlayer::BASE_PARAM::PLAYER_MAX_HP = 100.0f;
 const int	GamePlayer::BASE_PARAM::REGENE_VALUE_SECOND = 50;
 const float GamePlayer::BASE_PARAM::REGENE_COOL_TIME = 5.0f;
 const float GamePlayer::BASE_PARAM::JUMPFORSE = 520.0f;

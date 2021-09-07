@@ -57,7 +57,7 @@ bool RifleEnemy::Start()
     m_collision.Init(m_modelRender);
     
     //プレイヤーをFind。
-    m_player = GetPlayerForUseFind();
+    m_player = FindGO<GamePlayer>("Player");
 
     //頭のボーンを取得。
     int headID = m_modelRender->GetSkelton().FindBoneID(L"mixamorig:Head");
@@ -93,6 +93,10 @@ bool RifleEnemy::Start()
     m_trackingState = new EnemyTrackingState(this);
     m_wanderingState = new EnemyWanderingState(this);
 
+    //naviMeshでRnderの位置と回転を参照するためここで設定を指定おく。
+    m_modelRender->SetPosition(m_pos);
+    m_modelRender->SetRotation(m_rot);
+
 	return true;
 }
 
@@ -110,6 +114,9 @@ void RifleEnemy::Update()
     //後々使うのでヘッドのいちを計算しておく。
     Quaternion headRot;
     m_head->CalcWorldTRS(m_headPos, headRot);
+
+    //レイテスト用のタイマーを加算する。
+    m_rayTestTimer += GameTime().GetFrameDeltaTime();
 
     if (IsFindPlayer()) {
         //攻撃。
@@ -164,12 +171,10 @@ void RifleEnemy::Update()
     m_findMark->SetRotation(markRot);
 
     m_collision.Update();
-    m_currentTime += GameTime().GetFrameDeltaTime();
 }
 
 void RifleEnemy::Move()
 {
-    m_modelRender->SetPosition(m_pos);
     m_agent.Move();
     m_pos = m_agent.GetAgentPos();
     m_rot = m_agent.GetAgentRot();
@@ -203,35 +208,34 @@ bool RifleEnemy::IsFindPlayer()
 
     //プレイヤーへ伸びる方位ベクトル。
     m_toPlayerDir = m_player->GetPos() - m_pos;
-    //プレイヤーに向かうエネミーのエイム。
-    //Vector3 EnemyAIM_to_Player = { toPlayerDir.x + rand() % m_currentRondomAIM, toPlayerDir.y + rand() % m_currentRondomAIM, toPlayerDir.z };
     m_toPlayerDir.Normalize();
-    //EnemyAIM_to_Player.Normalize();
     //今回のターゲットはプレイヤーに伸びるベクトル。
     Vector3 target = m_toPlayerDir;
     target *= m_vision;
+
     //レイテスト。
-    PhysicObj().RayTest(m_headPos, target + m_headPos, visionCallBuck);
-    if (visionCallBuck.hasHit() && visionCallBuck.StaticObjectDist > visionCallBuck.CharacterObjectDist) {
-        //あたっている。
-        //printf("FindPlayer!\n");
-        return true;
+    if (m_rayTestTimer > RAY_TEST_INTERVAL) {
+        //レイを飛ばしすぎるとEnemyの挙動におかしな物が出る。
+        //間隔時間経過後レイを飛ばす。
+        PhysicObj().RayTest(m_headPos, target + m_headPos, visionCallBuck);
+        if (visionCallBuck.hasHit() && visionCallBuck.StaticObjectDist > visionCallBuck.CharacterObjectDist) {
+            //ヒット＆キャラが静的Objより手前
+            return true;
+        }
+        //レイを飛ばしたのでタイマーをリセット。
+        m_rayTestTimer = 0.0f;
     }
-    //見つけてない。
-    //printf("CantFindPlayer\n");
     return false;
 }
 
 void RifleEnemy::ChangeState(IEnemyState* state)
 {
-    //if (m_modelRender->GetAnimLoop() || !m_modelRender->isPlayAnim()) {
-        //ループしないアニメーションはしっかり流してから変えさせる。
-        if (m_enemyState != nullptr) {
-            m_enemyState->Leave();
-        }
-        m_enemyState = state;
-        m_enemyState->Enter();
-    //}
+    if (m_enemyState != nullptr) {
+        //前ステートないためLeaveを呼ばない。
+        m_enemyState->Leave();
+    }
+    m_enemyState = state;
+    m_enemyState->Enter();
 }
 
 void RifleEnemy::GetDamage()
@@ -239,10 +243,6 @@ void RifleEnemy::GetDamage()
     ChangeState(m_damageState);
 }
 
-GamePlayer* RifleEnemy::GetPlayerForUseFind() const
-{
-    return FindGO<GamePlayer>("Player");
-}
 
 
 

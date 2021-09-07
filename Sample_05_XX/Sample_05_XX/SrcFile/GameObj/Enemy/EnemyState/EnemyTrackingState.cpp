@@ -10,7 +10,7 @@ EnemyTrackingState::~EnemyTrackingState()
 
 void EnemyTrackingState::Enter()
 {
-	m_enemy->m_modelRender->PlayAnimation(EnEnemyAnimation_Run, 0.3f);
+	m_enemy->GetRender()->PlayAnimation(EnEnemyAnimation_Run, 0.3f);
     m_lastUpdateState = this;
 }
 

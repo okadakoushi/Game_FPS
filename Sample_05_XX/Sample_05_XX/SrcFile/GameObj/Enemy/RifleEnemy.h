@@ -35,6 +35,12 @@ public:
 	~RifleEnemy();
 	bool Start() override;
 	void Update() override;
+	/// <summary>
+	/// 移動。
+	/// </summary>
+	/// <remarks>
+	///	他ステートクラスからも参照されるためpublic。
+	/// </remarks>
 	void Move();
 	/// <summary>
 	/// プレイヤーを発見しているか。
@@ -75,6 +81,14 @@ public:
 		return m_pos;
 	}
 	/// <summary>
+	/// 回転を取得。
+	/// </summary>
+	/// <returns></returns>
+	Quaternion& GetRotation()
+	{
+		return m_rot;
+	}
+	/// <summary>
 	/// モデルレンダーを取得。
 	/// </summary>
 	/// <returns></returns>
@@ -107,29 +121,61 @@ public:
 		m_isMissingPlayer = flag;
 	}
 	/// <summary>
-	/// プレイヤーをFindして取得。
-	/// <para>複数回使用しないように。</para>
+	/// プレイヤーのポインタを取得。
+	/// </summary>
+	/// <returns>player</returns>
+	GamePlayer* GetPlayerPtr()
+	{
+		return m_player;
+	}
+	/// <summary>
+	/// 頭の位置を取得。
 	/// </summary>
 	/// <returns></returns>
-	GamePlayer* GetPlayerForUseFind() const;
-	friend class EnemyAttackState;
-	friend class EnemyDamageState;
-	friend class EnemyDethState;
-	friend class EnemyWanderingState;
-	friend class EnemyTrackingState;
+	Vector3& GetHeadPos()
+	{
+		return m_headPos;
+	}
+	/// <summary>
+	/// 武器を取得。
+	/// </summary>
+	/// <returns></returns>
+	Rifle* GerRifle()
+	{
+		return m_rifle;
+	}
+	/// <summary>
+	/// ヒットポイントを取得。
+	/// </summary>
+	/// <returns></returns>
+	int& GetHP()
+	{
+		return m_hp;
+	}
+	/// <summary>
+	/// 見失ったフラグを設定。
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetIsMissingFlag(const bool& flag)
+	{
+		m_isMissingPlayer = flag;
+	}
+	/// <summary>
+	/// コリジョンを取得。
+	/// </summary>
+	/// <returns></returns>
+	SoldierCollision& GetCollision()
+	{
+		return m_collision;
+	}
 protected:
 	Rifle* m_rifle = nullptr;				//銃。
-	float m_currentTime = 0.0f;				//タイマー。
-	float COOLDOWN = 0.22f;					//クールダウン。
 	SoldierCollision m_collision;	
 	int m_pathIndex = 0;						//
 	float m_FOV = 40.0f;						//視野角。
 	float m_vision = 700.0f;					//エネミーの視野範囲。
 	Bone* m_head;								//頭ボーン。
 	int m_hp = 100;								//HP。
-	const int ATTACK = 10;						//攻撃力。
-	const int MAX_RANDOM_AIM = 120;				//エネミーのAIMの最大乱れ値。
-	int m_currentRondomAIM = MAX_RANDOM_AIM;	//エネミーの現在のAIMの乱れ値。
 	bool m_isMissingPlayer = false;				//プレイヤーを見失った。
 	Vector3 m_toPlayerDir = g_vec3Zero;			//エネミーのヘッドからプレイヤーに伸びるベクトル。
 	Vector3 m_headPos = g_vec3Zero;				//ヘッドの位置。
@@ -143,9 +189,10 @@ protected:
 	NaviMesh* m_naviMesh = nullptr;
 	SoundSource* m_findSE;						//見つけた
 	SoundSource* m_footStep = nullptr;			//足音。
-	//
-	GamePlayer* m_player = nullptr;						//プレイヤー。
+	GamePlayer* m_player = nullptr;				//プレイヤー。
 	SpriteRender* m_findMark = nullptr;			//！マーク。
+	float m_rayTestTimer = 0.0f;				//現在のレイテストタイマー。
+	const float RAY_TEST_INTERVAL = 0.5f;		//レイテトを行う間隔。
 
 protected:
 	IEnemyState*		m_enemyState;			//ステート。

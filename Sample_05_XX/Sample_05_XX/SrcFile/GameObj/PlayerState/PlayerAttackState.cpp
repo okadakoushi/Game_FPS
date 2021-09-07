@@ -36,9 +36,6 @@ void PlayerAttackState::Update()
 		if (enemy != nullptr) {
 			enemy->GetDamage();
 		}
-		else {
-			printf("キャストが失敗。\n");
-		}
 	}
 	else if (rayCallBack.hasHit() && rayCallBack.StaticObjectDist < rayCallBack.CharacterObjectDist) {
 		//なんかのメッシュに命中。
@@ -49,13 +46,7 @@ void PlayerAttackState::Update()
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(effectRot);
 		//Y成分はいらない。
-		//printf("%f\n", rayCallBack.StaticObjectDist);
-		//printf("%f, %f, %f\n", toDir.x /* rayCallBack.StaticObjectDist*/, toDir.y /* rayCallBack.StaticObjectDist*/, toDir.z /* rayCallBack.StaticObjectDist*/);
 		m_effect->Play(L"Assets/effect/aaaa.efk");
-		//printf("壁Hit\n");
-	}
-	else if (!rayCallBack.hasHit()) {
-		//printf("%f\n", rayCallBack.StaticObjectDist);
 	}
 }
 

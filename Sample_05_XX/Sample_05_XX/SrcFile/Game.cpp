@@ -26,6 +26,7 @@ Game::~Game()
 
 bool Game::Start()
 {
+	//Title消してPtr迷子になってるのでこっちでFind。
 	m_camera = FindGO<GameCamera>("GameCamera");
 	m_player = FindGO<GamePlayer>("Player");
 	//全mapの共通要素をインスタンス化。

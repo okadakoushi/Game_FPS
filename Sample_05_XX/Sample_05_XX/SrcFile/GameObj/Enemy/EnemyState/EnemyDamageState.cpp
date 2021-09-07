@@ -7,16 +7,15 @@
 
 void EnemyDamageState::Enter()
 {
-    if (m_enemy->m_hp > 0 && m_enemy->IsActive()) {
-        m_enemy->m_hp -= 25;
+    if (m_enmey->GetHP() > 0 && m_enemy->IsActive()) {
+        m_enmey->GetHP() -= 25;
     }
 
-    printf("¡‚ÌHP‚Í%d\n", m_enemy->m_hp);
-    m_enemy->m_modelRender->PlayAnimation(EnEnemyAnimation_Damage, 0.3f);
+    m_enemy->GetRender()->PlayAnimation(EnEnemyAnimation_Damage, 0.3f);
 
     //“G‚ðŒ©Ž¸‚Á‚½ó‘Ô‚É‚·‚éB
-    m_enemy->m_isMissingPlayer = true;
-    m_enemy->GetAgent().SetTargetPos(m_enemy->m_player->GetPos());
+    m_enemy->SetIsMissingFlag(true);
+    m_enemy->GetAgent().SetTargetPos(m_enemy->GetPlayerPtr()->GetPos());
 
     m_lastUpdateState = this;
 }

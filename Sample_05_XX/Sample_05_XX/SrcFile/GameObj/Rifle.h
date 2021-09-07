@@ -99,6 +99,14 @@ public:
 	{
 		return RAITO;
 	}
+	/// <summary>
+	/// 武器の有効距離を取得。
+	/// </summary>
+	/// <returns></returns>
+	const float& GetWeponEnableRange() const
+	{
+		return ENABLE_RANGE;
+	}
 private:
 	//モデル基礎パラメーター。
 	SkinModelRender* m_render = nullptr;
@@ -114,6 +122,7 @@ private:
 	const float RELOADTIME = 0.5f;				//リロード時間。todo
 	float m_currentReloadTime;					//現在のリロード時間。
 	const float RAITO = 0.1f;					//発射レイト。
+	const float ENABLE_RANGE = 1500.0f;			//有効射程。
 	EnRifleEvent m_currentRifleEvent = EnRifleEvent_None;			//ライフルイベント。
 };
 

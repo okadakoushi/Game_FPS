@@ -24,7 +24,7 @@ class GamePlayer : public IGameObject
 public:
 	//定数値はpublicでも許されるか
 	struct BASE_PARAM {
-		static const float	PLAYER_MAX_HP;				//プレイヤーの最大体力。
+		static const int	PLAYER_MAX_HP;				//プレイヤーの最大体力。
 		static const int	REGENE_VALUE_SECOND;				//秒間リジェネ量。
 		static const float	REGENE_COOL_TIME;					//リジェネのクールタイム。
 		static const float	JUMPFORSE;							//ジャンプ。
@@ -172,7 +172,7 @@ private:
 	SoundSource* m_footStepSE = nullptr;		//足音。
 	SoundSource* m_beHitSE = nullptr;			//被弾。
 
-	float m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。
+	int m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。
 	PlayerUIs* m_playerUIs;						//UI。
 	float m_currentRegeneTime = 0.0f;			//リジェネタイム。
 
