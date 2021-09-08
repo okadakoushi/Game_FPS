@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SrcFile/Fade.h"
+#include "IStage.h"
 
 class GamePlayer;
 class Guide;
@@ -12,7 +13,7 @@ class StageGenerator;
 /// <summary>
 /// スタンバイステージクラス。
 /// </summary>
-class Stage : public IGameObject
+class Stage : public IStage
 {
 public:
 	Stage();
@@ -30,6 +31,9 @@ public:
 	/// 更新。
 	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// フォワードレンダリング。
+	/// </summary>
 	void ForwardRender() override;
 	/// <summary>
 	/// プレイヤーを設定。
@@ -55,24 +59,26 @@ public:
 	{
 		return m_securityCameraRotList;
 	}
-
+	/// <summary>
+	/// プレイヤーのリスポーン位置を取得。
+	/// </summary>
+	/// <returns></returns>
 	Vector3& GetPlayerPos()
 	{
-		return m_playerPos;
+		return m_playerRootPos;
 	}
 private:
-	static const int m_enemyCount = 5;				//現在のエネミーの数。			
-	SkinModelRender* m_modelRender[20];				//レンダー。
-	RifleEnemy* m_rifleEnemys[m_enemyCount];		//ライフルエネミー。
-	Level m_level;									//レベル。
-	int m_mobCount = 0;								//モブカウント。
-	PhysicsStaticObject m_physicsStaticObject;		//静的オブジェクト。
-	GamePlayer* m_player = nullptr;					//プレイヤー。
-	Vector3 m_playerPos = g_vec3Zero;					//
-	Guide* m_guide = nullptr;						//ガイド。
-	NaviMesh* m_naviMesh = nullptr;					//ナビゲーションメッシュ。
-	StageGenerator* m_stageGenerator = nullptr;		//ステージジェネレーター。
-	std::vector<Vector3> m_securityCameraPosList;	//監視カメラの位置リスト。
-	std::vector<Quaternion> m_securityCameraRotList;//監視カメラの向きリスト。
+	static const int m_enemyCount = 5;					//現在のエネミーの数。			
+	SkinModelRender* m_modelRender[20];					//レンダー。
+	RifleEnemy* m_rifleEnemys[m_enemyCount];			//ライフルエネミー。
+	Level m_level;										//レベル。
+	PhysicsStaticObject m_physicsStaticObject;			//静的オブジェクト。
+	Vector3 m_playerRootPos = g_vec3Zero;				//レベルから引っ張って来たプレイヤーのリスポーン位置。titleからの遷移の都合上保存しておく。
+	std::vector<Vector3> m_securityCameraPosList;		//監視カメラの位置リスト。
+	std::vector<Quaternion> m_securityCameraRotList;	//監視カメラの向きリスト。
+	//GamePlayer* m_player = nullptr;					//プレイヤー。
+	//NaviMesh* m_naviMesh = nullptr;					//ナビゲーションメッシュ。
+	//StageGenerator* m_stageGenerator = nullptr;		//ステージジェネレーター。
+
 };
 

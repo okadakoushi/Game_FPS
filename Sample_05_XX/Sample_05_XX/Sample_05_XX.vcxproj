@@ -309,6 +309,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="SrcFile\Bloom.h" />
     <ClInclude Include="BulletManeger.h" />
+    <ClInclude Include="SrcFile\GameObj\Stages\IStage.h" />
     <ClInclude Include="SrcFile\GaussianBlur.h" />
     <ClInclude Include="SrcFile\RenderingEngine.h" />
     <ClInclude Include="SrcFile\GameObj\PlayerState\PlayerIdleState.h" />

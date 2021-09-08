@@ -727,6 +727,9 @@
     <ClInclude Include="SrcFile\Bloom.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\Stages\IStage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\tkEngine3\GameTemplate\Game\Assets\sprite\reticle.dds" />

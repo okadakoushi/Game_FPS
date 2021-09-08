@@ -87,7 +87,7 @@ float4 PSMain( PSInput In ) : SV_Target0
 	float metaric = g_specularMap.Sample(g_sampler, In.uv).r;
 	//滑らかさ
 	float smooth = g_specularMap.Sample(g_sampler, In.uv).a;
-
+	//影。1で落ちている。
 	float shadow = g_shadow.Sample(g_sampler, In.uv);
 
 	//ランバート拡散反射と鏡面反射の計算をしていく。
@@ -142,7 +142,7 @@ float4 PSMain( PSInput In ) : SV_Target0
 	texColor.xyz *= lig; 
 	texColor *= mulColor;
 
-	//fog
+	//fogのアルゴリズムを使用した大気散乱。
 	float3 worldToEye = eyePos - posInWorld;
 	float worldToEyeLength = length(worldToEye);
 	if (worldToEyeLength >= ENABLE_FOG_RANGE) {

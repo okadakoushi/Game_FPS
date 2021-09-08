@@ -123,7 +123,7 @@ void Title::Update()
 		m_player->SetActive(true);
 		m_camera->SetActive(true);
 		m_player->GetPlayerUIs()->ActiveProcess(true);
-		m_stageGenerator->SetPlayerRespawnPos();
+		m_stageGenerator->GetBattleStage1()->GetPlayerPos();
 		DeleteGO(this);
 		NewGO<Game>(EnPriority_Game);
 	}

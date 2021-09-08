@@ -36,7 +36,7 @@ void GamePlayer::Regene()
 		m_currentRegeneTime += GameTime().GetFrameDeltaTime();
 		if (m_currentRegeneTime >= BASE_PARAM::REGENE_COOL_TIME) {
 			//‰ñ•œŠJŽnB
-			m_hp += BASE_PARAM::REGENE_VALUE_SECOND * GameTime().GetFrameDeltaTime();
+			m_hp += 1;
 		}
 	}
 }

@@ -8,6 +8,44 @@
 
 StageGenerator::StageGenerator()
 {
+	//各ステージのライティングパラメーターを設定。
+	//Startでやってもいいな。
+
+	//s1
+	{
+		m_ligParams[EnStageNumber_BattleStage1].DirectionLightColor = { 1.4f, 1.4f, 1.4f, 1.0f };
+		m_ligParams[EnStageNumber_BattleStage1].DirectionLightDir = { 1.0f, -1.0f, 0.3f };
+		m_ligParams[EnStageNumber_BattleStage1].SkySelfLuminous = 1.0f;
+		m_ligParams[EnStageNumber_BattleStage1].IBLItensity = 4.0f;
+		m_ligParams[EnStageNumber_BattleStage1].MiddleGray = 0.1f;
+	}
+
+	//s2
+	{
+		m_ligParams[EnStageNumber_BattleStage2].DirectionLightColor = { 1.4f, 1.4f, 1.4f, 1.0f };
+		m_ligParams[EnStageNumber_BattleStage2].DirectionLightDir = { 1.0f, -1.0f, 0.3f };
+		m_ligParams[EnStageNumber_BattleStage2].SkySelfLuminous = 1.0f;
+		m_ligParams[EnStageNumber_BattleStage2].IBLItensity = 1.0f;
+		m_ligParams[EnStageNumber_BattleStage2].MiddleGray = 0.15f;
+	}
+
+	//s3
+	{
+		m_ligParams[EnStageNumber_BattleStage3].DirectionLightColor = { 15.4f, 15.4f, 15.4f, 1.0f };
+		m_ligParams[EnStageNumber_BattleStage3].DirectionLightDir = { 1.0f, -1.0f, 0.3f };
+		m_ligParams[EnStageNumber_BattleStage3].SkySelfLuminous = 10.0f;
+		m_ligParams[EnStageNumber_BattleStage3].IBLItensity = 1.0f;
+		m_ligParams[EnStageNumber_BattleStage3].MiddleGray = 0.18f;
+	}
+
+	//s4 没予定。
+	{
+		m_ligParams[EnStageNumber_BattleStage4].DirectionLightColor = { 1.4f, 1.4f, 1.4f, 1.0f };
+		m_ligParams[EnStageNumber_BattleStage4].DirectionLightDir = { 1.0f, -1.0f, 0.3f };
+		m_ligParams[EnStageNumber_BattleStage4].SkySelfLuminous = 3.0f;
+		m_ligParams[EnStageNumber_BattleStage4].IBLItensity = 2.0f;
+		m_ligParams[EnStageNumber_BattleStage4].MiddleGray = 0.23f;
+	}
 }
 
 void StageGenerator::OnDestroy()
@@ -40,14 +78,14 @@ void StageGenerator::Update()
 		return;
 	}
 	if (m_currentStageNum == EnStageNumber_BattleStage1 || m_currentStageNum == EnStageNumber_BattleStage3) {
-		if (m_stanbyStage->IsStart()) {
+		if (m_stage->IsStart()) {
 			//レベルの初期化が終了。
 			FadeProcess(false);
 			m_isStageDeleteCall = false;
 		}
 	}
 	else if (m_currentStageNum == EnStageNumber_BattleStage2 || m_currentStageNum == EnStageNumber_BattleStage4) {
-		if (m_battleStage->IsStart()) {
+		if (m_stage->IsStart()) {
 			//レベルの初期化が終了。
 			FadeProcess(false);
 			m_isStageDeleteCall = false;
@@ -78,91 +116,18 @@ bool StageGenerator::FadeProcess(const bool& fadeIn)
 
 void StageGenerator::CreateStage(const StageNumber& stageNum)
 {
-	//ここポリモーフィズム使った設計にしたい。
+	//引数で渡されたステージ番号に応じてステージを生成する。
 	if (stageNum == EnStageNumber_BattleStage1) {
-
-		m_stanbyStage = NewGO<Stage>(EnPriority_3DModel);
-
-#ifdef GAME
-		if (m_sky != nullptr) {
-			DeleteGO(m_sky);
-		}
-		//skyも変更。
-		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
-		//ライト調整。
-		g_light.directionalLight[0].color = { 1.4f, 1.4f, 1.4f, 1.0f };
-		g_light.directionalLight[0].direction = { 1.0f, -1.0f, 0.3f };
-		g_light.directionalLight[0].direction.Normalize();
-		//Prams設定。
-		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapNight_Toon_02.dds");
-		m_sky->SetSelfLuminous(1.0f);
-		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(4.0f);
-		GraphicsEngineObj()->GetRenderingEngine().GetToneMap().SetMiddleGray(0.1f);
-		GraphicsEngineObj()->GetRenderingEngine().GetBloom().SetWeight(10);
-#endif
-
-		m_stanbyStage->SetPlayer(m_player);
-		m_currentStageNum = EnStageNumber_BattleStage1;
+		m_stage = NewGO<Stage>(EnPriority_3DModel);
 	}
 	else if (stageNum == EnStageNumber_BattleStage2) {
-		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
-#ifdef GAME
-		DeleteGO(m_sky);
-		//skyも変更。
-		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
-		//ライト調整。
-		g_light.directionalLight[0].color = { 1.4f, 1.4f, 1.4f, 1.0f };
-		g_light.directionalLight[0].direction = { 1.0f, -1.0f, 0.3f };
-		g_light.directionalLight[0].direction.Normalize();
-		//Prams設定。
-		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapSpace_Toon_2.dds");
-		m_sky->SetSelfLuminous(1.0f);
-		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(1.0f);
-		GraphicsEngineObj()->GetRenderingEngine().GetToneMap().SetMiddleGray(0.15f);
-		//GraphicsEngineObj()->GetRenderingEngine().GetBloom().SetWeight()
-#endif
-
-		m_battleStage->SetPlayer(m_player);
-		m_currentStageNum = EnStageNumber_BattleStage2;
+		m_stage = NewGO<BattleStage1>(EnPriority_3DModel);
 	}
 	else if (stageNum == EnStageNumber_BattleStage3) {
-		m_stanbyStage = NewGO<Stage>(EnPriority_3DModel);
-#ifdef GAME
-		DeleteGO(m_sky);
-		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
-		//ライト調整。
-		g_light.directionalLight[0].color = { 15.4f, 15.4f, 15.4f, 1.0f };
-		g_light.directionalLight[0].direction = { 1.0f, -1.0f, 0.3f };
-		g_light.directionalLight[0].direction.Normalize();
-		//Prams設定。
-		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMap.dds");
-		m_sky->SetSelfLuminous(10.0f);
-		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(1.0f);
-		GraphicsEngineObj()->GetRenderingEngine().GetToneMap().SetMiddleGray(0.18f);
-#endif
-
-		m_stanbyStage->SetPlayer(m_player);
-		m_currentStageNum = EnStageNumber_BattleStage3;
+		m_stage = NewGO<Stage>(EnPriority_3DModel);
 	}
 	else if (stageNum == EnStageNumber_BattleStage4) {
-		m_battleStage = NewGO<BattleStage1>(EnPriority_3DModel);
-#ifdef GAME
-		DeleteGO(m_sky);
-		//skyも変更。
-		m_sky = NewGO<SkyBox>(EnPriority_3DModel, "Sky");
-		//ライト調整。
-		g_light.directionalLight[0].color = { 1.4f, 1.4f, 1.4f, 1.0f };
-		g_light.directionalLight[0].direction = { 1.0f, -1.0f, 0.3f };
-		g_light.directionalLight[0].direction.Normalize();
-		//Prams設定。
-		m_sky->SetSkyCubeTexturePath(L"Assets/modelData/nature/skyCubeMapDay_Toon_03.dds");
-		m_sky->SetSelfLuminous(3.0f);
-		GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(2.0f);
-		GraphicsEngineObj()->GetRenderingEngine().GetToneMap().SetMiddleGray(0.23f);
-#endif
-
-		m_battleStage->SetPlayer(m_player);
-		m_currentStageNum = EnStageNumber_BattleStage4;
+		m_stage = NewGO<BattleStage1>(EnPriority_3DModel);
 	}
 	else {
 		//printf("StageNum = %d", stageNum);
@@ -174,16 +139,42 @@ void StageGenerator::CreateStage(const StageNumber& stageNum)
 			MB_OK
 		);
 	}
+
+
+	//player設定。
+	m_stage->SetPlayer(m_player);
+	//ジェネレーター設定。
+	m_stage->SetStageGenerator(this);
+
+	//ステージ番号に合わせてパラメーターを設定していく。
+	//Dirライトのパラメーターを設定。
+	g_light.directionalLight[0].color = m_ligParams[stageNum].DirectionLightColor;
+	g_light.directionalLight[0].direction = m_ligParams[stageNum].DirectionLightDir;
+	//SkyBoxの解放。
+	if (m_sky != nullptr) {
+		DeleteGO(m_sky);
+	}
+	//SkyBoxをインスタンス化。
+	m_sky = NewGO<SkyBox>(EnPriority_3DModel, "SkyBox");
+	//Sky用のパラメーターを設定。
+	m_sky->SetSkyCubeTexturePath(m_skyBoxFilePaths[stageNum]);
+	m_sky->SetSelfLuminous(m_ligParams[stageNum].SkySelfLuminous);
+	//IBL用の輝度を設定。
+	GraphicsEngineObj()->GetDefferd().GetDefferdSprite().SetIBLItensity(m_ligParams[stageNum].IBLItensity);
+	//トーンマップ用ミドルグレイを設定。
+	GraphicsEngineObj()->GetRenderingEngine().GetToneMap().SetMiddleGray(m_ligParams[stageNum].MiddleGray);
+	//現在のステージ番号を更新する。
+	m_currentStageNum = stageNum;
 }
 
 void StageGenerator::DeleteCurrentStage()
 {
 	if (m_currentStageNum == EnStageNumber_BattleStage1 || m_currentStageNum == EnStageNumber_BattleStage3) {
-		DeleteGO(m_stanbyStage);
+		DeleteGO(m_stage);
 		m_player->Init();
 	}
 	else if (m_currentStageNum == EnStageNumber_BattleStage2 || m_currentStageNum == EnStageNumber_BattleStage4) {
-		DeleteGO(m_battleStage);
+		DeleteGO(m_stage);
 		m_player->Init();
 	}
 	//else if (m_currentStageNum == EnStageNumber_BattleStage3) {
@@ -205,9 +196,4 @@ void StageGenerator::DeleteCurrentStage()
 	return;
 	//番号初期化。
 	//m_currentStageNum = EnstageNumber_None;
-}
-
-void StageGenerator::SetPlayerRespawnPos()
-{
-	m_player->SetPos(m_stanbyStage->GetPlayerPos());
 }

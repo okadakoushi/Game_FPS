@@ -64,6 +64,7 @@ bool Stage::Start()
 		{ -700.0f, 0.0f, 1600.0f },
 		{ 0.0, 0.0f, 0.0 }
 	};
+
 	//ƒŒƒxƒ‹‚Ì‰Šú‰»B
 	m_level.Init("Assets/level/GameStage.tkl", [&](LevelObjectData& objData) {
 #ifdef NAV_DEBUG
@@ -78,9 +79,9 @@ bool Stage::Start()
 		}
 #endif
 		if (objData.EqualObjectName(L"PlayerRespawn") == true) {
-			m_playerPos = objData.position;
+			m_playerRootPos = objData.position;
 			if (m_player != nullptr) {
-				m_player->SetPos(m_playerPos);
+				m_player->SetPos(m_playerRootPos);
 			}
 			return true;
 		}
