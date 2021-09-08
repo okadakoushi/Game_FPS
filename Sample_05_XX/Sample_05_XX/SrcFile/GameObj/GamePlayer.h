@@ -170,6 +170,7 @@ private:
 	float m_damageEffectValue = 1.0f;
 
 	SoundSource* m_footStepSE = nullptr;		//足音。
+	SoundSource* m_runSE = nullptr;				//走行音。
 	SoundSource* m_beHitSE = nullptr;			//被弾。
 
 	int m_hp = BASE_PARAM::PLAYER_MAX_HP;		//HP。

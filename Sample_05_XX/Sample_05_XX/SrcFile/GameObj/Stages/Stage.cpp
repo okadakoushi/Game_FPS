@@ -4,7 +4,7 @@
 #include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/GameObj/guide.h"
 #include "SrcFile/GameObj/Enemy/RifleEnemy.h"
-#include "SrcFile/GameObj/StageGenerator.h"
+#include "SrcFile/GameObj/Stages/StageGenerator.h"
 
 namespace {
 	const int SpawnPointCount = 5;

@@ -3,7 +3,7 @@
 #include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/GameObj/Enemy/RifleEnemy.h"
 #include "SrcFile/GameObj/Stages/Stage.h"
-#include "SrcFile/GameObj/StageGenerator.h"
+#include "StageGenerator.h"
 #include "SrcFile/Fade.h"
 
 BattleStage1::BattleStage1()
@@ -173,9 +173,11 @@ void BattleStage1::Update()
 
 	if (m_player->GetHP() <= 0) {
 		//プレイヤー死亡。
-		//Retry?Title?
-		m_stageGenerator->DeleteCurrentStage();
-		m_stageGenerator->CreateStage(m_stageGenerator->GetCurrentStageNumber());
+		if (m_stageGenerator->FadeProcess(true)) {
+			//Retry?Title?
+			m_stageGenerator->DeleteCurrentStage();
+			m_stageGenerator->CreateStage(m_stageGenerator->GetCurrentStageNumber());
+		}
 	}
 }
 

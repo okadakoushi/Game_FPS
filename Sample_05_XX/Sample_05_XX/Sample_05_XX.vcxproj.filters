@@ -254,9 +254,6 @@
     <ClCompile Include="SrcFile\GameObj\Stages\BattleStage1.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SrcFile\GameObj\StageGenerator.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="SrcFile\GameObj\Stages\Stage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -357,6 +354,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SrcFile\Bloom.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SrcFile\GameObj\Stages\StageGenerator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -595,9 +595,6 @@
     <ClInclude Include="SrcFile\Culling\ObjectFrustumCulling.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SrcFile\GameObj\SoldierMob.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="SrcFile\Debug\LineDraw.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -638,9 +635,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\Fade.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SrcFile\GameObj\StageGenerator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\GameObj\Enemy\RifleEnemy.h">
@@ -728,6 +722,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SrcFile\GameObj\Stages\IStage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\SoldierMob.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SrcFile\GameObj\Stages\StageGenerator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

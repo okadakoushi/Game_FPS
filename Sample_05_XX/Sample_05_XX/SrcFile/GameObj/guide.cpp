@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "guide.h"
 #include "GamePlayer.h"
-#include "StageGenerator.h"
 
 //Guide::~Guide()
 //{

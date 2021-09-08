@@ -101,6 +101,10 @@ bool GamePlayer::Start()
 	//サウンド初期化。
 	m_footStepSE = NewGO<SoundSource>(0);
 	m_footStepSE->Init(L"Assets/Audio/footstep.wav");
+	m_footStepSE->SetVolume(0.4f);
+	m_runSE = NewGO<SoundSource>(0);
+	m_runSE->Init(L"Assets/Audio/run.wav");
+	m_runSE->SetVolume(0.3f);
 	m_beHitSE = NewGO<SoundSource>(0);
 	m_beHitSE->Init(L"Assets/Audio/shootBlood.wav");
 
@@ -156,7 +160,8 @@ void GamePlayer::Update()
 		ChangeState(m_reloadState);
 	}
 
-	if (GetAsyncKeyState('R')) {
+	if (GetAsyncKeyState('R') && m_wepon->GetCurrentAmo() != m_wepon->GetMAX_AMO()) {
+		m_wepon->SetRifleEvent(Rifle::EnRifleEvent_Reloading);
 		//リロード。
 		ChangeState(m_reloadState);
 	}
@@ -273,17 +278,23 @@ void GamePlayer::Move()
 
 	m_move += acc * 2.0;
 
-	if (m_move.Length() >= 300.0f) {
+	if (m_move.Length() >= 300.0f && m_move.Length() <= 600.0f) {
+		//歩行。
 		m_footStepSE->Play(true);
+		m_runSE->Stop();
 		m_unityChan->PlayAnimation(EnPlayerAnimation_Walk, 0.5f);
 	}
-	if (m_move.Length() >= 700.0f) {
+	if (m_move.Length() >= 600.0f) {
+		//走行。
 		m_footStepSE->Play(true);
+		m_runSE->Play(true);
 		m_unityChan->PlayAnimation(EnPlayerAnimation_Walk, 0.5f);
 	}
 	if (m_move.Length() <= 0.99999f) {
+		//停止。
 		ChangeState(m_playerIdleState);
 		m_footStepSE->Stop();
+		m_runSE->Stop();
 	}
 	if (m_move.Length() != 0) {
 		//printf("%f, %f, %f \n", m_move.x, m_move.y, m_move.z);

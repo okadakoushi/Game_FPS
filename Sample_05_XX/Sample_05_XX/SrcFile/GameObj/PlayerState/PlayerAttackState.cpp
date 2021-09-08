@@ -25,7 +25,7 @@ void PlayerAttackState::Update()
 	//”­–C‰¹B
 	m_shootSE->Stop();
 	m_shootSE->Play(false);
-	m_shootSE->SetPosition(m_player->GetPos());
+	m_shootSE->SetVolume(0.8f);
 	//’e‚ðŒ¸‚ç‚·B
 	m_player->GetWepon()->ReduseAmo();
 

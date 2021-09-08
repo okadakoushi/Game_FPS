@@ -141,6 +141,22 @@ public:
 	{
 		return m_sourceVoice;
 	}
+	/// <summary>
+	/// ディスタンスカーブを取得。
+	/// </summary>
+	/// <returns></returns>
+	FLOAT32& GetDistanceCurve()
+	{
+		return m_distanceCurve;
+	}
+	/// <summary>
+	/// ディスタンスカーブを設定。
+	/// </summary>
+	/// <param name="dist"></param>
+	void SetDistanceCurve(const FLOAT32& dist)
+	{
+		m_distanceCurve = dist;
+	}
 
 	void Update();
 private:
@@ -175,6 +191,7 @@ private:
 	bool							m_isSetPositionFirst = true;		//1番最初のSET。
 	FLOAT32							m_emitterAzimuths[INPUTCHANNELS];	//方位。				
 	FLOAT32							m_matrixCoefficients[INPUTCHANNELS * OUTPUTCHANNELS];
+	FLOAT32							m_distanceCurve = 14.0f;			//音源の聞こえる距離。
 	X3DAUDIO_DSP_SETTINGS			m_dspSettings;
 	bool							m_is3dSound = false;				//3Dサウンド？
 };

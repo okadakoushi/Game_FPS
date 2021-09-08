@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "StageGenerator.h"
-#include "Stages/Stage.h"
-#include "Stages/BattleStage1.h"
+#include "Stage.h"
+#include "BattleStage1.h"
 #include "SrcFile/Fade.h"
-#include "GamePlayer.h"
+#include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/nature/SkyBox.h"
 
 StageGenerator::StageGenerator()
@@ -169,31 +169,8 @@ void StageGenerator::CreateStage(const StageNumber& stageNum)
 
 void StageGenerator::DeleteCurrentStage()
 {
-	if (m_currentStageNum == EnStageNumber_BattleStage1 || m_currentStageNum == EnStageNumber_BattleStage3) {
-		DeleteGO(m_stage);
-		m_player->Init();
-	}
-	else if (m_currentStageNum == EnStageNumber_BattleStage2 || m_currentStageNum == EnStageNumber_BattleStage4) {
-		DeleteGO(m_stage);
-		m_player->Init();
-	}
-	//else if (m_currentStageNum == EnStageNumber_BattleStage3) {
-
-	//}
-	//else if (m_currentStageNum == EnStageNumber_BattleStage4) {
-
-	//}
-	else {
-		//エラー。
-		MessageBoxA(
-			nullptr,
-			"ステージが削除済みまたは、引数で渡されたステージは存在しません。",
-			"StageGenerator",
-			MB_OK
-		);
-	}
+	DeleteGO(m_stage);
+	m_player->Init();
 	m_isStageDeleteCall = true;
 	return;
-	//番号初期化。
-	//m_currentStageNum = EnstageNumber_None;
 }

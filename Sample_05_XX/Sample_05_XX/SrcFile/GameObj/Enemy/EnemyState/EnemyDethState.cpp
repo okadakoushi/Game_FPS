@@ -9,6 +9,7 @@ void EnemyDethState::Enter()
     m_enemy->GetCollision().Release();
 
     m_enemy->GetRender()->PlayAnimation(EnEnemyAnimation_Death, 0.7f);
+    m_deathSE->Play(false);
     m_lastUpdateState = this;
 }
 

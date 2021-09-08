@@ -10,6 +10,7 @@ SoundSource::SoundSource()
 SoundSource::~SoundSource()
 {
 	Release();
+	SoundEngineObj().Remove3DSoundSource(this);
 }
 
 void SoundSource::Release()

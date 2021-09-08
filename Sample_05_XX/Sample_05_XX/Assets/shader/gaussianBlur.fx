@@ -130,8 +130,6 @@ PS_BlurInput VSXBlur(VSInput In)
  */
 PS_BlurInput VSYBlur(VSInput In)
 {
-    // step-14 Yブラー用の頂点シェーダーを実装
-
     PS_BlurInput Out;
 
     // 座標変換

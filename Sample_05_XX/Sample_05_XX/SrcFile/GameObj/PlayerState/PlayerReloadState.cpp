@@ -12,7 +12,7 @@ void PlayerReloadState::Update()
 	if (m_player->GetWepon()->GetRifleEvent() == Rifle::EnRifleEvent_Reloading) {
 		m_player->GetWepon()->AddReloadTime();
 	}
-
+	m_reloadSE->Play(false);
 }
 
 void PlayerReloadState::Leave()

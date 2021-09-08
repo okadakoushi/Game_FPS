@@ -194,6 +194,9 @@ protected:
 	float m_rayTestTimer = 0.0f;				//現在のレイテストタイマー。
 	const float RAY_TEST_INTERVAL = 0.5f;		//レイテトを行う間隔。
 
+	float m_soundTimer = 0.0f;
+	const float SOUND_TIME = 1.0f;
+
 protected:
 	IEnemyState*		m_enemyState;			//ステート。
 	EnemyAttackState*	m_attackState;			//攻撃

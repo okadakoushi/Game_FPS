@@ -119,7 +119,7 @@ private:
 	bool m_isShoot = true;						//発砲可能？
 	const int MAX_AMO = 30;						//最大弾数。todo:Rifleに移譲。
 	int m_currentAmo = MAX_AMO;					//現在の弾数。todo
-	const float RELOADTIME = 0.5f;				//リロード時間。todo
+	const float RELOADTIME = 1.5f;				//リロード時間。todo
 	float m_currentReloadTime;					//現在のリロード時間。
 	const float RAITO = 0.1f;					//発射レイト。
 	const float ENABLE_RANGE = 1500.0f;			//有効射程。

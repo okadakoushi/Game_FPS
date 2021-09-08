@@ -9,7 +9,7 @@
 #include "GameObj/testObj/TestBox.h"
 #include "SrcFile/Map.h"
 #include "SrcFile/nature/SkyBox.h"
-#include "GameObj/StageGenerator.h"
+#include "GameObj/Stages/StageGenerator.h"
 #include "GameObj/guide.h"
 #include "Fade.h"
 
@@ -44,14 +44,14 @@ bool Game::Start()
 void Game::Update()
 {
 	//表示・非表示。
-	if(EngineObj().GetInputKeyCode().IsTriggerKey('R')) {
-		if (m_map->IsActive()) {
-			m_map->SetDraw(false);
-		}
-		else {
-			m_map->SetDraw(true);
-		}
-	}
+	//if(EngineObj().GetInputKeyCode().IsTriggerKey('R')) {
+	//	if (m_map->IsActive()) {
+	//		m_map->SetDraw(false);
+	//	}
+	//	else {
+	//		m_map->SetDraw(true);
+	//	}
+	//}
 	m_map->SetTargetPos(m_player->GetPos());
 }
 

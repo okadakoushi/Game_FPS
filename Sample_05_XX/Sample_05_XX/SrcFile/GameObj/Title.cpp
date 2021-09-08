@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Title.h"
-#include "SrcFile/GameObj/StageGenerator.h"
+#include "SrcFile/GameObj/Stages/StageGenerator.h"
 #include "SrcFile/GameObj/Stages/Stage.h"
 #include "SrcFile/GameObj/GamePlayer.h"
 #include "SrcFile/GameObj/GameCamera.h"

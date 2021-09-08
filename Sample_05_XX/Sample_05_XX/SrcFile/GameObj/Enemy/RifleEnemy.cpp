@@ -68,8 +68,8 @@ bool RifleEnemy::Start()
     m_findSE->Init(L"Assets/Audio/find.wav");
     m_footStep = NewGO<SoundSource>(0);
     m_footStep->Init(L"Assets/Audio/footstep.wav", true);
-    m_footStep->SetPosition(m_pos);
-    m_footStep->Play(true);
+    //足音の有効範囲は少し短めに取る。
+    m_footStep->SetDistanceCurve(10.0f);
 
     //マーク初期化。
     SpriteInitData initData;
@@ -179,6 +179,7 @@ void RifleEnemy::Move()
     m_pos = m_agent.GetAgentPos();
     m_rot = m_agent.GetAgentRot();
     m_footStep->SetPosition(m_pos);
+    m_footStep->Play(true);
 }
 
 bool RifleEnemy::IsFindPlayer()

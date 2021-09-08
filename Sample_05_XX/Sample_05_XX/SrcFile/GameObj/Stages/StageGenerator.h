@@ -97,6 +97,6 @@ private:
 	bool m_isChangeStage = false;						//ステージを変えるか。
 	bool m_isStageDeleteCall = false;					//ステージのデリートコールが呼ばれた
 	SkyBox* m_sky = nullptr;							//空。
-	IStage* m_stage = nullptr;
+	IStage* m_stage = nullptr;							//ステージ。ポリモーフィズム利用。
 };
 
